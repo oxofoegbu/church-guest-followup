@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    @apply bg-warm-50 text-church-900 font-body;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-church-800 text-white px-5 py-2.5 rounded-lg font-medium
+           hover:bg-church-700 active:bg-church-900 transition-colors
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply bg-white text-church-800 px-5 py-2.5 rounded-lg font-medium
+           border border-church-200 hover:bg-church-50 transition-colors
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-accent {
+    @apply bg-brand-500 text-white px-5 py-2.5 rounded-lg font-medium
+           hover:bg-brand-600 active:bg-brand-700 transition-colors
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-danger {
+    @apply bg-red-600 text-white px-5 py-2.5 rounded-lg font-medium
+           hover:bg-red-700 transition-colors
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-sm {
+    @apply px-3 py-1.5 text-sm rounded-md;
+  }
+  .input-field {
+    @apply w-full px-4 py-2.5 rounded-lg border border-church-200
+           bg-white text-church-900 placeholder-church-400
+           focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent
+           transition-shadow;
+  }
+  .select-field {
+    @apply w-full px-4 py-2.5 rounded-lg border border-church-200
+           bg-white text-church-900 appearance-none cursor-pointer
+           focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent
+           transition-shadow;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23627d98' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+  }
+  .textarea-field {
+    @apply w-full px-4 py-2.5 rounded-lg border border-church-200
+           bg-white text-church-900 placeholder-church-400
+           focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent
+           resize-y min-h-[80px] transition-shadow;
+  }
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-church-100 p-6;
+  }
+  .stat-card {
+    @apply bg-white rounded-xl shadow-sm border border-church-100 p-5;
+  }
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  .table-container {
+    @apply overflow-x-auto rounded-xl border border-church-100 bg-white shadow-sm;
+  }
+  .table-container table {
+    @apply w-full text-sm;
+  }
+  .table-container thead {
+    @apply bg-church-50 border-b border-church-100;
+  }
+  .table-container th {
+    @apply px-4 py-3 text-left text-xs font-semibold text-church-600 uppercase tracking-wider;
+  }
+  .table-container td {
+    @apply px-4 py-3 border-b border-church-50;
+  }
+  .table-container tbody tr:hover {
+    @apply bg-warm-50;
+  }
+  .label {
+    @apply block text-sm font-medium text-church-700 mb-1;
+  }
+  .page-header {
+    @apply text-2xl font-display font-bold text-church-900;
+  }
+  .section-header {
+    @apply text-lg font-display font-semibold text-church-800;
+  }
+}
+
+/* Progress ring */
+.progress-ring {
+  transform: rotate(-90deg);
+}
+.progress-ring circle {
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.slide-in {
+  animation: slideIn 0.3s ease forwards;
+}

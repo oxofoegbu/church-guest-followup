@@ -1,0 +1,159 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+ url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum UserRole {
+  ADMIN
+  VOLUNTEER
+  LEADER
+}
+
+enum GuestStatus {
+  NEW_GUEST
+  ASSIGNED
+  CONTACT_ATTEMPTED
+  CONTACTED
+  MEETING_SCHEDULED
+  MET
+  ATTENDING_REGULARLY
+  NOT_INTERESTED
+  INACTIVE
+  BECOME_SIGNED_UP
+}
+
+enum PreferredContact {
+  CALL
+  TEXT
+  WHATSAPP
+  EMAIL
+}
+
+enum ActivityType {
+  PHONE_CALL
+  WHATSAPP_MESSAGE
+  SMS_TEXT
+  EMAIL
+  HOME_VISIT
+  INVITED_SMALL_GROUP
+  LUNCH_MEETING_PASTOR
+  ATTENDED_NEXT_SERVICE
+  PASTORAL_MEETING
+  OTHER
+}
+
+enum NotificationChannel {
+  EMAIL
+  WHATSAPP
+}
+
+enum NotificationStatus {
+  QUEUED
+  SENT
+  FAILED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  phone     String?
+  password  String
+  role      UserRole @default(VOLUNTEER)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  assignedGuests       Guest[]            @relation("AssignedVolunteer")
+  activities           FollowUpActivity[] @relation("PerformedBy")
+  serviceReturns       GuestServiceReturn[] @relation("RecordedBy")
+  notificationsReceived NotificationLog[] @relation("NotifiedUser")
+
+  @@map("users")
+}
+
+model Guest {
+  id                   String          @id @default(cuid())
+  firstName            String
+  lastName             String
+  phone                String?
+  email                String?
+  address              String?
+  preferredContactMethod PreferredContact @default(CALL)
+  firstVisitDate       DateTime
+  serviceAttended      String?
+  howHeardAboutUs      String?
+  prayerRequest        String?
+  status               GuestStatus     @default(NEW_GUEST)
+  assignedVolunteerId  String?
+  assignedAt           DateTime?
+  becomeSignup         Boolean         @default(false)
+  becomeSignupDate     DateTime?
+  becomeCohort         String?
+  serviceReturnCount   Int             @default(0)
+  serviceReturnTarget  Int             @default(7)
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+
+  assignedVolunteer    User?           @relation("AssignedVolunteer", fields: [assignedVolunteerId], references: [id])
+  activities           FollowUpActivity[]
+  serviceReturns       GuestServiceReturn[]
+  notifications        NotificationLog[]
+
+  @@map("guests")
+}
+
+model GuestServiceReturn {
+  id              String   @id @default(cuid())
+  guestId         String
+  returnNumber    Int
+  serviceDate     DateTime
+  serviceName     String?
+  recordedByUserId String
+  createdAt       DateTime @default(now())
+
+  guest           Guest    @relation(fields: [guestId], references: [id], onDelete: Cascade)
+  recordedBy      User     @relation("RecordedBy", fields: [recordedByUserId], references: [id])
+
+  @@unique([guestId, returnNumber])
+  @@map("guest_service_returns")
+}
+
+model FollowUpActivity {
+  id                String       @id @default(cuid())
+  guestId           String
+  performedByUserId String
+  activityType      ActivityType
+  activityDateTime  DateTime     @default(now())
+  outcome           String?
+  notes             String?
+  nextFollowUpDate  DateTime?
+  createdAt         DateTime     @default(now())
+
+  guest             Guest        @relation(fields: [guestId], references: [id], onDelete: Cascade)
+  performedBy       User         @relation("PerformedBy", fields: [performedByUserId], references: [id])
+
+  @@map("follow_up_activities")
+}
+
+model NotificationLog {
+  id                String             @id @default(cuid())
+  guestId           String?
+  toUserId          String
+  channel           NotificationChannel
+  status            NotificationStatus @default(QUEUED)
+  providerMessageId String?
+  errorMessage      String?
+  payloadSnapshot   String?
+  createdAt         DateTime           @default(now())
+
+  guest             Guest?             @relation(fields: [guestId], references: [id], onDelete: SetNull)
+  toUser            User               @relation("NotifiedUser", fields: [toUserId], references: [id])
+
+  @@map("notification_logs")
+}
