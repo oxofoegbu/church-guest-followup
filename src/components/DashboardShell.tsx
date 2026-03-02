@@ -18,6 +18,7 @@ const NAV_ITEMS = {
     { href: '/dashboard/my-guests', label: 'My Guests', icon: '🙋' },
     { href: '/dashboard/users', label: 'Users', icon: '⚙️' },
     { href: '/dashboard/reports', label: 'Reports', icon: '📈' },
+    { href: '/dashboard/settings', label: 'Settings', icon: '🔔' },
   ],
   VOLUNTEER: [
     { href: '/dashboard', label: 'Dashboard', icon: '📊' },

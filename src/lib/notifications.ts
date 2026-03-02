@@ -164,9 +164,147 @@ export async function sendEmailNotification(params: NotifyVolunteerParams): Prom
 }
 
 export async function notifyVolunteerAssignment(params: NotifyVolunteerParams): Promise<void> {
+  // Check if assignment notifications are enabled
+  const setting = await prisma.appSetting.findUnique({ where: { key: 'notify_on_assignment' } });
+  if (setting?.value === 'false') return;
+
   // Fire both in parallel
   await Promise.allSettled([
     sendEmailNotification(params),
     sendWhatsAppNotification(params),
   ]);
+}
+
+// ==========================================
+// NEW GUEST FORM SUBMISSION NOTIFICATIONS
+// ==========================================
+
+interface GuestInfo {
+  id: string;
+  firstName: string;
+  lastName: string;
+  phone: string | null;
+  email: string | null;
+  serviceAttended: string | null;
+  firstVisitDate: string;
+  preferredContactMethod: string;
+  prayerRequest: string | null;
+}
+
+function buildNewGuestEmailHtml(guest: GuestInfo): string {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || '';
+  return `
+    <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 24px;">
+      <div style="background: #102a43; color: #fff; padding: 20px 24px; border-radius: 8px 8px 0 0;">
+        <h1 style="margin: 0; font-size: 20px;">🆕 New Guest Card Submitted</h1>
+      </div>
+      <div style="border: 1px solid #d9e2ec; border-top: none; padding: 24px; border-radius: 0 0 8px 8px;">
+        <p>A new guest has submitted their information through the guest form:</p>
+        <table style="width: 100%; border-collapse: collapse; margin: 16px 0;">
+          <tr><td style="padding: 8px 0; color: #627d98; width: 160px;">Name</td><td style="padding: 8px 0; font-weight: bold;">${guest.firstName} ${guest.lastName}</td></tr>
+          <tr><td style="padding: 8px 0; color: #627d98;">Phone</td><td style="padding: 8px 0;">${guest.phone || 'N/A'}</td></tr>
+          <tr><td style="padding: 8px 0; color: #627d98;">Email</td><td style="padding: 8px 0;">${guest.email || 'N/A'}</td></tr>
+          <tr><td style="padding: 8px 0; color: #627d98;">First Visit</td><td style="padding: 8px 0;">${guest.firstVisitDate}</td></tr>
+          <tr><td style="padding: 8px 0; color: #627d98;">Service</td><td style="padding: 8px 0;">${guest.serviceAttended || 'N/A'}</td></tr>
+          <tr><td style="padding: 8px 0; color: #627d98;">Preferred Contact</td><td style="padding: 8px 0;">${guest.preferredContactMethod}</td></tr>
+          ${guest.prayerRequest ? `<tr><td style="padding: 8px 0; color: #627d98;">Prayer Request</td><td style="padding: 8px 0;">${guest.prayerRequest}</td></tr>` : ''}
+        </table>
+        ${appUrl ? `<a href="${appUrl}/dashboard/guests/${guest.id}" style="display: inline-block; background: #d57d2a; color: #fff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; margin-top: 8px;">View in Dashboard →</a>` : ''}
+        <p style="margin-top: 24px; color: #829ab1; font-size: 14px;">
+          Please assign this guest to a volunteer for follow-up.
+        </p>
+      </div>
+    </div>
+  `;
+}
+
+function buildNewGuestWhatsAppMessage(guest: GuestInfo): string {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || '';
+  let msg = `🆕 *New Guest Card*\n\nName: ${guest.firstName} ${guest.lastName}\nPhone: ${guest.phone || 'N/A'}\nService: ${guest.serviceAttended || 'N/A'}\nFirst Visit: ${guest.firstVisitDate}\nPreferred Contact: ${guest.preferredContactMethod}`;
+  if (guest.prayerRequest) {
+    msg += `\nPrayer Request: ${guest.prayerRequest}`;
+  }
+  if (appUrl) {
+    msg += `\n\nView: ${appUrl}/dashboard/guests/${guest.id}`;
+  }
+  return msg;
+}
+
+async function sendNewGuestEmails(guest: GuestInfo, emails: string[]): Promise<void> {
+  const apiKey = process.env.SENDGRID_API_KEY;
+  const fromEmail = process.env.SENDGRID_FROM_EMAIL;
+  const fromName = process.env.SENDGRID_FROM_NAME || 'Church Guest Follow-Up';
+
+  if (!apiKey || !fromEmail) {
+    console.error('SendGrid credentials not configured');
+    return;
+  }
+
+  const sgMail = require('@sendgrid/mail');
+  sgMail.setApiKey(apiKey);
+  const html = buildNewGuestEmailHtml(guest);
+  const subject = `New Guest: ${guest.firstName} ${guest.lastName}`;
+
+  for (const email of emails) {
+    const trimmed = email.trim();
+    if (!trimmed) continue;
+    try {
+      await sgMail.send({
+        to: trimmed,
+        from: { email: fromEmail, name: fromName },
+        subject,
+        html,
+      });
+      console.log(`New guest email sent to ${trimmed}`);
+    } catch (error: any) {
+      console.error(`New guest email failed to ${trimmed}:`, error.message);
+    }
+  }
+}
+
+async function sendNewGuestWhatsApp(guest: GuestInfo, numbers: string[]): Promise<void> {
+  const accountSid = process.env.TWILIO_ACCOUNT_SID;
+  const authToken = process.env.TWILIO_AUTH_TOKEN;
+  const fromNumber = process.env.TWILIO_WHATSAPP_FROM;
+
+  if (!accountSid || !authToken || !fromNumber) {
+    console.error('Twilio credentials not configured');
+    return;
+  }
+
+  const twilio = require('twilio')(accountSid, authToken);
+  const body = buildNewGuestWhatsAppMessage(guest);
+
+  for (const number of numbers) {
+    const trimmed = number.trim();
+    if (!trimmed) continue;
+    const toWhatsApp = trimmed.startsWith('whatsapp:') ? trimmed : `whatsapp:${trimmed}`;
+    try {
+      await twilio.messages.create({ body, from: fromNumber, to: toWhatsApp });
+      console.log(`New guest WhatsApp sent to ${trimmed}`);
+    } catch (error: any) {
+      console.error(`New guest WhatsApp failed to ${trimmed}:`, error.message);
+    }
+  }
+}
+
+export async function notifyNewGuestSubmission(guest: GuestInfo): Promise<void> {
+  // Check if new guest notifications are enabled
+  const enabledSetting = await prisma.appSetting.findUnique({ where: { key: 'notify_on_new_guest' } });
+  if (enabledSetting?.value === 'false') return;
+
+  // Get email recipients
+  const emailSetting = await prisma.appSetting.findUnique({ where: { key: 'notify_emails' } });
+  const emails = emailSetting?.value ? emailSetting.value.split(',').map(e => e.trim()).filter(Boolean) : [];
+
+  // Get WhatsApp recipients
+  const whatsappSetting = await prisma.appSetting.findUnique({ where: { key: 'notify_whatsapp' } });
+  const numbers = whatsappSetting?.value ? whatsappSetting.value.split(',').map(n => n.trim()).filter(Boolean) : [];
+
+  // Fire all in parallel
+  const tasks: Promise<void>[] = [];
+  if (emails.length > 0) tasks.push(sendNewGuestEmails(guest, emails));
+  if (numbers.length > 0) tasks.push(sendNewGuestWhatsApp(guest, numbers));
+
+  await Promise.allSettled(tasks);
 }

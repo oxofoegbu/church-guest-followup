@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { guestIntakeSchema } from '@/lib/utils';
+import { notifyNewGuestSubmission } from '@/lib/notifications';
 
 // Simple in-memory rate limiter
 const rateLimit = new Map<string, { count: number; resetAt: number }>();
@@ -57,6 +58,19 @@ export async function POST(request: NextRequest) {
         status: 'NEW_GUEST',
       },
     });
+
+    // Send notifications in the background (don't block response)
+    notifyNewGuestSubmission({
+      id: guest.id,
+      firstName: guest.firstName,
+      lastName: guest.lastName,
+      phone: guest.phone,
+      email: guest.email,
+      serviceAttended: guest.serviceAttended,
+      firstVisitDate: new Date(data.firstVisitDate).toLocaleDateString(),
+      preferredContactMethod: data.preferredContactMethod,
+      prayerRequest: guest.prayerRequest,
+    }).catch(err => console.error('New guest notification error:', err));
 
     return NextResponse.json({ ok: true, id: guest.id }, { status: 201 });
   } catch (error) {

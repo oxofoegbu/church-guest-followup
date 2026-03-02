@@ -278,6 +278,23 @@ async function main() {
   }
   console.log('✅ Notifications created');
 
+  // Create default notification settings
+  const settings = [
+    { key: 'notify_emails', value: 'churchadmin@gracelifecenter.com,pastor@gracelifecenter.com' },
+    { key: 'notify_whatsapp', value: '+12023526018' },
+    { key: 'notify_on_new_guest', value: 'true' },
+    { key: 'notify_on_assignment', value: 'true' },
+  ];
+
+  for (const setting of settings) {
+    await prisma.appSetting.upsert({
+      where: { key: setting.key },
+      update: { value: setting.value },
+      create: setting,
+    });
+  }
+  console.log('✅ Notification settings created');
+
   console.log('\n🎉 Seed completed!');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   console.log('Login credentials (all accounts):');
