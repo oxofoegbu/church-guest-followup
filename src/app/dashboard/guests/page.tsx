@@ -21,7 +21,11 @@ export default function GuestsPage() {
     setLoading(true);
     const params = new URLSearchParams();
     if (filters.search) params.set('search', filters.search);
-    if (filters.status) params.set('status', filters.status);
+    if (filters.status === 'UNASSIGNED') {
+      params.set('unassigned', 'true');
+    } else if (filters.status) {
+      params.set('status', filters.status);
+    }
     if (filters.volunteerId) params.set('volunteerId', filters.volunteerId);
     if (filters.service) params.set('service', filters.service);
     if (filters.dateFrom) params.set('dateFrom', filters.dateFrom);
@@ -82,6 +86,7 @@ export default function GuestsPage() {
           <select value={filters.status} onChange={e => { setFilters({ ...filters, status: e.target.value }); setPage(1); }}
             className="select-field">
             <option value="">All Statuses</option>
+            <option value="UNASSIGNED">— Unassigned —</option>
             {Object.entries(STATUS_LABELS).map(([k, v]) => (
               <option key={k} value={k}>{v}</option>
             ))}
