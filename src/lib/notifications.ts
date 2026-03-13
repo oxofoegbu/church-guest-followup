@@ -14,7 +14,6 @@ interface NotifyVolunteerParams {
   guestLink: string;
 }
 
-// Default templates (can be overridden via env)
 const DEFAULT_WHATSAPP_TEMPLATE =
   'New guest assigned: {GuestName}. Phone: {GuestPhone}. First visit: {FirstVisitDate} ({ServiceAttended}). Preferred contact: {PreferredContact}. Open: {GuestLink}';
 
@@ -57,6 +56,50 @@ function buildEmailHtml(params: NotifyVolunteerParams): string {
     </div>
   `;
 }
+
+// ==========================================
+// RESEND EMAIL HELPER
+// ==========================================
+
+async function sendEmailViaResend(to: string, subject: string, html: string): Promise<{ id?: string; error?: string }> {
+  const apiKey = process.env.RESEND_API_KEY;
+  const fromEmail = process.env.RESEND_FROM_EMAIL;
+  const fromName = process.env.RESEND_FROM_NAME || 'Church Guest Follow-Up';
+
+  if (!apiKey || !fromEmail) {
+    return { error: 'Resend credentials not configured' };
+  }
+
+  try {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: `${fromName} <${fromEmail}>`,
+        to: [to],
+        subject,
+        html,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { error: data.message || `Resend error: ${response.status}` };
+    }
+
+    return { id: data.id };
+  } catch (error: any) {
+    return { error: error.message };
+  }
+}
+
+// ==========================================
+// WHATSAPP (TWILIO) - unchanged
+// ==========================================
 
 export async function sendWhatsAppNotification(params: NotifyVolunteerParams): Promise<void> {
   const template = process.env.WHATSAPP_TEMPLATE || DEFAULT_WHATSAPP_TEMPLATE;
@@ -113,6 +156,10 @@ export async function sendWhatsAppNotification(params: NotifyVolunteerParams): P
   }
 }
 
+// ==========================================
+// EMAIL NOTIFICATION (via Resend)
+// ==========================================
+
 export async function sendEmailNotification(params: NotifyVolunteerParams): Promise<void> {
   const subjectTemplate = process.env.EMAIL_SUBJECT_TEMPLATE || DEFAULT_EMAIL_SUBJECT;
   const subject = fillTemplate(subjectTemplate, params);
@@ -129,30 +176,15 @@ export async function sendEmailNotification(params: NotifyVolunteerParams): Prom
   });
 
   try {
-    const apiKey = process.env.SENDGRID_API_KEY;
-    const fromEmail = process.env.SENDGRID_FROM_EMAIL;
-    const fromName = process.env.SENDGRID_FROM_NAME || 'Church Guest Follow-Up';
+    const result = await sendEmailViaResend(params.volunteerEmail, subject, html);
 
-    if (!apiKey || !fromEmail) {
-      throw new Error('SendGrid credentials not configured');
+    if (result.error) {
+      throw new Error(result.error);
     }
-
-    const sgMail = require('@sendgrid/mail');
-    sgMail.setApiKey(apiKey);
-
-    const [response] = await sgMail.send({
-      to: params.volunteerEmail,
-      from: { email: fromEmail, name: fromName },
-      subject,
-      html,
-    });
 
     await prisma.notificationLog.update({
       where: { id: logEntry.id },
-      data: {
-        status: 'SENT',
-        providerMessageId: response?.headers?.['x-message-id'] || null,
-      },
+      data: { status: 'SENT', providerMessageId: result.id || null },
     });
   } catch (error: any) {
     await prisma.notificationLog.update({
@@ -163,12 +195,14 @@ export async function sendEmailNotification(params: NotifyVolunteerParams): Prom
   }
 }
 
+// ==========================================
+// VOLUNTEER ASSIGNMENT NOTIFICATION
+// ==========================================
+
 export async function notifyVolunteerAssignment(params: NotifyVolunteerParams): Promise<void> {
-  // Check if assignment notifications are enabled
   const setting = await prisma.appSetting.findUnique({ where: { key: 'notify_on_assignment' } });
   if (setting?.value === 'false') return;
 
-  // Fire both in parallel
   await Promise.allSettled([
     sendEmailNotification(params),
     sendWhatsAppNotification(params),
@@ -211,7 +245,7 @@ function buildNewGuestEmailHtml(guest: GuestInfo): string {
         </table>
         ${appUrl ? `<a href="${appUrl}/dashboard/guests/${guest.id}" style="display: inline-block; background: #d57d2a; color: #fff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; margin-top: 8px;">View in Dashboard →</a>` : ''}
         <p style="margin-top: 24px; color: #829ab1; font-size: 14px;">
-          Please assign this guest to a volunteer for follow-up.
+          Please assign this guest to someone for follow-up.
         </p>
       </div>
     </div>
@@ -231,31 +265,19 @@ function buildNewGuestWhatsAppMessage(guest: GuestInfo): string {
 }
 
 async function sendNewGuestEmails(guest: GuestInfo, emails: string[]): Promise<void> {
-  const apiKey = process.env.SENDGRID_API_KEY;
-  const fromEmail = process.env.SENDGRID_FROM_EMAIL;
-  const fromName = process.env.SENDGRID_FROM_NAME || 'Church Guest Follow-Up';
-
-  if (!apiKey || !fromEmail) {
-    console.error('SendGrid credentials not configured');
-    return;
-  }
-
-  const sgMail = require('@sendgrid/mail');
-  sgMail.setApiKey(apiKey);
-  const html = buildNewGuestEmailHtml(guest);
   const subject = `New Guest: ${guest.firstName} ${guest.lastName}`;
+  const html = buildNewGuestEmailHtml(guest);
 
   for (const email of emails) {
     const trimmed = email.trim();
     if (!trimmed) continue;
     try {
-      await sgMail.send({
-        to: trimmed,
-        from: { email: fromEmail, name: fromName },
-        subject,
-        html,
-      });
-      console.log(`New guest email sent to ${trimmed}`);
+      const result = await sendEmailViaResend(trimmed, subject, html);
+      if (result.error) {
+        console.error(`New guest email failed to ${trimmed}:`, result.error);
+      } else {
+        console.log(`New guest email sent to ${trimmed}`);
+      }
     } catch (error: any) {
       console.error(`New guest email failed to ${trimmed}:`, error.message);
     }
@@ -289,19 +311,15 @@ async function sendNewGuestWhatsApp(guest: GuestInfo, numbers: string[]): Promis
 }
 
 export async function notifyNewGuestSubmission(guest: GuestInfo): Promise<void> {
-  // Check if new guest notifications are enabled
   const enabledSetting = await prisma.appSetting.findUnique({ where: { key: 'notify_on_new_guest' } });
   if (enabledSetting?.value === 'false') return;
 
-  // Get email recipients
   const emailSetting = await prisma.appSetting.findUnique({ where: { key: 'notify_emails' } });
   const emails = emailSetting?.value ? emailSetting.value.split(',').map(e => e.trim()).filter(Boolean) : [];
 
-  // Get WhatsApp recipients
   const whatsappSetting = await prisma.appSetting.findUnique({ where: { key: 'notify_whatsapp' } });
   const numbers = whatsappSetting?.value ? whatsappSetting.value.split(',').map(n => n.trim()).filter(Boolean) : [];
 
-  // Fire all in parallel
   const tasks: Promise<void>[] = [];
   if (emails.length > 0) tasks.push(sendNewGuestEmails(guest, emails));
   if (numbers.length > 0) tasks.push(sendNewGuestWhatsApp(guest, numbers));
