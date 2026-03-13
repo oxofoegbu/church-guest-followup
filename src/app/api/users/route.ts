@@ -22,7 +22,7 @@ const updateUserSchema = z.object({
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await requireAuth(request, ['ADMIN']);
+    const session = await requireAuth(request, ['ADMIN', 'LEADER']);
     const users = await prisma.user.findMany({
       select: {
         id: true, name: true, email: true, phone: true,
@@ -49,7 +49,6 @@ export async function POST(request: NextRequest) {
 
     const data = parsed.data;
 
-    // Check email unique
     const existing = await prisma.user.findUnique({ where: { email: data.email.toLowerCase() } });
     if (existing) {
       return NextResponse.json({ error: 'Email already in use' }, { status: 409 });
