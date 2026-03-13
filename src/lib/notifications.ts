@@ -98,8 +98,44 @@ async function sendEmailViaResend(to: string, subject: string, html: string): Pr
 }
 
 // ==========================================
-// WHATSAPP (TWILIO) - unchanged
+// WHATSAPP (via Whapi.cloud)
 // ==========================================
+
+async function sendWhatsAppViaWhapi(to: string, message: string): Promise<{ id?: string; error?: string }> {
+  const apiUrl = process.env.WHAPI_API_URL || 'https://gate.whapi.cloud';
+  const token = process.env.WHAPI_TOKEN;
+
+  if (!token) {
+    return { error: 'Whapi token not configured' };
+  }
+
+  // Format number: remove + and any non-digits, ensure no whatsapp: prefix
+  const cleanNumber = to.replace(/^whatsapp:/, '').replace(/[^0-9]/g, '');
+
+  try {
+    const response = await fetch(`${apiUrl}/messages/text`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        to: cleanNumber,
+        body: message,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { error: data.message || `Whapi error: ${response.status}` };
+    }
+
+    return { id: data.message?.id || data.id || 'sent' };
+  } catch (error: any) {
+    return { error: error.message };
+  }
+}
 
 export async function sendWhatsAppNotification(params: NotifyVolunteerParams): Promise<void> {
   const template = process.env.WHATSAPP_TEMPLATE || DEFAULT_WHATSAPP_TEMPLATE;
@@ -124,28 +160,15 @@ export async function sendWhatsAppNotification(params: NotifyVolunteerParams): P
   }
 
   try {
-    const accountSid = process.env.TWILIO_ACCOUNT_SID;
-    const authToken = process.env.TWILIO_AUTH_TOKEN;
-    const fromNumber = process.env.TWILIO_WHATSAPP_FROM;
+    const result = await sendWhatsAppViaWhapi(params.volunteerPhone, body);
 
-    if (!accountSid || !authToken || !fromNumber) {
-      throw new Error('Twilio credentials not configured');
+    if (result.error) {
+      throw new Error(result.error);
     }
-
-    const twilio = require('twilio')(accountSid, authToken);
-    const toWhatsApp = params.volunteerPhone.startsWith('whatsapp:')
-      ? params.volunteerPhone
-      : `whatsapp:${params.volunteerPhone}`;
-
-    const message = await twilio.messages.create({
-      body,
-      from: fromNumber,
-      to: toWhatsApp,
-    });
 
     await prisma.notificationLog.update({
       where: { id: logEntry.id },
-      data: { status: 'SENT', providerMessageId: message.sid },
+      data: { status: 'SENT', providerMessageId: result.id || null },
     });
   } catch (error: any) {
     await prisma.notificationLog.update({
@@ -285,25 +308,18 @@ async function sendNewGuestEmails(guest: GuestInfo, emails: string[]): Promise<v
 }
 
 async function sendNewGuestWhatsApp(guest: GuestInfo, numbers: string[]): Promise<void> {
-  const accountSid = process.env.TWILIO_ACCOUNT_SID;
-  const authToken = process.env.TWILIO_AUTH_TOKEN;
-  const fromNumber = process.env.TWILIO_WHATSAPP_FROM;
-
-  if (!accountSid || !authToken || !fromNumber) {
-    console.error('Twilio credentials not configured');
-    return;
-  }
-
-  const twilio = require('twilio')(accountSid, authToken);
   const body = buildNewGuestWhatsAppMessage(guest);
 
   for (const number of numbers) {
     const trimmed = number.trim();
     if (!trimmed) continue;
-    const toWhatsApp = trimmed.startsWith('whatsapp:') ? trimmed : `whatsapp:${trimmed}`;
     try {
-      await twilio.messages.create({ body, from: fromNumber, to: toWhatsApp });
-      console.log(`New guest WhatsApp sent to ${trimmed}`);
+      const result = await sendWhatsAppViaWhapi(trimmed, body);
+      if (result.error) {
+        console.error(`New guest WhatsApp failed to ${trimmed}:`, result.error);
+      } else {
+        console.log(`New guest WhatsApp sent to ${trimmed}`);
+      }
     } catch (error: any) {
       console.error(`New guest WhatsApp failed to ${trimmed}:`, error.message);
     }
