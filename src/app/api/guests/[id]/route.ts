@@ -129,23 +129,25 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       include: { assignedVolunteer: { select: { id: true, name: true, email: true, phone: true } } },
     });
 
-    // Notify on assignment
+    // Notify on assignment (await so log status updates before function terminates)
     if (isNewAssignment && updated.assignedVolunteer) {
       const vol = updated.assignedVolunteer;
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-      notifyVolunteerAssignment({
-        volunteerId: vol.id,
-        volunteerName: vol.name,
-        volunteerEmail: vol.email,
-        volunteerPhone: vol.phone,
-        guestId: updated.id,
-        guestName: `${updated.firstName} ${updated.lastName}`,
-        guestPhone: updated.phone,
-        firstVisitDate: formatDate(updated.firstVisitDate),
-        serviceAttended: updated.serviceAttended,
-        preferredContact: updated.preferredContactMethod,
-        guestLink: `${appUrl}/dashboard/guests/${updated.id}`,
-      }).catch(console.error);
+      try {
+        await notifyVolunteerAssignment({
+          volunteerId: vol.id,
+          volunteerName: vol.name,
+          volunteerEmail: vol.email,
+          volunteerPhone: vol.phone,
+          guestId: updated.id,
+          guestName: `${updated.firstName} ${updated.lastName}`,
+          guestPhone: updated.phone,
+          firstVisitDate: formatDate(updated.firstVisitDate),
+          serviceAttended: updated.serviceAttended,
+          preferredContact: updated.preferredContactMethod,
+          guestLink: `${appUrl}/dashboard/guests/${updated.id}`,
+        });
+      } catch (e) { console.error('Notification error:', e); }
     }
 
     return NextResponse.json({ guest: updated });
