@@ -25,7 +25,7 @@ export async function logAudit(params: AuditParams): Promise<void> {
         targetId: params.targetId || null,
         targetType: params.targetType || null,
         targetName: params.targetName || null,
-        metadata: params.metadata || null,
+        metadata: params.metadata || undefined,
         ipAddress: params.ipAddress || null,
       },
     });
