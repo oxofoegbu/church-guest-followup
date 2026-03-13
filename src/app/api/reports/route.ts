@@ -30,6 +30,8 @@ async function getOverview() {
   const weekAgo = new Date(now.getTime() - 7 * 86400000);
   const monthAgo = new Date(now.getTime() - 30 * 86400000);
 
+  const excludeStatuses = ['ARCHIVED'] as any[];
+
   const [
     totalGuests,
     newGuestsWeek,
@@ -40,23 +42,24 @@ async function getOverview() {
     statusCounts,
     returnDistribution,
   ] = await Promise.all([
-    prisma.guest.count(),
-    prisma.guest.count({ where: { createdAt: { gte: weekAgo } } }),
-    prisma.guest.count({ where: { createdAt: { gte: monthAgo } } }),
-    prisma.guest.count({ where: { assignedVolunteerId: { not: null } } }),
+    prisma.guest.count({ where: { status: { notIn: excludeStatuses } } }),
+    prisma.guest.count({ where: { createdAt: { gte: weekAgo }, status: { notIn: excludeStatuses } } }),
+    prisma.guest.count({ where: { createdAt: { gte: monthAgo }, status: { notIn: excludeStatuses } } }),
+    prisma.guest.count({ where: { assignedVolunteerId: { not: null }, status: { notIn: excludeStatuses } } }),
     prisma.guest.count({ where: { status: { in: ['CONTACTED', 'MEETING_SCHEDULED', 'MET', 'ATTENDING_REGULARLY', 'BECOME_SIGNED_UP'] } } }),
     prisma.guest.count({ where: { becomeSignup: true } }),
     prisma.guest.groupBy({ by: ['status'], _count: true }),
     prisma.guest.groupBy({
       by: ['serviceReturnCount'],
       _count: true,
+      where: { status: { notIn: excludeStatuses } },
       orderBy: { serviceReturnCount: 'asc' },
     }),
   ]);
 
   // % assigned within 24h
   const recentGuests = await prisma.guest.findMany({
-    where: { createdAt: { gte: monthAgo } },
+    where: { createdAt: { gte: monthAgo }, status: { notIn: excludeStatuses } },
     select: { createdAt: true, assignedAt: true },
   });
   const assignedWithin24h = recentGuests.filter(g => {
@@ -68,7 +71,7 @@ async function getOverview() {
 
   // % contacted within 48h
   const assignedGuests = await prisma.guest.findMany({
-    where: { assignedAt: { not: null }, createdAt: { gte: monthAgo } },
+    where: { assignedAt: { not: null }, createdAt: { gte: monthAgo }, status: { notIn: excludeStatuses } },
     select: { id: true, assignedAt: true },
   });
   let contactedWithin48h = 0;
@@ -89,14 +92,15 @@ async function getOverview() {
   const overdueCount = await prisma.followUpActivity.count({
     where: {
       nextFollowUpDate: { lt: now },
-      guest: { status: { notIn: ['BECOME_SIGNED_UP', 'NOT_INTERESTED', 'INACTIVE'] } },
+      guest: { status: { notIn: ['BECOME_SIGNED_UP', 'NOT_INTERESTED', 'INACTIVE', 'ARCHIVED'] } },
     },
   });
 
   // Return stats
-  const returned1x = await prisma.guest.count({ where: { serviceReturnCount: { gte: 1 } } });
-  const returned3x = await prisma.guest.count({ where: { serviceReturnCount: { gte: 3 } } });
-  const returned7x = await prisma.guest.count({ where: { serviceReturnCount: { gte: 7 } } });
+  const activeGuestCount = await prisma.guest.count({ where: { status: { notIn: excludeStatuses } } });
+  const returned1x = await prisma.guest.count({ where: { serviceReturnCount: { gte: 1 }, status: { notIn: excludeStatuses } } });
+  const returned3x = await prisma.guest.count({ where: { serviceReturnCount: { gte: 3 }, status: { notIn: excludeStatuses } } });
+  const returned7x = await prisma.guest.count({ where: { serviceReturnCount: { gte: 7 }, status: { notIn: excludeStatuses } } });
 
   return {
     totalGuests,
@@ -111,8 +115,8 @@ async function getOverview() {
     returned1x,
     returned3x,
     returned7x,
-    pctReturned1x: totalGuests > 0 ? Math.round((returned1x / totalGuests) * 100) : 0,
-    pctReturned7x: totalGuests > 0 ? Math.round((returned7x / totalGuests) * 100) : 0,
+    pctReturned1x: activeGuestCount > 0 ? Math.round((returned1x / activeGuestCount) * 100) : 0,
+    pctReturned7x: activeGuestCount > 0 ? Math.round((returned7x / activeGuestCount) * 100) : 0,
     statusCounts: Object.fromEntries(statusCounts.map(s => [s.status, s._count])),
     returnDistribution: returnDistribution.map(r => ({
       returns: r.serviceReturnCount,
@@ -156,13 +160,16 @@ async function getFunnel() {
 }
 
 async function getVolunteerPerformance() {
-  const volunteers = await prisma.user.findMany({
-    where: { role: 'VOLUNTEER', active: true },
+  // Include ALL active users who have assigned guests (not just VOLUNTEER role)
+  const users = await prisma.user.findMany({
+    where: { active: true, assignedGuests: { some: {} } },
     select: {
       id: true,
       name: true,
+      role: true,
       _count: { select: { assignedGuests: true, activities: true } },
       assignedGuests: {
+        where: { status: { not: 'ARCHIVED' as any } },
         select: {
           id: true,
           status: true,
@@ -178,8 +185,8 @@ async function getVolunteerPerformance() {
     },
   });
 
-  const result = volunteers.map(vol => {
-    const guestCount = vol._count.assignedGuests;
+  const result = users.map(vol => {
+    const guestCount = vol.assignedGuests.length;
     const activityCount = vol._count.activities;
     const becomeSignups = vol.assignedGuests.filter(g => g.becomeSignup).length;
     const avgReturns = guestCount > 0
@@ -187,7 +194,6 @@ async function getVolunteerPerformance() {
       : '0';
     const guests7Returns = vol.assignedGuests.filter(g => g.serviceReturnCount >= 7).length;
 
-    // Overdue follow-ups count would require another query; simplified here
     const activityByType: Record<string, number> = {};
     vol.activities.forEach(a => {
       activityByType[a.activityType] = (activityByType[a.activityType] || 0) + 1;
@@ -196,6 +202,7 @@ async function getVolunteerPerformance() {
     return {
       id: vol.id,
       name: vol.name,
+      role: vol.role,
       guestCount,
       activityCount,
       becomeSignups,
@@ -214,17 +221,15 @@ async function getOperational() {
   const sevenDaysAgo = new Date(now.getTime() - 7 * 86400000);
 
   const [unassigned24h, overdueFollowUps, stalledGuests, nearTarget] = await Promise.all([
-    // Unassigned guests older than 24h
     prisma.guest.findMany({
-      where: { assignedVolunteerId: null, createdAt: { lt: dayAgo } },
+      where: { assignedVolunteerId: null, createdAt: { lt: dayAgo }, status: { notIn: ['ARCHIVED'] as any[] } },
       select: { id: true, firstName: true, lastName: true, createdAt: true, serviceAttended: true },
       orderBy: { createdAt: 'asc' },
     }),
-    // Overdue follow-ups
     prisma.followUpActivity.findMany({
       where: {
         nextFollowUpDate: { lt: now },
-        guest: { status: { notIn: ['BECOME_SIGNED_UP', 'NOT_INTERESTED', 'INACTIVE'] } },
+        guest: { status: { notIn: ['BECOME_SIGNED_UP', 'NOT_INTERESTED', 'INACTIVE', 'ARCHIVED'] } },
       },
       include: {
         guest: { select: { id: true, firstName: true, lastName: true, status: true } },
@@ -232,11 +237,10 @@ async function getOperational() {
       },
       orderBy: { nextFollowUpDate: 'asc' },
     }),
-    // Stalled: assigned but no activity in 7+ days
     prisma.guest.findMany({
       where: {
         assignedVolunteerId: { not: null },
-        status: { notIn: ['BECOME_SIGNED_UP', 'NOT_INTERESTED', 'INACTIVE'] },
+        status: { notIn: ['BECOME_SIGNED_UP', 'NOT_INTERESTED', 'INACTIVE', 'ARCHIVED'] },
         activities: { none: { activityDateTime: { gte: sevenDaysAgo } } },
       },
       select: {
@@ -245,9 +249,8 @@ async function getOperational() {
         activities: { orderBy: { activityDateTime: 'desc' }, take: 1 },
       },
     }),
-    // Near target (5/7 or 6/7)
     prisma.guest.findMany({
-      where: { serviceReturnCount: { in: [5, 6] } },
+      where: { serviceReturnCount: { in: [5, 6] }, status: { notIn: ['ARCHIVED'] as any[] } },
       select: {
         id: true, firstName: true, lastName: true,
         serviceReturnCount: true,

@@ -113,11 +113,11 @@ async function sendWhatsAppViaWhapi(to: string, message: string): Promise<{ id?:
   const cleanNumber = to.replace(/^whatsapp:/, '').replace(/[^0-9]/g, '');
 
   try {
-    const response = await fetch(`${apiUrl}/messages/text`, {
+    const response = await fetch(`${apiUrl}/messages/text?token=${token}`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        'accept': 'application/json',
+        'content-type': 'application/json',
       },
       body: JSON.stringify({
         to: cleanNumber,
@@ -126,12 +126,13 @@ async function sendWhatsAppViaWhapi(to: string, message: string): Promise<{ id?:
     });
 
     const data = await response.json();
+    console.log('Whapi response:', JSON.stringify(data));
 
     if (!response.ok) {
-      return { error: data.message || `Whapi error: ${response.status}` };
+      return { error: data.message || data.error || `Whapi error: ${response.status}` };
     }
 
-    return { id: data.message?.id || data.id || 'sent' };
+    return { id: data.message?.id || data.id || data.sent?.id || 'sent' };
   } catch (error: any) {
     return { error: error.message };
   }

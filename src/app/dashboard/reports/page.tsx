@@ -35,7 +35,7 @@ export default function ReportsPage() {
 
   const tabs: { key: Tab; label: string; icon: string }[] = [
     { key: 'funnel', label: 'Funnel & Outcomes', icon: '📊' },
-    { key: 'volunteers', label: 'Volunteer Performance', icon: '👥' },
+    { key: 'volunteers', label: 'Assignee Performance', icon: '👥' },
     { key: 'operational', label: 'Operational', icon: '⚙️' },
     { key: 'exports', label: 'Export Data', icon: '📥' },
   ];
@@ -176,7 +176,7 @@ function VolunteerReport({ data }: { data: any }) {
         <table>
           <thead>
             <tr>
-              <th>Volunteer</th>
+              <th>Assignee</th>
               <th className="text-right">Guests</th>
               <th className="text-right">Activities</th>
               <th className="text-right">Become Signups</th>
@@ -192,6 +192,7 @@ function VolunteerReport({ data }: { data: any }) {
                   <td className="font-medium text-brand-600 underline decoration-dotted underline-offset-4">
                     <span className="flex items-center gap-2">
                       {expandedId === v.id ? '▼' : '▶'} {v.name}
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-church-100 text-church-500 font-normal no-underline">{v.role}</span>
                     </span>
                   </td>
                   <td className="text-right">{v.guestCount}</td>
