@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ACTIVITY_LABELS, formatDate } from '@/lib/utils';
+import Link from 'next/link';
+import { ACTIVITY_LABELS, STATUS_LABELS, STATUS_COLORS, formatDate } from '@/lib/utils';
 
 type Tab = 'funnel' | 'volunteers' | 'operational' | 'exports';
 
@@ -72,7 +73,6 @@ export default function ReportsPage() {
 function FunnelReport({ overview, funnel }: { overview: any; funnel: any }) {
   return (
     <div className="space-y-6">
-      {/* Key Metrics */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <MetricCard label="Assigned within 24h" value={`${overview.pctAssigned24h}%`} target="Goal: 90%" />
         <MetricCard label="Contacted within 48h" value={`${overview.pctContacted48h}%`} target="Goal: 80%" />
@@ -80,7 +80,6 @@ function FunnelReport({ overview, funnel }: { overview: any; funnel: any }) {
         <MetricCard label="Hit 7/7 Target" value={`${overview.pctReturned7x}%`} />
       </div>
 
-      {/* Monthly Funnel Table */}
       <div className="card">
         <h2 className="section-header mb-4">Monthly Funnel (Last 6 Months)</h2>
         <div className="table-container border-0 shadow-none">
@@ -109,7 +108,6 @@ function FunnelReport({ overview, funnel }: { overview: any; funnel: any }) {
         </div>
       </div>
 
-      {/* Return Stats */}
       <div className="card">
         <h2 className="section-header mb-4">Service Return Milestones</h2>
         <div className="grid grid-cols-3 gap-4">
@@ -128,7 +126,6 @@ function FunnelReport({ overview, funnel }: { overview: any; funnel: any }) {
         </div>
       </div>
 
-      {/* Drop-off */}
       <div className="card">
         <h2 className="section-header mb-3">Drop-Off Breakdown</h2>
         <div className="grid grid-cols-2 gap-4">
@@ -148,6 +145,30 @@ function FunnelReport({ overview, funnel }: { overview: any; funnel: any }) {
 
 function VolunteerReport({ data }: { data: any }) {
   const volunteers = data.volunteers || [];
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [volunteerDetail, setVolunteerDetail] = useState<any>(null);
+  const [detailLoading, setDetailLoading] = useState(false);
+
+  const handleVolunteerClick = async (volId: string) => {
+    if (expandedId === volId) {
+      setExpandedId(null);
+      setVolunteerDetail(null);
+      return;
+    }
+
+    setExpandedId(volId);
+    setDetailLoading(true);
+    try {
+      const res = await fetch(`/api/volunteers?id=${volId}`);
+      if (res.ok) {
+        const detail = await res.json();
+        setVolunteerDetail(detail);
+      }
+    } catch (err) {
+      console.error('Failed to load volunteer detail', err);
+    }
+    setDetailLoading(false);
+  };
 
   return (
     <div className="space-y-6">
@@ -165,14 +186,38 @@ function VolunteerReport({ data }: { data: any }) {
           </thead>
           <tbody>
             {volunteers.map((v: any) => (
-              <tr key={v.id}>
-                <td className="font-medium">{v.name}</td>
-                <td className="text-right">{v.guestCount}</td>
-                <td className="text-right">{v.activityCount}</td>
-                <td className="text-right font-medium text-emerald-600">{v.becomeSignups}</td>
-                <td className="text-right">{v.avgReturns}</td>
-                <td className="text-right font-medium">{v.guests7Returns}</td>
-              </tr>
+              <>
+                <tr key={v.id} className="cursor-pointer hover:bg-brand-50 transition-colors"
+                  onClick={() => handleVolunteerClick(v.id)}>
+                  <td className="font-medium text-brand-600 underline decoration-dotted underline-offset-4">
+                    <span className="flex items-center gap-2">
+                      {expandedId === v.id ? '▼' : '▶'} {v.name}
+                    </span>
+                  </td>
+                  <td className="text-right">{v.guestCount}</td>
+                  <td className="text-right">{v.activityCount}</td>
+                  <td className="text-right font-medium text-emerald-600">{v.becomeSignups}</td>
+                  <td className="text-right">{v.avgReturns}</td>
+                  <td className="text-right font-medium">{v.guests7Returns}</td>
+                </tr>
+
+                {/* Expanded Detail Row */}
+                {expandedId === v.id && (
+                  <tr key={`${v.id}-detail`}>
+                    <td colSpan={6} className="p-0">
+                      <div className="bg-church-50 border-t border-b border-church-200 p-4">
+                        {detailLoading ? (
+                          <div className="text-center py-4 text-church-400">Loading volunteer details...</div>
+                        ) : volunteerDetail ? (
+                          <VolunteerDetailPanel detail={volunteerDetail} />
+                        ) : (
+                          <div className="text-center py-4 text-red-500">Failed to load details</div>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </>
             ))}
           </tbody>
         </table>
@@ -198,10 +243,95 @@ function VolunteerReport({ data }: { data: any }) {
   );
 }
 
+function VolunteerDetailPanel({ detail }: { detail: any }) {
+  const guests = detail.assignedGuests || [];
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="font-display font-bold text-church-900">
+          {detail.name} — Assigned Guests ({guests.length})
+        </h3>
+        <div className="text-sm text-church-500">
+          {detail.email} {detail.phone ? `• ${detail.phone}` : ''}
+        </div>
+      </div>
+
+      {guests.length === 0 ? (
+        <p className="text-sm text-church-400 italic">No guests currently assigned</p>
+      ) : (
+        <div className="space-y-3">
+          {guests.map((guest: any) => (
+            <div key={guest.id} className="bg-white rounded-lg border border-church-200 p-4">
+              <div className="flex items-center justify-between mb-2">
+                <Link href={`/dashboard/guests/${guest.id}`}
+                  className="font-medium text-brand-600 hover:text-brand-700 underline">
+                  {guest.firstName} {guest.lastName}
+                </Link>
+                <div className="flex items-center gap-3">
+                  <span className={`badge ${STATUS_COLORS[guest.status] || 'bg-church-100 text-church-700'}`}>
+                    {STATUS_LABELS[guest.status] || guest.status}
+                  </span>
+                  <span className="text-xs font-medium text-church-600">
+                    Returns: {guest.serviceReturnCount}/{guest.serviceReturnTarget}
+                  </span>
+                </div>
+              </div>
+
+              <div className="text-xs text-church-500 mb-3 flex flex-wrap gap-x-4">
+                {guest.phone && <span>📞 {guest.phone}</span>}
+                {guest.email && <span>📧 {guest.email}</span>}
+                <span>⛪ {guest.serviceAttended || 'N/A'}</span>
+                <span>📅 First visit: {formatDate(guest.firstVisitDate)}</span>
+                {guest.assignedAt && <span>✅ Assigned: {formatDate(guest.assignedAt)}</span>}
+              </div>
+
+              {/* Activity Timeline */}
+              {guest.activities && guest.activities.length > 0 ? (
+                <div className="border-t border-church-100 pt-2 mt-2">
+                  <p className="text-xs font-medium text-church-600 mb-2">
+                    Activity Log ({guest.activities.length} total):
+                  </p>
+                  <div className="space-y-1.5 max-h-40 overflow-y-auto">
+                    {guest.activities.map((act: any) => {
+                      const isOverdue = act.nextFollowUpDate && new Date(act.nextFollowUpDate) < new Date();
+                      return (
+                        <div key={act.id} className="flex items-start gap-2 text-xs">
+                          <span className="text-church-400 whitespace-nowrap min-w-[70px]">
+                            {formatDate(act.activityDateTime)}
+                          </span>
+                          <span className="badge bg-church-100 text-church-600 text-[10px] whitespace-nowrap">
+                            {ACTIVITY_LABELS[act.activityType] || act.activityType}
+                          </span>
+                          <span className="text-church-600 flex-1">
+                            {act.outcome || act.notes || '—'}
+                          </span>
+                          {act.nextFollowUpDate && (
+                            <span className={`whitespace-nowrap ${isOverdue ? 'text-red-600 font-medium' : 'text-church-400'}`}>
+                              Next: {formatDate(act.nextFollowUpDate)} {isOverdue ? '⚠️' : ''}
+                            </span>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : (
+                <p className="text-xs text-church-400 italic border-t border-church-100 pt-2 mt-2">
+                  No activities logged yet
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function OperationalReport({ data }: { data: any }) {
   return (
     <div className="space-y-6">
-      {/* Unassigned >24h */}
       <div className="card border-l-4 border-l-red-400">
         <h2 className="section-header text-red-700 mb-3">
           ⚠️ Unassigned Guests &gt;24h ({data.unassigned24h?.length || 0})
@@ -211,16 +341,16 @@ function OperationalReport({ data }: { data: any }) {
         ) : (
           <div className="space-y-2">
             {data.unassigned24h.map((g: any) => (
-              <div key={g.id} className="flex justify-between items-center p-2 bg-red-50 rounded">
+              <Link key={g.id} href={`/dashboard/guests/${g.id}`}
+                className="flex justify-between items-center p-2 bg-red-50 rounded hover:bg-red-100">
                 <span className="font-medium text-sm">{g.firstName} {g.lastName}</span>
                 <span className="text-xs text-church-500">{formatDate(g.createdAt)}</span>
-              </div>
+              </Link>
             ))}
           </div>
         )}
       </div>
 
-      {/* Overdue Follow-ups */}
       <div className="card border-l-4 border-l-amber-400">
         <h2 className="section-header text-amber-700 mb-3">
           📅 Overdue Follow-Ups ({data.overdueFollowUps?.length || 0})
@@ -244,7 +374,6 @@ function OperationalReport({ data }: { data: any }) {
         )}
       </div>
 
-      {/* Stalled */}
       <div className="card border-l-4 border-l-gray-400">
         <h2 className="section-header text-gray-700 mb-3">
           💤 Stalled Guests — No Activity 7+ Days ({data.stalledGuests?.length || 0})
@@ -254,7 +383,8 @@ function OperationalReport({ data }: { data: any }) {
         ) : (
           <div className="space-y-2 max-h-64 overflow-y-auto">
             {data.stalledGuests.map((g: any) => (
-              <div key={g.id} className="flex justify-between items-center p-2 bg-gray-50 rounded text-sm">
+              <Link key={g.id} href={`/dashboard/guests/${g.id}`}
+                className="flex justify-between items-center p-2 bg-gray-50 rounded text-sm hover:bg-gray-100">
                 <div>
                   <span className="font-medium">{g.firstName} {g.lastName}</span>
                   <span className="text-church-500 ml-2">→ {g.assignedVolunteer?.name}</span>
@@ -262,13 +392,12 @@ function OperationalReport({ data }: { data: any }) {
                 <span className="text-xs text-church-400">
                   Last: {g.activities?.[0] ? formatDate(g.activities[0].activityDateTime) : 'Never'}
                 </span>
-              </div>
+              </Link>
             ))}
           </div>
         )}
       </div>
 
-      {/* Near Target */}
       <div className="card border-l-4 border-l-emerald-400">
         <h2 className="section-header text-emerald-700 mb-3">
           🎯 Near Target — 5/7 or 6/7 ({data.nearTarget?.length || 0})
@@ -278,12 +407,13 @@ function OperationalReport({ data }: { data: any }) {
         ) : (
           <div className="space-y-2">
             {data.nearTarget.map((g: any) => (
-              <div key={g.id} className="flex justify-between items-center p-2 bg-emerald-50 rounded text-sm">
+              <Link key={g.id} href={`/dashboard/guests/${g.id}`}
+                className="flex justify-between items-center p-2 bg-emerald-50 rounded text-sm hover:bg-emerald-100">
                 <span className="font-medium">{g.firstName} {g.lastName}</span>
                 <span className="badge bg-emerald-100 text-emerald-700">
                   {g.serviceReturnCount}/7
                 </span>
-              </div>
+              </Link>
             ))}
           </div>
         )}
