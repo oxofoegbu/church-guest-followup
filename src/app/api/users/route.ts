@@ -89,6 +89,7 @@ export async function PATCH(request: NextRequest) {
     const data: any = { ...parsed.data };
     if (data.password) {
       data.password = await hashPassword(data.password);
+      data.mustChangePassword = true; // Force password change on next login
     }
     if (data.email) {
       data.email = data.email.toLowerCase();

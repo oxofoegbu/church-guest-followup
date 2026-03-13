@@ -87,6 +87,11 @@ export default function DashboardShell({ user, children }: { user: User; childre
             );
           })}
           <div className="pt-3 mt-3 border-t border-church-700/50">
+            <Link href="/dashboard/help" onClick={() => setSidebarOpen(false)}
+              className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm text-church-400 hover:bg-church-800 hover:text-white transition-colors">
+              <span className="text-lg">❓</span>
+              Help & Tutorial
+            </Link>
             <Link href="/" target="_blank" onClick={() => setSidebarOpen(false)}
               className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm text-church-400 hover:bg-church-800 hover:text-white transition-colors">
               <span className="text-lg">📋</span>
@@ -105,10 +110,16 @@ export default function DashboardShell({ user, children }: { user: User; childre
               <p className="text-[11px] text-church-400">{ROLE_LABELS[user.role]}</p>
             </div>
           </div>
-          <button onClick={handleLogout}
-            className="w-full text-left text-xs text-church-400 hover:text-red-400 transition-colors px-1">
-            Sign Out →
-          </button>
+          <div className="flex gap-3">
+            <Link href="/change-password"
+              className="text-xs text-church-400 hover:text-brand-300 transition-colors px-1">
+              Change Password
+            </Link>
+            <button onClick={handleLogout}
+              className="text-xs text-church-400 hover:text-red-400 transition-colors px-1">
+              Sign Out →
+            </button>
+          </div>
         </div>
       </aside>
 
