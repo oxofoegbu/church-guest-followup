@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { requireAuth, handleAuthError, hashPassword } from '@/lib/auth';
+import { auditUserCreated, auditUserUpdated, auditUserDeactivated, auditPasswordReset } from '@/lib/audit';
 import { z } from 'zod';
 
 const createUserSchema = z.object({
@@ -39,7 +40,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    await requireAuth(request, ['ADMIN']);
+    const session = await requireAuth(request, ['ADMIN']);
     const body = await request.json();
     const parsed = createUserSchema.safeParse(body);
 
@@ -65,6 +66,8 @@ export async function POST(request: NextRequest) {
       select: { id: true, name: true, email: true, phone: true, role: true, active: true },
     });
 
+    auditUserCreated(session.userId, session.name, user.id, user.name, data.role).catch(() => {});
+
     return NextResponse.json({ user }, { status: 201 });
   } catch (error) {
     return handleAuthError(error);
@@ -73,7 +76,7 @@ export async function POST(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   try {
-    await requireAuth(request, ['ADMIN']);
+    const session = await requireAuth(request, ['ADMIN']);
     const body = await request.json();
     const { id, ...updateFields } = body;
 
@@ -86,10 +89,13 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: 'Validation failed', details: parsed.error.flatten() }, { status: 400 });
     }
 
+    const targetUser = await prisma.user.findUnique({ where: { id }, select: { name: true, active: true } });
+    const hasPasswordChange = !!parsed.data.password;
+
     const data: any = { ...parsed.data };
     if (data.password) {
       data.password = await hashPassword(data.password);
-      data.mustChangePassword = true; // Force password change on next login
+      data.mustChangePassword = true;
     }
     if (data.email) {
       data.email = data.email.toLowerCase();
@@ -100,6 +106,17 @@ export async function PATCH(request: NextRequest) {
       data,
       select: { id: true, name: true, email: true, phone: true, role: true, active: true },
     });
+
+    // Audit logging
+    if (hasPasswordChange) {
+      auditPasswordReset(session.userId, session.name, id, user.name).catch(() => {});
+    }
+    if (data.active === false && targetUser?.active === true) {
+      auditUserDeactivated(session.userId, session.name, id, user.name).catch(() => {});
+    }
+    if (!hasPasswordChange) {
+      auditUserUpdated(session.userId, session.name, id, user.name, updateFields).catch(() => {});
+    }
 
     return NextResponse.json({ user });
   } catch (error) {

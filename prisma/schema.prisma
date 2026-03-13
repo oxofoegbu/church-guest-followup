@@ -178,3 +178,23 @@ model AppSetting {
 
   @@map("app_settings")
 }
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  action      String
+  category    String
+  description String
+  userId      String?
+  userName    String?
+  targetId    String?
+  targetType  String?
+  targetName  String?
+  metadata    Json?
+  ipAddress   String?
+  createdAt   DateTime @default(now())
+
+  @@index([category])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}

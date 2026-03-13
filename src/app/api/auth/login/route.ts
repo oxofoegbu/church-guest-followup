@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { verifyPassword, setSessionCookie } from '@/lib/auth';
+import { auditLogin } from '@/lib/audit';
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,6 +27,9 @@ export async function POST(request: NextRequest) {
       role: user.role,
       name: user.name,
     });
+
+    const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || undefined;
+    auditLogin(user.id, user.name, ip || undefined).catch(() => {});
 
     return NextResponse.json({
       user: {

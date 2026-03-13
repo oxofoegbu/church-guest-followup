@@ -2,11 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { guestIntakeSchema } from '@/lib/utils';
 import { notifyNewGuestSubmission } from '@/lib/notifications';
+import { auditGuestCreated } from '@/lib/audit';
 
 // Simple in-memory rate limiter
 const rateLimit = new Map<string, { count: number; resetAt: number }>();
-const RATE_LIMIT = 10; // requests per window
-const RATE_WINDOW = 60 * 60 * 1000; // 1 hour
+const RATE_LIMIT = 10;
+const RATE_WINDOW = 60 * 60 * 1000;
 
 function checkRateLimit(ip: string): boolean {
   const now = Date.now();
@@ -40,7 +41,6 @@ export async function POST(request: NextRequest) {
 
     // Honeypot check
     if (data.honeypot) {
-      // Silently accept but don't save (bot submission)
       return NextResponse.json({ ok: true, id: 'fake' });
     }
 
@@ -59,7 +59,12 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Send notifications in the background (don't block response)
+    const guestName = `${guest.firstName} ${guest.lastName}`;
+
+    // Audit log
+    auditGuestCreated(guest.id, guestName, ip).catch(() => {});
+
+    // Send notifications in the background
     notifyNewGuestSubmission({
       id: guest.id,
       firstName: guest.firstName,

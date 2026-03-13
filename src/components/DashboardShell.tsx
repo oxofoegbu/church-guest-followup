@@ -19,6 +19,7 @@ const NAV_ITEMS = {
     { href: '/dashboard/my-assigned', label: 'My Guests', icon: '🙋' },
     { href: '/dashboard/users', label: 'Users', icon: '⚙️' },
     { href: '/dashboard/reports', label: 'Reports', icon: '📈' },
+    { href: '/dashboard/audit', label: 'Audit Trail', icon: '📜' },
     { href: '/dashboard/settings', label: 'Settings', icon: '🔔' },
   ],
   VOLUNTEER: [

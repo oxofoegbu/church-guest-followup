@@ -3,6 +3,7 @@ import prisma from '@/lib/db';
 import { requireAuth, handleAuthError } from '@/lib/auth';
 import { notifyVolunteerAssignment } from '@/lib/notifications';
 import { formatDate } from '@/lib/utils';
+import { auditGuestAssigned, auditGuestStatusChanged, auditGuestArchived, auditGuestRestored, auditGuestDeleted } from '@/lib/audit';
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -129,6 +130,28 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       include: { assignedVolunteer: { select: { id: true, name: true, email: true, phone: true } } },
     });
 
+    const guestName = `${updated.firstName} ${updated.lastName}`;
+
+    // Audit: status change
+    if (body.status && body.status !== guest.status) {
+      auditGuestStatusChanged(session.userId, session.name, id, guestName, guest.status, body.status).catch(() => {});
+    }
+
+    // Audit: archive
+    if (body.status === 'ARCHIVED') {
+      auditGuestArchived(session.userId, session.name, id, guestName, body.archivedReason).catch(() => {});
+    }
+
+    // Audit: restore from archive
+    if (guest.status === 'ARCHIVED' && body.status && body.status !== 'ARCHIVED') {
+      auditGuestRestored(session.userId, session.name, id, guestName).catch(() => {});
+    }
+
+    // Audit: assignment
+    if (isNewAssignment && updated.assignedVolunteer) {
+      auditGuestAssigned(session.userId, session.name, id, guestName, updated.assignedVolunteer.name).catch(() => {});
+    }
+
     // Notify on assignment (await so log status updates before function terminates)
     if (isNewAssignment && updated.assignedVolunteer) {
       const vol = updated.assignedVolunteer;
@@ -140,7 +163,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
           volunteerEmail: vol.email,
           volunteerPhone: vol.phone,
           guestId: updated.id,
-          guestName: `${updated.firstName} ${updated.lastName}`,
+          guestName,
           guestPhone: updated.phone,
           firstVisitDate: formatDate(updated.firstVisitDate),
           serviceAttended: updated.serviceAttended,
@@ -166,8 +189,13 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
       return NextResponse.json({ error: 'Guest not found' }, { status: 404 });
     }
 
+    const guestName = `${guest.firstName} ${guest.lastName}`;
+
     // Delete guest and all related data (cascades)
     await prisma.guest.delete({ where: { id } });
+
+    // Audit after deletion
+    await auditGuestDeleted(session.userId, session.name, guestName);
 
     return NextResponse.json({ ok: true, message: 'Guest permanently deleted' });
   } catch (error) {

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { requireAuth } from '@/lib/auth';
+import { auditSettingsChanged } from '@/lib/audit';
 
 export async function GET(request: NextRequest) {
   const user = await requireAuth(request);
@@ -40,6 +41,11 @@ export async function PATCH(request: NextRequest) {
       update: { value: String(value) },
       create: { key, value: String(value) },
     });
+  }
+
+  const changedKeys = Object.keys(body).filter(k => allowedKeys.includes(k));
+  if (changedKeys.length > 0) {
+    auditSettingsChanged(user.userId, user.name, changedKeys).catch(() => {});
   }
 
   return NextResponse.json({ ok: true });
