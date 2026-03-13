@@ -29,12 +29,15 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       return NextResponse.json({ error: 'Guest not found' }, { status: 404 });
     }
 
-    // Volunteers can only see their guests
     if (session.role === 'VOLUNTEER' && guest.assignedVolunteerId !== session.userId) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
 
-    return NextResponse.json({ guest });
+    // Also fetch custom targets from settings
+    const customTargetsSetting = await prisma.appSetting.findUnique({ where: { key: 'custom_targets' } });
+    const customTargets = customTargetsSetting?.value ? JSON.parse(customTargetsSetting.value) : [];
+
+    return NextResponse.json({ guest, customTargets });
   } catch (error) {
     return handleAuthError(error);
   }
@@ -56,15 +59,17 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       if (guest.assignedVolunteerId !== session.userId) {
         return NextResponse.json({ error: 'Access denied' }, { status: 403 });
       }
-      // Restrict fields
-      const allowed = ['status', 'becomeSignup', 'becomeSignupDate', 'becomeCohort'];
+      const allowed = [
+        'status', 'becomeSignup', 'becomeSignupDate', 'becomeCohort',
+        'waterBaptism', 'waterBaptismDate', 'volunteerInChurch', 'volunteerInChurchDate',
+        'joinSmallGroup', 'joinSmallGroupDate', 'customTargets',
+      ];
       const keys = Object.keys(body);
       for (const key of keys) {
         if (!allowed.includes(key)) {
           return NextResponse.json({ error: `Cannot update field: ${key}` }, { status: 403 });
         }
       }
-      // Restrict statuses
       const VOLUNTEER_ALLOWED = [
         'ASSIGNED', 'CONTACT_ATTEMPTED', 'CONTACTED',
         'MEETING_SCHEDULED', 'MET', 'ATTENDING_REGULARLY',
@@ -74,15 +79,15 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       }
     }
 
-    // Handle assignment
+    // Handle assignment (admin and leader can assign)
     const isNewAssignment = body.assignedVolunteerId !== undefined &&
       body.assignedVolunteerId !== guest.assignedVolunteerId;
 
     const updateData: any = { ...body };
 
     if (isNewAssignment) {
-      if (session.role !== 'ADMIN') {
-        return NextResponse.json({ error: 'Only admins can assign guests' }, { status: 403 });
+      if (session.role === 'VOLUNTEER') {
+        return NextResponse.json({ error: 'Only admins and leaders can assign guests' }, { status: 403 });
       }
       updateData.assignedAt = new Date();
       if (guest.status === 'NEW_GUEST') {
@@ -90,10 +95,33 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       }
     }
 
+    // Handle archiving
+    if (body.status === 'ARCHIVED' && session.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Only admins can archive guests' }, { status: 403 });
+    }
+    if (body.status === 'ARCHIVED') {
+      updateData.archivedAt = new Date();
+      updateData.archivedReason = body.archivedReason || null;
+    }
+
+    // Unarchive
+    if (guest.status === 'ARCHIVED' && body.status && body.status !== 'ARCHIVED') {
+      updateData.archivedAt = null;
+      updateData.archivedReason = null;
+    }
+
     // Date fields
     if (updateData.firstVisitDate) updateData.firstVisitDate = new Date(updateData.firstVisitDate);
     if (updateData.becomeSignupDate) updateData.becomeSignupDate = new Date(updateData.becomeSignupDate);
+    if (updateData.waterBaptismDate) updateData.waterBaptismDate = new Date(updateData.waterBaptismDate);
+    if (updateData.volunteerInChurchDate) updateData.volunteerInChurchDate = new Date(updateData.volunteerInChurchDate);
+    if (updateData.joinSmallGroupDate) updateData.joinSmallGroupDate = new Date(updateData.joinSmallGroupDate);
     if (updateData.assignedAt) updateData.assignedAt = new Date(updateData.assignedAt);
+
+    // Remove archivedReason from updateData if not archiving (it's not a Prisma field to set otherwise)
+    if (body.status !== 'ARCHIVED') {
+      delete updateData.archivedReason;
+    }
 
     const updated = await prisma.guest.update({
       where: { id },
@@ -101,7 +129,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       include: { assignedVolunteer: { select: { id: true, name: true, email: true, phone: true } } },
     });
 
-    // Notify volunteer on assignment
+    // Notify on assignment
     if (isNewAssignment && updated.assignedVolunteer) {
       const vol = updated.assignedVolunteer;
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
@@ -117,10 +145,29 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
         serviceAttended: updated.serviceAttended,
         preferredContact: updated.preferredContactMethod,
         guestLink: `${appUrl}/dashboard/guests/${updated.id}`,
-      }).catch(console.error); // Fire and forget
+      }).catch(console.error);
     }
 
     return NextResponse.json({ guest: updated });
+  } catch (error) {
+    return handleAuthError(error);
+  }
+}
+
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+  try {
+    const session = await requireAuth(request, ['ADMIN']);
+    const { id } = params;
+
+    const guest = await prisma.guest.findUnique({ where: { id } });
+    if (!guest) {
+      return NextResponse.json({ error: 'Guest not found' }, { status: 404 });
+    }
+
+    // Delete guest and all related data (cascades)
+    await prisma.guest.delete({ where: { id } });
+
+    return NextResponse.json({ ok: true, message: 'Guest permanently deleted' });
   } catch (error) {
     return handleAuthError(error);
   }

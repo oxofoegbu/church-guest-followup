@@ -12,6 +12,7 @@ export const STATUS_LABELS: Record<string, string> = {
   NOT_INTERESTED: 'Not Interested',
   INACTIVE: 'Inactive',
   BECOME_SIGNED_UP: 'Become Signed Up ✓',
+  ARCHIVED: 'Archived',
 };
 
 export const STATUS_COLORS: Record<string, string> = {
@@ -25,6 +26,7 @@ export const STATUS_COLORS: Record<string, string> = {
   NOT_INTERESTED: 'bg-red-100 text-red-800',
   INACTIVE: 'bg-gray-100 text-gray-600',
   BECOME_SIGNED_UP: 'bg-emerald-100 text-emerald-800',
+  ARCHIVED: 'bg-stone-100 text-stone-600',
 };
 
 export const ACTIVITY_LABELS: Record<string, string> = {
@@ -60,7 +62,15 @@ export const PREFERRED_CONTACT_LABELS: Record<string, string> = {
   EMAIL: 'Email',
 };
 
-// ─── Validation Schemas ──────────────────────────────────
+// Built-in target goals
+export const BUILTIN_TARGETS = [
+  { key: 'becomeSignup', label: 'Become Signup', dateKey: 'becomeSignupDate' },
+  { key: 'waterBaptism', label: 'Water Baptism', dateKey: 'waterBaptismDate' },
+  { key: 'volunteerInChurch', label: 'Volunteer in Church', dateKey: 'volunteerInChurchDate' },
+  { key: 'joinSmallGroup', label: 'Join A Small Group', dateKey: 'joinSmallGroupDate' },
+];
+
+// ─── Validation Schemas ──────────────────────────────────────────
 export const guestIntakeSchema = z.object({
   firstName: z.string().min(1, 'First name is required').max(100).trim(),
   lastName: z.string().min(1, 'Last name is required').max(100).trim(),
@@ -72,7 +82,7 @@ export const guestIntakeSchema = z.object({
   serviceAttended: z.string().max(100).optional(),
   howHeardAboutUs: z.string().max(200).optional(),
   prayerRequest: z.string().max(1000).optional(),
-  honeypot: z.string().max(0).optional(), // spam trap
+  honeypot: z.string().max(0).optional(),
 });
 
 export const activitySchema = z.object({
@@ -94,17 +104,17 @@ export const serviceReturnSchema = z.object({
   serviceName: z.string().max(100).optional(),
 });
 
-// ─── Helpers ─────────────────────────────────────────────
+// ─── Helpers ─────────────────────────────────────────────────────
 export function formatDate(date: Date | string | null): string {
   if (!date) return '—';
   const d = new Date(date);
-  return d.toLocaleDateString('en-NG', { year: 'numeric', month: 'short', day: 'numeric' });
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
 export function formatDateTime(date: Date | string | null): string {
   if (!date) return '—';
   const d = new Date(date);
-  return d.toLocaleDateString('en-NG', {
+  return d.toLocaleDateString('en-US', {
     year: 'numeric', month: 'short', day: 'numeric',
     hour: '2-digit', minute: '2-digit',
   });
@@ -125,13 +135,11 @@ export function cn(...classes: (string | undefined | false | null)[]): string {
   return classes.filter(Boolean).join(' ');
 }
 
-// ─── Volunteer-allowed statuses ──────────────────────────
 export const VOLUNTEER_ALLOWED_STATUSES = [
   'ASSIGNED', 'CONTACT_ATTEMPTED', 'CONTACTED',
   'MEETING_SCHEDULED', 'MET', 'ATTENDING_REGULARLY',
 ];
 
-// CSV export helper
 export function toCSV(data: Record<string, any>[], columns: { key: string; label: string }[]): string {
   const header = columns.map((c) => `"${c.label}"`).join(',');
   const rows = data.map((row) =>

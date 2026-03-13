@@ -42,7 +42,7 @@ export default function GuestsPage() {
   useEffect(() => {
     fetch('/api/auth/me').then(r => r.json()).then(d => setUser(d.user));
     fetch('/api/users').then(r => r.ok ? r.json() : { users: [] })
-      .then(d => setVolunteers((d.users || []).filter((u: any) => u.role === 'VOLUNTEER' && u.active)));
+      .then(d => setVolunteers((d.users || []).filter((u: any) => u.active)));
     fetchGuests();
   }, [fetchGuests]);
 
@@ -65,6 +65,7 @@ export default function GuestsPage() {
   };
 
   const isAdmin = user?.role === 'ADMIN';
+  const canAssign = user?.role === 'ADMIN' || user?.role === 'LEADER';
 
   return (
     <div className="space-y-6 fade-in">
@@ -94,7 +95,7 @@ export default function GuestsPage() {
           <select value={filters.volunteerId}
             onChange={e => { setFilters({ ...filters, volunteerId: e.target.value }); setPage(1); }}
             className="select-field">
-            <option value="">All Volunteers</option>
+            <option value="">All Assignees</option>
             {volunteers.map(v => (
               <option key={v.id} value={v.id}>{v.name}</option>
             ))}
@@ -109,7 +110,7 @@ export default function GuestsPage() {
       </div>
 
       {/* Bulk Assign */}
-      {isAdmin && selected.length > 0 && (
+      {canAssign && selected.length > 0 && (
         <div className="card bg-brand-50 border-brand-200 flex flex-wrap items-center gap-3">
           <span className="text-sm font-medium">{selected.length} selected</span>
           <select value={bulkVolunteer} onChange={e => setBulkVolunteer(e.target.value)}
@@ -133,7 +134,7 @@ export default function GuestsPage() {
         <table>
           <thead>
             <tr>
-              {isAdmin && <th className="w-10"><input type="checkbox"
+              {canAssign && <th className="w-10"><input type="checkbox"
                 checked={selected.length === guests.length && guests.length > 0}
                 onChange={e => setSelected(e.target.checked ? guests.map(g => g.id) : [])}
               /></th>}
@@ -153,7 +154,7 @@ export default function GuestsPage() {
               <tr><td colSpan={8} className="text-center py-8 text-church-400">No guests found</td></tr>
             ) : guests.map(guest => (
               <tr key={guest.id}>
-                {isAdmin && <td>
+                {canAssign && <td>
                   <input type="checkbox" checked={selected.includes(guest.id)}
                     onChange={() => toggleSelect(guest.id)} />
                 </td>}

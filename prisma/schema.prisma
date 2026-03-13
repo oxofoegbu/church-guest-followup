@@ -25,6 +25,7 @@ enum GuestStatus {
   NOT_INTERESTED
   INACTIVE
   BECOME_SIGNED_UP
+  ARCHIVED
 }
 
 enum PreferredContact {
@@ -97,6 +98,17 @@ model Guest {
   becomeCohort         String?
   serviceReturnCount   Int             @default(0)
   serviceReturnTarget  Int             @default(7)
+  // Target Goals
+  waterBaptism         Boolean         @default(false)
+  waterBaptismDate     DateTime?
+  volunteerInChurch    Boolean         @default(false)
+  volunteerInChurchDate DateTime?
+  joinSmallGroup       Boolean         @default(false)
+  joinSmallGroupDate   DateTime?
+  customTargets        Json?           @default("[]")
+  // Archival
+  archivedAt           DateTime?
+  archivedReason       String?
   createdAt            DateTime        @default(now())
   updatedAt            DateTime        @updatedAt
 

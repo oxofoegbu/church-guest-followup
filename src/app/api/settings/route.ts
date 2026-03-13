@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { requireAuth } from '@/lib/auth';
 
-// GET all settings (admin only)
 export async function GET(request: NextRequest) {
   const user = await requireAuth(request);
   if (!user || user.role !== 'ADMIN') {
@@ -18,7 +17,6 @@ export async function GET(request: NextRequest) {
   return NextResponse.json(settingsMap);
 }
 
-// PATCH update settings (admin only)
 export async function PATCH(request: NextRequest) {
   const user = await requireAuth(request);
   if (!user || user.role !== 'ADMIN') {
@@ -32,6 +30,7 @@ export async function PATCH(request: NextRequest) {
     'notify_whatsapp',
     'notify_on_new_guest',
     'notify_on_assignment',
+    'custom_targets',
   ];
 
   for (const [key, value] of Object.entries(body)) {

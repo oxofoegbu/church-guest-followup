@@ -15,18 +15,21 @@ const NAV_ITEMS = {
   ADMIN: [
     { href: '/dashboard', label: 'Dashboard', icon: '📊' },
     { href: '/dashboard/guests', label: 'All Guests', icon: '👥' },
-    { href: '/dashboard/my-guests', label: 'My Guests', icon: '🙋' },
+    { href: '/dashboard/overview', label: 'All Guests Overview', icon: '📋' },
+    { href: '/dashboard/my-assigned', label: 'My Guests', icon: '🙋' },
     { href: '/dashboard/users', label: 'Users', icon: '⚙️' },
     { href: '/dashboard/reports', label: 'Reports', icon: '📈' },
     { href: '/dashboard/settings', label: 'Settings', icon: '🔔' },
   ],
   VOLUNTEER: [
     { href: '/dashboard', label: 'Dashboard', icon: '📊' },
-    { href: '/dashboard/my-guests', label: 'My Guests', icon: '🙋' },
+    { href: '/dashboard/my-assigned', label: 'My Guests', icon: '🙋' },
   ],
   LEADER: [
     { href: '/dashboard', label: 'Dashboard', icon: '📊' },
     { href: '/dashboard/guests', label: 'All Guests', icon: '👥' },
+    { href: '/dashboard/overview', label: 'All Guests Overview', icon: '📋' },
+    { href: '/dashboard/my-assigned', label: 'My Guests', icon: '🙋' },
     { href: '/dashboard/reports', label: 'Reports', icon: '📈' },
   ],
 };
@@ -51,16 +54,13 @@ export default function DashboardShell({ user, children }: { user: User; childre
 
   return (
     <div className="min-h-screen bg-warm-50 flex">
-      {/* Mobile overlay */}
       {sidebarOpen && (
         <div className="fixed inset-0 bg-black/40 z-30 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
 
-      {/* Sidebar */}
       <aside className={`fixed lg:static inset-y-0 left-0 z-40 w-64 bg-church-900 text-white
         transform transition-transform duration-200 lg:transform-none flex flex-col
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
-        {/* Logo */}
         <div className="p-5 border-b border-church-700/50">
           <Link href="/dashboard" className="flex items-center gap-3">
             <span className="text-2xl">⛪</span>
@@ -71,7 +71,6 @@ export default function DashboardShell({ user, children }: { user: User; childre
           </Link>
         </div>
 
-        {/* Nav */}
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
           {items.map((item) => {
             const active = pathname === item.href ||
@@ -96,7 +95,6 @@ export default function DashboardShell({ user, children }: { user: User; childre
           </div>
         </nav>
 
-        {/* User */}
         <div className="p-4 border-t border-church-700/50">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-9 h-9 rounded-full bg-brand-500/30 flex items-center justify-center text-sm font-bold text-brand-300">
@@ -114,9 +112,7 @@ export default function DashboardShell({ user, children }: { user: User; childre
         </div>
       </aside>
 
-      {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Mobile header */}
         <header className="lg:hidden sticky top-0 z-20 bg-white border-b border-church-100 px-4 py-3 flex items-center gap-3">
           <button onClick={() => setSidebarOpen(true)}
             className="p-1.5 rounded-lg hover:bg-church-50">
@@ -127,7 +123,6 @@ export default function DashboardShell({ user, children }: { user: User; childre
           <span className="font-display font-bold text-church-900">⛪ Guest Follow-Up</span>
         </header>
 
-        {/* Page content */}
         <main className="flex-1 p-4 lg:p-8 overflow-y-auto">
           {children}
         </main>
