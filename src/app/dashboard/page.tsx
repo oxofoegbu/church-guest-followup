@@ -102,28 +102,41 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Return Distribution */}
+          {/* Return Distribution - Bar Chart */}
           <div className="card">
-            <h2 className="section-header mb-4">Service Return Distribution</h2>
-            <div className="flex items-end gap-2 h-32">
+            <h2 className="section-header mb-6">Service Return Distribution</h2>
+            <div className="flex items-end justify-between gap-3" style={{ height: '200px' }}>
               {Array.from({ length: 8 }, (_, i) => {
                 const item = stats.returnDistribution.find(r => r.returns === i);
                 const count = item?.count || 0;
                 const maxCount = Math.max(...stats.returnDistribution.map(r => r.count), 1);
-                const height = count > 0 ? Math.max((count / maxCount) * 100, 8) : 4;
+                const heightPct = count > 0 ? Math.max((count / maxCount) * 100, 8) : 0;
+                const barColor = i === 7
+                  ? 'bg-emerald-500'
+                  : i >= 5
+                    ? 'bg-teal-400'
+                    : i >= 3
+                      ? 'bg-blue-400'
+                      : i >= 1
+                        ? 'bg-church-300'
+                        : 'bg-church-200';
                 return (
-                  <div key={i} className="flex-1 flex flex-col items-center gap-1">
-                    <span className="text-xs font-medium text-church-700">{count}</span>
+                  <div key={i} className="flex-1 flex flex-col items-center justify-end h-full">
+                    <span className="text-sm font-bold text-church-800 mb-1">{count}</span>
                     <div
-                      className={`w-full rounded-t-md transition-all ${i === 7 ? 'bg-emerald-500' : i >= 5 ? 'bg-sage-400' : 'bg-church-300'}`}
-                      style={{ height: `${height}%` }}
+                      className={`w-full max-w-[48px] mx-auto rounded-t-md transition-all duration-500 ${barColor}`}
+                      style={{ height: count > 0 ? `${heightPct}%` : '2px' }}
                     />
-                    <span className="text-[10px] text-church-500">{i}</span>
+                    <div className="mt-2 text-center">
+                      <span className="text-xs font-medium text-church-600">{i}</span>
+                      {i === 0 && <div className="text-[9px] text-church-400">visits</div>}
+                      {i === 7 && <div className="text-[9px] text-emerald-600 font-medium">target</div>}
+                    </div>
                   </div>
                 );
               })}
             </div>
-            <div className="text-center text-xs text-church-500 mt-2">
+            <div className="text-center text-xs text-church-500 mt-4 pt-3 border-t border-church-100">
               Number of service returns (0 = first visit only)
             </div>
           </div>
