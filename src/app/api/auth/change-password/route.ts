@@ -1,13 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
-import { getSession, verifyPassword, hashPassword } from '@/lib/auth';
+import { requireAuth, handleAuthError, verifyPassword, hashPassword } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getSession(request);
-    if (!session) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
-    }
+    const session = await requireAuth(request);
 
     const { currentPassword, newPassword } = await request.json();
 
@@ -21,7 +18,6 @@ export async function POST(request: NextRequest) {
     }
 
     // If user must change password (first login), currentPassword check is optional
-    // Otherwise, require current password
     if (!user.mustChangePassword) {
       if (!currentPassword) {
         return NextResponse.json({ error: 'Current password is required' }, { status: 400 });
@@ -44,7 +40,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ ok: true, message: 'Password changed successfully' });
   } catch (error) {
-    console.error('Change password error:', error);
-    return NextResponse.json({ error: 'Failed to change password' }, { status: 500 });
+    return handleAuthError(error);
   }
 }
