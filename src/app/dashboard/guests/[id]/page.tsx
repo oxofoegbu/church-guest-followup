@@ -9,7 +9,7 @@ export default function GuestDetailPage() {
   const params = useParams();
   const router = useRouter();
   const [guest, setGuest] = useState<any>(null);
-  const [customTargets, setCustomTargets] = useState<string[]>([]);
+  const [targetConfig, setTargetConfig] = useState<{ key: string; label: string; builtin: boolean }[]>([]);
   const [users, setUsers] = useState<any[]>([]);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -23,9 +23,15 @@ export default function GuestDetailPage() {
     if (res.ok) {
       const data = await res.json();
       setGuest(data.guest);
-      setCustomTargets(data.customTargets || []);
     }
   };
+
+  const DEFAULT_TARGETS = [
+    { key: 'becomeSignup', label: 'Become Signup', builtin: true },
+    { key: 'waterBaptism', label: 'Water Baptism', builtin: true },
+    { key: 'volunteerInChurch', label: 'Volunteer in Church', builtin: true },
+    { key: 'joinSmallGroup', label: 'Join A Small Group', builtin: true },
+  ];
 
   useEffect(() => {
     Promise.all([
@@ -33,6 +39,12 @@ export default function GuestDetailPage() {
       fetch('/api/auth/me').then(r => r.json()).then(d => setUser(d.user)),
       fetch('/api/users').then(r => r.ok ? r.json() : { users: [] })
         .then(d => setUsers((d.users || []).filter((u: any) => u.active))),
+      fetch('/api/settings').then(r => r.ok ? r.json() : {}).then(d => {
+        try {
+          const parsed = JSON.parse(d.target_config || '[]');
+          setTargetConfig(Array.isArray(parsed) && parsed.length > 0 ? parsed : DEFAULT_TARGETS);
+        } catch { setTargetConfig(DEFAULT_TARGETS); }
+      }),
     ]).then(() => setLoading(false));
   }, [params.id]);
 
@@ -112,29 +124,37 @@ export default function GuestDetailPage() {
           <div className="card">
             <h2 className="section-header mb-4">🎯 Target Goals</h2>
             <div className="space-y-3">
-              {/* Become Signup */}
-              <TargetRow label="Become Signup" completed={guest.becomeSignup} date={guest.becomeSignupDate}
-                onToggle={(val) => updateGuest({ becomeSignup: val, becomeSignupDate: val ? new Date().toISOString() : null })}
-                disabled={isVolunteer && false} />
-              {/* Water Baptism */}
-              <TargetRow label="Water Baptism" completed={guest.waterBaptism} date={guest.waterBaptismDate}
-                onToggle={(val) => updateGuest({ waterBaptism: val, waterBaptismDate: val ? new Date().toISOString() : null })} />
-              {/* Volunteer in Church */}
-              <TargetRow label="Volunteer in Church" completed={guest.volunteerInChurch} date={guest.volunteerInChurchDate}
-                onToggle={(val) => updateGuest({ volunteerInChurch: val, volunteerInChurchDate: val ? new Date().toISOString() : null })} />
-              {/* Join Small Group */}
-              <TargetRow label="Join A Small Group" completed={guest.joinSmallGroup} date={guest.joinSmallGroupDate}
-                onToggle={(val) => updateGuest({ joinSmallGroup: val, joinSmallGroupDate: val ? new Date().toISOString() : null })} />
-              {/* Custom Targets */}
-              {customTargets.map((target: string) => (
-                <TargetRow key={target} label={target}
-                  completed={guestCustomTargets[target]?.completed || false}
-                  date={guestCustomTargets[target]?.date || null}
-                  onToggle={(val) => {
-                    const updated = { ...guestCustomTargets, [target]: { completed: val, date: val ? new Date().toISOString() : null } };
-                    updateGuest({ customTargets: JSON.stringify(updated) });
-                  }} />
-              ))}
+              {targetConfig.map((target) => {
+                // Built-in targets use dedicated DB columns
+                const builtinFieldMap: Record<string, { field: string; dateField: string }> = {
+                  becomeSignup: { field: 'becomeSignup', dateField: 'becomeSignupDate' },
+                  waterBaptism: { field: 'waterBaptism', dateField: 'waterBaptismDate' },
+                  volunteerInChurch: { field: 'volunteerInChurch', dateField: 'volunteerInChurchDate' },
+                  joinSmallGroup: { field: 'joinSmallGroup', dateField: 'joinSmallGroupDate' },
+                };
+                const builtin = builtinFieldMap[target.key];
+                if (builtin) {
+                  return (
+                    <TargetRow key={target.key} label={target.label}
+                      completed={guest[builtin.field]}
+                      date={guest[builtin.dateField]}
+                      onToggle={(val) => updateGuest({
+                        [builtin.field]: val,
+                        [builtin.dateField]: val ? new Date().toISOString() : null,
+                      })} />
+                  );
+                }
+                // Custom targets use JSON field
+                return (
+                  <TargetRow key={target.key} label={target.label}
+                    completed={guestCustomTargets[target.key]?.completed || false}
+                    date={guestCustomTargets[target.key]?.date || null}
+                    onToggle={(val) => {
+                      const updated = { ...guestCustomTargets, [target.key]: { completed: val, date: val ? new Date().toISOString() : null } };
+                      updateGuest({ customTargets: JSON.stringify(updated) });
+                    }} />
+                );
+              })}
             </div>
             {guest.becomeCohort && (
               <div className="mt-3 pt-3 border-t border-church-100 text-sm">

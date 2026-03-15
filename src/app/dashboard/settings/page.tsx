@@ -12,14 +12,75 @@ export default function SettingsPage() {
     notify_on_assignment: 'true',
     custom_targets: '[]',
     custom_roles: '[]',
+    target_config: '[]',
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [newTarget, setNewTarget] = useState('');
+  const [editingTarget, setEditingTarget] = useState<string | null>(null);
+  const [editingLabel, setEditingLabel] = useState('');
   const [newRoleName, setNewRoleName] = useState('');
   const [newRoleLabel, setNewRoleLabel] = useState('');
   const [newRolePermission, setNewRolePermission] = useState<PermissionLevel>('VOLUNTEER_ACCESS');
+
+  interface TargetConfig {
+    key: string;
+    label: string;
+    builtin: boolean;
+  }
+
+  const DEFAULT_TARGETS: TargetConfig[] = [
+    { key: 'becomeSignup', label: 'Become Signup', builtin: true },
+    { key: 'waterBaptism', label: 'Water Baptism', builtin: true },
+    { key: 'volunteerInChurch', label: 'Volunteer in Church', builtin: true },
+    { key: 'joinSmallGroup', label: 'Join A Small Group', builtin: true },
+  ];
+
+  const targetConfig: TargetConfig[] = (() => {
+    try {
+      const parsed = JSON.parse(settings.target_config);
+      return Array.isArray(parsed) && parsed.length > 0 ? parsed : DEFAULT_TARGETS;
+    } catch { return DEFAULT_TARGETS; }
+  })();
+
+  const setTargetConfig = (config: TargetConfig[]) => {
+    setSettings({ ...settings, target_config: JSON.stringify(config) });
+  };
+
+  const addTargetConfig = () => {
+    const label = newTarget.trim();
+    if (!label) return;
+    const key = label.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+    if (targetConfig.some(t => t.key === key || t.label === label)) return;
+    setTargetConfig([...targetConfig, { key, label, builtin: false }]);
+    setNewTarget('');
+  };
+
+  const removeTargetConfig = (key: string) => {
+    setTargetConfig(targetConfig.filter(t => t.key !== key));
+  };
+
+  const startEditTarget = (key: string, label: string) => {
+    setEditingTarget(key);
+    setEditingLabel(label);
+  };
+
+  const finishEditTarget = (key: string) => {
+    const trimmed = editingLabel.trim();
+    if (trimmed) {
+      setTargetConfig(targetConfig.map(t => t.key === key ? { ...t, label: trimmed } : t));
+    }
+    setEditingTarget(null);
+    setEditingLabel('');
+  };
+
+  const moveTarget = (idx: number, direction: number) => {
+    const newConfig = [...targetConfig];
+    const target = newConfig.splice(idx, 1)[0];
+    newConfig.splice(idx + direction, 0, target);
+    setTargetConfig(newConfig);
+  };
 
   useEffect(() => {
     fetch('/api/settings')
@@ -32,26 +93,9 @@ export default function SettingsPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const customTargets: string[] = (() => {
-    try { return JSON.parse(settings.custom_targets); } catch { return []; }
-  })();
-
   const customRoles: RoleConfig[] = (() => {
     try { return JSON.parse(settings.custom_roles); } catch { return []; }
   })();
-
-  const addTarget = () => {
-    const trimmed = newTarget.trim();
-    if (!trimmed || customTargets.includes(trimmed)) return;
-    const updated = [...customTargets, trimmed];
-    setSettings({ ...settings, custom_targets: JSON.stringify(updated) });
-    setNewTarget('');
-  };
-
-  const removeTarget = (target: string) => {
-    const updated = customTargets.filter(t => t !== target);
-    setSettings({ ...settings, custom_targets: JSON.stringify(updated) });
-  };
 
   const addRole = () => {
     const name = newRoleName.trim().toUpperCase().replace(/\s+/g, '_');
@@ -192,43 +236,56 @@ export default function SettingsPage() {
         <div className="card">
           <h2 className="section-header mb-1">🎯 Target Goals</h2>
           <p className="text-sm text-church-500 mb-4">
-            Built-in targets are always available. Add custom targets for your church's specific needs.
+            Manage the target milestones shown on each guest's profile. You can rename, reorder, or remove any target.
           </p>
 
-          <div className="mb-4">
-            <p className="text-xs font-medium text-church-600 mb-2">Built-in Targets (always available):</p>
-            <div className="flex flex-wrap gap-2">
-              <span className="badge bg-emerald-100 text-emerald-700">Become Signup</span>
-              <span className="badge bg-blue-100 text-blue-700">Water Baptism</span>
-              <span className="badge bg-purple-100 text-purple-700">Volunteer in Church</span>
-              <span className="badge bg-amber-100 text-amber-700">Join A Small Group</span>
-            </div>
+          <div className="space-y-2 mb-4">
+            {targetConfig.length === 0 ? (
+              <p className="text-sm text-church-400 italic">No targets configured. Add some below.</p>
+            ) : targetConfig.map((target, idx) => (
+              <div key={target.key} className="flex items-center gap-2 p-3 bg-church-50 rounded-lg group">
+                <span className="text-lg">{target.builtin ? '📌' : '🏷️'}</span>
+                {editingTarget === target.key ? (
+                  <input type="text" value={editingLabel}
+                    onChange={e => setEditingLabel(e.target.value)}
+                    onBlur={() => finishEditTarget(target.key)}
+                    onKeyDown={e => e.key === 'Enter' && finishEditTarget(target.key)}
+                    autoFocus className="input-field flex-1 py-1" />
+                ) : (
+                  <span className="flex-1 text-sm font-medium text-church-800">{target.label}</span>
+                )}
+                {target.builtin && (
+                  <span className="text-[10px] px-1.5 py-0.5 bg-church-200 text-church-500 rounded">built-in</span>
+                )}
+                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  {idx > 0 && (
+                    <button onClick={() => moveTarget(idx, -1)}
+                      className="text-xs text-church-400 hover:text-church-700 px-1">↑</button>
+                  )}
+                  {idx < targetConfig.length - 1 && (
+                    <button onClick={() => moveTarget(idx, 1)}
+                      className="text-xs text-church-400 hover:text-church-700 px-1">↓</button>
+                  )}
+                  <button onClick={() => startEditTarget(target.key, target.label)}
+                    className="text-xs text-brand-500 hover:text-brand-700 px-1">✏️</button>
+                  <button onClick={() => removeTargetConfig(target.key)}
+                    className="text-xs text-red-400 hover:text-red-600 px-1">🗑️</button>
+                </div>
+              </div>
+            ))}
           </div>
 
-          <div className="border-t border-church-100 pt-4">
-            <p className="text-xs font-medium text-church-600 mb-2">Custom Targets:</p>
-            {customTargets.length === 0 ? (
-              <p className="text-sm text-church-400 italic mb-3">No custom targets added yet.</p>
-            ) : (
-              <div className="flex flex-wrap gap-2 mb-3">
-                {customTargets.map(target => (
-                  <span key={target} className="badge bg-church-100 text-church-700 flex items-center gap-1.5">
-                    {target}
-                    <button onClick={() => removeTarget(target)}
-                      className="text-red-400 hover:text-red-600 ml-1 text-xs font-bold">×</button>
-                  </span>
-                ))}
-              </div>
-            )}
-            <div className="flex gap-2">
-              <input type="text" value={newTarget}
-                onChange={e => setNewTarget(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && addTarget()}
-                placeholder="e.g. Completed New Members Class"
-                className="input-field flex-1" />
-              <button onClick={addTarget} className="btn-secondary btn-sm whitespace-nowrap">+ Add Target</button>
-            </div>
+          <div className="flex gap-2">
+            <input type="text" value={newTarget}
+              onChange={e => setNewTarget(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && addTargetConfig()}
+              placeholder="e.g. Completed New Members Class"
+              className="input-field flex-1" />
+            <button onClick={addTargetConfig} className="btn-secondary btn-sm whitespace-nowrap">+ Add Target</button>
           </div>
+          <p className="text-xs text-church-400 mt-2">
+            Removing a target hides it from guest profiles. Guest data is preserved and will reappear if you re-add it.
+          </p>
         </div>
 
         {/* Notification Settings */}

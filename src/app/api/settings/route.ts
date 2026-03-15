@@ -33,6 +33,7 @@ export async function PATCH(request: NextRequest) {
     'notify_on_assignment',
     'custom_targets',
     'custom_roles',
+    'target_config',
   ];
 
   for (const [key, value] of Object.entries(body)) {
