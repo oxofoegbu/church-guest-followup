@@ -234,7 +234,7 @@ export default function SchedulePage() {
       if (meData?.user) setUser(meData.user);
       // Parse schedule_coordinators to get list of authorised user IDs
       try {
-        const coords = JSON.parse(settingsData?.schedule_coordinators || '[]');
+        const coords = JSON.parse((settingsData as any)?.schedule_coordinators || '[]');
         setCoordinatorUserIds(coords.map((c: any) => c.userId));
       } catch { setCoordinatorUserIds([]); }
     });
