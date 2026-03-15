@@ -23,7 +23,7 @@ const updateUserSchema = z.object({
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await requireAuth(request, ['ADMIN', 'LEADER']);
+    const session = await requireAuth(request);
     const users = await prisma.user.findMany({
       select: {
         id: true, name: true, email: true, phone: true,
