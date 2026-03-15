@@ -106,6 +106,31 @@ export const BUILTIN_TARGETS = [
   { key: 'joinSmallGroup', label: 'Join A Small Group', dateKey: 'joinSmallGroupDate' },
 ];
 
+// ─── Action Item Types ──────────────────────────────────────────
+export const ACTION_ITEM_TYPES: Record<string, { label: string; icon: string }> = {
+  CALL: { label: 'Call', icon: '📞' },
+  TEXT: { label: 'Send Text', icon: '💬' },
+  WHATSAPP: { label: 'WhatsApp Message', icon: '📱' },
+  PRAY: { label: 'Pray for Them', icon: '🙏' },
+  VISIT: { label: 'Visit Them', icon: '🏠' },
+  APPOINTMENT: { label: 'Set Up Appointment', icon: '📅' },
+  PASTOR_MEETING: { label: 'Meeting with Pastor/Leader', icon: '⛪' },
+  INVITE: { label: 'Invite to Church', icon: '💌' },
+  FOLLOW_UP: { label: 'General Follow-Up', icon: '🔄' },
+  OTHER: { label: 'Other', icon: '📝' },
+};
+
+export const actionItemSchema = z.object({
+  guestId: z.string().optional().nullable(),
+  actionType: z.string().min(1),
+  customAction: z.string().max(200).optional(),
+  title: z.string().min(1, 'Title is required').max(200),
+  notes: z.string().max(2000).optional(),
+  dueDate: z.string().min(1, 'Due date is required'),
+  dueTime: z.string().optional(),
+  reminderMinutes: z.number().default(60),
+});
+
 // ─── Validation Schemas ──────────────────────────────────────────
 export const guestIntakeSchema = z.object({
   firstName: z.string().min(1, 'First name is required').max(100).trim(),

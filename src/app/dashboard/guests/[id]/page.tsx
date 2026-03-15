@@ -106,6 +106,9 @@ export default function GuestDetailPage() {
           {guest.status !== 'ARCHIVED' && (
             <button onClick={() => setShowActivityModal(true)} className="btn-primary btn-sm">+ Log Activity</button>
           )}
+          {guest.status !== 'ARCHIVED' && (
+            <Link href={`/dashboard/calendar?guestId=${guest.id}`} className="btn-secondary btn-sm">📅 Plan Action</Link>
+          )}
           {!isProspect && guest.status !== 'ARCHIVED' && guest.serviceReturnCount < 7 && (
             <button onClick={() => setShowReturnModal(true)} className="btn-secondary btn-sm">+ Record Return</button>
           )}
