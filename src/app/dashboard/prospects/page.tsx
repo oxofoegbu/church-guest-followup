@@ -153,13 +153,23 @@ function ProspectFormModal({ users, currentUserId, onClose }: {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.firstName.trim() || !form.lastName.trim()) {
+      setError('First and last name are required');
+      return;
+    }
     setSaving(true);
     setError('');
+
+    // Ensure assignedVolunteerId defaults to current user
+    const payload = { ...form };
+    if (!payload.assignedVolunteerId) {
+      payload.assignedVolunteerId = currentUserId;
+    }
 
     const res = await fetch('/api/prospects', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
+      body: JSON.stringify(payload),
     });
 
     if (!res.ok) {
@@ -181,17 +191,23 @@ function ProspectFormModal({ users, currentUserId, onClose }: {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="label">Prospect's First Name *</label>
-              <input value={form.firstName} onChange={e => setForm({ ...form, firstName: e.target.value })}
-                required className="input-field" placeholder="First name" autoComplete="new-password" />
-            </div>
-            <div>
-              <label className="label">Prospect's Last Name *</label>
-              <input value={form.lastName} onChange={e => setForm({ ...form, lastName: e.target.value })}
-                required className="input-field" placeholder="Last name" autoComplete="new-password" />
+        <form onSubmit={handleSubmit} autoComplete="off" className="space-y-4">
+          {/* Name fields first and prominent */}
+          <div className="p-3 bg-brand-50 rounded-lg border border-brand-100">
+            <p className="text-xs font-medium text-brand-700 mb-2">Who is this prospect?</p>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="label">First Name *</label>
+                <input value={form.firstName} onChange={e => setForm({ ...form, firstName: e.target.value })}
+                  required className="input-field" placeholder="Prospect's first name" autoComplete="new-password"
+                  name="prospect-first-name" id="prospect-first-name" />
+              </div>
+              <div>
+                <label className="label">Last Name *</label>
+                <input value={form.lastName} onChange={e => setForm({ ...form, lastName: e.target.value })}
+                  required className="input-field" placeholder="Prospect's last name" autoComplete="new-password"
+                  name="prospect-last-name" id="prospect-last-name" />
+              </div>
             </div>
           </div>
 
@@ -199,12 +215,12 @@ function ProspectFormModal({ users, currentUserId, onClose }: {
             <div>
               <label className="label">Phone</label>
               <input value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })}
-                className="input-field" placeholder="+1..." />
+                className="input-field" placeholder="+1..." autoComplete="new-password" />
             </div>
             <div>
               <label className="label">Email</label>
               <input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })}
-                className="input-field" placeholder="email@example.com" />
+                className="input-field" placeholder="email@example.com" autoComplete="new-password" />
             </div>
           </div>
 
@@ -245,18 +261,21 @@ function ProspectFormModal({ users, currentUserId, onClose }: {
             </div>
           </div>
 
-          <div>
-            <label className="label">Assign To</label>
-            <select value={form.assignedVolunteerId}
-              onChange={e => setForm({ ...form, assignedVolunteerId: e.target.value })}
-              className="select-field">
-              {users.map(u => (
-                <option key={u.id} value={u.id}>
-                  {u.name} ({u.role}){u.id === currentUserId ? ' — me' : ''}
-                </option>
-              ))}
-            </select>
-          </div>
+          {/* Only show Assign To if users list is available */}
+          {users.length > 0 && (
+            <div>
+              <label className="label">Assign To</label>
+              <select value={form.assignedVolunteerId}
+                onChange={e => setForm({ ...form, assignedVolunteerId: e.target.value })}
+                className="select-field">
+                {users.map(u => (
+                  <option key={u.id} value={u.id}>
+                    {u.name} ({u.role}){u.id === currentUserId ? ' — me' : ''}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
           <div>
             <label className="label">Notes</label>
