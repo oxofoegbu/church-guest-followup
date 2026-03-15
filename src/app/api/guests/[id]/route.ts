@@ -4,6 +4,7 @@ import { requireAuth, handleAuthError } from '@/lib/auth';
 import { notifyVolunteerAssignment } from '@/lib/notifications';
 import { formatDate } from '@/lib/utils';
 import { auditGuestAssigned, auditGuestStatusChanged, auditGuestArchived, auditGuestRestored, auditGuestDeleted } from '@/lib/audit';
+import { logAudit } from '@/lib/audit';
 import { getPermissionLevel } from '@/lib/roles';
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
@@ -72,6 +73,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
         'status', 'becomeSignup', 'becomeSignupDate', 'becomeCohort',
         'waterBaptism', 'waterBaptismDate', 'volunteerInChurch', 'volunteerInChurchDate',
         'joinSmallGroup', 'joinSmallGroupDate', 'customTargets',
+        'requestDeletion', 'deletionReason',
       ];
       const keys = Object.keys(body);
       for (const key of keys) {
@@ -93,6 +95,11 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       body.assignedVolunteerId !== guest.assignedVolunteerId;
 
     const updateData: any = { ...body };
+    // Remove action flags that aren't DB fields
+    delete updateData.requestDeletion;
+    delete updateData.deletionReason;
+    delete updateData.dismissDeletionRequest;
+    delete updateData.archivedReason;
 
     if (isNewAssignment) {
       if (patchPermLevel === 'VOLUNTEER_ACCESS') {
@@ -111,6 +118,18 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     if (body.status === 'ARCHIVED') {
       updateData.archivedAt = new Date();
       updateData.archivedReason = body.archivedReason || null;
+    }
+
+    // Handle deletion request (non-admins can request, admins can dismiss)
+    if (body.requestDeletion) {
+      updateData.deletionRequestedAt = new Date();
+      updateData.deletionRequestedBy = session.name;
+      updateData.deletionRequestReason = body.deletionReason || null;
+    }
+    if (body.dismissDeletionRequest && patchPermLevel === 'ADMIN_ACCESS') {
+      updateData.deletionRequestedAt = null;
+      updateData.deletionRequestedBy = null;
+      updateData.deletionRequestReason = null;
     }
 
     // Unarchive
@@ -158,6 +177,14 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     // Audit: assignment
     if (isNewAssignment && updated.assignedVolunteer) {
       auditGuestAssigned(session.userId, session.name, id, guestName, updated.assignedVolunteer.name).catch(() => {});
+    }
+
+    // Audit: deletion request
+    if (body.requestDeletion) {
+      logAudit({ action: 'DELETION_REQUESTED', category: 'GUEST', description: `${session.name} requested deletion of "${guestName}"`, userId: session.userId, userName: session.name, targetId: id, targetType: 'GUEST', targetName: guestName, metadata: { reason: body.deletionReason } }).catch(() => {});
+    }
+    if (body.dismissDeletionRequest) {
+      logAudit({ action: 'DELETION_REQUEST_DISMISSED', category: 'GUEST', description: `${session.name} dismissed deletion request for "${guestName}"`, userId: session.userId, userName: session.name, targetId: id, targetType: 'GUEST', targetName: guestName }).catch(() => {});
     }
 
     // Notify on assignment (await so log status updates before function terminates)

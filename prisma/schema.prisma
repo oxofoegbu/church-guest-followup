@@ -122,6 +122,10 @@ model Guest {
   // Archival
   archivedAt           DateTime?
   archivedReason       String?
+  // Deletion Request
+  deletionRequestedAt  DateTime?
+  deletionRequestedBy  String?
+  deletionRequestReason String?
   createdAt            DateTime        @default(now())
   updatedAt            DateTime        @updatedAt
 

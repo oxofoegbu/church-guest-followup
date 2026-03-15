@@ -181,17 +181,17 @@ function ProspectFormModal({ users, currentUserId, onClose }: {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="label">First Name *</label>
+              <label className="label">Prospect's First Name *</label>
               <input value={form.firstName} onChange={e => setForm({ ...form, firstName: e.target.value })}
-                required className="input-field" placeholder="First name" />
+                required className="input-field" placeholder="First name" autoComplete="new-password" />
             </div>
             <div>
-              <label className="label">Last Name *</label>
+              <label className="label">Prospect's Last Name *</label>
               <input value={form.lastName} onChange={e => setForm({ ...form, lastName: e.target.value })}
-                required className="input-field" placeholder="Last name" />
+                required className="input-field" placeholder="Last name" autoComplete="new-password" />
             </div>
           </div>
 

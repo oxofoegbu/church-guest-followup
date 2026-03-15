@@ -18,6 +18,7 @@ export default function GuestDetailPage() {
   const [showArchiveModal, setShowArchiveModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showConvertModal, setShowConvertModal] = useState(false);
+  const [showRequestDeletionModal, setShowRequestDeletionModal] = useState(false);
 
   const fetchGuest = async () => {
     const res = await fetch(`/api/guests/${params.id}`);
@@ -117,8 +118,39 @@ export default function GuestDetailPage() {
           {isAdmin && (
             <button onClick={() => setShowDeleteModal(true)} className="btn-secondary btn-sm text-red-600">Delete</button>
           )}
+          {!isAdmin && !guest.deletionRequestedAt && (
+            <button onClick={() => setShowRequestDeletionModal(true)} className="btn-secondary btn-sm text-red-500">Request Deletion</button>
+          )}
+          {!isAdmin && guest.deletionRequestedAt && (
+            <span className="badge bg-red-50 text-red-600 text-xs">🗑️ Deletion Requested</span>
+          )}
         </div>
       </div>
+
+      {/* Deletion Request Banner (visible to admins) */}
+      {isAdmin && guest.deletionRequestedAt && (
+        <div className="card bg-red-50 border-red-200 border p-4">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="font-medium text-red-800">🗑️ Deletion Requested</p>
+              <p className="text-sm text-red-700 mt-1">
+                <strong>{guest.deletionRequestedBy}</strong> requested this record be deleted on {formatDate(guest.deletionRequestedAt)}.
+              </p>
+              {guest.deletionRequestReason && (
+                <p className="text-sm text-red-600 mt-1 italic">Reason: "{guest.deletionRequestReason}"</p>
+              )}
+            </div>
+            <div className="flex gap-2 shrink-0">
+              <button onClick={() => setShowDeleteModal(true)}
+                className="btn-primary btn-sm bg-red-600 hover:bg-red-700">Approve & Delete</button>
+              <button onClick={() => setShowArchiveModal(true)}
+                className="btn-secondary btn-sm text-amber-600">Archive Instead</button>
+              <button onClick={() => updateGuest({ dismissDeletionRequest: true })}
+                className="btn-secondary btn-sm">Dismiss</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="grid md:grid-cols-3 gap-6">
         {/* Left Column - Guest Info */}
@@ -326,6 +358,7 @@ export default function GuestDetailPage() {
       {showArchiveModal && <ArchiveModal guestId={guest.id} guestName={`${guest.firstName} ${guest.lastName}`} onClose={() => { setShowArchiveModal(false); fetchGuest(); }} />}
       {showDeleteModal && <DeleteModal guestId={guest.id} guestName={`${guest.firstName} ${guest.lastName}`} onClose={() => setShowDeleteModal(false)} onDeleted={() => router.push('/dashboard/guests')} />}
       {showConvertModal && <ConvertModal guestId={guest.id} guestName={`${guest.firstName} ${guest.lastName}`} onClose={() => { setShowConvertModal(false); fetchGuest(); }} />}
+      {showRequestDeletionModal && <RequestDeletionModal guestId={guest.id} guestName={`${guest.firstName} ${guest.lastName}`} onClose={() => { setShowRequestDeletionModal(false); fetchGuest(); }} />}
     </div>
   );
 }
@@ -577,6 +610,45 @@ function ConvertModal({ guestId, guestName, onClose }: { guestId: string; guestN
             </button>
             <button onClick={onClose} className="btn-secondary">Cancel</button>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function RequestDeletionModal({ guestId, guestName, onClose }: { guestId: string; guestName: string; onClose: () => void }) {
+  const [reason, setReason] = useState('');
+  const [saving, setSaving] = useState(false);
+
+  const handleRequest = async () => {
+    setSaving(true);
+    await fetch(`/api/guests/${guestId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ requestDeletion: true, deletionReason: reason }),
+    });
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="card max-w-md w-full" onClick={e => e.stopPropagation()}>
+        <h2 className="section-header mb-2">Request Deletion</h2>
+        <p className="text-sm text-church-500 mb-4">
+          Send a request to the admin to delete <strong>{guestName}</strong>. The admin will review and approve or dismiss.
+        </p>
+        <div className="mb-4">
+          <label className="label">Reason (optional)</label>
+          <textarea value={reason} onChange={e => setReason(e.target.value)}
+            rows={3} className="textarea-field"
+            placeholder="Why should this record be deleted?" />
+        </div>
+        <div className="flex gap-3">
+          <button onClick={handleRequest} disabled={saving}
+            className="btn-primary flex-1 bg-red-600 hover:bg-red-700">
+            {saving ? 'Requesting...' : '🗑️ Request Deletion'}
+          </button>
+          <button onClick={onClose} className="btn-secondary">Cancel</button>
         </div>
       </div>
     </div>

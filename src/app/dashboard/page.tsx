@@ -32,6 +32,7 @@ interface Operational {
 export default function DashboardPage() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [ops, setOps] = useState<Operational | null>(null);
+  const [deletionRequests, setDeletionRequests] = useState<any[]>([]);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -40,10 +41,12 @@ export default function DashboardPage() {
       fetch('/api/auth/me').then(r => r.json()),
       fetch('/api/reports?type=overview').then(r => r.ok ? r.json() : null),
       fetch('/api/reports?type=operational').then(r => r.ok ? r.json() : null),
-    ]).then(([me, statsData, opsData]) => {
+      fetch('/api/guests?deletionRequested=true&limit=50').then(r => r.ok ? r.json() : { guests: [] }),
+    ]).then(([me, statsData, opsData, delData]) => {
       setUser(me.user);
       setStats(statsData);
       setOps(opsData);
+      setDeletionRequests(delData.guests || []);
       setLoading(false);
     }).catch(() => setLoading(false));
   }, []);
@@ -146,6 +149,27 @@ export default function DashboardPage() {
       {/* Operational Alerts */}
       {ops && (
         <div className="grid md:grid-cols-2 gap-6">
+          {/* Deletion Requests */}
+          {user?.permissionLevel === 'ADMIN_ACCESS' && deletionRequests.length > 0 && (
+            <div className="card border-l-4 border-l-red-500">
+              <h3 className="section-header text-red-700 mb-3">
+                🗑️ Deletion Requests ({deletionRequests.length})
+              </h3>
+              <div className="space-y-2">
+                {deletionRequests.slice(0, 5).map((g: any) => (
+                  <Link key={g.id} href={`/dashboard/guests/${g.id}`}
+                    className="flex justify-between items-center p-2 rounded hover:bg-red-50">
+                    <div>
+                      <span className="font-medium">{g.firstName} {g.lastName}</span>
+                      <span className="text-xs text-church-500 ml-2">by {g.deletionRequestedBy}</span>
+                    </div>
+                    <span className="text-xs text-red-500">{formatDate(g.deletionRequestedAt)}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Unassigned */}
           {ops.unassigned24h.length > 0 && (
             <div className="card border-l-4 border-l-red-400">

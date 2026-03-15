@@ -53,6 +53,12 @@ export async function GET(request: NextRequest) {
       where.source = 'GUEST_FORM';
     }
 
+    // Deletion request filter
+    const deletionRequested = url.searchParams.get('deletionRequested');
+    if (deletionRequested === 'true') {
+      where.deletionRequestedAt = { not: null };
+    }
+
     const [guests, total] = await Promise.all([
       prisma.guest.findMany({
         where,
