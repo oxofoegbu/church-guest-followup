@@ -98,7 +98,7 @@ function AssignModal({ service, onClose, onSaved }: { service: ServiceSchedule; 
                 }}
                 className="select-field mb-1.5"
               >
-                <option value="">— Select from users (links to calendar) —</option>
+                <option value="">— Select from users —</option>
                 {users.map(u => <option key={u.id} value={u.id}>{u.name} ({u.role})</option>)}
               </select>
               <input
@@ -112,17 +112,17 @@ function AssignModal({ service, onClose, onSaved }: { service: ServiceSchedule; 
           <div>
             <label className="label">📌 Notes (optional)</label>
             <textarea value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}
-              rows={2} className="textarea-field" placeholder="Special notes for this service…" />
+              rows={2} className="textarea-field" />
           </div>
           {error && <div className="px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{error}</div>}
-          <p className="text-xs text-church-400 bg-church-50 p-3 rounded-lg">
-            💡 Selecting a user from the dropdown will automatically add this service to their <strong>My Calendar</strong>.
-          </p>
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-700">
+            💡 Selecting a user by name sends them an <strong>immediate email + WhatsApp</strong> and adds this to their <strong>My Calendar</strong>.
+          </div>
         </div>
         <div className="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 flex gap-3">
           <button onClick={onClose} className="flex-1 btn-secondary">Cancel</button>
           <button onClick={handleSave} disabled={saving} className="flex-1 btn-primary">
-            {saving ? 'Saving…' : 'Save Assignments'}
+            {saving ? 'Saving…' : 'Save & Notify'}
           </button>
         </div>
       </div>
@@ -136,6 +136,13 @@ function NewYearModal({ onClose, onCreated }: { onClose: () => void; onCreated: 
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
+  const countSundays = (y: number) => {
+    let c = 0; const d = new Date(Date.UTC(y,0,1));
+    while (d.getUTCDay() !== 0) d.setUTCDate(d.getUTCDate()+1);
+    while (d.getUTCFullYear() === y) { c++; d.setUTCDate(d.getUTCDate()+7); }
+    return c;
+  };
+
   const handleCreate = async () => {
     setSaving(true); setError('');
     try {
@@ -146,7 +153,7 @@ function NewYearModal({ onClose, onCreated }: { onClose: () => void; onCreated: 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
       onCreated(form.year);
-    } catch (e: any) { setError(e.message || 'Failed to create'); }
+    } catch (e: any) { setError(e.message || 'Failed'); }
     finally { setSaving(false); }
   };
 
@@ -158,13 +165,13 @@ function NewYearModal({ onClose, onCreated }: { onClose: () => void; onCreated: 
         <div className="space-y-3">
           <div>
             <label className="label">Year *</label>
-            <input type="number" value={form.year} onChange={e => setForm(f => ({ ...f, year: Number(e.target.value), label: `${e.target.value} Sunday Schedule` }))}
+            <input type="number" value={form.year}
+              onChange={e => setForm(f => ({ ...f, year: Number(e.target.value), label: `${e.target.value} Sunday Schedule` }))}
               className="input-field" min={2025} max={2100} />
           </div>
           <div>
             <label className="label">Label</label>
-            <input type="text" value={form.label} onChange={e => setForm(f => ({ ...f, label: e.target.value }))}
-              className="input-field" placeholder={`${form.year} Sunday Schedule`} />
+            <input type="text" value={form.label} onChange={e => setForm(f => ({ ...f, label: e.target.value }))} className="input-field" />
           </div>
           <div>
             <label className="label">Year Theme (optional)</label>
@@ -172,7 +179,7 @@ function NewYearModal({ onClose, onCreated }: { onClose: () => void; onCreated: 
               className="input-field" placeholder="e.g. Walking in the Spirit…" />
           </div>
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-700">
-            🗓️ This will generate all <strong>{countSundays(form.year)}</strong> Sundays for {form.year} with blank topics for you to fill in.
+            🗓️ Will generate <strong>{countSundays(form.year)}</strong> blank Sundays for {form.year}.
           </div>
           {error && <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700">{error}</div>}
         </div>
@@ -187,14 +194,6 @@ function NewYearModal({ onClose, onCreated }: { onClose: () => void; onCreated: 
   );
 }
 
-function countSundays(year: number): number {
-  let count = 0;
-  const d = new Date(Date.UTC(year, 0, 1));
-  while (d.getUTCDay() !== 0) d.setUTCDate(d.getUTCDate() + 1);
-  while (d.getUTCFullYear() === year) { count++; d.setUTCDate(d.getUTCDate() + 7); }
-  return count;
-}
-
 export default function SchedulePage() {
   const [schedules, setSchedules] = useState<ServiceSchedule[]>([]);
   const [years, setYears] = useState<ScheduleYear[]>([]);
@@ -205,6 +204,7 @@ export default function SchedulePage() {
   const [showNewYear, setShowNewYear] = useState(false);
   const [showArchived, setShowArchived] = useState(false);
   const [collapsed, setCollapsed] = useState<Record<number, boolean>>({});
+  const [copied, setCopied] = useState(false);
 
   const fetchYears = useCallback(async () => {
     const res = await fetch('/api/schedule/years?includeArchived=true');
@@ -221,6 +221,16 @@ export default function SchedulePage() {
     setLoading(true);
     try {
       const res = await fetch(`/api/schedule?year=${selectedYear}`);
+      setSchedules(Array.isArray(await res.json()) ? await fetch(`/api/schedule?year=${selectedYear}`).then(r => r.json()) : []);
+    } catch (e) { console.error(e); }
+    finally { setLoading(false); }
+  }, [selectedYear]);
+
+  // Simpler fetch
+  const doFetch = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/schedule?year=${selectedYear}`);
       const data = await res.json();
       setSchedules(Array.isArray(data) ? data : []);
     } catch (e) { console.error(e); }
@@ -232,15 +242,29 @@ export default function SchedulePage() {
     fetchYears();
   }, []);
 
-  useEffect(() => { fetchSchedules(); }, [fetchSchedules]);
+  useEffect(() => { doFetch(); }, [doFetch]);
 
   const canEdit = user && ['ADMIN', 'SENIOR_LEADER', 'LEADER'].includes(user.role);
   const isAdmin = user && ['ADMIN', 'SENIOR_LEADER'].includes(user.role);
-
   const selectedYearData = years.find(y => y.year === selectedYear);
 
+  const publicUrl = typeof window !== 'undefined'
+    ? `${window.location.origin}/schedule/${selectedYear}`
+    : `/schedule/${selectedYear}`;
+  const printUrl = `/schedule/${selectedYear}/print`;
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(publicUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      prompt('Copy this link:', publicUrl);
+    }
+  };
+
   const handleArchive = async () => {
-    if (!confirm(`Archive the ${selectedYear} schedule? It will be hidden by default but still accessible.`)) return;
+    if (!confirm(`Archive the ${selectedYear} schedule?`)) return;
     await fetch('/api/schedule/years', {
       method: 'PATCH', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ year: selectedYear, archived: true }),
@@ -271,47 +295,52 @@ export default function SchedulePage() {
   return (
     <div className="fade-in">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
         <div>
           <h1 className="page-header">⛪ Sunday Schedule</h1>
           <p className="text-church-500 text-sm mt-1">Grace Life Center — {selectedYearData?.label || selectedYear}</p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
-          {/* Year selector */}
-          <select
-            value={selectedYear}
-            onChange={e => setSelectedYear(Number(e.target.value))}
-            className="select-field text-sm py-1.5"
-          >
+          <select value={selectedYear} onChange={e => setSelectedYear(Number(e.target.value))}
+            className="select-field text-sm py-1.5">
             {visibleYears.map(y => (
-              <option key={y.year} value={y.year}>
-                {y.label}{y.archived ? ' 📦' : ''}
-              </option>
+              <option key={y.year} value={y.year}>{y.label}{y.archived ? ' 📦' : ''}</option>
             ))}
           </select>
-
           {years.some(y => y.archived) && (
-            <button onClick={() => setShowArchived(s => !s)}
-              className="btn-secondary btn-sm text-xs">
-              {showArchived ? 'Hide Archived' : '📦 Show Archived'}
+            <button onClick={() => setShowArchived(s => !s)} className="btn-secondary btn-sm text-xs">
+              {showArchived ? 'Hide Archived' : '📦 Archived'}
             </button>
           )}
-
           {isAdmin && selectedYearData?.archived && (
-            <button onClick={handleUnarchive} className="btn-secondary btn-sm text-xs text-emerald-600">
-              ♻️ Restore Year
-            </button>
+            <button onClick={handleUnarchive} className="btn-secondary btn-sm text-xs text-emerald-600">♻️ Restore</button>
           )}
           {isAdmin && !selectedYearData?.archived && (
-            <button onClick={handleArchive} className="btn-secondary btn-sm text-xs text-amber-600">
-              📦 Archive Year
-            </button>
+            <button onClick={handleArchive} className="btn-secondary btn-sm text-xs text-amber-600">📦 Archive</button>
           )}
           {isAdmin && (
-            <button onClick={() => setShowNewYear(true)} className="btn-primary btn-sm">
-              + New Year
-            </button>
+            <button onClick={() => setShowNewYear(true)} className="btn-primary btn-sm">+ New Year</button>
           )}
+        </div>
+      </div>
+
+      {/* Share + Print toolbar */}
+      <div className="flex flex-wrap gap-2 mb-5 p-3 bg-church-50 border border-church-200 rounded-xl">
+        <button onClick={handleCopyLink}
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${copied ? 'bg-emerald-500 text-white' : 'bg-white border border-church-300 text-church-700 hover:bg-church-100'}`}>
+          {copied ? '✓ Link Copied!' : '🔗 Copy Share Link'}
+        </button>
+        <a href={publicUrl} target="_blank"
+          className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-white border border-church-300 text-church-700 hover:bg-church-100 transition-colors">
+          🌐 Open Public Page
+        </a>
+        <a href={printUrl} target="_blank"
+          className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-white border border-church-300 text-church-700 hover:bg-church-100 transition-colors">
+          🖨️ Print / Save as PDF
+        </a>
+        <div className="flex items-center ml-auto text-xs text-church-400 gap-1">
+          <span>Share URL:</span>
+          <code className="bg-white border border-church-200 px-2 py-0.5 rounded text-church-600 text-[11px]">{publicUrl}</code>
         </div>
       </div>
 
@@ -329,7 +358,7 @@ export default function SchedulePage() {
         </div>
       )}
 
-      {/* Stats row */}
+      {/* Stats */}
       <div className="grid grid-cols-3 gap-3 mb-6">
         <div className="card p-3 text-center">
           <p className="text-2xl font-bold text-church-900">{schedules.length}</p>
@@ -342,9 +371,7 @@ export default function SchedulePage() {
           <p className="text-xs text-church-500">Roles Linked</p>
         </div>
         <div className="card p-3 text-center">
-          <p className="text-2xl font-bold text-emerald-600">
-            {schedules.filter(s => s.reminderSent).length}
-          </p>
+          <p className="text-2xl font-bold text-emerald-600">{schedules.filter(s => s.reminderSent).length}</p>
           <p className="text-xs text-church-500">Reminders Sent</p>
         </div>
       </div>
@@ -356,11 +383,7 @@ export default function SchedulePage() {
       ) : schedules.length === 0 ? (
         <div className="card text-center py-12">
           <p className="text-church-400 mb-2">No Sundays found for {selectedYear}.</p>
-          {isAdmin && (
-            <p className="text-sm text-church-400">
-              If this is a new year, click <strong>+ New Year</strong> to generate all Sundays automatically.
-            </p>
-          )}
+          {isAdmin && <p className="text-sm text-church-400">Click <strong>+ New Year</strong> to generate all Sundays automatically.</p>}
         </div>
       ) : (
         <div className="space-y-6">
@@ -386,12 +409,11 @@ export default function SchedulePage() {
                       </div>
                       {cleanName && (
                         <p className="text-white/85 text-sm mt-0.5">
-                          {cleanName}
-                          {themeSub ? <span className="text-white/55"> — {themeSub}</span> : null}
+                          {cleanName}{themeSub ? <span className="text-white/55"> — {themeSub}</span> : null}
                         </p>
                       )}
                     </div>
-                    <span className="text-white/70 text-lg">{isCollapsed ? '▼' : '▲'}</span>
+                    <span className="text-white/70">{isCollapsed ? '▼' : '▲'}</span>
                   </button>
 
                   {!isCollapsed && (
@@ -404,7 +426,6 @@ export default function SchedulePage() {
                         const scriptureMatch = svc.topic.match(/\(([^)]+)\)\s*$/);
                         const scripture = scriptureMatch?.[1] || null;
                         const title = scripture ? svc.topic.replace(/\s*\([^)]+\)\s*$/, '') : svc.topic;
-                        const isTbd = title.startsWith('TBD');
 
                         return (
                           <div key={svc.id} className={`bg-white rounded-xl border shadow-sm hover:shadow-md transition-all ${isToday ? 'ring-2 ring-brand-500' : 'border-gray-200'}`}>
@@ -415,38 +436,34 @@ export default function SchedulePage() {
                                     <span className="text-[10px] text-gray-400 uppercase leading-none">{dayName}</span>
                                     <span className="text-lg font-bold text-gray-800 leading-tight">{day}</span>
                                   </div>
-                                  {isToday && <span className="text-[10px] font-bold bg-brand-500 text-white px-2 py-0.5 rounded-full uppercase">This Sunday</span>}
+                                  {isToday && <span className="text-[10px] font-bold bg-brand-500 text-white px-2 py-0.5 rounded-full uppercase">Today</span>}
                                 </div>
                                 {canEdit && (
                                   <button onClick={() => setEditing(svc)} className="text-church-300 hover:text-brand-500 text-lg transition-colors" title="Assign roles">✏️</button>
                                 )}
                               </div>
-
-                              <h3 className={`text-sm font-semibold leading-snug line-clamp-2 mb-1 ${isTbd ? 'text-church-400 italic' : 'text-gray-900'}`}>
+                              <h3 className={`text-sm font-semibold leading-snug line-clamp-2 mb-1 ${title.startsWith('TBD') ? 'text-church-400 italic' : 'text-gray-900'}`}>
                                 {title}
                               </h3>
                               {scripture && <p className="text-[11px] text-purple-600 italic mb-3">{scripture}</p>}
-
                               <div className="pt-3 border-t border-gray-100 grid grid-cols-2 gap-2">
                                 {[
                                   { label: '🎤 Speaker', name: svc.speakerName, user: svc.speaker },
-                                  { label: '📋 Coord.', name: svc.serviceCoordinatorName, user: svc.serviceCoordinator },
-                                  { label: '🙏 Prayer', name: svc.propheticPrayerName, user: svc.propheticPrayer },
+                                  { label: '📋 Coord.',  name: svc.serviceCoordinatorName, user: svc.serviceCoordinator },
+                                  { label: '🙏 Prayer',  name: svc.propheticPrayerName, user: svc.propheticPrayer },
                                   { label: '🎵 Worship', name: svc.worshipLeaderName, user: svc.worshipLeader },
                                 ].map(({ label, name, user: u }) => {
                                   const display = getDisplayName(name, u);
-                                  const linked = !!u;
                                   return (
                                     <div key={label}>
                                       <p className="text-[10px] text-gray-400 uppercase tracking-wide leading-none mb-0.5">{label}</p>
-                                      <p className={`text-xs font-medium truncate ${display === 'TBD' ? 'text-gray-400 italic' : linked ? 'text-brand-600' : 'text-gray-800'}`}>
-                                        {display}{linked ? ' 🔗' : ''}
+                                      <p className={`text-xs font-medium truncate ${display === 'TBD' ? 'text-gray-400 italic' : u ? 'text-brand-600' : 'text-gray-800'}`}>
+                                        {display}{u ? ' 🔗' : ''}
                                       </p>
                                     </div>
                                   );
                                 })}
                               </div>
-
                               {svc.notes && <p className="mt-2 text-[11px] text-amber-700 bg-amber-50 px-2 py-1 rounded italic">📌 {svc.notes}</p>}
                               {svc.reminderSent && <p className="mt-1 text-[10px] text-emerald-600">✓ Reminder sent</p>}
                             </div>
@@ -462,7 +479,7 @@ export default function SchedulePage() {
       )}
 
       {editing && (
-        <AssignModal service={editing} onClose={() => setEditing(null)} onSaved={() => { setEditing(null); fetchSchedules(); }} />
+        <AssignModal service={editing} onClose={() => setEditing(null)} onSaved={() => { setEditing(null); doFetch(); }} />
       )}
       {showNewYear && (
         <NewYearModal
