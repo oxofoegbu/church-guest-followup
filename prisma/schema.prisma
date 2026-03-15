@@ -82,6 +82,11 @@ model User {
   actionItems          ActionItem[]       @relation("UserActions")
 
   @@map("users")
+  schedulesAsSpeaker     ServiceSchedule[] @relation("ScheduleSpeaker")
+  schedulesAsCoordinator ServiceSchedule[] @relation("ScheduleCoordinator")
+  schedulesAsPropheticPr ServiceSchedule[] @relation("SchedulePropheticPrayer")
+  schedulesAsWorship     ServiceSchedule[] @relation("ScheduleWorshipLeader")
+
 }
 
 model Guest {
@@ -241,4 +246,33 @@ model ActionItem {
   @@index([userId, dueDate])
   @@index([dueDate, reminderSent])
   @@map("action_items")
+}
+
+model ServiceSchedule {
+  id                     String    @id @default(cuid())
+  date                   DateTime  @unique
+  monthTheme             String?
+  topic                  String
+
+  speakerName            String?
+  serviceCoordinatorName String?
+  propheticPrayerName    String?
+  worshipLeaderName      String?
+
+  speakerId              String?
+  serviceCoordinatorId   String?
+  propheticPrayerId      String?
+  worshipLeaderId        String?
+
+  speaker                User?     @relation("ScheduleSpeaker",         fields: [speakerId],            references: [id])
+  serviceCoordinator     User?     @relation("ScheduleCoordinator",     fields: [serviceCoordinatorId], references: [id])
+  propheticPrayer        User?     @relation("SchedulePropheticPrayer", fields: [propheticPrayerId],    references: [id])
+  worshipLeader          User?     @relation("ScheduleWorshipLeader",   fields: [worshipLeaderId],      references: [id])
+
+  reminderSent           Boolean   @default(false)
+  notes                  String?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  @@map("service_schedules")
 }
