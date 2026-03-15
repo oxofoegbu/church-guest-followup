@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
       // Delete all in series?
       if (body.deleteAll && (item as any).recurrenceParentId) {
         await prisma.actionItem.deleteMany({
-          where: { recurrenceParentId: (item as any).recurrenceParentId, userId: session.userId },
+          where: { recurrenceParentId: (item as any).recurrenceParentId, userId: session.userId } as any,
         });
         // also delete the parent itself if it wasn't caught above
         await prisma.actionItem.deleteMany({
