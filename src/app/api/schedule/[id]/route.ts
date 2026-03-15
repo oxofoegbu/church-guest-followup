@@ -38,7 +38,10 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     const session = await requireAuth(request);
     const customRolesSetting = await prisma.appSetting.findUnique({ where: { key: 'custom_roles' } });
     const permLevel = getPermissionLevel(session.role, customRolesSetting?.value ?? null);
-    if (permLevel !== 'ADMIN_ACCESS' && permLevel !== 'LEADER_ACCESS') {
+    const coordSetting = await prisma.appSetting.findUnique({ where: { key: 'schedule_coordinators' } });
+    const coordIds = JSON.parse(coordSetting?.value || '[]').map((c) => c.userId);
+    const isCoordinator = coordIds.includes(session.userId);
+    if (permLevel !== 'ADMIN_ACCESS' && permLevel !== 'LEADER_ACCESS' && !isCoordinator) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
