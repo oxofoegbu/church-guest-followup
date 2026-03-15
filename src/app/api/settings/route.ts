@@ -15,7 +15,12 @@ export async function GET(request: NextRequest) {
     settingsMap[s.key] = s.value;
   }
 
-  return NextResponse.json(settingsMap);
+  // Also include pending account requests count
+  const pendingRequests = await (prisma as any).accountRequest
+    .count({ where: { status: 'PENDING' } })
+    .catch(() => 0);
+
+  return NextResponse.json({ ...settingsMap, _pendingRequests: pendingRequests });
 }
 
 export async function PATCH(request: NextRequest) {
@@ -34,6 +39,7 @@ export async function PATCH(request: NextRequest) {
     'custom_targets',
     'custom_roles',
     'target_config',
+    'schedule_coordinators', // NEW: who can assign schedule roles
   ];
 
   for (const [key, value] of Object.entries(body)) {

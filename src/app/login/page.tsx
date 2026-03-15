@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -22,8 +23,6 @@ export default function LoginPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Login failed');
-
-      // Redirect to change password if required
       if (data.user?.mustChangePassword) {
         router.push('/change-password');
       } else {
@@ -72,10 +71,15 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className="mt-6 pt-4 border-t border-church-100">
-          <p className="text-xs text-church-400 text-center">
-            Contact your admin if you need account access.
-          </p>
+        <div className="mt-5 pt-4 border-t border-church-100 space-y-2 text-center">
+          <Link href="/forgot-password"
+            className="block text-sm text-brand-600 hover:text-brand-700 font-medium">
+            🔑 Forgot your password?
+          </Link>
+          <Link href="/forgot-password?mode=request"
+            className="block text-sm text-church-500 hover:text-church-700">
+            Don't have an account? Request access →
+          </Link>
         </div>
       </div>
     </div>

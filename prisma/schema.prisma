@@ -88,6 +88,10 @@ model User {
   schedulesAsWorship     ServiceSchedule[] @relation("ScheduleWorshipLeader")
 
   eventInvites         EventInvite[]  @relation("UserEventInvites")
+  passwordResetTokens  PasswordResetToken[] @relation("PasswordResets")
+  clusterMemberships   ClusterMember[]      @relation("ClusterMemberships")
+  clustersCreated      Cluster[]            @relation("ClusterCreatedBy")
+
 }
 
 model Guest {
@@ -304,4 +308,52 @@ model EventInvite {
 
   @@unique([eventItemId, userId])
   @@map("event_invites")
+}
+
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation("PasswordResets", fields: [userId], references: [id], onDelete: Cascade)
+  @@map("password_reset_tokens")
+}
+
+model AccountRequest {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  phone     String?
+  message   String?
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("account_requests")
+}
+
+model Cluster {
+  id            String          @id @default(cuid())
+  name          String
+  description   String?
+  color         String          @default("#6366f1")
+  createdById   String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  createdByUser User?           @relation("ClusterCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  members       ClusterMember[]
+  @@map("clusters")
+}
+
+model ClusterMember {
+  id        String   @id @default(cuid())
+  clusterId String
+  userId    String
+  joinedAt  DateTime @default(now())
+  cluster   Cluster  @relation(fields: [clusterId], references: [id], onDelete: Cascade)
+  user      User     @relation("ClusterMemberships", fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([clusterId, userId])
+  @@map("cluster_members")
 }
