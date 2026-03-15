@@ -1,4 +1,4 @@
-import { PrismaClient, UserRole, GuestStatus, PreferredContact, ActivityType, NotificationChannel, NotificationStatus } from '@prisma/client';
+import { PrismaClient, GuestStatus, PreferredContact, ActivityType, NotificationChannel, NotificationStatus } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -22,7 +22,7 @@ async function main() {
       email: 'admin@church.org',
       phone: '+2348012345678',
       password: passwordHash,
-      role: UserRole.ADMIN,
+      role: "ADMIN",
       active: true,
     },
   });
@@ -33,7 +33,7 @@ async function main() {
       email: 'grace@church.org',
       phone: '+2348023456789',
       password: passwordHash,
-      role: UserRole.LEADER,
+      role: "LEADER",
       active: true,
     },
   });
@@ -44,7 +44,7 @@ async function main() {
       email: 'james@church.org',
       phone: '+2348034567890',
       password: passwordHash,
-      role: UserRole.VOLUNTEER,
+      role: "VOLUNTEER",
       active: true,
     },
   });
@@ -55,7 +55,7 @@ async function main() {
       email: 'faith@church.org',
       phone: '+2348045678901',
       password: passwordHash,
-      role: UserRole.VOLUNTEER,
+      role: "VOLUNTEER",
       active: true,
     },
   });
@@ -66,7 +66,7 @@ async function main() {
       email: 'samuel@church.org',
       phone: '+2348056789012',
       password: passwordHash,
-      role: UserRole.VOLUNTEER,
+      role: "VOLUNTEER",
       active: true,
     },
   });
