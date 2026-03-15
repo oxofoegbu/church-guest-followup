@@ -1,27 +1,24 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
 type Mode = 'reset' | 'request';
 type Step = 'form' | 'done';
 
-export default function ForgotPasswordPage() {
+function ForgotPasswordContent() {
   const searchParams = useSearchParams();
   const [mode, setMode] = useState<Mode>(
     searchParams.get('mode') === 'request' ? 'request' : 'reset'
   );
   const [step, setStep] = useState<Step>('form');
 
-  // Reset form
   const [resetName, setResetName] = useState('');
   const [resetEmail, setResetEmail] = useState('');
   const [resetLoading, setResetLoading] = useState(false);
   const [resetError, setResetError] = useState('');
-  const [resetMessage, setResetMessage] = useState('');
 
-  // Request form
   const [reqName, setReqName] = useState('');
   const [reqEmail, setReqEmail] = useState('');
   const [reqPhone, setReqPhone] = useState('');
@@ -40,7 +37,6 @@ export default function ForgotPasswordPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Request failed');
-      setResetMessage(data.message);
       setStep('done');
     } catch (err: any) {
       setResetError(err.message);
@@ -82,7 +78,6 @@ export default function ForgotPasswordPage() {
           <p className="text-church-500 text-sm mt-1">Grace Life Center Staff System</p>
         </div>
 
-        {/* Tab switcher */}
         {step === 'form' && (
           <div className="flex gap-2 mb-6 p-1 bg-church-100 rounded-lg">
             <button
@@ -98,14 +93,13 @@ export default function ForgotPasswordPage() {
           </div>
         )}
 
-        {/* ── Success state ── */}
         {step === 'done' && (
           <div className="text-center space-y-4">
             <div className="text-5xl">✅</div>
             {mode === 'reset' ? (
               <>
                 <p className="font-semibold text-church-900">Check your email</p>
-                <p className="text-sm text-church-500">{resetMessage || 'If your name and email match our records, a password reset link has been sent.'}</p>
+                <p className="text-sm text-church-500">If your name and email match our records, a password reset link has been sent.</p>
               </>
             ) : (
               <>
@@ -117,11 +111,10 @@ export default function ForgotPasswordPage() {
           </div>
         )}
 
-        {/* ── Reset Password form ── */}
         {step === 'form' && mode === 'reset' && (
           <form onSubmit={handleReset} className="space-y-4">
             <p className="text-sm text-church-500 mb-4">
-              Enter your full name and email address exactly as they appear in the system. We'll send you a password reset link.
+              Enter your full name and email address exactly as they appear in the system.
             </p>
             <div>
               <label className="label">Full Name *</label>
@@ -142,11 +135,10 @@ export default function ForgotPasswordPage() {
           </form>
         )}
 
-        {/* ── Request Access form ── */}
         {step === 'form' && mode === 'request' && (
           <form onSubmit={handleRequest} className="space-y-4">
             <p className="text-sm text-church-500 mb-4">
-              Not in the system yet? Fill in your details and the admin will be notified to set up your account.
+              Not in the system yet? Fill in your details and the admin will set up your account.
             </p>
             <div>
               <label className="label">Full Name *</label>
@@ -186,5 +178,18 @@ export default function ForgotPasswordPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function ForgotPasswordPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center"
+        style={{ background: 'linear-gradient(135deg, #102a43 0%, #243b53 50%, #334e68 100%)' }}>
+        <div className="text-white text-sm">Loading…</div>
+      </div>
+    }>
+      <ForgotPasswordContent />
+    </Suspense>
   );
 }
