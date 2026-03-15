@@ -64,8 +64,8 @@ export default function GuestsPage() {
     setSelected(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
   };
 
-  const isAdmin = user?.role === 'ADMIN';
-  const canAssign = user?.role === 'ADMIN' || user?.role === 'LEADER';
+  const isAdmin = user?.permissionLevel === 'ADMIN_ACCESS';
+  const canAssign = user?.permissionLevel === 'ADMIN_ACCESS' || user?.permissionLevel === 'LEADER_ACCESS';
 
   return (
     <div className="space-y-6 fade-in">

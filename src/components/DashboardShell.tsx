@@ -1,18 +1,20 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { getPermissionLevel, getRoleLabel, getAllRoles } from '@/lib/roles';
 
 interface User {
   userId: string;
   name: string;
   email: string;
-  role: 'ADMIN' | 'VOLUNTEER' | 'LEADER';
+  role: string;
 }
 
-const NAV_ITEMS = {
-  ADMIN: [
+// Navigation by permission level
+const NAV_BY_PERMISSION = {
+  ADMIN_ACCESS: [
     { href: '/dashboard', label: 'Dashboard', icon: '📊' },
     { href: '/dashboard/guests', label: 'All Guests', icon: '👥' },
     { href: '/dashboard/overview', label: 'All Guests Overview', icon: '📋' },
@@ -22,30 +24,35 @@ const NAV_ITEMS = {
     { href: '/dashboard/audit', label: 'Audit Trail', icon: '📜' },
     { href: '/dashboard/settings', label: 'Settings', icon: '🔔' },
   ],
-  VOLUNTEER: [
-    { href: '/dashboard', label: 'Dashboard', icon: '📊' },
-    { href: '/dashboard/my-assigned', label: 'My Guests', icon: '🙋' },
-  ],
-  LEADER: [
+  LEADER_ACCESS: [
     { href: '/dashboard', label: 'Dashboard', icon: '📊' },
     { href: '/dashboard/guests', label: 'All Guests', icon: '👥' },
     { href: '/dashboard/overview', label: 'All Guests Overview', icon: '📋' },
     { href: '/dashboard/my-assigned', label: 'My Guests', icon: '🙋' },
     { href: '/dashboard/reports', label: 'Reports', icon: '📈' },
   ],
-};
-
-const ROLE_LABELS: Record<string, string> = {
-  ADMIN: 'Administrator',
-  VOLUNTEER: 'Volunteer',
-  LEADER: 'Leadership',
+  VOLUNTEER_ACCESS: [
+    { href: '/dashboard', label: 'Dashboard', icon: '📊' },
+    { href: '/dashboard/my-assigned', label: 'My Guests', icon: '🙋' },
+  ],
 };
 
 export default function DashboardShell({ user, children }: { user: User; children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const items = NAV_ITEMS[user.role] || NAV_ITEMS.VOLUNTEER;
+  const [customRolesJson, setCustomRolesJson] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Load custom roles config for permission level and label
+    fetch('/api/roles').then(r => r.ok ? r.json() : {}).then(data => {
+      if (data.customRolesJson) setCustomRolesJson(data.customRolesJson);
+    }).catch(() => {});
+  }, []);
+
+  const permLevel = getPermissionLevel(user.role, customRolesJson);
+  const items = NAV_BY_PERMISSION[permLevel] || NAV_BY_PERMISSION.VOLUNTEER_ACCESS;
+  const roleLabel = getRoleLabel(user.role, customRolesJson);
 
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
@@ -108,7 +115,7 @@ export default function DashboardShell({ user, children }: { user: User; childre
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium truncate">{user.name}</p>
-              <p className="text-[11px] text-church-400">{ROLE_LABELS[user.role]}</p>
+              <p className="text-[11px] text-church-400">{roleLabel}</p>
             </div>
           </div>
           <div className="flex gap-3">

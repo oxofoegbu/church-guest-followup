@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-
-const ROLE_LABELS: Record<string, string> = { ADMIN: 'Admin', VOLUNTEER: 'Volunteer', LEADER: 'Leader' };
+import type { RoleConfig } from '@/lib/roles';
 
 export default function UsersPage() {
   const [users, setUsers] = useState<any[]>([]);
+  const [roles, setRoles] = useState<RoleConfig[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [editUser, setEditUser] = useState<any>(null);
@@ -19,7 +19,28 @@ export default function UsersPage() {
     setLoading(false);
   }, []);
 
-  useEffect(() => { fetchUsers(); }, [fetchUsers]);
+  useEffect(() => {
+    fetchUsers();
+    fetch('/api/roles').then(r => r.ok ? r.json() : { roles: [] })
+      .then(data => setRoles(data.roles || []))
+      .catch(() => {});
+  }, [fetchUsers]);
+
+  const getRoleLabel = (roleName: string) => {
+    const r = roles.find(r => r.name === roleName);
+    return r?.label || roleName;
+  };
+
+  const getRoleBadgeColor = (roleName: string) => {
+    const r = roles.find(r => r.name === roleName);
+    if (!r) return 'bg-church-100 text-church-700';
+    switch (r.permissionLevel) {
+      case 'ADMIN_ACCESS': return 'bg-purple-100 text-purple-700';
+      case 'LEADER_ACCESS': return 'bg-blue-100 text-blue-700';
+      case 'VOLUNTEER_ACCESS': return 'bg-green-100 text-green-700';
+      default: return 'bg-church-100 text-church-700';
+    }
+  };
 
   const toggleActive = async (user: any) => {
     await fetch('/api/users', {
@@ -61,8 +82,8 @@ export default function UsersPage() {
                 <td className="text-sm">{user.email}</td>
                 <td className="text-sm">{user.phone || '—'}</td>
                 <td>
-                  <span className={`badge ${user.role === 'ADMIN' ? 'bg-purple-100 text-purple-700' : user.role === 'LEADER' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>
-                    {ROLE_LABELS[user.role]}
+                  <span className={`badge ${getRoleBadgeColor(user.role)}`}>
+                    {getRoleLabel(user.role)}
                   </span>
                 </td>
                 <td className="text-sm">{user._count?.assignedGuests || 0}</td>
@@ -87,10 +108,10 @@ export default function UsersPage() {
         </table>
       </div>
 
-      {/* Create/Edit Modal */}
       {(showCreate || editUser) && (
         <UserModal
           user={editUser}
+          roles={roles}
           onClose={() => { setShowCreate(false); setEditUser(null); fetchUsers(); }}
         />
       )}
@@ -98,7 +119,7 @@ export default function UsersPage() {
   );
 }
 
-function UserModal({ user, onClose }: { user: any; onClose: () => void }) {
+function UserModal({ user, roles, onClose }: { user: any; roles: RoleConfig[]; onClose: () => void }) {
   const isEdit = !!user;
   const [form, setForm] = useState({
     name: user?.name || '',
@@ -136,6 +157,11 @@ function UserModal({ user, onClose }: { user: any; onClose: () => void }) {
     onClose();
   };
 
+  // Group roles by permission level for the dropdown
+  const adminRoles = roles.filter(r => r.permissionLevel === 'ADMIN_ACCESS');
+  const leaderRoles = roles.filter(r => r.permissionLevel === 'LEADER_ACCESS');
+  const volunteerRoles = roles.filter(r => r.permissionLevel === 'VOLUNTEER_ACCESS');
+
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
       <div className="card max-w-md w-full" onClick={e => e.stopPropagation()}>
@@ -153,17 +179,35 @@ function UserModal({ user, onClose }: { user: any; onClose: () => void }) {
               required className="input-field" />
           </div>
           <div>
-            <label className="label">Phone (E.164 format for WhatsApp)</label>
+            <label className="label">Phone (with country code for WhatsApp)</label>
             <input value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })}
-              className="input-field" placeholder="+234..." />
+              className="input-field" placeholder="+12025551234" />
           </div>
           <div>
             <label className="label">Role</label>
             <select value={form.role} onChange={e => setForm({ ...form, role: e.target.value })}
               className="select-field">
-              <option value="VOLUNTEER">Volunteer</option>
-              <option value="LEADER">Leader</option>
-              <option value="ADMIN">Admin</option>
+              {volunteerRoles.length > 0 && (
+                <optgroup label="— Volunteer Access —">
+                  {volunteerRoles.map(r => (
+                    <option key={r.name} value={r.name}>{r.label}</option>
+                  ))}
+                </optgroup>
+              )}
+              {leaderRoles.length > 0 && (
+                <optgroup label="— Leader Access —">
+                  {leaderRoles.map(r => (
+                    <option key={r.name} value={r.name}>{r.label}</option>
+                  ))}
+                </optgroup>
+              )}
+              {adminRoles.length > 0 && (
+                <optgroup label="— Admin Access —">
+                  {adminRoles.map(r => (
+                    <option key={r.name} value={r.name}>{r.label}</option>
+                  ))}
+                </optgroup>
+              )}
             </select>
           </div>
           <div>

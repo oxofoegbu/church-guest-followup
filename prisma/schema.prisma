@@ -8,11 +8,9 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-enum UserRole {
-  ADMIN
-  VOLUNTEER
-  LEADER
-}
+// Note: UserRole enum removed - roles are now flexible strings
+// Default roles: ADMIN, SENIOR_LEADER, LEADER, VOLUNTEER
+// Custom roles can be added via Settings
 
 enum GuestStatus {
   NEW_GUEST
@@ -65,7 +63,7 @@ model User {
   email              String   @unique
   phone              String?
   password           String
-  role               UserRole @default(VOLUNTEER)
+  role               String   @default("VOLUNTEER")
   active             Boolean  @default(true)
   mustChangePassword Boolean  @default(true)
   createdAt          DateTime @default(now())

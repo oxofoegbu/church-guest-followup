@@ -8,7 +8,7 @@ const createUserSchema = z.object({
   name: z.string().min(1).max(100),
   email: z.string().email(),
   phone: z.string().max(20).optional(),
-  role: z.enum(['ADMIN', 'VOLUNTEER', 'LEADER']),
+  role: z.string().min(1).max(50),
   password: z.string().min(6),
 });
 
@@ -16,7 +16,7 @@ const updateUserSchema = z.object({
   name: z.string().min(1).max(100).optional(),
   email: z.string().email().optional(),
   phone: z.string().max(20).optional().nullable(),
-  role: z.enum(['ADMIN', 'VOLUNTEER', 'LEADER']).optional(),
+  role: z.string().min(1).max(50).optional(),
   active: z.boolean().optional(),
   password: z.string().min(6).optional(),
 });

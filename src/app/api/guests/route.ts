@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { requireAuth, handleAuthError } from '@/lib/auth';
 import { Prisma } from '@prisma/client';
+import { getPermissionLevel } from '@/lib/roles';
 
 export async function GET(request: NextRequest) {
   try {
@@ -19,8 +20,12 @@ export async function GET(request: NextRequest) {
 
     const where: Prisma.GuestWhereInput = {};
 
-    // Volunteers only see their guests
-    if (session.role === 'VOLUNTEER') {
+    // Get permission level for current user's role
+    const customRolesSetting = await prisma.appSetting.findUnique({ where: { key: 'custom_roles' } });
+    const permLevel = getPermissionLevel(session.role, customRolesSetting?.value);
+
+    // Volunteer-level users only see their assigned guests
+    if (permLevel === 'VOLUNTEER_ACCESS') {
       where.assignedVolunteerId = session.userId;
     }
 

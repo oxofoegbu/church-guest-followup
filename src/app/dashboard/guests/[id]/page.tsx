@@ -49,10 +49,10 @@ export default function GuestDetailPage() {
     return <div className="flex items-center justify-center h-64 text-church-400">Loading...</div>;
   }
 
-  const isAdmin = user?.role === 'ADMIN';
-  const isLeader = user?.role === 'LEADER';
+  const isAdmin = user?.permissionLevel === 'ADMIN_ACCESS';
+  const isLeader = user?.permissionLevel === 'LEADER_ACCESS';
   const canAssign = isAdmin || isLeader;
-  const isVolunteer = user?.role === 'VOLUNTEER';
+  const isVolunteer = user?.permissionLevel === 'VOLUNTEER_ACCESS';
 
   const guestCustomTargets: Record<string, { completed: boolean; date: string | null }> = (() => {
     try { return typeof guest.customTargets === 'string' ? JSON.parse(guest.customTargets) : (guest.customTargets || {}); }

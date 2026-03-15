@@ -4,6 +4,7 @@ import { requireAuth, handleAuthError } from '@/lib/auth';
 import { notifyVolunteerAssignment } from '@/lib/notifications';
 import { formatDate } from '@/lib/utils';
 import { auditGuestAssigned, auditGuestStatusChanged, auditGuestArchived, auditGuestRestored, auditGuestDeleted } from '@/lib/audit';
+import { getPermissionLevel } from '@/lib/roles';
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -30,7 +31,10 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       return NextResponse.json({ error: 'Guest not found' }, { status: 404 });
     }
 
-    if (session.role === 'VOLUNTEER' && guest.assignedVolunteerId !== session.userId) {
+    const customRolesSetting = await prisma.appSetting.findUnique({ where: { key: 'custom_roles' } });
+    const permLevel = getPermissionLevel(session.role, customRolesSetting?.value);
+
+    if (permLevel === 'VOLUNTEER_ACCESS' && guest.assignedVolunteerId !== session.userId) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
 
@@ -55,8 +59,11 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       return NextResponse.json({ error: 'Guest not found' }, { status: 404 });
     }
 
-    // Volunteers can only update their assigned guests and only certain fields
-    if (session.role === 'VOLUNTEER') {
+    const customRolesSetting2 = await prisma.appSetting.findUnique({ where: { key: 'custom_roles' } });
+    const patchPermLevel = getPermissionLevel(session.role, customRolesSetting2?.value);
+
+    // Volunteer-level users can only update their assigned guests and only certain fields
+    if (patchPermLevel === 'VOLUNTEER_ACCESS') {
       if (guest.assignedVolunteerId !== session.userId) {
         return NextResponse.json({ error: 'Access denied' }, { status: 403 });
       }
@@ -87,7 +94,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     const updateData: any = { ...body };
 
     if (isNewAssignment) {
-      if (session.role === 'VOLUNTEER') {
+      if (patchPermLevel === 'VOLUNTEER_ACCESS') {
         return NextResponse.json({ error: 'Only admins and leaders can assign guests' }, { status: 403 });
       }
       updateData.assignedAt = new Date();
@@ -97,7 +104,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     }
 
     // Handle archiving
-    if (body.status === 'ARCHIVED' && session.role !== 'ADMIN') {
+    if (body.status === 'ARCHIVED' && patchPermLevel !== 'ADMIN_ACCESS') {
       return NextResponse.json({ error: 'Only admins can archive guests' }, { status: 403 });
     }
     if (body.status === 'ARCHIVED') {

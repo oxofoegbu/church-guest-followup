@@ -50,7 +50,7 @@ export default function DashboardPage() {
 
   if (loading) return <LoadingSkeleton />;
 
-  const isVolunteer = user?.role === 'VOLUNTEER';
+  const isVolunteer = user?.permissionLevel === 'VOLUNTEER_ACCESS';
 
   if (isVolunteer) {
     return <VolunteerDashboard />;
@@ -244,7 +244,7 @@ function VolunteerDashboard() {
         <div className="flex items-center justify-between mb-4">
           <h2 className="section-header">Quick Actions</h2>
         </div>
-        <Link href="/dashboard/my-guests" className="btn-primary inline-flex items-center gap-2">
+        <Link href="/dashboard/my-assigned" className="btn-primary inline-flex items-center gap-2">
           🙋 View My Guests →
         </Link>
       </div>

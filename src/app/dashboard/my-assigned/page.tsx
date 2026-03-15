@@ -18,7 +18,7 @@ export default function MyAssignedGuestsPage() {
         setUser(data.user);
         // For volunteers, /api/guests already filters by assigned user
         // For admin/leader, we pass volunteerId to filter by their own ID
-        const url = data.user?.role === 'VOLUNTEER'
+        const url = data.user?.permissionLevel === 'VOLUNTEER_ACCESS'
           ? '/api/guests?limit=200'
           : `/api/guests?limit=200&volunteerId=${data.user?.userId}`;
         const res = await fetch(url);

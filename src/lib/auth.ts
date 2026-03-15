@@ -10,7 +10,7 @@ const COOKIE_NAME = 'session';
 export interface SessionPayload {
   userId: string;
   email: string;
-  role: 'ADMIN' | 'VOLUNTEER' | 'LEADER';
+  role: string;
   name: string;
 }
 
@@ -46,7 +46,7 @@ export async function setSessionCookie(payload: SessionPayload): Promise<void> {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
-    maxAge: 60 * 60 * 24 * 7, // 7 days
+    maxAge: 60 * 60 * 24 * 7,
     path: '/',
   });
 }
@@ -63,7 +63,7 @@ export async function clearSession(): Promise<void> {
   cookieStore.delete(COOKIE_NAME);
 }
 
-// API route auth helper
+// API route auth helper - allowedRoles can be specific role names OR permission levels
 export async function requireAuth(request: NextRequest, allowedRoles?: string[]): Promise<SessionPayload> {
   const token = request.cookies.get(COOKIE_NAME)?.value;
   if (!token) {
@@ -75,14 +75,35 @@ export async function requireAuth(request: NextRequest, allowedRoles?: string[])
     throw new AuthError('Invalid session', 401);
   }
 
-  // Check user is still active
   const user = await prisma.user.findUnique({ where: { id: session.userId } });
   if (!user || !user.active) {
     throw new AuthError('Account deactivated', 403);
   }
 
-  if (allowedRoles && !allowedRoles.includes(session.role)) {
-    throw new AuthError('Insufficient permissions', 403);
+  if (allowedRoles && allowedRoles.length > 0) {
+    // Check direct role match first
+    if (allowedRoles.includes(session.role)) {
+      return session;
+    }
+
+    // Then check permission-level based access
+    // Load custom roles config to resolve permission levels
+    const customRolesSetting = await prisma.appSetting.findUnique({ where: { key: 'custom_roles' } });
+    const { getPermissionLevel } = require('./roles');
+    const userPermLevel = getPermissionLevel(session.role, customRolesSetting?.value);
+
+    // Map allowed roles to their permission levels and check
+    const hasAccess = allowedRoles.some(allowedRole => {
+      // If the allowed role is a permission level check
+      if (allowedRole === 'ADMIN') return userPermLevel === 'ADMIN_ACCESS';
+      if (allowedRole === 'LEADER') return userPermLevel === 'ADMIN_ACCESS' || userPermLevel === 'LEADER_ACCESS';
+      // Direct role name match (already checked above, but for completeness)
+      return false;
+    });
+
+    if (!hasAccess) {
+      throw new AuthError('Insufficient permissions', 403);
+    }
   }
 
   return session;

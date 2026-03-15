@@ -32,6 +32,7 @@ export async function PATCH(request: NextRequest) {
     'notify_on_new_guest',
     'notify_on_assignment',
     'custom_targets',
+    'custom_roles',
   ];
 
   for (const [key, value] of Object.entries(body)) {

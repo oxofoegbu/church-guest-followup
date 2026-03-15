@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { DEFAULT_ROLES, PERMISSION_LEVEL_LABELS } from '@/lib/roles';
+import type { RoleConfig, PermissionLevel } from '@/lib/roles';
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState({
@@ -9,11 +11,15 @@ export default function SettingsPage() {
     notify_on_new_guest: 'true',
     notify_on_assignment: 'true',
     custom_targets: '[]',
+    custom_roles: '[]',
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [newTarget, setNewTarget] = useState('');
+  const [newRoleName, setNewRoleName] = useState('');
+  const [newRoleLabel, setNewRoleLabel] = useState('');
+  const [newRolePermission, setNewRolePermission] = useState<PermissionLevel>('VOLUNTEER_ACCESS');
 
   useEffect(() => {
     fetch('/api/settings')
@@ -30,6 +36,10 @@ export default function SettingsPage() {
     try { return JSON.parse(settings.custom_targets); } catch { return []; }
   })();
 
+  const customRoles: RoleConfig[] = (() => {
+    try { return JSON.parse(settings.custom_roles); } catch { return []; }
+  })();
+
   const addTarget = () => {
     const trimmed = newTarget.trim();
     if (!trimmed || customTargets.includes(trimmed)) return;
@@ -41,6 +51,25 @@ export default function SettingsPage() {
   const removeTarget = (target: string) => {
     const updated = customTargets.filter(t => t !== target);
     setSettings({ ...settings, custom_targets: JSON.stringify(updated) });
+  };
+
+  const addRole = () => {
+    const name = newRoleName.trim().toUpperCase().replace(/\s+/g, '_');
+    const label = newRoleLabel.trim();
+    if (!name || !label) return;
+    // Check for duplicates in both default and custom
+    const allNames = [...DEFAULT_ROLES.map(r => r.name), ...customRoles.map(r => r.name)];
+    if (allNames.includes(name)) return;
+    const updated: RoleConfig[] = [...customRoles, { name, label, permissionLevel: newRolePermission }];
+    setSettings({ ...settings, custom_roles: JSON.stringify(updated) });
+    setNewRoleName('');
+    setNewRoleLabel('');
+    setNewRolePermission('VOLUNTEER_ACCESS');
+  };
+
+  const removeRole = (name: string) => {
+    const updated = customRoles.filter(r => r.name !== name);
+    setSettings({ ...settings, custom_roles: JSON.stringify(updated) });
   };
 
   const handleSave = async () => {
@@ -76,7 +105,7 @@ export default function SettingsPage() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="page-header">Settings</h1>
-          <p className="text-church-500 mt-1">Configure notifications, target goals, and other app settings.</p>
+          <p className="text-church-500 mt-1">Configure roles, notifications, target goals, and other app settings.</p>
         </div>
       </div>
 
@@ -89,6 +118,76 @@ export default function SettingsPage() {
       )}
 
       <div className="space-y-6">
+        {/* Roles Management */}
+        <div className="card">
+          <h2 className="section-header mb-1">🔐 Roles & Permissions</h2>
+          <p className="text-sm text-church-500 mb-4">
+            Manage user roles and their permission levels. Each role maps to a permission level that controls what features are accessible.
+          </p>
+
+          <div className="mb-4">
+            <p className="text-xs font-medium text-church-600 mb-2">Built-in Roles (cannot be removed):</p>
+            <div className="space-y-2">
+              {DEFAULT_ROLES.map(role => (
+                <div key={role.name} className="flex items-center justify-between p-3 bg-church-50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <span className="font-medium text-sm text-church-800">{role.label}</span>
+                    <span className="text-[10px] font-mono px-1.5 py-0.5 bg-church-200 text-church-600 rounded">{role.name}</span>
+                  </div>
+                  <span className="text-xs text-church-500">{PERMISSION_LEVEL_LABELS[role.permissionLevel]}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="border-t border-church-100 pt-4">
+            <p className="text-xs font-medium text-church-600 mb-2">Custom Roles:</p>
+            {customRoles.length === 0 ? (
+              <p className="text-sm text-church-400 italic mb-3">No custom roles added yet.</p>
+            ) : (
+              <div className="space-y-2 mb-3">
+                {customRoles.map(role => (
+                  <div key={role.name} className="flex items-center justify-between p-3 bg-brand-50 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <span className="font-medium text-sm text-church-800">{role.label}</span>
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 bg-church-200 text-church-600 rounded">{role.name}</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs text-church-500">{PERMISSION_LEVEL_LABELS[role.permissionLevel]}</span>
+                      <button onClick={() => removeRole(role.name)}
+                        className="text-red-400 hover:text-red-600 text-xs font-bold">×</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
+              <input type="text" value={newRoleLabel}
+                onChange={e => {
+                  setNewRoleLabel(e.target.value);
+                  setNewRoleName(e.target.value.toUpperCase().replace(/\s+/g, '_'));
+                }}
+                placeholder="Display Name (e.g. Deacon)"
+                className="input-field" />
+              <input type="text" value={newRoleName}
+                onChange={e => setNewRoleName(e.target.value.toUpperCase().replace(/\s+/g, '_'))}
+                placeholder="CODE (e.g. DEACON)"
+                className="input-field font-mono text-xs" />
+              <select value={newRolePermission}
+                onChange={e => setNewRolePermission(e.target.value as PermissionLevel)}
+                className="select-field">
+                <option value="VOLUNTEER_ACCESS">Volunteer Access</option>
+                <option value="LEADER_ACCESS">Leader Access</option>
+                <option value="ADMIN_ACCESS">Admin Access</option>
+              </select>
+              <button onClick={addRole} className="btn-secondary btn-sm whitespace-nowrap">+ Add Role</button>
+            </div>
+            <p className="text-xs text-church-400 mt-2">
+              Permission levels: <strong>Admin</strong> = full access; <strong>Leader</strong> = view all, assign, reports; <strong>Volunteer</strong> = own guests only
+            </p>
+          </div>
+        </div>
+
         {/* Target Goals */}
         <div className="card">
           <h2 className="section-header mb-1">🎯 Target Goals</h2>
@@ -127,9 +226,7 @@ export default function SettingsPage() {
                 onKeyDown={e => e.key === 'Enter' && addTarget()}
                 placeholder="e.g. Completed New Members Class"
                 className="input-field flex-1" />
-              <button onClick={addTarget} className="btn-secondary btn-sm whitespace-nowrap">
-                + Add Target
-              </button>
+              <button onClick={addTarget} className="btn-secondary btn-sm whitespace-nowrap">+ Add Target</button>
             </div>
           </div>
         </div>
@@ -159,7 +256,6 @@ export default function SettingsPage() {
                 className="input-field" />
               <p className="text-xs text-church-400 mt-1">Separate multiple emails with commas</p>
             </div>
-
             <div>
               <label className="label">📱 WhatsApp Numbers</label>
               <input type="text" value={settings.notify_whatsapp}
@@ -186,15 +282,6 @@ export default function SettingsPage() {
             </label>
             <span className="text-sm font-medium text-church-700">Enable notifications when guests are assigned</span>
           </div>
-        </div>
-
-        {/* WhatsApp Note */}
-        <div className="card bg-amber-50 border-amber-200">
-          <h2 className="section-header text-amber-800 mb-2">⚠️ WhatsApp Sandbox Note</h2>
-          <p className="text-sm text-amber-700">
-            If using the Twilio sandbox, every recipient must first send the join code to the sandbox number.
-            For production, register a WhatsApp Business Account through Twilio.
-          </p>
         </div>
 
         {/* Save */}

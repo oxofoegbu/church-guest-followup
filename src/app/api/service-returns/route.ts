@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { requireAuth, handleAuthError } from '@/lib/auth';
 import { serviceReturnSchema } from '@/lib/utils';
+import { getPermissionLevel } from '@/lib/roles';
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await requireAuth(request, ['ADMIN', 'VOLUNTEER']);
+    const session = await requireAuth(request);
     const body = await request.json();
     const parsed = serviceReturnSchema.safeParse(body);
 
@@ -24,18 +25,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Guest not found' }, { status: 404 });
     }
 
-    if (session.role === 'VOLUNTEER' && guest.assignedVolunteerId !== session.userId) {
+    const customRolesSetting = await prisma.appSetting.findUnique({ where: { key: 'custom_roles' } });
+    const permLevel = getPermissionLevel(session.role, customRolesSetting?.value);
+
+    if (permLevel === 'VOLUNTEER_ACCESS' && guest.assignedVolunteerId !== session.userId) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
 
-    // Check max returns
     if (guest.serviceReturnCount >= 7) {
       return NextResponse.json({ error: 'Guest has reached the maximum of 7 service returns' }, { status: 400 });
     }
 
     const nextReturnNumber = guest.serviceReturnCount + 1;
 
-    // Create return record
     const serviceReturn = await prisma.guestServiceReturn.create({
       data: {
         guestId: data.guestId,
@@ -46,7 +48,6 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Update guest count
     await prisma.guest.update({
       where: { id: data.guestId },
       data: { serviceReturnCount: nextReturnNumber },
