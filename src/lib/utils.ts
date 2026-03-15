@@ -2,6 +2,11 @@ import { z } from 'zod';
 
 // ─── Status & Activity Type Labels ───────────────────────
 export const STATUS_LABELS: Record<string, string> = {
+  // Prospect pipeline
+  PROSPECT: 'Prospect',
+  INVITED: 'Invited',
+  FIRST_VISIT: 'First Visit',
+  // Guest pipeline
   NEW_GUEST: 'New Guest',
   ASSIGNED: 'Assigned',
   CONTACT_ATTEMPTED: 'Contact Attempted',
@@ -16,6 +21,9 @@ export const STATUS_LABELS: Record<string, string> = {
 };
 
 export const STATUS_COLORS: Record<string, string> = {
+  PROSPECT: 'bg-orange-100 text-orange-800',
+  INVITED: 'bg-pink-100 text-pink-800',
+  FIRST_VISIT: 'bg-cyan-100 text-cyan-800',
   NEW_GUEST: 'bg-blue-100 text-blue-800',
   ASSIGNED: 'bg-indigo-100 text-indigo-800',
   CONTACT_ATTEMPTED: 'bg-yellow-100 text-yellow-800',
@@ -27,6 +35,34 @@ export const STATUS_COLORS: Record<string, string> = {
   INACTIVE: 'bg-gray-100 text-gray-600',
   BECOME_SIGNED_UP: 'bg-emerald-100 text-emerald-800',
   ARCHIVED: 'bg-stone-100 text-stone-600',
+};
+
+export const PROSPECT_STATUSES = ['PROSPECT', 'INVITED', 'FIRST_VISIT'];
+export const GUEST_STATUSES = ['NEW_GUEST', 'ASSIGNED', 'CONTACT_ATTEMPTED', 'CONTACTED', 'MEETING_SCHEDULED', 'MET', 'ATTENDING_REGULARLY', 'NOT_INTERESTED', 'INACTIVE', 'BECOME_SIGNED_UP'];
+
+export const SOURCE_LABELS: Record<string, string> = {
+  GUEST_FORM: 'Guest Form',
+  PROSPECT: 'Prospect (Added by Member)',
+};
+
+export const RELATIONSHIP_OPTIONS = [
+  'Neighbor', 'Coworker', 'Friend', 'Family Member', 'Classmate', 'Acquaintance', 'Other',
+];
+
+export const SPIRITUAL_STATUS_OPTIONS = [
+  { value: 'unsaved', label: 'Not Yet Saved' },
+  { value: 'believer_no_church', label: 'Believer – No Church Home' },
+  { value: 'new_believer', label: 'New Believer' },
+  { value: 'backslider', label: 'Backslider' },
+  { value: 'unknown', label: 'Unknown' },
+];
+
+export const SPIRITUAL_STATUS_LABELS: Record<string, string> = {
+  unsaved: 'Not Yet Saved',
+  believer_no_church: 'Believer – No Church Home',
+  new_believer: 'New Believer',
+  backslider: 'Backslider',
+  unknown: 'Unknown',
 };
 
 export const ACTIVITY_LABELS: Record<string, string> = {
@@ -83,6 +119,19 @@ export const guestIntakeSchema = z.object({
   howHeardAboutUs: z.string().max(200).optional(),
   prayerRequest: z.string().max(1000).optional(),
   honeypot: z.string().max(0).optional(),
+});
+
+export const prospectSchema = z.object({
+  firstName: z.string().min(1, 'First name is required').max(100).trim(),
+  lastName: z.string().min(1, 'Last name is required').max(100).trim(),
+  phone: z.string().max(20).optional().or(z.literal('')),
+  email: z.string().email('Invalid email').optional().or(z.literal('')),
+  address: z.string().max(500).optional(),
+  preferredContactMethod: z.enum(['CALL', 'TEXT', 'WHATSAPP', 'EMAIL']).default('CALL'),
+  relationshipToAdder: z.string().max(100).optional(),
+  spiritualStatus: z.string().max(50).optional(),
+  prospectNotes: z.string().max(2000).optional(),
+  assignedVolunteerId: z.string().optional(),
 });
 
 export const activitySchema = z.object({

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { STATUS_LABELS, STATUS_COLORS, ACTIVITY_LABELS, ACTIVITY_ICONS, PREFERRED_CONTACT_LABELS, BUILTIN_TARGETS, formatDate, formatDateTime } from '@/lib/utils';
+import { STATUS_LABELS, STATUS_COLORS, ACTIVITY_LABELS, ACTIVITY_ICONS, PREFERRED_CONTACT_LABELS, BUILTIN_TARGETS, PROSPECT_STATUSES, SPIRITUAL_STATUS_LABELS, SOURCE_LABELS, formatDate, formatDateTime } from '@/lib/utils';
 
 export default function GuestDetailPage() {
   const params = useParams();
@@ -17,6 +17,7 @@ export default function GuestDetailPage() {
   const [showReturnModal, setShowReturnModal] = useState(false);
   const [showArchiveModal, setShowArchiveModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showConvertModal, setShowConvertModal] = useState(false);
 
   const fetchGuest = async () => {
     const res = await fetch(`/api/guests/${params.id}`);
@@ -39,7 +40,7 @@ export default function GuestDetailPage() {
       fetch('/api/auth/me').then(r => r.json()).then(d => setUser(d.user)),
       fetch('/api/users').then(r => r.ok ? r.json() : { users: [] })
         .then(d => setUsers((d.users || []).filter((u: any) => u.active))),
-      fetch('/api/settings').then(r => r.ok ? r.json() : {}).then((d: any) => {
+      fetch('/api/settings').then(r => r.ok ? r.json() : {}).then(d => {
         try {
           const parsed = JSON.parse(d.target_config || '[]');
           setTargetConfig(Array.isArray(parsed) && parsed.length > 0 ? parsed : DEFAULT_TARGETS);
@@ -71,22 +72,40 @@ export default function GuestDetailPage() {
     catch { return {}; }
   })();
 
+  const isProspect = PROSPECT_STATUSES.includes(guest.status);
+
   return (
     <div className="space-y-6 fade-in">
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
-          <Link href="/dashboard/guests" className="text-sm text-church-400 hover:text-church-600 mb-1 inline-block">← Back to Guests</Link>
-          <h1 className="page-header">{guest.firstName} {guest.lastName}</h1>
+          <Link href={isProspect ? "/dashboard/prospects" : "/dashboard/guests"}
+            className="text-sm text-church-400 hover:text-church-600 mb-1 inline-block">
+            ← Back to {isProspect ? 'Prospects' : 'Guests'}
+          </Link>
+          <div className="flex items-center gap-2 flex-wrap">
+            <h1 className="page-header">{guest.firstName} {guest.lastName}</h1>
+            {guest.source === 'PROSPECT' && (
+              <span className="badge bg-orange-100 text-orange-700 text-[10px]">PROSPECT</span>
+            )}
+          </div>
           {guest.status === 'ARCHIVED' && (
             <span className="badge bg-stone-100 text-stone-600 mt-1">Archived {guest.archivedAt ? `on ${formatDate(guest.archivedAt)}` : ''}</span>
           )}
+          {guest.convertedToGuestAt && (
+            <span className="badge bg-emerald-50 text-emerald-700 mt-1">Converted to Guest {formatDate(guest.convertedToGuestAt)}</span>
+          )}
         </div>
         <div className="flex gap-2 flex-wrap">
+          {isProspect && (
+            <button onClick={() => setShowConvertModal(true)} className="btn-primary btn-sm bg-emerald-600 hover:bg-emerald-700">
+              🎉 Convert to Guest
+            </button>
+          )}
           {guest.status !== 'ARCHIVED' && (
             <button onClick={() => setShowActivityModal(true)} className="btn-primary btn-sm">+ Log Activity</button>
           )}
-          {guest.status !== 'ARCHIVED' && guest.serviceReturnCount < 7 && (
+          {!isProspect && guest.status !== 'ARCHIVED' && guest.serviceReturnCount < 7 && (
             <button onClick={() => setShowReturnModal(true)} className="btn-secondary btn-sm">+ Record Return</button>
           )}
           {isAdmin && guest.status !== 'ARCHIVED' && (
@@ -106,16 +125,37 @@ export default function GuestDetailPage() {
         <div className="md:col-span-2 space-y-6">
           {/* Profile Card */}
           <div className="card">
-            <h2 className="section-header mb-4">Guest Information</h2>
+            <h2 className="section-header mb-4">{isProspect ? 'Prospect Information' : 'Guest Information'}</h2>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div><span className="text-church-500">Phone:</span> <span className="font-medium">{guest.phone || '—'}</span></div>
               <div><span className="text-church-500">Email:</span> <span className="font-medium">{guest.email || '—'}</span></div>
               <div><span className="text-church-500">Preferred Contact:</span> <span className="font-medium">{PREFERRED_CONTACT_LABELS[guest.preferredContactMethod]}</span></div>
-              <div><span className="text-church-500">First Visit:</span> <span className="font-medium">{formatDate(guest.firstVisitDate)}</span></div>
-              <div><span className="text-church-500">Service Attended:</span> <span className="font-medium">{guest.serviceAttended || '—'}</span></div>
-              <div><span className="text-church-500">How Heard:</span> <span className="font-medium">{guest.howHeardAboutUs || '—'}</span></div>
+              {!isProspect && (
+                <>
+                  <div><span className="text-church-500">First Visit:</span> <span className="font-medium">{guest.firstVisitDate ? formatDate(guest.firstVisitDate) : '—'}</span></div>
+                  <div><span className="text-church-500">Service Attended:</span> <span className="font-medium">{guest.serviceAttended || '—'}</span></div>
+                  <div><span className="text-church-500">How Heard:</span> <span className="font-medium">{guest.howHeardAboutUs || '—'}</span></div>
+                </>
+              )}
+              {guest.source === 'PROSPECT' && (
+                <>
+                  {guest.spiritualStatus && (
+                    <div><span className="text-church-500">Spiritual Status:</span> <span className="font-medium">{SPIRITUAL_STATUS_LABELS[guest.spiritualStatus] || guest.spiritualStatus}</span></div>
+                  )}
+                  {guest.relationshipToAdder && (
+                    <div><span className="text-church-500">Relationship:</span> <span className="font-medium">{guest.relationshipToAdder}</span></div>
+                  )}
+                  {guest.addedBy && (
+                    <div><span className="text-church-500">Added By:</span> <span className="font-medium">{guest.addedBy.name}</span></div>
+                  )}
+                  <div><span className="text-church-500">Source:</span> <span className="font-medium">{SOURCE_LABELS[guest.source] || guest.source}</span></div>
+                </>
+              )}
               {guest.prayerRequest && (
                 <div className="col-span-2"><span className="text-church-500">Prayer Request:</span> <span className="font-medium">{guest.prayerRequest}</span></div>
+              )}
+              {guest.prospectNotes && (
+                <div className="col-span-2"><span className="text-church-500">Notes:</span> <span className="font-medium">{guest.prospectNotes}</span></div>
               )}
             </div>
           </div>
@@ -285,6 +325,7 @@ export default function GuestDetailPage() {
       {showReturnModal && <ReturnModal guestId={guest.id} nextNumber={guest.serviceReturnCount + 1} onClose={() => { setShowReturnModal(false); fetchGuest(); }} />}
       {showArchiveModal && <ArchiveModal guestId={guest.id} guestName={`${guest.firstName} ${guest.lastName}`} onClose={() => { setShowArchiveModal(false); fetchGuest(); }} />}
       {showDeleteModal && <DeleteModal guestId={guest.id} guestName={`${guest.firstName} ${guest.lastName}`} onClose={() => setShowDeleteModal(false)} onDeleted={() => router.push('/dashboard/guests')} />}
+      {showConvertModal && <ConvertModal guestId={guest.id} guestName={`${guest.firstName} ${guest.lastName}`} onClose={() => { setShowConvertModal(false); fetchGuest(); }} />}
     </div>
   );
 }
@@ -467,6 +508,75 @@ function DeleteModal({ guestId, guestName, onClose, onDeleted }: { guestId: stri
             {deleting ? 'Deleting...' : 'Permanently Delete'}
           </button>
           <button onClick={onClose} className="btn-secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ConvertModal({ guestId, guestName, onClose }: { guestId: string; guestName: string; onClose: () => void }) {
+  const [form, setForm] = useState({
+    firstVisitDate: new Date().toISOString().split('T')[0],
+    serviceAttended: '',
+  });
+  const [saving, setSaving] = useState(false);
+
+  const handleConvert = async () => {
+    setSaving(true);
+    const res = await fetch('/api/prospects', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'convert',
+        guestId,
+        firstVisitDate: form.firstVisitDate,
+        serviceAttended: form.serviceAttended,
+      }),
+    });
+    if (res.ok) {
+      onClose();
+    } else {
+      setSaving(false);
+      alert('Failed to convert prospect');
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="card max-w-md w-full" onClick={e => e.stopPropagation()}>
+        <div className="text-center mb-4">
+          <span className="text-4xl">🎉</span>
+          <h2 className="section-header mt-2">Convert to Guest</h2>
+          <p className="text-sm text-church-500 mt-1">
+            <strong>{guestName}</strong> visited church! Move them into the guest follow-up pipeline.
+          </p>
+        </div>
+        <div className="space-y-4">
+          <div>
+            <label className="label">Date of First Visit</label>
+            <input type="date" value={form.firstVisitDate}
+              onChange={e => setForm({ ...form, firstVisitDate: e.target.value })}
+              className="input-field" />
+          </div>
+          <div>
+            <label className="label">Service Attended</label>
+            <select value={form.serviceAttended}
+              onChange={e => setForm({ ...form, serviceAttended: e.target.value })}
+              className="select-field">
+              <option value="">Select...</option>
+              <option value="Sunday 10am">Sunday 10am</option>
+              <option value="Wednesday Bible Study">Wednesday Bible Study</option>
+              <option value="Friday Prayer Meeting">Friday Prayer Meeting</option>
+              <option value="Special Event">Special Event</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div className="flex gap-3 pt-2">
+            <button onClick={handleConvert} disabled={saving} className="btn-primary flex-1 bg-emerald-600 hover:bg-emerald-700">
+              {saving ? 'Converting...' : '✅ Convert to Guest'}
+            </button>
+            <button onClick={onClose} className="btn-secondary">Cancel</button>
+          </div>
         </div>
       </div>
     </div>

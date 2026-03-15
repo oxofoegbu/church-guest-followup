@@ -17,6 +17,7 @@ const NAV_BY_PERMISSION = {
   ADMIN_ACCESS: [
     { href: '/dashboard', label: 'Dashboard', icon: '📊' },
     { href: '/dashboard/guests', label: 'All Guests', icon: '👥' },
+    { href: '/dashboard/prospects', label: 'Prospects', icon: '🎯' },
     { href: '/dashboard/overview', label: 'All Guests Overview', icon: '📋' },
     { href: '/dashboard/my-assigned', label: 'My Guests', icon: '🙋' },
     { href: '/dashboard/users', label: 'Users', icon: '⚙️' },
@@ -27,12 +28,14 @@ const NAV_BY_PERMISSION = {
   LEADER_ACCESS: [
     { href: '/dashboard', label: 'Dashboard', icon: '📊' },
     { href: '/dashboard/guests', label: 'All Guests', icon: '👥' },
+    { href: '/dashboard/prospects', label: 'Prospects', icon: '🎯' },
     { href: '/dashboard/overview', label: 'All Guests Overview', icon: '📋' },
     { href: '/dashboard/my-assigned', label: 'My Guests', icon: '🙋' },
     { href: '/dashboard/reports', label: 'Reports', icon: '📈' },
   ],
   VOLUNTEER_ACCESS: [
     { href: '/dashboard', label: 'Dashboard', icon: '📊' },
+    { href: '/dashboard/prospects', label: 'Prospects', icon: '🎯' },
     { href: '/dashboard/my-assigned', label: 'My Guests', icon: '🙋' },
   ],
 };
@@ -45,7 +48,7 @@ export default function DashboardShell({ user, children }: { user: User; childre
 
   useEffect(() => {
     // Load custom roles config for permission level and label
-    fetch("/api/roles").then(r => r.ok ? r.json() : {}).then((data: any) => {
+    fetch('/api/roles').then(r => r.ok ? r.json() : {}).then(data => {
       if (data.customRolesJson) setCustomRolesJson(data.customRolesJson);
     }).catch(() => {});
   }, []);

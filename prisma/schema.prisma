@@ -13,6 +13,11 @@ datasource db {
 // Custom roles can be added via Settings
 
 enum GuestStatus {
+  // Prospect pipeline (pre-visit)
+  PROSPECT
+  INVITED
+  FIRST_VISIT
+  // Guest pipeline (post-visit)
   NEW_GUEST
   ASSIGNED
   CONTACT_ATTEMPTED
@@ -70,6 +75,7 @@ model User {
   updatedAt          DateTime @updatedAt
 
   assignedGuests       Guest[]            @relation("AssignedVolunteer")
+  addedProspects       Guest[]            @relation("AddedBy")
   activities           FollowUpActivity[] @relation("PerformedBy")
   serviceReturns       GuestServiceReturn[] @relation("RecordedBy")
   notificationsReceived NotificationLog[] @relation("NotifiedUser")
@@ -85,7 +91,7 @@ model Guest {
   email                String?
   address              String?
   preferredContactMethod PreferredContact @default(CALL)
-  firstVisitDate       DateTime
+  firstVisitDate       DateTime?
   serviceAttended      String?
   howHeardAboutUs      String?
   prayerRequest        String?
@@ -97,6 +103,14 @@ model Guest {
   becomeCohort         String?
   serviceReturnCount   Int             @default(0)
   serviceReturnTarget  Int             @default(7)
+  // Source tracking
+  source               String          @default("GUEST_FORM")  // GUEST_FORM or PROSPECT
+  addedByUserId        String?
+  // Prospect-specific fields
+  relationshipToAdder  String?         // "neighbor", "coworker", "friend", "family"
+  spiritualStatus      String?         // "unsaved", "believer_no_church", "new_believer", "backslider"
+  prospectNotes        String?
+  convertedToGuestAt   DateTime?
   // Target Goals
   waterBaptism         Boolean         @default(false)
   waterBaptismDate     DateTime?
@@ -111,6 +125,7 @@ model Guest {
   createdAt            DateTime        @default(now())
   updatedAt            DateTime        @updatedAt
 
+  addedBy              User?           @relation("AddedBy", fields: [addedByUserId], references: [id])
   assignedVolunteer    User?           @relation("AssignedVolunteer", fields: [assignedVolunteerId], references: [id])
   activities           FollowUpActivity[]
   serviceReturns       GuestServiceReturn[]

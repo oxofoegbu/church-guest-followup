@@ -45,11 +45,20 @@ export async function GET(request: NextRequest) {
     if (dateFrom) where.firstVisitDate = { ...(where.firstVisitDate as any || {}), gte: new Date(dateFrom) };
     if (dateTo) where.firstVisitDate = { ...(where.firstVisitDate as any || {}), lte: new Date(dateTo) };
 
+    // Source filter: 'prospect' or 'guest_form'
+    const source = url.searchParams.get('source') || '';
+    if (source === 'prospect') {
+      where.source = 'PROSPECT';
+    } else if (source === 'guest_form') {
+      where.source = 'GUEST_FORM';
+    }
+
     const [guests, total] = await Promise.all([
       prisma.guest.findMany({
         where,
         include: {
           assignedVolunteer: { select: { id: true, name: true, email: true } },
+          addedBy: { select: { id: true, name: true } },
           activities: { orderBy: { activityDateTime: 'desc' }, take: 1 },
         },
         orderBy: { createdAt: 'desc' },

@@ -15,6 +15,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       where: { id },
       include: {
         assignedVolunteer: { select: { id: true, name: true, email: true, phone: true } },
+        addedBy: { select: { id: true, name: true } },
         activities: {
           include: { performedBy: { select: { id: true, name: true } } },
           orderBy: { activityDateTime: 'desc' },
