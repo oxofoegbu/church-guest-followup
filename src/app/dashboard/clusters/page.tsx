@@ -23,19 +23,19 @@ function ClusterModal({
   const [name, setName] = useState(cluster?.name || '');
   const [description, setDescription] = useState(cluster?.description || '');
   const [color, setColor] = useState(cluster?.color || '#6366f1');
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(
-    new Set(cluster?.members.map(m => m.userId) || [])
+  const [selectedIds, setSelectedIds] = useState<string[]>(
+    cluster?.members.map(m => m.userId) || []
   );
   const [search, setSearch] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
+  const isSelected = (id: string) => selectedIds.includes(id);
+
   const toggleUser = (id: string) => {
-    setSelectedIds(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id); else next.add(id);
-      return next;
-    });
+    setSelectedIds(prev =>
+      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+    );
   };
 
   const filteredUsers = users.filter(u =>
@@ -48,9 +48,9 @@ function ClusterModal({
     setSaving(true); setError('');
     try {
       if (isEdit) {
-        const existingIds = new Set(cluster!.members.map(m => m.userId));
-        const addMemberIds   = [...selectedIds].filter(id => !existingIds.has(id));
-        const removeMemberIds = [...existingIds].filter(id => !selectedIds.has(id));
+        const existingIds = cluster!.members.map(m => m.userId);
+        const addMemberIds    = selectedIds.filter(id => !existingIds.includes(id));
+        const removeMemberIds = existingIds.filter(id => !selectedIds.includes(id));
         const res = await fetch(`/api/clusters/${cluster!.id}`, {
           method: 'PATCH', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, description, color, addMemberIds, removeMemberIds }),
@@ -59,7 +59,7 @@ function ClusterModal({
       } else {
         const res = await fetch('/api/clusters', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, description, color, memberIds: [...selectedIds] }),
+          body: JSON.stringify({ name, description, color, memberIds: selectedIds }),
         });
         if (!res.ok) throw new Error((await res.json()).error);
       }
@@ -83,13 +83,11 @@ function ClusterModal({
             <input type="text" value={name} onChange={e => setName(e.target.value)}
               className="input-field" placeholder="e.g. Young Adults, Prayer Team, Ushers" />
           </div>
-
           <div>
             <label className="label">Description (optional)</label>
             <textarea value={description} onChange={e => setDescription(e.target.value)}
               rows={2} className="textarea-field" placeholder="What is this cluster for?" />
           </div>
-
           <div>
             <label className="label">Colour</label>
             <div className="flex gap-2 flex-wrap mt-1">
@@ -100,10 +98,9 @@ function ClusterModal({
               ))}
             </div>
           </div>
-
           <div>
             <label className="label mb-2">
-              Members <span className="text-church-400 font-normal">({selectedIds.size} selected)</span>
+              Members <span className="text-church-400 font-normal">({selectedIds.length} selected)</span>
             </label>
             <input type="text" value={search} onChange={e => setSearch(e.target.value)}
               placeholder="Search by name or email…" className="input-field mb-2" />
@@ -112,7 +109,7 @@ function ClusterModal({
                 <p className="text-sm text-church-400 text-center py-4">No users found</p>
               ) : filteredUsers.map(u => (
                 <label key={u.id} className="flex items-center gap-3 px-4 py-2.5 hover:bg-brand-50 cursor-pointer border-b border-church-50 last:border-0">
-                  <input type="checkbox" checked={selectedIds.has(u.id)} onChange={() => toggleUser(u.id)}
+                  <input type="checkbox" checked={isSelected(u.id)} onChange={() => toggleUser(u.id)}
                     className="w-4 h-4 rounded border-church-300 text-brand-500" />
                   <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-brand-600 bg-brand-100 flex-shrink-0">
                     {u.name[0]?.toUpperCase()}
@@ -125,14 +122,13 @@ function ClusterModal({
               ))}
             </div>
           </div>
-
           {error && <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">{error}</div>}
         </div>
 
         <div className="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 flex gap-3">
           <button onClick={onClose} className="flex-1 btn-secondary">Cancel</button>
           <button onClick={handleSave} disabled={saving} className="flex-1 btn-primary">
-            {saving ? 'Saving…' : isEdit ? 'Save Changes' : `Create Cluster`}
+            {saving ? 'Saving…' : isEdit ? 'Save Changes' : 'Create Cluster'}
           </button>
         </div>
       </div>
@@ -156,7 +152,8 @@ export default function ClustersPage() {
 
   useEffect(() => {
     fetchClusters();
-    fetch('/api/users').then(r => r.ok ? r.json() : { users: [] }).then(d => setUsers((d.users || []).filter((u: any) => u.active)));
+    fetch('/api/users').then(r => r.ok ? r.json() : { users: [] })
+      .then(d => setUsers((d.users || []).filter((u: any) => u.active)));
     fetch('/api/auth/me').then(r => r.json()).then(d => setCurrentUser(d.user)).catch(() => {});
   }, [fetchClusters]);
 
@@ -178,13 +175,10 @@ export default function ClustersPage() {
           </p>
         </div>
         {isAdmin && (
-          <button onClick={() => setShowCreate(true)} className="btn-primary">
-            + New Cluster
-          </button>
+          <button onClick={() => setShowCreate(true)} className="btn-primary">+ New Cluster</button>
         )}
       </div>
 
-      {/* Info banner */}
       <div className="mb-6 p-4 bg-indigo-50 border border-indigo-200 rounded-xl text-sm text-indigo-700">
         <p className="font-semibold mb-1">🚀 What clusters unlock (coming soon)</p>
         <p className="text-indigo-600">Schedule meetings with your whole cluster · Send targeted WhatsApp/email blasts · Set up shared calendar events · Manage small groups — this is the foundation.</p>
@@ -205,7 +199,6 @@ export default function ClustersPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {clusters.map(cluster => (
             <div key={cluster.id} className="card hover:shadow-md transition-shadow">
-              {/* Header */}
               <div className="flex items-start gap-3 mb-3">
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-lg flex-shrink-0"
                   style={{ background: cluster.color }}>
@@ -227,7 +220,6 @@ export default function ClustersPage() {
                 )}
               </div>
 
-              {/* Stats */}
               <div className="flex items-center gap-3 mb-3 text-xs text-church-500">
                 <span className="flex items-center gap-1">
                   <span style={{ color: cluster.color }}>●</span>
@@ -236,12 +228,10 @@ export default function ClustersPage() {
                 <span>Created by {cluster.createdByUser.name}</span>
               </div>
 
-              {/* Member avatars */}
               {cluster.members.length > 0 && (
                 <div className="flex items-center gap-1 flex-wrap">
                   {cluster.members.slice(0, 8).map(m => (
-                    <div key={m.userId}
-                      title={m.user.name}
+                    <div key={m.userId} title={m.user.name}
                       className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
                       style={{ background: cluster.color, opacity: 0.85 }}>
                       {m.user.name[0]?.toUpperCase()}
@@ -267,10 +257,13 @@ export default function ClustersPage() {
       )}
 
       {showCreate && (
-        <ClusterModal users={users} onClose={() => setShowCreate(false)} onSaved={() => { setShowCreate(false); fetchClusters(); }} />
+        <ClusterModal users={users} onClose={() => setShowCreate(false)}
+          onSaved={() => { setShowCreate(false); fetchClusters(); }} />
       )}
       {editingCluster && (
-        <ClusterModal cluster={editingCluster} users={users} onClose={() => setEditingCluster(null)} onSaved={() => { setEditingCluster(null); fetchClusters(); }} />
+        <ClusterModal cluster={editingCluster} users={users}
+          onClose={() => setEditingCluster(null)}
+          onSaved={() => { setEditingCluster(null); fetchClusters(); }} />
       )}
     </div>
   );

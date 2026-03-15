@@ -38,10 +38,10 @@ function AssignModal({ service, onClose, onSaved }: { service: ServiceSchedule; 
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [form, setForm] = useState({
-    speakerId: service.speakerId, speakerName: service.speakerName || '',
+    speakerId: service.speakerId,             speakerName: service.speakerName || '',
     serviceCoordinatorId: service.serviceCoordinatorId, serviceCoordinatorName: service.serviceCoordinatorName || '',
-    propheticPrayerId: service.propheticPrayerId, propheticPrayerName: service.propheticPrayerName || '',
-    worshipLeaderId: service.worshipLeaderId, worshipLeaderName: service.worshipLeaderName || '',
+    propheticPrayerId: service.propheticPrayerId,       propheticPrayerName: service.propheticPrayerName || '',
+    worshipLeaderId: service.worshipLeaderId,           worshipLeaderName: service.worshipLeaderName || '',
     notes: service.notes || '',
   });
 
@@ -68,10 +68,10 @@ function AssignModal({ service, onClose, onSaved }: { service: ServiceSchedule; 
   };
 
   const roles = [
-    { label: '🎤 Speaker (Word Minister)', idKey: 'speakerId' as const, nameKey: 'speakerName' as const },
-    { label: '📋 Service Coordinator', idKey: 'serviceCoordinatorId' as const, nameKey: 'serviceCoordinatorName' as const },
-    { label: '🙏 Prophetic Prayer', idKey: 'propheticPrayerId' as const, nameKey: 'propheticPrayerName' as const },
-    { label: '🎵 Worship Leader', idKey: 'worshipLeaderId' as const, nameKey: 'worshipLeaderName' as const },
+    { label: '🎤 Speaker (Word Minister)', idKey: 'speakerId' as const,            nameKey: 'speakerName' as const },
+    { label: '📋 Service Coordinator',     idKey: 'serviceCoordinatorId' as const,  nameKey: 'serviceCoordinatorName' as const },
+    { label: '🙏 Prophetic Prayer',        idKey: 'propheticPrayerId' as const,     nameKey: 'propheticPrayerName' as const },
+    { label: '🎵 Worship Leader',          idKey: 'worshipLeaderId' as const,       nameKey: 'worshipLeaderName' as const },
   ];
 
   return (
@@ -98,7 +98,7 @@ function AssignModal({ service, onClose, onSaved }: { service: ServiceSchedule; 
                 }}
                 className="select-field mb-1.5"
               >
-                <option value="">— Select from users —</option>
+                <option value="">— Select from users (links to calendar) —</option>
                 {users.map(u => <option key={u.id} value={u.id}>{u.name} ({u.role})</option>)}
               </select>
               <input
@@ -200,6 +200,7 @@ export default function SchedulePage() {
   const [selectedYear, setSelectedYear] = useState(2026);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
+  const [coordinatorUserIds, setCoordinatorUserIds] = useState<string[]>([]);
   const [editing, setEditing] = useState<ServiceSchedule | null>(null);
   const [showNewYear, setShowNewYear] = useState(false);
   const [showArchived, setShowArchived] = useState(false);
@@ -211,22 +212,8 @@ export default function SchedulePage() {
     const data = await res.json();
     const all = Array.isArray(data) ? data : [];
     setYears(all);
-    const active = all.filter((y: ScheduleYear) => !y.archived);
-    if (active.length > 0 && !all.find((y: ScheduleYear) => y.year === selectedYear)) {
-      setSelectedYear(active[0].year);
-    }
-  }, [selectedYear]);
+  }, []);
 
-  const fetchSchedules = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/schedule?year=${selectedYear}`);
-      setSchedules(Array.isArray(await res.json()) ? await fetch(`/api/schedule?year=${selectedYear}`).then(r => r.json()) : []);
-    } catch (e) { console.error(e); }
-    finally { setLoading(false); }
-  }, [selectedYear]);
-
-  // Simpler fetch
   const doFetch = useCallback(async () => {
     setLoading(true);
     try {
@@ -238,13 +225,28 @@ export default function SchedulePage() {
   }, [selectedYear]);
 
   useEffect(() => {
-    fetch('/api/auth/me').then(r => r.json()).then(d => setUser(d.user)).catch(() => {});
-    fetchYears();
-  }, []);
+    // Load user, years, and coordinator settings in parallel
+    Promise.all([
+      fetch('/api/auth/me').then(r => r.json()).catch(() => ({})),
+      fetchYears(),
+      fetch('/api/settings').then(r => r.ok ? r.json() : {}).catch(() => ({})),
+    ]).then(([meData, _years, settingsData]) => {
+      if (meData?.user) setUser(meData.user);
+      // Parse schedule_coordinators to get list of authorised user IDs
+      try {
+        const coords = JSON.parse(settingsData?.schedule_coordinators || '[]');
+        setCoordinatorUserIds(coords.map((c: any) => c.userId));
+      } catch { setCoordinatorUserIds([]); }
+    });
+  }, [fetchYears]);
 
   useEffect(() => { doFetch(); }, [doFetch]);
 
-  const canEdit = user && ['ADMIN', 'SENIOR_LEADER', 'LEADER'].includes(user.role);
+  // canEdit: admin/senior_leader/leader roles OR explicitly designated coordinator
+  const canEdit = user && (
+    ['ADMIN', 'SENIOR_LEADER', 'LEADER'].includes(user.role) ||
+    coordinatorUserIds.includes(user.userId || user.id)
+  );
   const isAdmin = user && ['ADMIN', 'SENIOR_LEADER'].includes(user.role);
   const selectedYearData = years.find(y => y.year === selectedYear);
 
@@ -254,13 +256,10 @@ export default function SchedulePage() {
   const printUrl = `/schedule/${selectedYear}/print`;
 
   const handleCopyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(publicUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
-    } catch {
-      prompt('Copy this link:', publicUrl);
-    }
+    try { await navigator.clipboard.writeText(publicUrl); }
+    catch { prompt('Copy this link:', publicUrl); return; }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
   };
 
   const handleArchive = async () => {
@@ -301,11 +300,8 @@ export default function SchedulePage() {
           <p className="text-church-500 text-sm mt-1">Grace Life Center — {selectedYearData?.label || selectedYear}</p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
-          <select value={selectedYear} onChange={e => setSelectedYear(Number(e.target.value))}
-            className="select-field text-sm py-1.5">
-            {visibleYears.map(y => (
-              <option key={y.year} value={y.year}>{y.label}{y.archived ? ' 📦' : ''}</option>
-            ))}
+          <select value={selectedYear} onChange={e => setSelectedYear(Number(e.target.value))} className="select-field text-sm py-1.5">
+            {visibleYears.map(y => <option key={y.year} value={y.year}>{y.label}{y.archived ? ' 📦' : ''}</option>)}
           </select>
           {years.some(y => y.archived) && (
             <button onClick={() => setShowArchived(s => !s)} className="btn-secondary btn-sm text-xs">
@@ -338,8 +334,8 @@ export default function SchedulePage() {
           className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-white border border-church-300 text-church-700 hover:bg-church-100 transition-colors">
           🖨️ Print / Save as PDF
         </a>
-        <div className="flex items-center ml-auto text-xs text-church-400 gap-1">
-          <span>Share URL:</span>
+        <div className="flex items-center ml-auto text-xs text-church-400 gap-1 flex-wrap">
+          <span>Share:</span>
           <code className="bg-white border border-church-200 px-2 py-0.5 rounded text-church-600 text-[11px]">{publicUrl}</code>
         </div>
       </div>
@@ -439,7 +435,13 @@ export default function SchedulePage() {
                                   {isToday && <span className="text-[10px] font-bold bg-brand-500 text-white px-2 py-0.5 rounded-full uppercase">Today</span>}
                                 </div>
                                 {canEdit && (
-                                  <button onClick={() => setEditing(svc)} className="text-church-300 hover:text-brand-500 text-lg transition-colors" title="Assign roles">✏️</button>
+                                  <button
+                                    onClick={(e) => { e.stopPropagation(); setEditing(svc); }}
+                                    className="p-1.5 text-church-300 hover:text-brand-500 hover:bg-brand-50 rounded-lg transition-colors"
+                                    title="Assign roles"
+                                  >
+                                    ✏️
+                                  </button>
                                 )}
                               </div>
                               <h3 className={`text-sm font-semibold leading-snug line-clamp-2 mb-1 ${title.startsWith('TBD') ? 'text-church-400 italic' : 'text-gray-900'}`}>
