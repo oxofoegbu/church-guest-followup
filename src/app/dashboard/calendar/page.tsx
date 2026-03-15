@@ -111,7 +111,7 @@ export default function CalendarPage() {
           currentMonth={currentMonth}
           onPrev={prevMonth}
           onNext={nextMonth}
-          onDayClick={(date) => { setSelectedDate(date); setShowAddModal(true); }}
+          onDayClick={(date: string) => { setSelectedDate(date); setShowAddModal(true); }}
           onComplete={handleComplete}
           onDelete={handleDelete}
         />
