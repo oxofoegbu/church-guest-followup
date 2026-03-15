@@ -40,7 +40,7 @@ export default function GuestDetailPage() {
       fetch('/api/auth/me').then(r => r.json()).then(d => setUser(d.user)),
       fetch('/api/users').then(r => r.ok ? r.json() : { users: [] })
         .then(d => setUsers((d.users || []).filter((u: any) => u.active))),
-      fetch('/api/settings').then(r => r.ok ? r.json() : {}).then(d => {
+      fetch('/api/settings').then(r => r.ok ? r.json() : {}).then((d: any) => {
         try {
           const parsed = JSON.parse(d.target_config || '[]');
           setTargetConfig(Array.isArray(parsed) && parsed.length > 0 ? parsed : DEFAULT_TARGETS);
