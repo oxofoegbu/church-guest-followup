@@ -1,3 +1,4 @@
+import PageHelp from '@/components/PageHelp';
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
@@ -55,6 +56,11 @@ export default function UsersPage() {
     <div className="space-y-6 fade-in max-w-4xl">
       <div className="flex items-center justify-between">
         <h1 className="page-header">User Management</h1>
+        <PageHelp docSection="users" tips={[
+          { icon: "➕", title: "Adding a new staff member", body: "Click + Add User, fill in their details and assign a role. They receive a welcome email with a temporary password and must change it on first login." },
+          { icon: "👤", title: "Convert a guest to a user", body: "Go to the guest's profile and click Convert to User — useful when a first-time visitor officially joins your team." },
+          { icon: "⚠️", title: "Deactivating vs deleting", body: "Toggle Active off to prevent login without losing any data. All their guest assignments and activity history are preserved." }
+        ]} />
         <button onClick={() => setShowCreate(true)} className="btn-primary">
           + Add User
         </button>

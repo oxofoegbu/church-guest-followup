@@ -1,3 +1,4 @@
+import PageHelp from '@/components/PageHelp';
 'use client';
 
 import { useState, useEffect } from 'react';

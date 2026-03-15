@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import PageHelp from '@/components/PageHelp';
 import { STATUS_LABELS, STATUS_COLORS, PREFERRED_CONTACT_LABELS, formatDate } from '@/lib/utils';
 
 export default function GuestsPage() {
@@ -71,6 +72,11 @@ export default function GuestsPage() {
     <div className="space-y-6 fade-in">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <h1 className="page-header">All Guests ({total})</h1>
+        <PageHelp docSection="guest-pipeline" tips={[
+          { icon: "👥", title: "Finding guests to follow up", body: "Filter by status NEW GUEST to find unassigned visitors. Click any card to open their full profile and assign them to a volunteer." },
+          { icon: "📤", title: "Bulk assign", body: "Tick multiple guest cards then use the bulk assign dropdown to assign them all to one volunteer at once — great after a busy Sunday." },
+          { icon: "🔄", title: "Pipeline stages", body: "Guests move through 10 stages from NEW GUEST to COMPLETED. Update their status from inside their profile as follow-up progresses." }
+        ]} />
         <div className="flex gap-2">
           <a href="/api/reports/export?type=guests" className="btn-secondary btn-sm">
             📥 Export CSV

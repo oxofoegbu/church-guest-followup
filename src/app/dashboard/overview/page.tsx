@@ -1,3 +1,4 @@
+import PageHelp from '@/components/PageHelp';
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -42,6 +43,10 @@ export default function AllGuestsOverviewPage() {
     <div className="space-y-6 fade-in">
       <div className="flex items-center justify-between">
         <h1 className="page-header">All Guests Overview ({guests.filter(g => g.status !== 'ARCHIVED').length})</h1>
+        <PageHelp docSection="guest-pipeline" tips={[
+          { icon: "📋", title: "Bird's eye view", body: "This page shows every guest as a compact card with their status badge and service return progress. Use it for a quick Sunday morning check before service." },
+          { icon: "🏷️", title: "Status badges", body: "Each card shows the current pipeline stage. Click View to open the full guest profile and update their status or log an activity." }
+        ]} />
       </div>
 
       {/* Filter Tabs */}

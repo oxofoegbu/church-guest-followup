@@ -1,3 +1,4 @@
+import PageHelp from '@/components/PageHelp';
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
@@ -298,6 +299,11 @@ export default function SchedulePage() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
         <div>
           <h1 className="page-header">⛪ Sunday Schedule</h1>
+        <PageHelp docSection="sunday-schedule" tips={[
+          { icon: "✏️", title: "Assigning roles", body: "Click the pencil icon on any Sunday card. Select a user from the dropdown to link them — they get an immediate notification and a calendar entry. Or type a name manually for guests or TBD." },
+          { icon: "🔗", title: "Linking sends notifications", body: "Only roles linked to a user account trigger email + WhatsApp notifications and 7-day advance reminders. Plain text names do not." },
+          { icon: "🌐", title: "Share publicly", body: "Use Copy Share Link to send the full schedule to anyone — no login required. Great for the church WhatsApp group." }
+        ]} />
           <p className="text-church-500 text-sm mt-1">Grace Life Center — {selectedYearData?.label || selectedYear}</p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">

@@ -1,3 +1,4 @@
+import PageHelp from '@/components/PageHelp';
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -172,6 +173,11 @@ export default function SettingsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="page-header">⚙️ Settings</h1>
+        <PageHelp docSection="settings" tips={[
+          { icon: "⛪", title: "Set coordinators first", body: "Before your first Sunday, designate your Schedule Coordinators so they can assign service roles without needing Admin access." },
+          { icon: "🎯", title: "Customise target goals", body: "Rename or add milestones to match your church's discipleship pathway. Changes appear on every guest profile immediately after saving." },
+          { icon: "🔔", title: "Test notifications", body: "Add your own email and WhatsApp number to the notification recipients and submit a test guest form to confirm delivery." }
+        ]} />
           {pendingRequests > 0 && (
             <p className="text-sm text-amber-600 mt-1 font-medium">
               ⚠️ {pendingRequests} pending account request{pendingRequests > 1 ? 's' : ''} — see Users page

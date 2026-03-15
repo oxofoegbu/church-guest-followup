@@ -1,3 +1,4 @@
+import PageHelp from '@/components/PageHelp';
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
@@ -170,6 +171,11 @@ export default function ClustersPage() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="page-header">👥 Clusters</h1>
+        <PageHelp docSection="clusters" tips={[
+          { icon: "👥", title: "Group your team", body: "Clusters are named groups of staff members — Prayer Team, Young Adults, Ushers, etc. Use them to organise your team for future targeted communications." },
+          { icon: "🎨", title: "Use colours to identify groups", body: "Each cluster has a colour. Pick distinct colours so clusters are easy to tell apart at a glance." },
+          { icon: "🚀", title: "More features coming", body: "Clusters will soon support group meeting scheduling, targeted WhatsApp/email blasts, and full small-group management." }
+        ]} />
           <p className="text-church-500 text-sm mt-1">
             Groups of members for shared activities, meetings, and targeted communications.
           </p>

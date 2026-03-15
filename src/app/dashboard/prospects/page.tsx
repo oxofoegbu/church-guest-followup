@@ -1,3 +1,4 @@
+import PageHelp from '@/components/PageHelp';
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -51,6 +52,11 @@ export default function ProspectsPage() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
           <h1 className="page-header">Prospects</h1>
+        <PageHelp docSection="prospects" tips={[
+          { icon: "🎯", title: "Pre-visit outreach", body: "Prospects are people you know who haven't visited yet. Add them here, log prayers and invitations, then convert them to a Guest when they first attend." },
+          { icon: "🔄", title: "Converting a prospect", body: "When a prospect visits for the first time, open their profile and click Convert to Guest. All their history is preserved." },
+          { icon: "👤", title: "Anyone can add prospects", body: "All roles can add and manage their own prospects independently — great for tracking personal outreach." }
+        ]} />
           <p className="text-church-500 text-sm mt-1">People your team is reaching out to who haven't visited church yet.</p>
         </div>
         <button onClick={() => setShowForm(true)} className="btn-primary">

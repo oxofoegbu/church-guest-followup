@@ -1,3 +1,4 @@
+import PageHelp from '@/components/PageHelp';
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
@@ -67,6 +68,10 @@ export default function AuditPage() {
     <div className="space-y-6 fade-in">
       <div>
         <h1 className="page-header">Audit Trail</h1>
+        <PageHelp docSection="audit" tips={[
+          { icon: "📜", title: "Immutable record", body: "Every significant action is logged here — who did what and when. This cannot be edited or deleted." },
+          { icon: "🔍", title: "Filter by category", body: "Use the category filter to focus on GUEST, USER, or SETTINGS events. Use date range to narrow to a specific period." }
+        ]} />
         <p className="text-church-500 mt-1">Complete log of all system actions and changes.</p>
       </div>
 

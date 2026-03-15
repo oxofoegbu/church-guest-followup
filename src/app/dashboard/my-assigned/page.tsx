@@ -1,3 +1,4 @@
+import PageHelp from '@/components/PageHelp';
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -54,6 +55,11 @@ export default function MyAssignedGuestsPage() {
     <div className="space-y-6 fade-in">
       <div className="flex items-center justify-between">
         <h1 className="page-header">My Guests ({guests.length})</h1>
+        <PageHelp docSection="guest-pipeline" tips={[
+          { icon: "🙋", title: "Your assigned guests", body: "These are the guests assigned specifically to you for follow-up. Focus here first every week." },
+          { icon: "📞", title: "Log every contact", body: "After every call, text, or visit — open the guest profile and log an activity. This keeps your leader informed and the Audit Trail complete." },
+          { icon: "🎯", title: "Tick off milestones", body: "When a guest gets baptised, joins a group, or signs up for BECOME — tick it off in their Target Goals section." }
+        ]} />
       </div>
 
       {guests.length === 0 ? (

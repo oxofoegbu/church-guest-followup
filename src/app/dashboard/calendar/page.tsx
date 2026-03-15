@@ -1,3 +1,4 @@
+import PageHelp from '@/components/PageHelp';
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
@@ -102,6 +103,11 @@ export default function CalendarPage() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
           <h1 className="page-header">My Calendar</h1>
+        <PageHelp docSection="calendar" tips={[
+          { icon: "📅", title: "Three types of items", body: "Your calendar shows personal action items (your follow-up tasks), service roles (from the Sunday Schedule), and meeting invites (from other team members)." },
+          { icon: "🔁", title: "Set recurring events", body: "For regular meetings like weekly prayer or monthly leadership reviews, use the Recurring option when creating an event. Set it once, done." },
+          { icon: "👥", title: "Invite attendees", body: "Check 'Meeting with attendees' when creating an event and tick who to invite. Each person gets the event added to their calendar automatically." }
+        ]} />
           <p className="text-church-500 text-sm mt-1">Actions, events, and service roles.</p>
         </div>
         <div className="flex gap-2">
