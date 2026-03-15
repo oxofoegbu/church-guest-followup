@@ -12,6 +12,8 @@ export default function CalendarPage() {
   const preGuestId = searchParams.get('guestId');
   const [items, setItems] = useState<any[]>([]);
   const [allGuests, setAllGuests] = useState<any[]>([]);
+  const [allUsers, setAllUsers] = useState<any[]>([]);
+  const [currentUser, setCurrentUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<ViewMode>('calendar');
   const [currentMonth, setCurrentMonth] = useState(() => {
@@ -35,9 +37,17 @@ export default function CalendarPage() {
 
   useEffect(() => {
     fetchItems();
-    fetch('/api/guests?limit=200').then(r => r.ok ? r.json() : { guests: [] })
+    fetch('/api/guests?limit=200')
+      .then(r => r.ok ? r.json() : { guests: [] })
       .then((data: any) => setAllGuests(data.guests || []))
       .finally(() => setLoading(false));
+    fetch('/api/users?limit=200')
+      .then(r => r.ok ? r.json() : {})
+      .then((data: any) => setAllUsers(data.users || []));
+    fetch('/api/auth/me')
+      .then(r => r.json())
+      .then(d => setCurrentUser(d.user))
+      .catch(() => {});
   }, [fetchItems]);
 
   const prevMonth = () => {
@@ -84,7 +94,7 @@ export default function CalendarPage() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
           <h1 className="page-header">My Calendar</h1>
-          <p className="text-church-500 text-sm mt-1">Planned actions and reminders for your guests and prospects.</p>
+          <p className="text-church-500 text-sm mt-1">Planned actions, reminders, and events.</p>
         </div>
         <div className="flex gap-2">
           <button onClick={() => setShowAddModal(true)} className="btn-primary btn-sm">+ New Action</button>
@@ -92,7 +102,6 @@ export default function CalendarPage() {
         </div>
       </div>
 
-      {/* View Toggle */}
       <div className="flex gap-2">
         <button onClick={() => setView('calendar')}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${view === 'calendar' ? 'bg-brand-500 text-white' : 'bg-church-100 text-church-600 hover:bg-church-200'}`}>
@@ -128,6 +137,8 @@ export default function CalendarPage() {
       {showAddModal && (
         <AddActionModal
           guests={allGuests}
+          users={allUsers}
+          currentUser={currentUser}
           initialDate={selectedDate}
           initialGuestId={preGuestId}
           onClose={() => { setShowAddModal(false); setSelectedDate(null); fetchItems(); }}
@@ -176,17 +187,25 @@ function CalendarView({ items, monthLabel, currentMonth, onPrev, onNext, onDayCl
           const isToday = dateStr === todayStr;
 
           return (
-            <div key={day} className={`bg-white p-1 min-h-[80px] cursor-pointer hover:bg-brand-50 transition-colors ${isToday ? 'ring-2 ring-inset ring-brand-400' : ''}`}
+            <div key={day}
+              className={`bg-white p-1 min-h-[80px] cursor-pointer hover:bg-brand-50 transition-colors ${isToday ? 'ring-2 ring-inset ring-brand-400' : ''}`}
               onClick={() => onDayClick(dateStr)}>
               <div className={`text-xs font-medium mb-1 ${isToday ? 'text-brand-600 font-bold' : 'text-church-500'}`}>{day}</div>
               <div className="space-y-0.5">
                 {dayItems.slice(0, 3).map((item: any) => {
                   const typeInfo = ACTION_ITEM_TYPES[item.actionType] || { icon: '📝', label: item.actionType };
+                  const isService = !!item.scheduleId;
+                  const isEvent = item.isEvent && item.invites?.length > 0;
                   return (
                     <div key={item.id}
-                      className={`text-[10px] px-1 py-0.5 rounded truncate ${item.completed ? 'bg-green-100 text-green-700 line-through' : 'bg-brand-50 text-brand-700'}`}
+                      className={`text-[10px] px-1 py-0.5 rounded truncate ${
+                        item.completed ? 'bg-green-100 text-green-700 line-through' :
+                        isService ? 'bg-purple-100 text-purple-700' :
+                        isEvent ? 'bg-blue-100 text-blue-700' :
+                        'bg-brand-50 text-brand-700'
+                      }`}
                       onClick={e => { e.stopPropagation(); onComplete(item.id, item.completed); }}>
-                      {typeInfo.icon} {item.title}
+                      {isService ? '⛪' : typeInfo.icon} {item.title}
                     </div>
                   );
                 })}
@@ -198,6 +217,14 @@ function CalendarView({ items, monthLabel, currentMonth, onPrev, onNext, onDayCl
           );
         })}
       </div>
+
+      {/* Legend */}
+      <div className="flex gap-4 mt-3 pt-3 border-t border-church-100 text-xs text-church-500 flex-wrap">
+        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-brand-50 border border-brand-200 inline-block" /> Action</span>
+        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-purple-100 border border-purple-200 inline-block" /> ⛪ Service Role</span>
+        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-blue-100 border border-blue-200 inline-block" /> 👥 Meeting/Event</span>
+        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-green-100 border border-green-200 inline-block" /> Completed</span>
+      </div>
     </div>
   );
 }
@@ -207,7 +234,7 @@ function ListView({ items, filter, onFilterChange, onComplete, onDelete }: any) 
 
   return (
     <div>
-      <div className="flex gap-2 mb-4">
+      <div className="flex gap-2 mb-4 flex-wrap">
         {(['upcoming', 'overdue', 'completed', 'all'] as const).map(f => (
           <button key={f} onClick={() => onFilterChange(f)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors
@@ -218,14 +245,15 @@ function ListView({ items, filter, onFilterChange, onComplete, onDelete }: any) 
       </div>
 
       {items.length === 0 ? (
-        <div className="card text-center py-12 text-church-400">
-          No action items found.
-        </div>
+        <div className="card text-center py-12 text-church-400">No action items found.</div>
       ) : (
         <div className="space-y-2">
           {items.map((item: any) => {
             const typeInfo = ACTION_ITEM_TYPES[item.actionType] || { icon: '📝', label: item.customAction || item.actionType };
             const isOverdue = !item.completed && new Date(item.dueDate) < now;
+            const isService = !!item.scheduleId;
+            const isHostEvent = item.isEvent && item.invites?.length > 0;
+            const isInvitedEvent = item.isEvent && (!item.invites || item.invites.length === 0);
 
             return (
               <div key={item.id} className={`card p-4 flex items-start gap-3 ${item.completed ? 'opacity-60' : ''}`}>
@@ -236,14 +264,22 @@ function ListView({ items, filter, onFilterChange, onComplete, onDelete }: any) 
                 </button>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-sm">{typeInfo.icon}</span>
+                    <span className="text-sm">{isService ? '⛪' : typeInfo.icon}</span>
                     <span className={`font-medium text-sm ${item.completed ? 'line-through text-church-400' : 'text-church-900'}`}>{item.title}</span>
                     {isOverdue && <span className="badge bg-red-100 text-red-700 text-[10px]">OVERDUE</span>}
+                    {isService && <span className="badge bg-purple-100 text-purple-700 text-[10px]">⛪ SERVICE ROLE</span>}
+                    {isHostEvent && <span className="badge bg-blue-100 text-blue-700 text-[10px]">👥 {item.invites.length} ATTENDEE{item.invites.length > 1 ? 'S' : ''}</span>}
+                    {isInvitedEvent && <span className="badge bg-indigo-100 text-indigo-700 text-[10px]">📨 INVITED</span>}
                   </div>
-                  <div className="flex items-center gap-3 mt-1 text-xs text-church-500">
+                  <div className="flex items-center gap-3 mt-1 text-xs text-church-500 flex-wrap">
                     <span>{formatDate(item.dueDate)}{item.dueTime ? ` at ${item.dueTime}` : ''}</span>
                     <span className="badge bg-church-100 text-church-600 text-[10px]">{typeInfo.label}</span>
                   </div>
+                  {isHostEvent && (
+                    <p className="text-xs text-blue-600 mt-1">
+                      Attendees: {item.invites.map((i: any) => i.userName).join(', ')}
+                    </p>
+                  )}
                   {item.guest && (
                     <Link href={`/dashboard/guests/${item.guest.id}`}
                       className="text-xs text-brand-600 hover:underline mt-1 inline-block">
@@ -251,10 +287,9 @@ function ListView({ items, filter, onFilterChange, onComplete, onDelete }: any) 
                       {item.guest.source === 'PROSPECT' && ' (prospect)'}
                     </Link>
                   )}
-                  {item.notes && <p className="text-xs text-church-400 mt-1">{item.notes}</p>}
+                  {item.notes && <p className="text-xs text-church-400 mt-1 whitespace-pre-line">{item.notes}</p>}
                 </div>
-                <button onClick={() => onDelete(item.id)}
-                  className="text-church-300 hover:text-red-500 text-sm shrink-0">🗑️</button>
+                <button onClick={() => onDelete(item.id)} className="text-church-300 hover:text-red-500 text-sm shrink-0">🗑️</button>
               </div>
             );
           })}
@@ -264,7 +299,12 @@ function ListView({ items, filter, onFilterChange, onComplete, onDelete }: any) 
   );
 }
 
-function AddActionModal({ guests, initialDate, initialGuestId, onClose }: { guests: any[]; initialDate?: string | null; initialGuestId?: string | null; onClose: () => void }) {
+function AddActionModal({
+  guests, users, currentUser, initialDate, initialGuestId, onClose,
+}: {
+  guests: any[]; users: any[]; currentUser: any;
+  initialDate?: string | null; initialGuestId?: string | null; onClose: () => void;
+}) {
   const [form, setForm] = useState({
     guestId: initialGuestId || '',
     actionType: 'CALL',
@@ -275,10 +315,11 @@ function AddActionModal({ guests, initialDate, initialGuestId, onClose }: { gues
     dueTime: '',
     reminderMinutes: 60,
   });
+  const [isEvent, setIsEvent] = useState(false);
+  const [attendeeIds, setAttendeeIds] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
-  // Auto-generate title when action type or guest changes
   const updateTitle = (actionType: string, guestId: string, customAction?: string) => {
     const typeLabel = ACTION_ITEM_TYPES[actionType]?.label || customAction || actionType;
     const guest = guests.find((g: any) => g.id === guestId);
@@ -287,19 +328,22 @@ function AddActionModal({ guests, initialDate, initialGuestId, onClose }: { gues
   };
 
   const handleTypeChange = (actionType: string) => {
-    const title = updateTitle(actionType, form.guestId, form.customAction);
-    setForm({ ...form, actionType, title });
+    setForm({ ...form, actionType, title: updateTitle(actionType, form.guestId, form.customAction) });
   };
 
   const handleGuestChange = (guestId: string) => {
-    const title = updateTitle(form.actionType, guestId, form.customAction);
-    setForm({ ...form, guestId, title });
+    setForm({ ...form, guestId, title: updateTitle(form.actionType, guestId, form.customAction) });
+  };
+
+  const toggleAttendee = (userId: string) => {
+    setAttendeeIds(prev =>
+      prev.includes(userId) ? prev.filter(id => id !== userId) : [...prev, userId]
+    );
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSaving(true);
-    setError('');
+    setSaving(true); setError('');
 
     const res = await fetch('/api/action-items', {
       method: 'POST',
@@ -308,17 +352,22 @@ function AddActionModal({ guests, initialDate, initialGuestId, onClose }: { gues
         ...form,
         guestId: form.guestId || null,
         reminderMinutes: Number(form.reminderMinutes),
+        isEvent,
+        attendeeIds: isEvent ? attendeeIds : [],
       }),
     });
 
     if (!res.ok) {
       const data = await res.json();
-      setError(data.error || 'Failed to create action item');
+      setError(data.error || 'Failed to create');
       setSaving(false);
       return;
     }
     onClose();
   };
+
+  // Users excluding the current user
+  const otherUsers = users.filter(u => u.id !== currentUser?.userId && u.active !== false);
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
@@ -326,12 +375,12 @@ function AddActionModal({ guests, initialDate, initialGuestId, onClose }: { gues
         <h2 className="section-header mb-4">New Action Item</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Action type grid */}
           <div>
             <label className="label">Action Type</label>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {Object.entries(ACTION_ITEM_TYPES).map(([key, { label, icon }]) => (
-                <button key={key} type="button"
-                  onClick={() => handleTypeChange(key)}
+                <button key={key} type="button" onClick={() => handleTypeChange(key)}
                   className={`p-2 rounded-lg border text-sm text-left flex items-center gap-2 transition-all
                     ${form.actionType === key ? 'border-brand-400 bg-brand-50 ring-1 ring-brand-400' : 'border-church-200 hover:border-church-300'}`}>
                   <span>{icon}</span> {label}
@@ -344,13 +393,49 @@ function AddActionModal({ guests, initialDate, initialGuestId, onClose }: { gues
             <div>
               <label className="label">Custom Action</label>
               <input value={form.customAction}
-                onChange={e => {
-                  const title = updateTitle('OTHER', form.guestId, e.target.value);
-                  setForm({ ...form, customAction: e.target.value, title });
-                }}
+                onChange={e => { const title = updateTitle('OTHER', form.guestId, e.target.value); setForm({ ...form, customAction: e.target.value, title }); }}
                 className="input-field" placeholder="Describe the action..." />
             </div>
           )}
+
+          {/* ── Is this a meeting/event? ── */}
+          <div className="bg-church-50 border border-church-200 rounded-lg p-3">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input type="checkbox" checked={isEvent} onChange={e => { setIsEvent(e.target.checked); if (!e.target.checked) setAttendeeIds([]); }}
+                className="w-4 h-4 rounded border-church-300 text-brand-500" />
+              <div>
+                <span className="text-sm font-medium text-church-800">👥 This is a meeting or event with attendees</span>
+                <p className="text-xs text-church-500 mt-0.5">Invited people will receive a calendar entry automatically</p>
+              </div>
+            </label>
+
+            {isEvent && (
+              <div className="mt-3 pt-3 border-t border-church-200">
+                <label className="label mb-2">Invite Attendees</label>
+                {otherUsers.length === 0 ? (
+                  <p className="text-sm text-church-400">No other users found.</p>
+                ) : (
+                  <div className="space-y-1 max-h-44 overflow-y-auto border border-church-200 rounded-lg p-2 bg-white">
+                    {otherUsers.map(u => (
+                      <label key={u.id} className="flex items-center gap-2 py-1.5 px-1 cursor-pointer hover:bg-brand-50 rounded">
+                        <input type="checkbox" checked={attendeeIds.includes(u.id)} onChange={() => toggleAttendee(u.id)}
+                          className="w-4 h-4 rounded border-church-300 text-brand-500" />
+                        <div className="flex-1 min-w-0">
+                          <span className="text-sm font-medium text-church-900">{u.name}</span>
+                          <span className="text-xs text-church-400 ml-2">{u.role}</span>
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                )}
+                {attendeeIds.length > 0 && (
+                  <p className="text-xs text-brand-600 mt-1.5 font-medium">
+                    ✓ {attendeeIds.length} person{attendeeIds.length > 1 ? 's' : ''} will receive a calendar entry
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
 
           <div>
             <label className="label">For Guest/Prospect (optional)</label>
@@ -378,14 +463,12 @@ function AddActionModal({ guests, initialDate, initialGuestId, onClose }: { gues
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="label">Due Date *</label>
-              <input type="date" value={form.dueDate}
-                onChange={e => setForm({ ...form, dueDate: e.target.value })}
+              <input type="date" value={form.dueDate} onChange={e => setForm({ ...form, dueDate: e.target.value })}
                 required className="input-field" />
             </div>
             <div>
               <label className="label">Time (optional)</label>
-              <input type="time" value={form.dueTime}
-                onChange={e => setForm({ ...form, dueTime: e.target.value })}
+              <input type="time" value={form.dueTime} onChange={e => setForm({ ...form, dueTime: e.target.value })}
                 className="input-field" />
             </div>
           </div>
@@ -414,7 +497,7 @@ function AddActionModal({ guests, initialDate, initialGuestId, onClose }: { gues
 
           <div className="flex gap-3 pt-2">
             <button type="submit" disabled={saving} className="btn-primary flex-1">
-              {saving ? 'Saving...' : 'Create Action Item'}
+              {saving ? 'Saving...' : isEvent && attendeeIds.length > 0 ? `Create & Invite ${attendeeIds.length} Person${attendeeIds.length > 1 ? 's' : ''}` : 'Create Action Item'}
             </button>
             <button type="button" onClick={onClose} className="btn-secondary">Cancel</button>
           </div>
@@ -423,4 +506,3 @@ function AddActionModal({ guests, initialDate, initialGuestId, onClose }: { gues
     </div>
   );
 }
-// rebuild Sun Mar 15 01:57:05 EDT 2026

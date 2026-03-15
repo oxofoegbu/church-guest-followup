@@ -87,6 +87,7 @@ model User {
   schedulesAsPropheticPr ServiceSchedule[] @relation("SchedulePropheticPrayer")
   schedulesAsWorship     ServiceSchedule[] @relation("ScheduleWorshipLeader")
 
+  eventInvites         EventInvite[]  @relation("UserEventInvites")
 }
 
 model Guest {
@@ -246,6 +247,10 @@ model ActionItem {
   @@index([userId, dueDate])
   @@index([dueDate, reminderSent])
   @@map("action_items")
+  scheduleId      String?
+  isEvent         Boolean   @default(false)
+  invites         EventInvite[]  @relation("EventInvites")
+
 }
 
 model ServiceSchedule {
@@ -275,4 +280,28 @@ model ServiceSchedule {
   updatedAt              DateTime  @updatedAt
 
   @@map("service_schedules")
+}
+
+model ScheduleYear {
+  year      Int      @id
+  label     String
+  archived  Boolean  @default(false)
+  theme     String?
+  createdAt DateTime @default(now())
+
+  @@map("schedule_years")
+}
+
+model EventInvite {
+  id          String     @id @default(cuid())
+  eventItemId String
+  userId      String
+  userName    String
+  createdAt   DateTime   @default(now())
+
+  eventItem   ActionItem @relation("EventInvites", fields: [eventItemId], references: [id], onDelete: Cascade)
+  user        User       @relation("UserEventInvites", fields: [userId],    references: [id], onDelete: Cascade)
+
+  @@unique([eventItemId, userId])
+  @@map("event_invites")
 }

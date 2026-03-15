@@ -8,23 +8,18 @@ export async function GET(request: NextRequest) {
   try {
     const session = await requireAuth(request);
     const url = new URL(request.url);
-    const month = url.searchParams.get('month'); // YYYY-MM
-    const format = url.searchParams.get('format'); // 'ics' for calendar export
-    const view = url.searchParams.get('view'); // 'upcoming', 'overdue', 'all'
+    const month = url.searchParams.get('month');
+    const format = url.searchParams.get('format');
+    const view = url.searchParams.get('view');
     const guestId = url.searchParams.get('guestId');
 
     const where: any = { userId: session.userId };
 
-    if (guestId) {
-      where.guestId = guestId;
-    }
+    if (guestId) where.guestId = guestId;
 
     if (month) {
       const [y, m] = month.split('-').map(Number);
-      where.dueDate = {
-        gte: new Date(y, m - 1, 1),
-        lt: new Date(y, m, 1),
-      };
+      where.dueDate = { gte: new Date(y, m - 1, 1), lt: new Date(y, m, 1) };
     }
 
     if (view === 'upcoming') {
@@ -33,17 +28,19 @@ export async function GET(request: NextRequest) {
     } else if (view === 'overdue') {
       where.completed = false;
       where.dueDate = { lt: new Date() };
+    } else if (view === 'completed') {
+      where.completed = true;
     }
 
     const items = await prisma.actionItem.findMany({
       where,
       include: {
         guest: { select: { id: true, firstName: true, lastName: true, status: true, source: true } },
+        invites: { select: { userId: true, userName: true } },
       },
       orderBy: { dueDate: 'asc' },
     });
 
-    // ICS export
     if (format === 'ics') {
       const icsContent = generateICS(items, session.name);
       return new NextResponse(icsContent, {
@@ -65,7 +62,7 @@ export async function POST(request: NextRequest) {
     const session = await requireAuth(request);
     const body = await request.json();
 
-    // Handle complete/uncomplete action
+    // ── Complete / uncomplete ───────────────────────────────
     if (body.action === 'complete' || body.action === 'uncomplete') {
       const item = await prisma.actionItem.findUnique({ where: { id: body.id } });
       if (!item || item.userId !== session.userId) {
@@ -81,26 +78,44 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ item: updated });
     }
 
-    // Handle delete action
+    // ── Delete ──────────────────────────────────────────────
     if (body.action === 'delete') {
       const item = await prisma.actionItem.findUnique({ where: { id: body.id } });
       if (!item || item.userId !== session.userId) {
         return NextResponse.json({ error: 'Not found' }, { status: 404 });
       }
+      // If this is an event, also remove all invite copies
+      if (item.isEvent) {
+        const invites = await prisma.eventInvite.findMany({ where: { eventItemId: body.id } });
+        // Delete attendee copies
+        for (const inv of invites) {
+          await prisma.actionItem.deleteMany({
+            where: {
+              userId: inv.userId,
+              title: item.title,
+              dueDate: item.dueDate,
+              isEvent: true,
+            },
+          });
+        }
+        await prisma.eventInvite.deleteMany({ where: { eventItemId: body.id } });
+      }
       await prisma.actionItem.delete({ where: { id: body.id } });
       return NextResponse.json({ ok: true });
     }
 
-    // Create new action item
+    // ── Create ──────────────────────────────────────────────
     const parsed = actionItemSchema.safeParse(body);
     if (!parsed.success) {
-      return NextResponse.json({ error: 'Validation failed', details: parsed.error.flatten() }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Validation failed', details: parsed.error.flatten() },
+        { status: 400 }
+      );
     }
 
     const data = parsed.data;
-
-    // Build title if not provided
-    let title = data.title;
+    const isEvent: boolean = body.isEvent === true;
+    const attendeeIds: string[] = Array.isArray(body.attendeeIds) ? body.attendeeIds : [];
 
     const item = await prisma.actionItem.create({
       data: {
@@ -108,22 +123,64 @@ export async function POST(request: NextRequest) {
         guestId: data.guestId || null,
         actionType: data.actionType,
         customAction: data.customAction || null,
-        title,
+        title: data.title,
         notes: data.notes || null,
         dueDate: new Date(data.dueDate),
         dueTime: data.dueTime || null,
         reminderMinutes: data.reminderMinutes || 60,
+        isEvent,
       },
       include: {
         guest: { select: { id: true, firstName: true, lastName: true } },
       },
     });
 
+    // ── Create attendee calendar copies ─────────────────────
+    if (isEvent && attendeeIds.length > 0) {
+      const attendees = await prisma.user.findMany({
+        where: { id: { in: attendeeIds } },
+        select: { id: true, name: true, email: true },
+      });
+
+      // Create EventInvite records
+      await prisma.eventInvite.createMany({
+        data: attendees.map((a) => ({
+          eventItemId: item.id,
+          userId: a.id,
+          userName: a.name,
+        })),
+        skipDuplicates: true,
+      });
+
+      // Create ActionItem copy for each attendee so it appears in their calendar
+      for (const attendee of attendees) {
+        await prisma.actionItem.create({
+          data: {
+            userId: attendee.id,
+            actionType: data.actionType,
+            customAction: data.customAction || null,
+            title: data.title,
+            notes: [
+              data.notes || '',
+              `📨 Invited by: ${session.name}`,
+              data.dueTime ? `🕐 Time: ${data.dueTime}` : '',
+            ].filter(Boolean).join('\n'),
+            dueDate: new Date(data.dueDate),
+            dueTime: data.dueTime || null,
+            reminderMinutes: data.reminderMinutes || 60,
+            isEvent: true,
+          },
+        });
+      }
+    }
+
     return NextResponse.json({ item }, { status: 201 });
   } catch (error) {
     return handleAuthError(error);
   }
 }
+
+// ── ICS helpers (unchanged) ──────────────────────────────────
 
 function generateICS(items: any[], userName: string): string {
   const lines = [
@@ -138,13 +195,25 @@ function generateICS(items: any[], userName: string): string {
   for (const item of items) {
     const dueDate = new Date(item.dueDate);
     const dtStart = formatICSDate(dueDate, item.dueTime);
-    const dtEnd = formatICSDate(new Date(dueDate.getTime() + 30 * 60000), item.dueTime ? addMinutesToTime(item.dueTime, 30) : undefined);
-    const guestName = item.guest ? `${item.guest.firstName} ${item.guest.lastName}` : '';
+    const dtEnd = formatICSDate(
+      new Date(dueDate.getTime() + 30 * 60000),
+      item.dueTime ? addMinutesToTime(item.dueTime, 30) : undefined
+    );
+    const guestName = item.guest
+      ? `${item.guest.firstName} ${item.guest.lastName}`
+      : '';
+    const attendeeNames =
+      item.invites?.length > 0
+        ? `Attendees: ${item.invites.map((i: any) => i.userName).join(', ')}`
+        : '';
     const description = [
       guestName ? `Guest/Prospect: ${guestName}` : '',
+      attendeeNames,
       item.notes || '',
       item.completed ? 'Status: Completed' : 'Status: Pending',
-    ].filter(Boolean).join('\\n');
+    ]
+      .filter(Boolean)
+      .join('\\n');
 
     lines.push('BEGIN:VEVENT');
     lines.push(`UID:${item.id}@church-followup`);
@@ -186,5 +255,9 @@ function addMinutesToTime(time: string, mins: number): string {
 }
 
 function escapeICS(text: string): string {
-  return text.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
+  return text
+    .replace(/\\/g, '\\\\')
+    .replace(/;/g, '\\;')
+    .replace(/,/g, '\\,')
+    .replace(/\n/g, '\\n');
 }
