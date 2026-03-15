@@ -1,5 +1,5 @@
-import PageHelp from '@/components/PageHelp';
 'use client';
+import PageHelp from '@/components/PageHelp';
 
 import { useState, useEffect } from 'react';
 import { DEFAULT_ROLES, PERMISSION_LEVEL_LABELS } from '@/lib/roles';

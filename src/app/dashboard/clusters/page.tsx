@@ -1,5 +1,5 @@
-import PageHelp from '@/components/PageHelp';
 'use client';
+import PageHelp from '@/components/PageHelp';
 
 import { useState, useEffect, useCallback } from 'react';
 
