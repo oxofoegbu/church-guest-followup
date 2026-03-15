@@ -20,20 +20,22 @@ function getDisplayName(name: string | null, user: { name: string } | null): str
   return 'TBD';
 }
 
-// ── OG Meta tags for WhatsApp / social previews ───────────────────────────────
 export async function generateMetadata({ params }: { params: { year: string } }): Promise<Metadata> {
   const year = parseInt(params.year);
   const scheduleYear = await prisma.scheduleYear.findUnique({ where: { year } }).catch(() => null);
   const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://church-guest-followup.vercel.app';
 
-  if (!scheduleYear) {
-    return { title: 'Grace Life Center' };
-  }
+  if (!scheduleYear) return { title: 'Grace Life Center' };
 
   const title       = `Grace Life Center — ${scheduleYear.label}`;
   const description = scheduleYear.theme
     ? `${scheduleYear.theme} · View our full ${year} Sunday service schedule.`
     : `View our full ${year} Sunday service schedule at Grace Life Center.`;
+
+  // Build OG image URL with theme passed as query params
+  const themePart      = encodeURIComponent(scheduleYear.theme?.split(' — ')[0] || 'Bringing In The Harvest');
+  const scripturePart  = encodeURIComponent(scheduleYear.theme?.split(' — ')[1] || '');
+  const ogImageUrl     = `${APP_URL}/api/og?year=${year}&theme=${themePart}&scripture=${scripturePart}`;
 
   return {
     title,
@@ -41,11 +43,11 @@ export async function generateMetadata({ params }: { params: { year: string } })
     openGraph: {
       title,
       description,
-      url:       `${APP_URL}/schedule/${year}`,
-      siteName:  'Grace Life Center',
-      type:      'website',
+      url:      `${APP_URL}/schedule/${year}`,
+      siteName: 'Grace Life Center',
+      type:     'website',
       images: [{
-        url:    `${APP_URL}/og-schedule.png`,   // add a 1200×630 banner to /public if you want an image preview
+        url:    ogImageUrl,
         width:  1200,
         height: 630,
         alt:    title,
@@ -55,6 +57,7 @@ export async function generateMetadata({ params }: { params: { year: string } })
       card:        'summary_large_image',
       title,
       description,
+      images:      [ogImageUrl],
     },
   };
 }
@@ -89,11 +92,9 @@ export default async function PublicSchedulePage({ params }: { params: { year: s
   }, {});
 
   const printUrl = `/schedule/${year}/print`;
-  const APP_URL  = process.env.NEXT_PUBLIC_APP_URL || 'https://church-guest-followup.vercel.app';
 
   return (
     <div style={{ fontFamily: 'Georgia, serif', background: '#f8f9fa', minHeight: '100vh' }}>
-      {/* Hero */}
       <div style={{ background: 'linear-gradient(135deg, #102a43 0%, #4a1772 100%)', color: '#fff', padding: '48px 24px', textAlign: 'center' }}>
         <div style={{ maxWidth: 700, margin: '0 auto' }}>
           <div style={{ fontSize: 48, marginBottom: 12 }}>⛪</div>
@@ -120,7 +121,6 @@ export default async function PublicSchedulePage({ params }: { params: { year: s
         </div>
       </div>
 
-      {/* Schedule */}
       <div style={{ maxWidth: 960, margin: '0 auto', padding: '32px 16px' }}>
         {Object.entries(byMonth)
           .sort(([a], [b]) => Number(a) - Number(b))
@@ -145,12 +145,12 @@ export default async function PublicSchedulePage({ params }: { params: { year: s
                 <div style={{ background: bg, border: `1px solid ${accent}33`, borderTop: 'none', borderRadius: '0 0 12px 12px', padding: 16 }}>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12 }}>
                     {services.map(svc => {
-                      const date = new Date(svc.date);
-                      const day  = date.getUTCDate();
+                      const date    = new Date(svc.date);
+                      const day     = date.getUTCDate();
                       const dayName = date.toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' });
                       const scriptureMatch = svc.topic.match(/\(([^)]+)\)\s*$/);
                       const scripture = scriptureMatch?.[1] || null;
-                      const title = scripture ? svc.topic.replace(/\s*\([^)]+\)\s*$/, '') : svc.topic;
+                      const title   = scripture ? svc.topic.replace(/\s*\([^)]+\)\s*$/, '') : svc.topic;
                       const speaker  = getDisplayName(svc.speakerName, svc.speaker);
                       const coord    = getDisplayName(svc.serviceCoordinatorName, svc.serviceCoordinator);
                       const prayer   = getDisplayName(svc.propheticPrayerName, svc.propheticPrayer);
