@@ -3,6 +3,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Church Guest Follow-Up',
+  metadataBase: new URL('https://church-guest-followup.vercel.app'),
   description: 'Guest intake, follow-up tracking, and volunteer management for churches',
 };
 
