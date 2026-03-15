@@ -21,6 +21,7 @@ const NAV_BY_PERMISSION = {
     { href: '/dashboard/overview', label: 'All Guests Overview', icon: '📋' },
     { href: '/dashboard/my-assigned', label: 'My Guests', icon: '🙋' },
     { href: '/dashboard/calendar', label: 'My Calendar', icon: '📅' },
+    { href: '/dashboard/schedule', label: 'Sunday Schedule', icon: '⛪' },
     { href: '/dashboard/users', label: 'Users', icon: '⚙️' },
     { href: '/dashboard/reports', label: 'Reports', icon: '📈' },
     { href: '/dashboard/audit', label: 'Audit Trail', icon: '📜' },
@@ -33,6 +34,7 @@ const NAV_BY_PERMISSION = {
     { href: '/dashboard/overview', label: 'All Guests Overview', icon: '📋' },
     { href: '/dashboard/my-assigned', label: 'My Guests', icon: '🙋' },
     { href: '/dashboard/calendar', label: 'My Calendar', icon: '📅' },
+    { href: '/dashboard/schedule', label: 'Sunday Schedule', icon: '⛪' },
     { href: '/dashboard/reports', label: 'Reports', icon: '📈' },
   ],
   VOLUNTEER_ACCESS: [
@@ -40,6 +42,7 @@ const NAV_BY_PERMISSION = {
     { href: '/dashboard/prospects', label: 'Prospects', icon: '🎯' },
     { href: '/dashboard/my-assigned', label: 'My Guests', icon: '🙋' },
     { href: '/dashboard/calendar', label: 'My Calendar', icon: '📅' },
+    { href: '/dashboard/schedule', label: 'Sunday Schedule', icon: '⛪' },
   ],
 };
 
