@@ -45,7 +45,7 @@ export default function DashboardShell({ user, children }: { user: User; childre
 
   useEffect(() => {
     // Load custom roles config for permission level and label
-    fetch('/api/roles').then(r => r.ok ? r.json() : {}).then(data => {
+    fetch("/api/roles").then(r => r.ok ? r.json() : {}).then((data: any) => {
       if (data.customRolesJson) setCustomRolesJson(data.customRolesJson);
     }).catch(() => {});
   }, []);
