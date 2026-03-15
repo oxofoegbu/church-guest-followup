@@ -292,6 +292,7 @@ export default function SchedulePage() {
   const visibleYears = showArchived ? years : years.filter(y => !y.archived);
 
   return (
+    <>
     <div className="fade-in">
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
@@ -480,6 +481,7 @@ export default function SchedulePage() {
         </div>
       )}
 
+    </div>
       {editing && (
         <AssignModal service={editing} onClose={() => setEditing(null)} onSaved={() => { setEditing(null); doFetch(); }} />
       )}
@@ -489,6 +491,6 @@ export default function SchedulePage() {
           onCreated={(year) => { setShowNewYear(false); fetchYears(); setSelectedYear(year); }}
         />
       )}
-    </div>
+    </>
   );
 }
