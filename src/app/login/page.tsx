@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -40,24 +41,32 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center p-4"
       style={{ background: 'linear-gradient(135deg, #102a43 0%, #243b53 50%, #334e68 100%)' }}>
       <div className="card max-w-md w-full fade-in">
+
+        {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-brand-100 mb-4">
-            <span className="text-2xl">⛪</span>
+          <div className="flex justify-center mb-4">
+            <Image
+              src="/logo-full.png"
+              alt="Grace Life Center"
+              width={260}
+              height={100}
+              style={{ objectFit: 'contain' }}
+              priority
+            />
           </div>
-          <h1 className="text-2xl font-display font-bold text-church-900">Staff Login</h1>
-          <p className="text-church-500 text-sm mt-1">Church Guest Follow-Up System</p>
+          <p className="text-church-500 text-sm mt-2">Staff Portal</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="label">Email</label>
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-              required className="input-field" placeholder="you@church.org" />
+              required className="input-field" placeholder="you@church.org" autoComplete="email" />
           </div>
           <div>
             <label className="label">Password</label>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
-              required className="input-field" placeholder="••••••••" />
+              required className="input-field" placeholder="••••••••" autoComplete="current-password" />
           </div>
 
           {error && (
