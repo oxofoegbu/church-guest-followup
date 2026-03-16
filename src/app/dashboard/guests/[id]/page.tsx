@@ -13,7 +13,6 @@ export default function GuestDetailPage() {
   const [users, setUsers] = useState<any[]>([]);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [showActivityModal, setShowActivityModal] = useState(false);
   const [showReturnModal, setShowReturnModal] = useState(false);
   const [showArchiveModal, setShowArchiveModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -104,7 +103,6 @@ export default function GuestDetailPage() {
             </button>
           )}
           {guest.status !== 'ARCHIVED' && (
-            <button onClick={() => setShowActivityModal(true)} className="btn-primary btn-sm">+ Log Activity</button>
           )}
           {guest.status !== 'ARCHIVED' && (
             <Link href={`/dashboard/calendar?guestId=${guest.id}`} className="btn-secondary btn-sm">📅 Plan Action</Link>
@@ -356,7 +354,6 @@ export default function GuestDetailPage() {
       </div>
 
       {/* Modals */}
-      {showActivityModal && <ActivityModal guestId={guest.id} onClose={() => { setShowActivityModal(false); fetchGuest(); }} />}
       {showReturnModal && <ReturnModal guestId={guest.id} nextNumber={guest.serviceReturnCount + 1} onClose={() => { setShowReturnModal(false); fetchGuest(); }} />}
       {showArchiveModal && <ArchiveModal guestId={guest.id} guestName={`${guest.firstName} ${guest.lastName}`} onClose={() => { setShowArchiveModal(false); fetchGuest(); }} />}
       {showDeleteModal && <DeleteModal guestId={guest.id} guestName={`${guest.firstName} ${guest.lastName}`} onClose={() => setShowDeleteModal(false)} onDeleted={() => router.push('/dashboard/guests')} />}
@@ -383,58 +380,6 @@ function TargetRow({ label, completed, date, onToggle, disabled }: { label: stri
   );
 }
 
-function ActivityModal({ guestId, onClose }: { guestId: string; onClose: () => void }) {
-  const [form, setForm] = useState({
-    activityType: 'PHONE_CALL',
-    outcome: '',
-    notes: '',
-    nextFollowUpDate: '',
-  });
-  const [saving, setSaving] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSaving(true);
-    await fetch('/api/activities', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...form, guestId, nextFollowUpDate: form.nextFollowUpDate || null }),
-    });
-    onClose();
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
-      <div className="card max-w-md w-full" onClick={e => e.stopPropagation()}>
-        <h2 className="section-header mb-4">Log Activity</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="label">Activity Type</label>
-            <select value={form.activityType} onChange={e => setForm({ ...form, activityType: e.target.value })} className="select-field">
-              {Object.entries(ACTIVITY_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-            </select>
-          </div>
-          <div>
-            <label className="label">Outcome</label>
-            <input type="text" value={form.outcome} onChange={e => setForm({ ...form, outcome: e.target.value })} className="input-field" placeholder="Brief outcome..." />
-          </div>
-          <div>
-            <label className="label">Notes</label>
-            <textarea value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })} className="input-field" rows={3} placeholder="Additional notes..." />
-          </div>
-          <div>
-            <label className="label">Next Follow-Up Date</label>
-            <input type="date" value={form.nextFollowUpDate} onChange={e => setForm({ ...form, nextFollowUpDate: e.target.value })} className="input-field" />
-          </div>
-          <div className="flex gap-3 pt-2">
-            <button type="submit" disabled={saving} className="btn-primary flex-1">{saving ? 'Saving...' : 'Log Activity'}</button>
-            <button type="button" onClick={onClose} className="btn-secondary">Cancel</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
 
 function ReturnModal({ guestId, nextNumber, onClose }: { guestId: string; nextNumber: number; onClose: () => void }) {
   const [form, setForm] = useState({ serviceDate: new Date().toISOString().split('T')[0], serviceName: 'Sunday 10am' });
