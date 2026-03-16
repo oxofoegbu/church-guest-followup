@@ -14,7 +14,6 @@ function ForgotPasswordContent() {
   );
   const [step, setStep] = useState<Step>('form');
 
-  const [resetName, setResetName] = useState('');
   const [resetEmail, setResetEmail] = useState('');
   const [resetLoading, setResetLoading] = useState(false);
   const [resetError, setResetError] = useState('');
@@ -33,7 +32,7 @@ function ForgotPasswordContent() {
       const res = await fetch('/api/auth/forgot-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: resetName.trim(), email: resetEmail.trim().toLowerCase() }),
+        body: JSON.stringify({ email: resetEmail.trim().toLowerCase() }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Request failed');
@@ -116,11 +115,6 @@ function ForgotPasswordContent() {
             <p className="text-sm text-church-500 mb-4">
               Enter your full name and email address exactly as they appear in the system.
             </p>
-            <div>
-              <label className="label">Full Name *</label>
-              <input type="text" value={resetName} onChange={e => setResetName(e.target.value)}
-                required className="input-field" placeholder="e.g. John Smith" />
-            </div>
             <div>
               <label className="label">Email Address *</label>
               <input type="email" value={resetEmail} onChange={e => setResetEmail(e.target.value)}

@@ -9,9 +9,10 @@ const APP_URL         = process.env.NEXT_PUBLIC_APP_URL || 'https://church-guest
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email } = await request.json();
-    if (!name || !email) {
-      return NextResponse.json({ error: 'Name and email are required' }, { status: 400 });
+    const { email } = await request.json();
+    if (!email) {
+      return NextResponse.json({ error: 'Email is required' }, { status: 400 });
+    }, { status: 400 });
     }
 
     // Find user by email first, then verify name loosely
@@ -25,16 +26,7 @@ export async function POST(request: NextRequest) {
     if (!user || !user.active) {
       return NextResponse.json({ message: safeMessage });
     }
-
-    // Loose name match (case-insensitive, partial)
-    const nameMatch = user.name.toLowerCase().includes(name.toLowerCase().trim()) ||
-      name.toLowerCase().trim().includes(user.name.toLowerCase().split(' ')[0]);
-
-    if (!nameMatch) {
-      return NextResponse.json({ message: safeMessage });
-    }
-
-    // Generate token (expires in 1 hour)
+        // Generate token (expires in 1 hour)
     const token = crypto.randomBytes(32).toString('hex');
     const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
 
