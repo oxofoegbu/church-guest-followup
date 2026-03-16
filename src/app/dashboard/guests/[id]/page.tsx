@@ -103,8 +103,6 @@ export default function GuestDetailPage() {
             </button>
           )}
           {guest.status !== 'ARCHIVED' && (
-          )}
-          {guest.status !== 'ARCHIVED' && (
             <Link href={`/dashboard/calendar?guestId=${guest.id}`} className="btn-secondary btn-sm">📅 Plan Action</Link>
           )}
           {!isProspect && guest.status !== 'ARCHIVED' && guest.serviceReturnCount < 7 && (
