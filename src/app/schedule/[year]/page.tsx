@@ -97,7 +97,7 @@ export default async function PublicSchedulePage({ params }: { params: { year: s
     <div style={{ fontFamily: 'Georgia, serif', background: '#f8f9fa', minHeight: '100vh' }}>
       <div style={{ background: 'linear-gradient(135deg, #102a43 0%, #4a1772 100%)', color: '#fff', padding: '48px 24px', textAlign: 'center' }}>
         <div style={{ maxWidth: 700, margin: '0 auto' }}>
-          <div style={{ fontSize: 48, marginBottom: 12 }}>⛪</div>
+          <img src="/icons/icon-192.png" alt="Grace Life Center" style={{width:80,height:80,borderRadius:'50%',objectFit:'cover',marginBottom:12}} />
           <h1 style={{ margin: '0 0 8px', fontSize: 32, fontWeight: 'bold', letterSpacing: '-0.5px' }}>
             Grace Life Center
           </h1>

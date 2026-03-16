@@ -71,7 +71,7 @@ export default function GuestIntakeForm() {
         {/* Header */}
         <div className="text-center mb-6 fade-in">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand-500/20 mb-4">
-            <span className="text-3xl">⛪</span>
+            <img src="/icons/icon-152.png" alt="Grace Life Center" style={{width:72,height:72,borderRadius:"50%",objectFit:"cover"}} />
           </div>
           <h1 className="text-3xl font-display font-bold text-white mb-2">
             Welcome, Guest!

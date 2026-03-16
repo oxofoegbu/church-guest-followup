@@ -76,7 +76,7 @@ export default function DashboardShell({ user, children }: { user: User; childre
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
         <div className="p-5 border-b border-church-700/50">
           <Link href="/dashboard" className="flex items-center gap-3">
-            <span className="text-2xl">⛪</span>
+            <img src="/logo-full.png" alt="Grace Life Center" style={{width:140,height:54,objectFit:"contain"}} />
             <div>
               <h1 className="font-display font-bold text-base leading-tight">Guest Follow-Up</h1>
               <p className="text-church-400 text-[11px]">Church Management</p>
@@ -133,7 +133,7 @@ export default function DashboardShell({ user, children }: { user: User; childre
               <path d="M3 12h18M3 6h18M3 18h18" />
             </svg>
           </button>
-          <span className="font-display font-bold text-church-900">⛪ Guest Follow-Up</span>
+          <img src="/logo-full.png" alt="Grace Life Center" style={{height:32,objectFit:"contain"}} />
         </header>
         <main className="flex-1 p-4 lg:p-8 overflow-y-auto">{children}</main>
       </div>
