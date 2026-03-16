@@ -30,6 +30,8 @@ export default function SettingsPage() {
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [clearingDemo, setClearingDemo] = useState(false);
+  const [demoMessage, setDemoMessage] = useState('');
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   // Target goals state
@@ -378,6 +380,39 @@ export default function SettingsPage() {
             </label>
             <span className="text-sm font-medium text-church-700">Enable assignment notifications</span>
           </div>
+        </div>
+
+        {/* ── Demo Data ── */}
+        <div className="card border-2 border-dashed border-amber-300 bg-amber-50">
+          <h2 className="section-header mb-1 text-amber-800">🧪 Demo Data</h2>
+          <p className="text-sm text-amber-700 mb-3 leading-relaxed">
+            The app was loaded with sample guest data so you could explore how it works.
+            When you are ready to go live, click below to permanently delete all demo records.
+            Any guests added through the real guest form are <strong>not</strong> affected.
+            <strong className="text-red-600"> This cannot be undone.</strong>
+          </p>
+          {demoMessage && (
+            <div className={`mb-3 p-3 rounded-lg text-sm font-medium border ${demoMessage.startsWith('✅') ? 'bg-green-50 border-green-200 text-green-800' : 'bg-red-50 border-red-200 text-red-700'}`}>
+              {demoMessage}
+            </div>
+          )}
+          <button
+            onClick={async () => {
+              if (!confirm('Permanently delete ALL demo guest records? This cannot be undone.')) return;
+              setClearingDemo(true); setDemoMessage('');
+              try {
+                const res = await fetch('/api/settings?action=clearDemo', { method: 'DELETE' });
+                const data = await res.json();
+                setDemoMessage(data.ok ? ('✅ ' + data.message) : ('❌ ' + (data.error || 'Failed')));
+              } catch { setDemoMessage('❌ Request failed — please try again.'); }
+              finally { setClearingDemo(false); }
+            }}
+            disabled={clearingDemo}
+            className="btn-primary"
+            style={{ background: clearingDemo ? '#9ca3af' : '#d97706', borderColor: '#d97706' }}
+          >
+            {clearingDemo ? '⏳ Clearing demo data...' : '🗑️ Clear All Demo Data'}
+          </button>
         </div>
 
         <div className="flex justify-end">

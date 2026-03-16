@@ -73,3 +73,33 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const user = await requireAuth(request);
+    if (user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    const url = new URL(request.url);
+    if (url.searchParams.get('action') !== 'clearDemo') {
+      return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
+    }
+    const demoGuests = await prisma.guest.findMany({
+      where: { isDemo: true },
+      select: { id: true },
+    });
+    const ids = demoGuests.map((g: any) => g.id);
+    if (ids.length === 0) {
+      return NextResponse.json({ ok: true, deleted: 0, message: 'No demo data found — already clear!' });
+    }
+    await prisma.followUpActivity.deleteMany({ where: { guestId: { in: ids } } });
+    await prisma.guestServiceReturn.deleteMany({ where: { guestId: { in: ids } } });
+    await prisma.notificationLog.deleteMany({ where: { guestId: { in: ids } } });
+    await prisma.actionItem.deleteMany({ where: { guestId: { in: ids } } });
+    const result = await prisma.guest.deleteMany({ where: { isDemo: true } });
+    return NextResponse.json({ ok: true, deleted: result.count, message: `Successfully deleted ${result.count} demo guest records. Your app is now ready for live use!` });
+  } catch (error) {
+    console.error('[clearDemo]', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
