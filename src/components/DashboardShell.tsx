@@ -76,7 +76,7 @@ export default function DashboardShell({ user, children }: { user: User; childre
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
         <div className="p-5 border-b border-church-700/50">
           <Link href="/dashboard" className="flex items-center gap-3">
-            <img src="/logo-full.png" alt="Grace Life Center" style={{width:140,height:54,objectFit:"contain"}} />
+            <img src="/logo-icon.png" alt="Grace Life Center" style={{width:44,height:44,objectFit:"contain"}} />
             <div>
               <h1 className="font-display font-bold text-base leading-tight">Guest Follow-Up</h1>
               <p className="text-church-400 text-[11px]">Church Management</p>
