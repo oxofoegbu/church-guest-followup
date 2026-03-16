@@ -252,7 +252,11 @@ model ActionItem {
   @@index([dueDate, reminderSent])
   @@map("action_items")
   scheduleId      String?
-  isEvent         Boolean   @default(false)
+  isEvent              Boolean   @default(false)
+  recurrence           String?
+  recurrenceInterval   Int?
+  recurrenceEndDate    DateTime?
+  recurrenceParentId   String?
   invites         EventInvite[]  @relation("EventInvites")
 
 }
