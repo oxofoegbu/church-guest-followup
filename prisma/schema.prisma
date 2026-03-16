@@ -115,6 +115,7 @@ model Guest {
   serviceReturnCount   Int             @default(0)
   serviceReturnTarget  Int             @default(7)
   // Source tracking
+  isDemo               Boolean         @default(false)
   source               String          @default("GUEST_FORM")  // GUEST_FORM or PROSPECT
   addedByUserId        String?
   // Prospect-specific fields
