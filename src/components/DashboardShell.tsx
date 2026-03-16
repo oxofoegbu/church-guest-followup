@@ -78,7 +78,7 @@ export default function DashboardShell({ user, children }: { user: User; childre
           <Link href="/dashboard" className="flex items-center gap-3">
             <img src="/logo-icon.png" alt="Grace Life Center" style={{width:44,height:44,objectFit:"contain"}} />
             <div>
-              <h1 className="font-display font-bold text-base leading-tight">Guest Follow-Up</h1>
+              <h1 className="font-display font-bold text-base leading-tight">Harvest</h1>
               <p className="text-church-400 text-[11px]">Church Management</p>
             </div>
           </Link>
