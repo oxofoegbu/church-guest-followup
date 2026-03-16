@@ -65,10 +65,36 @@ export default function UsersPage() {
     setDismissingRequest(null);
   };
 
-  const createFromRequest = (req: any) => {
-    // Pre-fill the create user form with request data
-    setEditUser({ _fromRequest: req });
-    setShowCreate(true);
+  const createFromRequest = async (req: any) => {
+    if (!confirm(`Create an account for ${req.name}?`)) return;
+    setDismissingRequest(req.id); // reuse loading state
+    try {
+      // Generate a temp password
+      const tempPassword = Math.random().toString(36).slice(-8) + 'Aa1!';
+      const res = await fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name:     req.name,
+          email:    req.email,
+          phone:    req.phone || '',
+          role:     'VOLUNTEER',
+          password: tempPassword,
+          mustChangePassword: true,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to create account');
+      // Dismiss the request
+      await fetch(`/api/auth/account-request/${req.id}`, { method: 'DELETE' }).catch(() => {});
+      setAccountRequests(prev => prev.filter(r => r.id !== req.id));
+      fetchUsers();
+      alert(`✅ Account created for ${req.name}!\n\nThey will receive a welcome email with their temporary password.`);
+    } catch (e: any) {
+      alert('❌ ' + (e.message || 'Failed to create account'));
+    } finally {
+      setDismissingRequest(null);
+    }
   };
 
 
@@ -97,9 +123,10 @@ export default function UsersPage() {
                 <div className="flex gap-2 flex-shrink-0">
                   <button
                     onClick={() => createFromRequest(req)}
+                    disabled={dismissingRequest === req.id}
                     className="btn-primary btn-sm"
                   >
-                    ✅ Create Account
+                    {dismissingRequest === req.id ? 'Creating...' : '✅ Create Account'}
                   </button>
                   <button
                     onClick={() => dismissRequest(req.id)}
