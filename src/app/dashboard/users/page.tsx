@@ -10,6 +10,8 @@ export default function UsersPage() {
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [editUser, setEditUser] = useState<any>(null);
+  const [accountRequests, setAccountRequests] = useState<any[]>([]);
+  const [dismissingRequest, setDismissingRequest] = useState<string | null>(null);
 
   const fetchUsers = useCallback(async () => {
     const res = await fetch('/api/users');
@@ -22,6 +24,10 @@ export default function UsersPage() {
 
   useEffect(() => {
     fetchUsers();
+    fetch('/api/auth/account-request')
+      .then(r => r.ok ? r.json() : { requests: [] })
+      .then(d => setAccountRequests(d.requests || []))
+      .catch(() => {});
     fetch('/api/roles').then(r => r.ok ? r.json() : { roles: [] })
       .then(data => setRoles(data.roles || []))
       .catch(() => {});
@@ -52,10 +58,64 @@ export default function UsersPage() {
     fetchUsers();
   };
 
+  const dismissRequest = async (id: string) => {
+    setDismissingRequest(id);
+    await fetch(`/api/auth/account-request/${id}`, { method: 'DELETE' }).catch(() => {});
+    setAccountRequests(prev => prev.filter(r => r.id !== id));
+    setDismissingRequest(null);
+  };
+
+  const createFromRequest = (req: any) => {
+    // Pre-fill the create user form with request data
+    setEditUser({ _fromRequest: req });
+    setShowCreate(true);
+  };
+
+
   return (
     <div className="space-y-6 fade-in max-w-4xl">
       <div className="flex items-center justify-between">
         <h1 className="page-header">User Management</h1>
+
+      {/* Account Requests Banner */}
+      {accountRequests.length > 0 && (
+        <div className="mb-6 card border-2 border-amber-300 bg-amber-50">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-xl">📬</span>
+            <h2 className="font-bold text-amber-800 text-base">
+              {accountRequests.length} Pending Access Request{accountRequests.length > 1 ? 's' : ''}
+            </h2>
+          </div>
+          <div className="space-y-3">
+            {accountRequests.map((req: any) => (
+              <div key={req.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-white rounded-lg border border-amber-200">
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-church-900">{req.name}</p>
+                  <p className="text-sm text-church-500">{req.email}{req.phone ? ` · ${req.phone}` : ''}</p>
+                  {req.message && <p className="text-xs text-church-400 italic mt-0.5">"{req.message}"</p>}
+                </div>
+                <div className="flex gap-2 flex-shrink-0">
+                  <button
+                    onClick={() => createFromRequest(req)}
+                    className="btn-primary btn-sm"
+                  >
+                    ✅ Create Account
+                  </button>
+                  <button
+                    onClick={() => dismissRequest(req.id)}
+                    disabled={dismissingRequest === req.id}
+                    className="btn-secondary btn-sm text-red-500"
+                  >
+                    {dismissingRequest === req.id ? '...' : '✕ Dismiss'}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+
         <PageHelp docSection="users" tips={[
           { icon: "➕", title: "Adding a new staff member", body: "Click + Add User, fill in their details and assign a role. They receive a welcome email with a temporary password and must change it on first login." },
           { icon: "👤", title: "Convert a guest to a user", body: "Go to the guest's profile and click Convert to User — useful when a first-time visitor officially joins your team." },

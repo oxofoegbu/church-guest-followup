@@ -91,3 +91,18 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    await (prisma as any).accountRequest.update({
+      where: { id: params.id },
+      data: { status: 'DISMISSED' },
+    });
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  }
+}
