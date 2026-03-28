@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
       email:           user.email,
       name:            user.name,
       role:            user.role,
-      permissionLevel,
+
     });
 
     // If they need to change password, redirect there
