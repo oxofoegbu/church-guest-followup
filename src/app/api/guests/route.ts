@@ -24,9 +24,15 @@ export async function GET(request: NextRequest) {
     const customRolesSetting = await prisma.appSetting.findUnique({ where: { key: 'custom_roles' } });
     const permLevel = getPermissionLevel(session.role, customRolesSetting?.value);
 
-    // Volunteer-level users only see their assigned guests
+    // Volunteer-level users see their assigned guests OR unassigned guests (for self-pickup)
     if (permLevel === 'VOLUNTEER_ACCESS') {
-      where.assignedVolunteerId = session.userId;
+      if (unassigned) {
+        // Allow volunteers to browse unassigned guests to self-assign
+        where.assignedVolunteerId = null;
+        where.status = { notIn: ['ARCHIVED', 'CLOSED', 'COMPLETED'] } as any;
+      } else {
+        where.assignedVolunteerId = session.userId;
+      }
     }
 
     if (search) {

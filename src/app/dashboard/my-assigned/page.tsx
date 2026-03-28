@@ -8,6 +8,10 @@ import { STATUS_LABELS, STATUS_COLORS, formatDate } from '@/lib/utils';
 export default function MyAssignedGuestsPage() {
   const [guests, setGuests] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState<'mine' | 'available'>('mine');
+  const [availableGuests, setAvailableGuests] = useState<any[]>([]);
+  const [availableLoading, setAvailableLoading] = useState(false);
+  const [assigning, setAssigning] = useState<string | null>(null);
   const [filter, setFilter] = useState('active');
   const [user, setUser] = useState<any>(null);
 
@@ -51,6 +55,41 @@ export default function MyAssignedGuestsPage() {
     return <div className="flex items-center justify-center h-64 text-church-400">Loading...</div>;
   }
 
+  const fetchAvailable = async () => {
+    setAvailableLoading(true);
+    try {
+      const res = await fetch('/api/guests?unassigned=true&limit=50');
+      if (res.ok) {
+        const data = await res.json();
+        setAvailableGuests(data.guests || []);
+      }
+    } finally {
+      setAvailableLoading(false);
+    }
+  };
+
+  const selfAssign = async (guestId: string, guestName: string) => {
+    if (!confirm(`Assign ${guestName} to yourself for follow-up?`)) return;
+    setAssigning(guestId);
+    try {
+      const res = await fetch('/api/guests/self-assign', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ guestId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed');
+      // Remove from available, refresh my guests
+      setAvailableGuests(prev => prev.filter(g => g.id !== guestId));
+      await fetchGuests();
+    } catch (e: any) {
+      alert('❌ ' + e.message);
+    } finally {
+      setAssigning(null);
+    }
+  };
+
+
   return (
     <div className="space-y-6 fade-in">
       <div className="flex items-center justify-between">
@@ -62,7 +101,7 @@ export default function MyAssignedGuestsPage() {
         ]} />
       </div>
 
-      {guests.length === 0 ? (
+      {tab === 'mine' && guests.length === 0 ? (
         <div className="card text-center py-12">
           <p className="text-church-400 mb-2">No guests assigned to you yet.</p>
           <p className="text-sm text-church-300">Guests will appear here once they are assigned to you.</p>
@@ -152,6 +191,59 @@ export default function MyAssignedGuestsPage() {
           )}
         </>
       )}
+
+      {/* ── Available Guests Tab ── */}
+      {tab === 'available' && (
+        <div className="space-y-3">
+          <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-sm text-emerald-800">
+            <p className="font-semibold mb-1">🙋 Pick up a guest for follow-up</p>
+            <p className="text-emerald-700">These guests have submitted the welcome form but haven't been assigned yet. Click <strong>Assign to Me</strong> to take them on — you'll get a notification and they'll appear in your My Guests list.</p>
+          </div>
+
+          {availableLoading ? (
+            <div className="text-center py-8 text-church-400">Loading available guests…</div>
+          ) : availableGuests.length === 0 ? (
+            <div className="card text-center py-10">
+              <div className="text-3xl mb-2">✅</div>
+              <p className="font-semibold text-church-700">All guests are assigned!</p>
+              <p className="text-sm text-church-400 mt-1">No unassigned guests at the moment. Check back after the next service.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {availableGuests.map((guest: any) => {
+                const guestName = `${guest.firstName} ${guest.lastName}`;
+                return (
+                  <div key={guest.id} className="card hover:shadow-md transition-shadow">
+                    <div className="flex items-start justify-between gap-3 mb-3">
+                      <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-sm flex-shrink-0">
+                        {guest.firstName[0]}{guest.lastName[0]}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-church-900 truncate">{guestName}</p>
+                        <p className="text-xs text-church-400">{guest.serviceAttended || 'Service not specified'}</p>
+                      </div>
+                      <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full flex-shrink-0">New</span>
+                    </div>
+                    {guest.phone && <p className="text-xs text-church-500 mb-1">📞 {guest.phone}</p>}
+                    {guest.preferredContactMethod && <p className="text-xs text-church-500 mb-3">Prefers: {guest.preferredContactMethod}</p>}
+                    {guest.prayerRequest && (
+                      <p className="text-xs text-church-400 italic mb-3 line-clamp-2">🙏 "{guest.prayerRequest}"</p>
+                    )}
+                    <button
+                      onClick={() => selfAssign(guest.id, guestName)}
+                      disabled={assigning === guest.id}
+                      className="w-full btn-primary btn-sm bg-emerald-600 hover:bg-emerald-700"
+                    >
+                      {assigning === guest.id ? 'Assigning…' : '🙋 Assign to Me'}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
     </div>
   );
 }
