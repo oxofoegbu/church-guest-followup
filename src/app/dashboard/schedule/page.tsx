@@ -90,7 +90,67 @@ function AssignModal({ service, onClose, onSaved }: { service: ServiceSchedule; 
           <button onClick={onClose} className="p-2 text-church-400 hover:text-church-600 rounded-lg">✕</button>
         </div>
         <div className="px-6 py-4 space-y-4">
-          {roles.map(({ label, idKey, nameKey }) => (
+          {/* Seminar toggle — shown above speaker slot */}
+          <div className="flex items-center gap-3 p-3 bg-purple-50 border border-purple-200 rounded-lg">
+            <input type="checkbox" id="isSeminar" checked={form.isSeminar}
+              onChange={e => setForm(f => ({ ...f, isSeminar: e.target.checked }))}
+              className="w-4 h-4 accent-purple-600 cursor-pointer" />
+            <label htmlFor="isSeminar" className="text-sm font-semibold text-purple-800 cursor-pointer select-none">
+              🎓 Seminar Sunday — panel of speakers
+            </label>
+          </div>
+
+          {/* Speaker slot — single or panel depending on isSeminar */}
+          {!form.isSeminar ? (
+            <div>
+              <label className="label">🎤 Speaker (Word Minister)</label>
+              <select value={form.speakerId || ''}
+                onChange={e => { const sel = users.find(u => u.id === e.target.value); setForm(f => ({ ...f, speakerId: e.target.value || null, speakerName: sel?.name || f.speakerName })); }}
+                className="select-field mb-1.5">
+                <option value="">— Select from users (links to calendar) —</option>
+                {users.map(u => <option key={u.id} value={u.id}>{u.name} ({u.role})</option>)}
+              </select>
+              <input type="text" value={form.speakerName}
+                onChange={e => setForm(f => ({ ...f, speakerName: e.target.value, speakerId: null }))}
+                placeholder="Or type name manually (TBD, Young Adults…)"
+                className="input-field text-church-500 text-sm" />
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <label className="label">🎤 Panel Speakers (up to 4)</label>
+              {form.panelSpeakers.map((spk: any, idx: number) => (
+                <div key={idx} className="p-3 bg-purple-50 rounded-lg border border-purple-100 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-bold text-purple-700">Speaker {idx + 1}</p>
+                    {idx > 0 && (
+                      <button type="button" onClick={() => setForm(f => ({ ...f, panelSpeakers: f.panelSpeakers.filter((_: any, i: number) => i !== idx) }))}
+                        className="text-xs text-red-400 hover:text-red-600">✕ Remove</button>
+                    )}
+                  </div>
+                  <select value={spk.userId || ''}
+                    onChange={e => { const sel = users.find((u: any) => u.id === e.target.value); const updated = [...form.panelSpeakers]; updated[idx] = { ...updated[idx], userId: e.target.value || '', name: sel?.name || updated[idx].name }; setForm(f => ({ ...f, panelSpeakers: updated })); }}
+                    className="select-field text-sm">
+                    <option value="">— Select from users —</option>
+                    {users.map((u: any) => <option key={u.id} value={u.id}>{u.name}</option>)}
+                  </select>
+                  <input type="text" value={spk.name}
+                    onChange={e => { const updated = [...form.panelSpeakers]; updated[idx] = { ...updated[idx], name: e.target.value, userId: '' }; setForm(f => ({ ...f, panelSpeakers: updated })); }}
+                    placeholder="Or type name manually" className="input-field text-sm" />
+                  <input type="text" value={spk.title || ''}
+                    onChange={e => { const updated = [...form.panelSpeakers]; updated[idx] = { ...updated[idx], title: e.target.value }; setForm(f => ({ ...f, panelSpeakers: updated })); }}
+                    placeholder="Topic / title (e.g. The Holy Spirit)" className="input-field text-sm text-church-500" />
+                </div>
+              ))}
+              {form.panelSpeakers.length < 4 && (
+                <button type="button"
+                  onClick={() => setForm(f => ({ ...f, panelSpeakers: [...f.panelSpeakers, { name: '', userId: '', title: '' }] }))}
+                  className="btn-secondary btn-sm w-full">+ Add Another Speaker</button>
+              )}
+            </div>
+          )}
+
+          {/* Remaining roles (coordinator, prayer, worship) */}
+          {roles.slice(1).map(({ label, idKey, nameKey }) => (
             <div key={idKey}>
               <label className="label">{label}</label>
               <select
