@@ -89,6 +89,7 @@ model User {
 
   eventInvites         EventInvite[]  @relation("UserEventInvites")
   passwordResetTokens  PasswordResetToken[] @relation("PasswordResets")
+  magicLinkTokens      MagicLinkToken[]     @relation("MagicLinks")
   clusterMemberships   ClusterMember[]      @relation("ClusterMemberships")
   clustersCreated      Cluster[]            @relation("ClusterCreatedBy")
 
@@ -361,4 +362,14 @@ model ClusterMember {
   user      User     @relation("ClusterMemberships", fields: [userId], references: [id], onDelete: Cascade)
   @@unique([clusterId, userId])
   @@map("cluster_members")
+}
+model MagicLinkToken {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation("MagicLinks", fields: [userId], references: [id], onDelete: Cascade)
+  @@map("magic_link_tokens")
 }
