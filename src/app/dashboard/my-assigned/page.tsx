@@ -81,7 +81,14 @@ export default function MyAssignedGuestsPage() {
       if (!res.ok) throw new Error(data.error || 'Failed');
       // Remove from available, refresh my guests
       setAvailableGuests(prev => prev.filter(g => g.id !== guestId));
-      await fetchGuests();
+      // Refresh my guests list
+      if (user) {
+        const url = user.permissionLevel === 'VOLUNTEER_ACCESS'
+          ? '/api/guests?limit=200'
+          : '/api/guests?limit=200&volunteerId=' + user.userId;
+        const r = await fetch(url);
+        if (r.ok) { const d = await r.json(); setGuests(d.guests || []); }
+      }
     } catch (e: any) {
       alert('❌ ' + e.message);
     } finally {
