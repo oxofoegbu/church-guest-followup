@@ -29,7 +29,6 @@ export async function GET(request: NextRequest) {
       if (unassigned) {
         // Allow volunteers to browse unassigned guests to self-assign
         where.assignedVolunteerId = null;
-        where.status = { notIn: ['ARCHIVED', 'CLOSED', 'COMPLETED'] } as any;
       } else {
         where.assignedVolunteerId = session.userId;
       }
