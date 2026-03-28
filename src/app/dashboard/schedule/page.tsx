@@ -12,7 +12,7 @@ type ServiceSchedule = {
   propheticPrayerId: string | null; worshipLeaderId: string | null;
   speaker: UserRef; serviceCoordinator: UserRef;
   propheticPrayer: UserRef; worshipLeader: UserRef;
-  reminderSent: boolean; notes: string | null;
+  reminder7Sent: boolean; notes: string | null;
 };
 type ScheduleYear = { year: number; label: string; archived: boolean; theme: string | null; sundayCount: number };
 
@@ -27,6 +27,9 @@ const HEADER_COLORS = [
   'bg-violet-700','bg-rose-700','bg-emerald-700','bg-amber-600','bg-cyan-700','bg-lime-700',
   'bg-orange-700','bg-teal-700','bg-indigo-700','bg-red-700','bg-purple-700','bg-blue-700',
 ];
+
+const NOW_YEAR  = new Date().getFullYear();
+const NOW_MONTH = new Date().getMonth(); // 0-indexed, current month
 
 function getDisplayName(name: string | null, user: UserRef): string {
   if (user?.name) return user.name;
@@ -305,6 +308,17 @@ export default function SchedulePage() {
 
   useEffect(() => { doFetch(); }, [doFetch]);
 
+  // Auto-collapse past months whenever the selected year changes
+  useEffect(() => {
+    const init: Record<number, boolean> = {};
+    if (selectedYear < NOW_YEAR) {
+      for (let m = 0; m < 12; m++) init[m] = true;
+    } else if (selectedYear === NOW_YEAR) {
+      for (let m = 0; m < NOW_MONTH; m++) init[m] = true;
+    }
+    setCollapsed(init);
+  }, [selectedYear]);
+
   // canEdit: admin/senior_leader/leader roles OR explicitly designated coordinator
   const canEdit = user && (
     ['ADMIN', 'SENIOR_LEADER', 'LEADER'].includes(user.role) ||
@@ -313,10 +327,30 @@ export default function SchedulePage() {
   const isAdmin = user && ['ADMIN', 'SENIOR_LEADER'].includes(user.role);
   const selectedYearData = years.find(y => y.year === selectedYear);
 
+  // Past months for selected year (0-indexed)
+  const pastMonths: number[] = selectedYear < NOW_YEAR
+    ? [0,1,2,3,4,5,6,7,8,9,10,11]
+    : selectedYear === NOW_YEAR
+      ? Array.from({ length: NOW_MONTH }, (_, i) => i)
+      : [];
+
+  const allPastHidden = pastMonths.length > 0 && pastMonths.every(m => collapsed[m] === true);
+
+  const togglePastMonths = () => {
+    setCollapsed(prev => {
+      const next = { ...prev };
+      if (allPastHidden) {
+        pastMonths.forEach(m => { next[m] = false; });
+      } else {
+        pastMonths.forEach(m => { next[m] = true; });
+      }
+      return next;
+    });
+  };
+
   const publicUrl = typeof window !== 'undefined'
     ? `${window.location.origin}/schedule/${selectedYear}`
     : `/schedule/${selectedYear}`;
-  const printUrl = `/schedule/${selectedYear}/print`;
 
   const handleCopyLink = async () => {
     try { await navigator.clipboard.writeText(publicUrl); }
@@ -350,6 +384,12 @@ export default function SchedulePage() {
     acc[m].push(svc);
     return acc;
   }, {});
+
+  // Print URL only includes months that are currently visible (not collapsed)
+  const visibleMonthKeys = Object.keys(byMonth).map(Number).filter(m => !collapsed[m]);
+  const printUrl = visibleMonthKeys.length > 0
+    ? `/schedule/${selectedYear}/print?months=${visibleMonthKeys.join(',')}`
+    : `/schedule/${selectedYear}/print`;
 
   const todayStr = new Date().toISOString().slice(0, 10);
   const visibleYears = showArchived ? years : years.filter(y => !y.archived);
@@ -403,6 +443,13 @@ export default function SchedulePage() {
           className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-white border border-church-300 text-church-700 hover:bg-church-100 transition-colors">
           🖨️ Print / Save as PDF
         </a>
+        {pastMonths.length > 0 && (
+          <button onClick={togglePastMonths}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${allPastHidden ? 'bg-amber-50 border border-amber-300 text-amber-700 hover:bg-amber-100' : 'bg-white border border-church-300 text-church-700 hover:bg-church-100'}`}
+            title={allPastHidden ? 'Past months are hidden — click to show' : 'Click to hide past months'}>
+            {allPastHidden ? '👁 Show Past Months' : '🙈 Hide Past Months'}
+          </button>
+        )}
         <div className="flex items-center ml-auto text-xs text-church-400 gap-1 flex-wrap">
           <span>Share:</span>
           <code className="bg-white border border-church-200 px-2 py-0.5 rounded text-church-600 text-[11px]">{publicUrl}</code>
@@ -436,7 +483,7 @@ export default function SchedulePage() {
           <p className="text-xs text-church-500">Roles Linked</p>
         </div>
         <div className="card p-3 text-center">
-          <p className="text-2xl font-bold text-emerald-600">{schedules.filter(s => s.reminderSent).length}</p>
+          <p className="text-2xl font-bold text-emerald-600">{schedules.filter(s => (s as any).reminder7Sent).length}</p>
           <p className="text-xs text-church-500">Reminders Sent</p>
         </div>
       </div>
@@ -471,6 +518,9 @@ export default function SchedulePage() {
                       <div className="flex items-center gap-3">
                         <span className="text-lg font-bold">{MONTH_NAMES[month]}</span>
                         <span className="text-white/60 text-sm">{services.length} Sundays</span>
+                        {pastMonths.includes(month) && (
+                          <span className="text-[10px] bg-white/20 text-white/70 px-2 py-0.5 rounded-full">Past</span>
+                        )}
                       </div>
                       {cleanName && (
                         <p className="text-white/85 text-sm mt-0.5">
@@ -536,7 +586,7 @@ export default function SchedulePage() {
                                 })}
                               </div>
                               {svc.notes && <p className="mt-2 text-[11px] text-amber-700 bg-amber-50 px-2 py-1 rounded italic">📌 {svc.notes}</p>}
-                              {svc.reminderSent && <p className="mt-1 text-[10px] text-emerald-600">✓ Reminder sent</p>}
+                              {(svc as any).reminder7Sent && <p className="mt-1 text-[10px] text-emerald-600">✓ Reminder sent</p>}
                             </div>
                           </div>
                         );

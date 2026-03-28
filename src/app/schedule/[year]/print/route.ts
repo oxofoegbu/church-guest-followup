@@ -10,9 +10,15 @@ function getDisplayName(name: string | null, user: { name: string } | null): str
   return 'TBD';
 }
 
-export async function GET(_req: NextRequest, { params }: { params: { year: string } }) {
+export async function GET(req: NextRequest, { params }: { params: { year: string } }) {
   const year = parseInt(params.year);
   if (isNaN(year)) return new NextResponse('Not found', { status: 404 });
+
+  // Optional months filter — comma-separated 0-indexed month numbers (e.g. ?months=2,3,4)
+  const monthsParam = req.nextUrl.searchParams.get('months');
+  const allowedMonths: number[] | null = monthsParam
+    ? monthsParam.split(',').map(Number).filter(n => !isNaN(n) && n >= 0 && n <= 11)
+    : null;
 
   const scheduleYear = await prisma.scheduleYear.findUnique({ where: { year } }).catch(() => null);
   if (!scheduleYear) return new NextResponse('Schedule not found', { status: 404 });
@@ -41,6 +47,7 @@ export async function GET(_req: NextRequest, { params }: { params: { year: strin
 
   const monthSections = Object.entries(byMonth)
     .sort(([a], [b]) => Number(a) - Number(b))
+    .filter(([monthStr]) => !allowedMonths || allowedMonths.includes(Number(monthStr)))
     .map(([monthStr, services]) => {
       const month = Number(monthStr);
       const theme = services[0]?.monthTheme || '';
@@ -99,6 +106,10 @@ export async function GET(_req: NextRequest, { params }: { params: { year: strin
     }).join('');
 
   const printedOn = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  const visibleSchedules = allowedMonths
+    ? schedules.filter(s => allowedMonths.includes(new Date(s.date).getUTCMonth()))
+    : schedules;
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -164,7 +175,7 @@ export async function GET(_req: NextRequest, { params }: { params: { year: strin
     <h1>Grace Life Center</h1>
     <h2>${scheduleYear.label}</h2>
     ${scheduleYear.theme ? `<p class="theme">${scheduleYear.theme}</p>` : ''}
-    <p class="meta">${schedules.length} Sundays · Printed ${printedOn}</p>
+    <p class="meta">${visibleSchedules.length} Sundays · Printed ${printedOn}${allowedMonths ? ' · Showing selected months only' : ''}</p>
   </div>
 
   ${monthSections}
