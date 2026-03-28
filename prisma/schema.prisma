@@ -286,7 +286,10 @@ model ServiceSchedule {
 
   isSeminar              Boolean   @default(false)
   panelSpeakers          Json?     // [{name, userId?, title?}]
-  reminderSent           Boolean   @default(false)
+  reminder60Sent         Boolean   @default(false)
+  reminder30Sent         Boolean   @default(false)
+  reminder14Sent         Boolean   @default(false)
+  reminder7Sent          Boolean   @default(false)
   notes                  String?
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
