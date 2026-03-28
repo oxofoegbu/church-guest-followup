@@ -126,6 +126,56 @@ export async function PATCH(request: NextRequest, { params }: Params) {
       }
     }
 
+    // ── Panel speakers (Seminar Sunday) notifications ───────────────────
+    const updatedAny = updated as any;
+    if (updatedAny.isSeminar && Array.isArray(updatedAny.panelSpeakers)) {
+      const beforeAny = before as any;
+      const prevPanel = JSON.stringify(beforeAny.panelSpeakers || []);
+      const newPanel  = JSON.stringify(updatedAny.panelSpeakers || []);
+
+      if (prevPanel !== newPanel) {
+        for (const panelist of updatedAny.panelSpeakers) {
+          if (!panelist?.userId) continue;
+          const user = await prisma.user.findUnique({
+            where: { id: panelist.userId },
+            select: { id: true, name: true, email: true, phone: true },
+          });
+          if (!user) continue;
+
+          // Calendar entry for each panelist
+          await prisma.actionItem.deleteMany({
+            where: { scheduleId: params.id, userId: user.id },
+          });
+          await prisma.actionItem.create({
+            data: {
+              userId: user.id,
+              actionType: 'APPOINTMENT',
+              title: `🎓 Seminar Speaker${panelist.title ? ' — ' + panelist.title : ''}`,
+              notes: `📅 ${dateStr}
+📖 Topic: ${before.topic}${panelist.title ? '
+🎤 Your topic: ' + panelist.title : ''}`,
+              dueDate: before.date,
+              dueTime: '10:00',
+              reminderMinutes: 1440,
+              scheduleId: params.id,
+            },
+          });
+
+          // Notify each panelist
+          notifyServiceRoleAssignment({
+            userName:   user.name,
+            userEmail:  user.email,
+            userPhone:  user.phone,
+            role:       `🎓 Seminar Speaker${panelist.title ? ' — ' + panelist.title : ''}`,
+            date:       before.date,
+            topic:      before.topic,
+            monthTheme: before.monthTheme,
+            scheduleId: params.id,
+          }).catch(e => console.error('[seminar notify]', e));
+        }
+      }
+    }
+
     return NextResponse.json(updated);
   } catch (error: any) {
     if (error?.message === 'Unauthorized') return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
