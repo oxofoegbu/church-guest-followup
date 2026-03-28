@@ -101,6 +101,18 @@ export default function MyAssignedGuestsPage() {
     <div className="space-y-6 fade-in">
       <div className="flex items-center justify-between">
         <h1 className="page-header">My Guests ({guests.length})</h1>
+      </div>
+      <div className="flex gap-2 flex-wrap">
+        <button onClick={() => setTab('mine')}
+          className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${tab === 'mine' ? 'bg-brand-500 text-white' : 'bg-church-100 text-church-600 hover:bg-church-200'}`}>
+          🙋 My Guests ({guests.length})
+        </button>
+        <button onClick={() => { setTab('available'); fetchAvailable(); }}
+          className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${tab === 'available' ? 'bg-emerald-500 text-white' : 'bg-church-100 text-church-600 hover:bg-church-200'}`}>
+          🆕 Available to Pick Up
+        </button>
+      </div>
+      <div>
         <PageHelp docSection="guest-pipeline" tips={[
           { icon: "🙋", title: "Your assigned guests", body: "These are the guests assigned specifically to you for follow-up. Focus here first every week." },
           { icon: "📞", title: "Log every contact", body: "After every call, text, or visit — open the guest profile and log an activity. This keeps your leader informed and the Audit Trail complete." },
