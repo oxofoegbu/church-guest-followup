@@ -62,7 +62,7 @@ function AssignModal({ service, onClose, onSaved }: { service: ServiceSchedule; 
     try {
       const res = await fetch(`/api/schedule/${service.id}`, {
         method: 'PATCH', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, panelSpeakers: form.isSeminar ? form.panelSpeakers.filter((s: any) => s.name.trim()) : null }),
+        body: JSON.stringify({ ...form, panelSpeakers: form.isSeminar ? form.panelSpeakers.filter((s) => s.name.trim()) : null }),
       });
       if (!res.ok) throw new Error(await res.text());
       onSaved();
@@ -211,7 +211,7 @@ function NewYearModal({ onClose, onCreated }: { onClose: () => void; onCreated: 
     try {
       const res = await fetch('/api/schedule/years', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, panelSpeakers: form.isSeminar ? form.panelSpeakers.filter((s: any) => s.name.trim()) : null }),
+        body: JSON.stringify(form),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
