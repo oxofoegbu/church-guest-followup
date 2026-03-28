@@ -151,9 +151,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
               userId: user.id,
               actionType: 'APPOINTMENT',
               title: `🎓 Seminar Speaker${panelist.title ? ' — ' + panelist.title : ''}`,
-              notes: `📅 ${dateStr}
-📖 Topic: ${before.topic}${panelist.title ? '
-🎤 Your topic: ' + panelist.title : ''}`,
+              notes: `📅 ${dateStr} | 📖 Topic: ${before.topic}` + (panelist.title ? ` | 🎤 Your topic: ${panelist.title}` : ''),
               dueDate: before.date,
               dueTime: '10:00',
               reminderMinutes: 1440,
