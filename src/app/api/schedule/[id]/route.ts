@@ -50,7 +50,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
 
     const body = await request.json();
     const allowedFields = [
-      'speakerName','speakerId','serviceCoordinatorName','serviceCoordinatorId',
+      'speakerName','speakerId','serviceCoordinatorName','serviceCoordinatorId','isSeminar','panelSpeakers',
       'propheticPrayerName','propheticPrayerId','worshipLeaderName','worshipLeaderId',
       'notes','reminderSent',
     ];

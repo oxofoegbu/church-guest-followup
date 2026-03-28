@@ -284,6 +284,8 @@ model ServiceSchedule {
   propheticPrayer        User?     @relation("SchedulePropheticPrayer", fields: [propheticPrayerId],    references: [id])
   worshipLeader          User?     @relation("ScheduleWorshipLeader",   fields: [worshipLeaderId],      references: [id])
 
+  isSeminar              Boolean   @default(false)
+  panelSpeakers          Json?     // [{name, userId?, title?}]
   reminderSent           Boolean   @default(false)
   notes                  String?
   createdAt              DateTime  @default(now())

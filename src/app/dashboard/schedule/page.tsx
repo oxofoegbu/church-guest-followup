@@ -44,6 +44,8 @@ function AssignModal({ service, onClose, onSaved }: { service: ServiceSchedule; 
     propheticPrayerId: service.propheticPrayerId,       propheticPrayerName: service.propheticPrayerName || '',
     worshipLeaderId: service.worshipLeaderId,           worshipLeaderName: service.worshipLeaderName || '',
     notes: service.notes || '',
+    isSeminar: (service as any).isSeminar || false,
+    panelSpeakers: (service as any).panelSpeakers || [{ name: '', userId: '', title: '' }, { name: '', userId: '', title: '' }],
   });
 
   useEffect(() => {
@@ -60,7 +62,7 @@ function AssignModal({ service, onClose, onSaved }: { service: ServiceSchedule; 
     try {
       const res = await fetch(`/api/schedule/${service.id}`, {
         method: 'PATCH', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, panelSpeakers: form.isSeminar ? form.panelSpeakers.filter((s: any) => s.name.trim()) : null }),
       });
       if (!res.ok) throw new Error(await res.text());
       onSaved();
@@ -149,7 +151,7 @@ function NewYearModal({ onClose, onCreated }: { onClose: () => void; onCreated: 
     try {
       const res = await fetch('/api/schedule/years', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, panelSpeakers: form.isSeminar ? form.panelSpeakers.filter((s: any) => s.name.trim()) : null }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
@@ -457,7 +459,7 @@ export default function SchedulePage() {
                               {scripture && <p className="text-[11px] text-purple-600 italic mb-3">{scripture}</p>}
                               <div className="pt-3 border-t border-gray-100 grid grid-cols-2 gap-2">
                                 {[
-                                  { label: '🎤 Speaker', name: svc.speakerName, user: svc.speaker },
+                                  { label: '🎤 Speaker', name: (svc as any).isSeminar ? '🎓 Seminar' : svc.speakerName, user: (svc as any).isSeminar ? null : svc.speaker },
                                   { label: '📋 Coord.',  name: svc.serviceCoordinatorName, user: svc.serviceCoordinator },
                                   { label: '🙏 Prayer',  name: svc.propheticPrayerName, user: svc.propheticPrayer },
                                   { label: '🎵 Worship', name: svc.worshipLeaderName, user: svc.worshipLeader },
