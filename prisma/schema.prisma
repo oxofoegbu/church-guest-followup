@@ -290,6 +290,7 @@ model ServiceSchedule {
   reminder30Sent         Boolean   @default(false)
   reminder14Sent         Boolean   @default(false)
   reminder7Sent          Boolean   @default(false)
+  orderOfService         Json?     // Run 1 v3 - section/item array
   notes                  String?
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt

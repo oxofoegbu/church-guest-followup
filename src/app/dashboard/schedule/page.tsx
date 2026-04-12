@@ -1,5 +1,6 @@
 'use client';
 import PageHelp from '@/components/PageHelp';
+import OrderOfServiceEditor from '@/components/OrderOfServiceEditor';
 
 import { useEffect, useState, useCallback } from 'react';
 
@@ -268,6 +269,7 @@ export default function SchedulePage() {
   const [user, setUser] = useState<any>(null);
   const [coordinatorUserIds, setCoordinatorUserIds] = useState<string[]>([]);
   const [editing, setEditing] = useState<ServiceSchedule | null>(null);
+  const [orderEditor, setOrderEditor] = useState<{id: string; label: string} | null>(null);
   const [showNewYear, setShowNewYear] = useState(false);
   const [showArchived, setShowArchived] = useState(false);
   const [collapsed, setCollapsed] = useState<Record<number, boolean>>({});
@@ -585,6 +587,12 @@ export default function SchedulePage() {
                                   );
                                 })}
                               </div>
+                              <button
+                                onClick={() => setOrderEditor({ id: svc.id, label: new Date(svc.date).toDateString() + " — " + svc.topic })}
+                                className="mt-2 text-[11px] text-brand-700 hover:text-brand-900 underline"
+                              >
+                                📋 Order of Service
+                              </button>
                               {svc.notes && <p className="mt-2 text-[11px] text-amber-700 bg-amber-50 px-2 py-1 rounded italic">📌 {svc.notes}</p>}
                               {(svc as any).reminder7Sent && <p className="mt-1 text-[10px] text-emerald-600">✓ Reminder sent</p>}
                             </div>
@@ -600,6 +608,13 @@ export default function SchedulePage() {
       )}
 
     </div>
+      {orderEditor && (
+        <OrderOfServiceEditor
+          scheduleId={orderEditor.id}
+          scheduleLabel={orderEditor.label}
+          onClose={() => setOrderEditor(null)}
+        />
+      )}
       {editing && (
         <AssignModal service={editing} onClose={() => setEditing(null)} onSaved={() => { setEditing(null); doFetch(); }} />
       )}
