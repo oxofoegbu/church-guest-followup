@@ -1,10 +1,17 @@
 /**
- * /api/cron/drip-executor  (Run 5)
+ * /api/cron/drip-executor  (Run 5, v1.2 hotfix)
  * ---------------------------------------------------------------------------
  * Daily cron at 14:00 UTC. Picks up all PENDING GuestDripSteps whose
  * scheduledFor <= now(), applies the safety filters (guest.dripEnabled,
  * guest.dripPausedAt, dripTemplate.enabled, template deletion), renders the
  * template, and sends via Resend (EMAIL) or Whapi (WHATSAPP).
+ *
+ * v1.2: `truncateError` now coerces any input to string (previously was
+ * typed `string`, which meant Whapi's { code, message } object error payload
+ * leaked into Prisma's update and crashed the whole cron run with
+ * "Unknown argument `code`"). Defense in depth — drip-sender also now
+ * coerces at the boundary, so a non-string should never reach here, but
+ * the guard stays.
  *
  * Race prevention — Option C:
  * Vercel Hobby cron fires once per day. We accept the limitation that if the
@@ -51,9 +58,24 @@ function isDryRun(): boolean {
   return v === '1' || v === 'true';
 }
 
-function truncateError(msg: string, max = 500): string {
-  if (!msg) return 'Unknown error';
-  return msg.length > max ? msg.slice(0, max) : msg;
+// v1.2 hotfix: coerce any input to string. Providers (Whapi, Resend) can
+// return non-string error payloads (e.g. Whapi returns { code: 402, message }
+// on trial-limit exceeded). Writing a non-string into Prisma's String? column
+// throws and aborts the entire cron run. This guard prevents that.
+function truncateError(msg: any, max = 500): string {
+  if (msg == null) return 'Unknown error';
+  let str: string;
+  if (typeof msg === 'string') {
+    str = msg;
+  } else {
+    try {
+      str = JSON.stringify(msg);
+    } catch {
+      str = String(msg);
+    }
+  }
+  if (!str) return 'Unknown error';
+  return str.length > max ? str.slice(0, max) : str;
 }
 
 export async function GET(request: NextRequest) {

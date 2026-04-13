@@ -1,10 +1,17 @@
 /**
- * drip-sender.ts  (Run 5)
+ * drip-sender.ts  (Run 5, v1.2 hotfix)
  * ---------------------------------------------------------------------------
  * Mustache rendering + Resend/Whapi senders for the daily drip executor.
  *
  * Patterns mirrored from src/lib/notifications.ts and src/lib/schedule-
  * notifications.ts (same Resend + Whapi client shapes, same env vars).
+ *
+ * v1.2: Provider error payloads are coerced to string at the boundary.
+ * Observed failure: Whapi returned { code: 402, message: "trial limit..." }
+ * on trial exceeded, which in v1.1 leaked as an object into the executor's
+ * Prisma update of `errorMessage` (a String? column), throwing and aborting
+ * the entire cron run. Now both sendDripEmail and sendDripWhatsApp
+ * guarantee `{ error: string }` shape via safeStringify().
  *
  * Run 5 intentionally does NOT write to NotificationLog. The existing
  * NotificationLog.toUserId is non-nullable and drip messages go to guests
@@ -32,6 +39,22 @@ function escapeHtml(s: string): string {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+// v1.2 hotfix: defensive JSON.stringify that never throws (circular refs,
+// BigInt, etc.). Used to coerce object error payloads from providers into a
+// string before returning them as `error` (which eventually lands in
+// Prisma's String? errorMessage column).
+function safeStringify(v: any): string {
+  try {
+    return JSON.stringify(v);
+  } catch {
+    try {
+      return String(v);
+    } catch {
+      return '[unserializable error payload]';
+    }
+  }
 }
 
 /**
@@ -110,7 +133,10 @@ export async function sendDripEmail(opts: {
 
     const data = await res.json();
     if (!res.ok) {
-      return { error: data.message || `Resend error: ${res.status}` };
+      // v1.2 hotfix: providers can return object error payloads; coerce to string.
+      const payload = data?.message ?? data?.error ?? `Resend error: ${res.status}`;
+      const errStr = typeof payload === 'string' ? payload : safeStringify(payload);
+      return { error: errStr };
     }
     return { id: data.id };
   } catch (e: any) {
@@ -151,7 +177,11 @@ export async function sendDripWhatsApp(opts: {
 
     const data = await res.json();
     if (!res.ok) {
-      return { error: data.message || data.error || `Whapi error: ${res.status}` };
+      // v1.2 hotfix: Whapi returns { code, message } on trial-limit exceeded;
+      // error payloads can be objects, not strings. Coerce at the boundary.
+      const payload = data?.message ?? data?.error ?? `Whapi error: ${res.status}`;
+      const errStr = typeof payload === 'string' ? payload : safeStringify(payload);
+      return { error: errStr };
     }
     return { id: data.message?.id || data.id || data.sent?.id || 'sent' };
   } catch (e: any) {
