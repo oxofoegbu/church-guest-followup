@@ -1,5 +1,6 @@
 'use client';
 import OrderOfServiceTemplatesSection from '@/components/OrderOfServiceTemplatesSection';
+import DripTemplatesSection from '@/components/DripTemplatesSection';
 import PageHelp from '@/components/PageHelp';
 
 import { useState, useEffect } from 'react';
@@ -235,6 +236,8 @@ export default function SettingsPage() {
         </div>
 
         <OrderOfServiceTemplatesSection />
+
+        <DripTemplatesSection />
 
         {/* ── Roles & Permissions ── */}
         <div className="card">

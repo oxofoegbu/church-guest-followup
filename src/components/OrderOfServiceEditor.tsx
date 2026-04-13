@@ -51,6 +51,8 @@ export default function OrderOfServiceEditor({
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [dbTemplates, setDbTemplates] = useState<{ id: string; name: string; items: OrderItem[] }[]>([]);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string>('');
 
   useEffect(() => {
     let cancelled = false;
@@ -73,6 +75,25 @@ export default function OrderOfServiceEditor({
     };
   }, [scheduleId]);
 
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch('/api/settings/order-templates');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (cancelled) return;
+        const list = Array.isArray(data.templates) ? data.templates : [];
+        setDbTemplates(list);
+      } catch {
+        // silent — picker is optional
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   function update(id: string, patch: Partial<OrderItem>) {
     setItems((arr) => arr.map((it) => (it.id === id ? { ...it, ...patch } : it)));
   }
@@ -93,9 +114,20 @@ export default function OrderOfServiceEditor({
   function addItem(type: 'section' | 'item') {
     setItems((arr) => [...arr, blankItem(type)]);
   }
-  function loadTemplate() {
-    if (items.length > 0 && !confirm('Replace the current order with the GLC template?')) return;
+  function loadBuiltInTemplate() {
+    if (items.length > 0 && !confirm('Replace the current order with the GLC built-in template?')) return;
     setItems(DEFAULT_TEMPLATE.map((t) => ({ ...t, id: uid() })));
+  }
+
+  function loadDbTemplate(templateId: string) {
+    if (!templateId) return;
+    const tpl = dbTemplates.find((t) => t.id === templateId);
+    if (!tpl) return;
+    if (items.length > 0 && !confirm(`Replace the current order of service with template "${tpl.name}"? Unsaved changes will be lost.`)) {
+      return;
+    }
+    const cloned = (tpl.items as OrderItem[]).map((it) => ({ ...it, id: uid() }));
+    setItems(cloned);
   }
 
   async function save() {
@@ -153,17 +185,26 @@ export default function OrderOfServiceEditor({
                 <button onClick={() => addItem('item')} className="btn-secondary text-sm">
                   + Item
                 </button>
+                <select
+                  className="select-field text-sm py-1 max-w-xs"
+                  value={selectedTemplateId}
+                  onChange={(e) => { const id = e.target.value; setSelectedTemplateId(id); loadDbTemplate(id); setSelectedTemplateId(''); }}
+                  aria-label="Load template"
+                >
+                  <option value="">— Load template… —</option>
+                  {dbTemplates.map((tpl) => (<option key={tpl.id} value={tpl.id}>{tpl.name}</option>))}
+                </select>
                 <button
-                  onClick={loadTemplate}
+                  onClick={loadBuiltInTemplate}
                   className="ml-auto text-sm text-brand-700 hover:text-brand-900"
                 >
-                  Load GLC template
+                  Load built-in default
                 </button>
               </div>
 
               {items.length === 0 && (
                 <div className="rounded-lg border border-dashed border-church-300 p-6 text-center text-sm text-church-600">
-                  No items yet. Add a section or item, or load the GLC template.
+                  No items yet. Add a section or item, or load a template.
                 </div>
               )}
 

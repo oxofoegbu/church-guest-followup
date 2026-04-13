@@ -149,6 +149,11 @@ model Guest {
   notifications        NotificationLog[]
   actionItems          ActionItem[]
 
+  dripEnabled  Boolean   @default(true)
+  dripPausedAt DateTime?
+
+  guestDripSteps GuestDripStep[]
+
   @@map("guests")
 }
 
@@ -391,4 +396,53 @@ model OrderOfServiceTemplate {
   updatedAt DateTime @updatedAt
 
   @@map("order_of_service_templates")
+}
+
+
+// ── Drip Campaign (Run 3) ──────────────────────────────────────
+enum DripChannel {
+  EMAIL
+  WHATSAPP
+}
+
+enum DripStepStatus {
+  PENDING
+  SENT
+  FAILED
+  SKIPPED
+}
+
+model DripTemplate {
+  id        String      @id @default(cuid())
+  name      String
+  dayOffset Int
+  channel   DripChannel
+  subject   String?
+  body      String
+  enabled   Boolean     @default(true)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  guestDripSteps GuestDripStep[]
+
+  @@map("drip_templates")
+}
+
+model GuestDripStep {
+  id             String         @id @default(cuid())
+  guestId        String
+  dripTemplateId String
+  scheduledFor   DateTime
+  sentAt         DateTime?
+  status         DripStepStatus @default(PENDING)
+  errorMessage   String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  guest         Guest         @relation(fields: [guestId], references: [id], onDelete: Cascade)
+  dripTemplate  DripTemplate  @relation(fields: [dripTemplateId], references: [id])
+
+  @@index([guestId])
+  @@index([scheduledFor, status])
+  @@map("guest_drip_steps")
 }
