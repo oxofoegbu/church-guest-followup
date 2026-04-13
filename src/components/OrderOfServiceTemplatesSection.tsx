@@ -111,25 +111,27 @@ function TemplateEditor({ template, onClose }: { template: Template; onClose: ()
   return (
     <>
       <div className="fixed inset-0 bg-black/40 z-40" onClick={onClose} />
-      <div className="fixed inset-x-4 top-10 bottom-10 md:inset-x-1/4 bg-white rounded-lg shadow-xl z-50 p-6 overflow-auto">
+      <div className="fixed inset-x-4 top-10 bottom-10 md:inset-x-12 lg:inset-x-32 bg-white rounded-lg shadow-xl z-50 p-6 overflow-auto">
         <h3 className="text-lg font-bold mb-3">Edit Template</h3>
         <input className="input-field mb-3" value={name} onChange={e => setName(e.target.value)} />
         <div className="space-y-2">
           {items.map((it, i) => (
             <div key={it.id} className={`p-2 border rounded ${it.type === 'section' ? 'bg-church-100 font-semibold' : ''}`}>
-              <div className="flex gap-2 items-center">
-                <span className="text-xs w-16">{it.type}</span>
-                <input className="input-field flex-1" value={it.title} onChange={e => update(i, { title: e.target.value })} />
+              <div className="space-y-2">
+                <div className="flex gap-2 items-center">
+                  <span className="text-xs uppercase tracking-wide w-16 text-church-500">{it.type}</span>
+                  <input className="input-field flex-1" placeholder="Title" value={it.title} onChange={e => update(i, { title: e.target.value })} />
+                  <button className="btn-secondary text-xs px-2" onClick={() => move(i, -1)}>↑</button>
+                  <button className="btn-secondary text-xs px-2" onClick={() => move(i, 1)}>↓</button>
+                  <button className="btn-secondary text-xs px-2 text-red-600" onClick={() => remove(i)}>✕</button>
+                </div>
                 {it.type === 'item' && (
-                  <>
-                    <input className="input-field w-20" placeholder="09:00" value={it.time ?? ''} onChange={e => update(i, { time: e.target.value })} />
-                    <input className="input-field w-32" placeholder="Person" value={it.person ?? ''} onChange={e => update(i, { person: e.target.value })} />
-                    <input className="input-field w-16" placeholder="min" type="number" value={it.durationMin ?? ''} onChange={e => update(i, { durationMin: e.target.value ? Number(e.target.value) : undefined })} />
-                  </>
+                  <div className="flex gap-2 items-center pl-16">
+                    <input className="input-field w-24" placeholder="Time (09:00)" value={it.time ?? ''} onChange={e => update(i, { time: e.target.value })} />
+                    <input className="input-field flex-1" placeholder="Person" value={it.person ?? ''} onChange={e => update(i, { person: e.target.value })} />
+                    <input className="input-field w-24" placeholder="Min" type="number" value={it.durationMin ?? ''} onChange={e => update(i, { durationMin: e.target.value ? Number(e.target.value) : undefined })} />
+                  </div>
                 )}
-                <button className="btn-secondary text-xs" onClick={() => move(i, -1)}>↑</button>
-                <button className="btn-secondary text-xs" onClick={() => move(i, 1)}>↓</button>
-                <button className="btn-secondary text-xs text-red-600" onClick={() => remove(i)}>✕</button>
               </div>
             </div>
           ))}
