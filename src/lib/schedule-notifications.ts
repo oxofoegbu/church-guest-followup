@@ -180,12 +180,14 @@ export function renderOrderOfServiceHtml(items: OoSItem[] | null | undefined): s
     if (it.type === 'section') {
       return `<tr><td colspan="4" style="background:#f3efe7;padding:8px;font-weight:700;">${escapeHtml(it.title)}</td></tr>`;
     }
-    return `<tr>
-      <td style="padding:6px;border-bottom:1px solid #eee;">${escapeHtml(it.time ?? '')}</td>
-      <td style="padding:6px;border-bottom:1px solid #eee;">${escapeHtml(it.title)}</td>
-      <td style="padding:6px;border-bottom:1px solid #eee;">${escapeHtml(it.person ?? '')}</td>
-      <td style="padding:6px;border-bottom:1px solid #eee;text-align:right;">${it.durationMin ? it.durationMin + ' min' : ''}</td>
+    const mainRow = `<tr>
+      <td style="padding:6px;${it.notes ? '' : 'border-bottom:1px solid #eee;'}">${escapeHtml(it.time ?? '')}</td>
+      <td style="padding:6px;${it.notes ? '' : 'border-bottom:1px solid #eee;'}">${escapeHtml(it.title)}</td>
+      <td style="padding:6px;${it.notes ? '' : 'border-bottom:1px solid #eee;'}">${escapeHtml(it.person ?? '')}</td>
+      <td style="padding:6px;text-align:right;${it.notes ? '' : 'border-bottom:1px solid #eee;'}">${it.durationMin ? it.durationMin + ' min' : ''}</td>
     </tr>`;
+    const notesRow = it.notes ? `<tr><td colspan="4" style="padding:4px 12px 8px 12px;border-bottom:1px solid #eee;font-size:13px;color:#627d98;font-style:italic;">${escapeHtml(it.notes)}</td></tr>` : '';
+    return mainRow + notesRow;
   }).join('');
   return `<h3>Order of Service</h3><table style="width:100%;border-collapse:collapse;font-size:14px;">${rows}</table>`;
 }
@@ -195,7 +197,10 @@ export function renderOrderOfServiceWhatsApp(items: OoSItem[] | null | undefined
   const lines: string[] = ['*Order of Service*'];
   for (const it of items) {
     if (it.type === 'section') lines.push(`\n*${it.title}*`);
-    else lines.push(`• ${it.time ? it.time + ' — ' : ''}${it.title}${it.person ? ' (' + it.person + ')' : ''}`);
+    else {
+      lines.push(`• ${it.time ? it.time + ' — ' : ''}${it.title}${it.person ? ' (' + it.person + ')' : ''}`);
+      if (it.notes) lines.push(`   _${it.notes}_`);
+    }
   }
   let out = lines.join('\n');
   if (out.length > maxLen) out = out.slice(0, maxLen - 3) + '...';
