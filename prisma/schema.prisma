@@ -153,6 +153,7 @@ model Guest {
   dripPausedAt DateTime?
 
   guestDripSteps GuestDripStep[]
+  dripSendLogs   DripSendLog[]
 
   @@map("guests")
 }
@@ -441,8 +442,31 @@ model GuestDripStep {
 
   guest         Guest         @relation(fields: [guestId], references: [id], onDelete: Cascade)
   dripTemplate  DripTemplate  @relation(fields: [dripTemplateId], references: [id])
+  dripSendLogs  DripSendLog[]
 
   @@index([guestId])
   @@index([scheduledFor, status])
   @@map("guest_drip_steps")
+}
+
+
+model DripSendLog {
+  id                String             @id @default(cuid())
+  guestDripStepId   String
+  guestId           String
+  channel           DripChannel
+  status            NotificationStatus @default(QUEUED)
+  providerMessageId String?
+  errorMessage      String?
+  subjectRendered   String?
+  bodyRendered      String
+  createdAt         DateTime           @default(now())
+
+  guestDripStep     GuestDripStep      @relation(fields: [guestDripStepId], references: [id], onDelete: Cascade)
+  guest             Guest              @relation(fields: [guestId], references: [id], onDelete: Cascade)
+
+  @@index([guestId])
+  @@index([guestDripStepId])
+  @@index([createdAt])
+  @@map("drip_send_logs")
 }

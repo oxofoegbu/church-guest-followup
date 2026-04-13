@@ -1,30 +1,31 @@
 /**
- * drip-sender.ts  (Run 5, v1.2 hotfix)
+ * drip-sender.ts  (Run 6)
  * ---------------------------------------------------------------------------
  * Mustache rendering + Resend/Whapi senders for the daily drip executor.
  *
  * Patterns mirrored from src/lib/notifications.ts and src/lib/schedule-
  * notifications.ts (same Resend + Whapi client shapes, same env vars).
  *
- * v1.2: Provider error payloads are coerced to string at the boundary.
- * Observed failure: Whapi returned { code: 402, message: "trial limit..." }
- * on trial exceeded, which in v1.1 leaked as an object into the executor's
- * Prisma update of `errorMessage` (a String? column), throwing and aborting
- * the entire cron run. Now both sendDripEmail and sendDripWhatsApp
- * guarantee `{ error: string }` shape via safeStringify().
+ * Run 6 changes:
+ *   - `resolveDripVars` and `buildDripEmailHtml` accept an optional
+ *     `churchName` parameter. Executor fetches it ONCE per cron run from
+ *     AppSetting and threads it through. DEFAULT_CHURCH_NAME is still here
+ *     as a last-resort fallback so unit tests / ad-hoc callers don't have
+ *     to plumb a DB lookup.
  *
- * Run 5 intentionally does NOT write to NotificationLog. The existing
- * NotificationLog.toUserId is non-nullable and drip messages go to guests
- * (not Users), so the row has no sensible recipient. Traceability lives in
- * GuestDripStep (status, sentAt, errorMessage) + AuditLog (DRIP_STEP_SENT /
- * DRIP_STEP_FAILED). Run 6 will revisit — either adding a purpose-built
- * DripSendLog model or making NotificationLog.toUserId nullable + adding a
- * guestDripStepId FK. See Pitfall #45 precedent: notifyNewGuestSubmission
- * already bypasses NotificationLog for the same reason.
+ * v1.2 carryover: Provider error payloads are coerced to string at the
+ * boundary. Observed failure (Whapi Sandbox 5-chat cap) returned
+ * { code: 402, message: "trial limit..." } which leaked as an object
+ * into Prisma's update of `errorMessage` (String? column), aborting the
+ * cron. Both senders now guarantee `{ error: string }` via safeStringify.
+ *
+ * Run 6: DripSendLog is written by the executor after SEND/FAIL — this
+ * module stays focused on rendering + provider I/O. No NotificationLog
+ * writes (toUserId is non-nullable; drip recipients are guests, not users).
  * ---------------------------------------------------------------------------
  */
 
-const CHURCH_NAME = 'Grace Life Center';
+export const DEFAULT_CHURCH_NAME = 'Grace Life Center';
 
 // ── Mustache rendering ──────────────────────────────────────────────────────
 // Unknown vars render as empty string rather than throwing (a typo in a
@@ -41,11 +42,11 @@ function escapeHtml(s: string): string {
     .replace(/'/g, '&#39;');
 }
 
-// v1.2 hotfix: defensive JSON.stringify that never throws (circular refs,
-// BigInt, etc.). Used to coerce object error payloads from providers into a
-// string before returning them as `error` (which eventually lands in
-// Prisma's String? errorMessage column).
-function safeStringify(v: any): string {
+// Defensive JSON.stringify that never throws (circular refs, BigInt, etc.).
+// Used to coerce object error payloads from providers into a string before
+// returning them as `error` (which eventually lands in Prisma's String?
+// errorMessage column). Exported for the executor's own defensive coercion.
+export function safeStringify(v: any): string {
   try {
     return JSON.stringify(v);
   } catch {
@@ -80,23 +81,31 @@ export function renderMustache(
 export function buildDripEmailHtml(opts: {
   subject: string;
   renderedBody: string; // HTML-safe: already mustache-rendered with escape:'html'
+  churchName?: string;
 }): string {
+  const churchName = opts.churchName || DEFAULT_CHURCH_NAME;
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || '';
   // Convert simple newlines in the rendered body to <br/> so template authors
   // can write plain-text bodies and get reasonable email formatting.
   const bodyHtml = opts.renderedBody
     .split(/\n\n+/)
-    .map((para) => `<p style="margin:0 0 14px;font-size:15px;color:#334155;line-height:1.55;">${para.replace(/\n/g, '<br/>')}</p>`)
+    .map(
+      (para) =>
+        `<p style="margin:0 0 14px;font-size:15px;color:#334155;line-height:1.55;">${para.replace(
+          /\n/g,
+          '<br/>'
+        )}</p>`
+    )
     .join('');
 
   return `
     <div style="font-family:Georgia,serif;max-width:600px;margin:0 auto;padding:24px;">
       <div style="background:#102a43;color:#fff;padding:20px 24px;border-radius:8px 8px 0 0;">
-        <h1 style="margin:0;font-size:20px;">⛪ ${CHURCH_NAME}</h1>
+        <h1 style="margin:0;font-size:20px;">⛪ ${churchName}</h1>
       </div>
       <div style="border:1px solid #d9e2ec;border-top:none;padding:24px;border-radius:0 0 8px 8px;background:#fff;">
         ${bodyHtml}
-        ${appUrl ? `<p style="margin-top:24px;font-size:12px;color:#9ca3af;">${CHURCH_NAME} · <a href="${appUrl}" style="color:#9ca3af;">${appUrl}</a></p>` : ''}
+        ${appUrl ? `<p style="margin-top:24px;font-size:12px;color:#9ca3af;">${churchName} · <a href="${appUrl}" style="color:#9ca3af;">${appUrl}</a></p>` : ''}
       </div>
     </div>`;
 }
@@ -107,10 +116,11 @@ export async function sendDripEmail(opts: {
   to: string;
   subject: string;
   html: string;
+  fromNameOverride?: string;
 }): Promise<{ id?: string; error?: string }> {
   const apiKey = process.env.RESEND_API_KEY;
   const fromEmail = process.env.RESEND_FROM_EMAIL;
-  const fromName = process.env.RESEND_FROM_NAME || CHURCH_NAME;
+  const fromName = opts.fromNameOverride || process.env.RESEND_FROM_NAME || DEFAULT_CHURCH_NAME;
 
   if (!apiKey || !fromEmail) {
     return { error: 'Resend credentials not configured' };
@@ -133,7 +143,6 @@ export async function sendDripEmail(opts: {
 
     const data = await res.json();
     if (!res.ok) {
-      // v1.2 hotfix: providers can return object error payloads; coerce to string.
       const payload = data?.message ?? data?.error ?? `Resend error: ${res.status}`;
       const errStr = typeof payload === 'string' ? payload : safeStringify(payload);
       return { error: errStr };
@@ -177,8 +186,7 @@ export async function sendDripWhatsApp(opts: {
 
     const data = await res.json();
     if (!res.ok) {
-      // v1.2 hotfix: Whapi returns { code, message } on trial-limit exceeded;
-      // error payloads can be objects, not strings. Coerce at the boundary.
+      // Whapi returns { code, message } on trial-limit exceeded — coerce.
       const payload = data?.message ?? data?.error ?? `Whapi error: ${res.status}`;
       const errStr = typeof payload === 'string' ? payload : safeStringify(payload);
       return { error: errStr };
@@ -190,17 +198,19 @@ export async function sendDripWhatsApp(opts: {
 }
 
 // ── Var resolution ──────────────────────────────────────────────────────────
-// Centralized so the executor and any future manual-send UI use the same
-// source of truth. Run 6 can move `churchName` to AppSetting; for now it is
-// a constant.
+// Centralised so the executor and any future manual-send UI use the same
+// source of truth. Run 6: `churchName` is optional; executor threads in
+// the value fetched from AppSetting once per cron run.
 
 export function resolveDripVars(args: {
   guestFirstName: string;
   assignedVolunteerName: string | null;
+  churchName?: string;
 }): MustacheVars {
+  const churchName = args.churchName || DEFAULT_CHURCH_NAME;
   return {
     firstName: args.guestFirstName,
-    churchName: CHURCH_NAME,
-    volunteerName: args.assignedVolunteerName || 'your Grace Life Center family',
+    churchName,
+    volunteerName: args.assignedVolunteerName || `your ${churchName} family`,
   };
 }

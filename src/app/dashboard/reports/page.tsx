@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ACTIVITY_LABELS, STATUS_LABELS, STATUS_COLORS, formatDate } from '@/lib/utils';
 
-type Tab = 'funnel' | 'volunteers' | 'operational' | 'exports';
+type Tab = 'funnel' | 'volunteers' | 'operational' | 'drip' | 'exports';
 
 export default function ReportsPage() {
   const [tab, setTab] = useState<Tab>('funnel');
@@ -13,6 +13,7 @@ export default function ReportsPage() {
   const [funnel, setFunnel] = useState<any>(null);
   const [volPerf, setVolPerf] = useState<any>(null);
   const [ops, setOps] = useState<any>(null);
+  const [drip, setDrip] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,11 +22,13 @@ export default function ReportsPage() {
       fetch('/api/reports?type=funnel').then(r => r.ok ? r.json() : null),
       fetch('/api/reports?type=volunteer-performance').then(r => r.ok ? r.json() : null),
       fetch('/api/reports?type=operational').then(r => r.ok ? r.json() : null),
-    ]).then(([ov, fn, vp, op]) => {
+      fetch('/api/reports/drip').then(r => r.ok ? r.json() : null),
+    ]).then(([ov, fn, vp, op, dr]) => {
       setOverview(ov);
       setFunnel(fn);
       setVolPerf(vp);
       setOps(op);
+      setDrip(dr);
       setLoading(false);
     }).catch(() => setLoading(false));
   }, []);
@@ -38,6 +41,7 @@ export default function ReportsPage() {
     { key: 'funnel', label: 'Funnel & Outcomes', icon: '📊' },
     { key: 'volunteers', label: 'Assignee Performance', icon: '👥' },
     { key: 'operational', label: 'Operational', icon: '⚙️' },
+    { key: 'drip', label: 'Drip', icon: '💧' },
     { key: 'exports', label: 'Export Data', icon: '📥' },
   ];
 
@@ -65,6 +69,11 @@ export default function ReportsPage() {
       )}
       {tab === 'operational' && ops && (
         <OperationalReport data={ops} />
+      )}
+      {tab === 'drip' && (
+        drip ? <DripReport data={drip} /> : (
+          <div className="card text-church-400 text-sm">Drip report data unavailable. If drip was only recently rolled out, there may be no data yet.</div>
+        )
       )}
       {tab === 'exports' && <ExportsSection />}
     </div>
@@ -419,6 +428,157 @@ function OperationalReport({ data }: { data: any }) {
             ))}
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+// ── Run 6: Drip Report ────────────────────────────────────────────────────
+function DripReport({ data }: { data: any }) {
+  const ch = data.channelBreakdown || { EMAIL: { sent: 0, failed: 0 }, WHATSAPP: { sent: 0, failed: 0 } };
+  const perTemplate = data.perTemplate || [];
+  const pendingNext7d = data.pendingNext7d || [];
+  const failedLast30d = data.failedLast30d || [];
+  const pausedGuests = data.pausedGuests || [];
+
+  return (
+    <div className="space-y-6">
+      {/* Channel breakdown */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <MetricCard label="Email sent (all time)" value={String(ch.EMAIL?.sent ?? 0)} />
+        <MetricCard label="Email failed (all time)" value={String(ch.EMAIL?.failed ?? 0)} />
+        <MetricCard label="WhatsApp sent (all time)" value={String(ch.WHATSAPP?.sent ?? 0)} />
+        <MetricCard label="WhatsApp failed (all time)" value={String(ch.WHATSAPP?.failed ?? 0)} />
+      </div>
+
+      {/* Per-template */}
+      <div className="card">
+        <h2 className="section-header mb-4">Per-Template Metrics</h2>
+        {perTemplate.length === 0 ? (
+          <p className="text-sm text-church-400 italic">No templates found.</p>
+        ) : (
+          <div className="table-container border-0 shadow-none">
+            <table>
+              <thead>
+                <tr>
+                  <th>Template</th>
+                  <th>Channel</th>
+                  <th className="text-right">Day</th>
+                  <th className="text-right">Enabled</th>
+                  <th className="text-right">Pending</th>
+                  <th className="text-right">Sent (30d)</th>
+                  <th className="text-right">Failed (30d)</th>
+                  <th className="text-right">Sent (all)</th>
+                  <th className="text-right">Failed (all)</th>
+                  <th className="text-right">Skipped</th>
+                  <th className="text-right">Success %</th>
+                </tr>
+              </thead>
+              <tbody>
+                {perTemplate.map((t: any) => (
+                  <tr key={t.id}>
+                    <td className="font-medium">{t.name}</td>
+                    <td>
+                      <span className="badge bg-church-100 text-church-700">{t.channel}</span>
+                    </td>
+                    <td className="text-right">{t.dayOffset}</td>
+                    <td className="text-right">
+                      {t.enabled ? <span className="text-emerald-600">✓</span> : <span className="text-red-500">✗</span>}
+                    </td>
+                    <td className="text-right">{t.pending}</td>
+                    <td className="text-right text-emerald-600">{t.sent30d}</td>
+                    <td className="text-right text-red-600">{t.failed30d}</td>
+                    <td className="text-right">{t.sent}</td>
+                    <td className="text-right">{t.failed}</td>
+                    <td className="text-right text-church-500">{t.skipped}</td>
+                    <td className="text-right font-medium">
+                      {t.successRate == null ? '—' : `${t.successRate}%`}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      {/* Upcoming 7d */}
+      <div className="card border-l-4 border-l-blue-400">
+        <h2 className="section-header text-blue-700 mb-3">
+          📤 Upcoming Sends — Next 7 Days ({pendingNext7d.length})
+        </h2>
+        {pendingNext7d.length === 0 ? (
+          <p className="text-sm text-church-400">No pending sends in the next 7 days.</p>
+        ) : (
+          <div className="space-y-2 max-h-80 overflow-y-auto">
+            {pendingNext7d.map((s: any) => (
+              <div key={s.id} className="flex justify-between items-center p-2 bg-blue-50 rounded text-sm">
+                <div className="flex items-center gap-2">
+                  <Link href={`/dashboard/guests/${s.guest?.id}`} className="font-medium text-brand-600 hover:text-brand-700 underline">
+                    {s.guest?.firstName} {s.guest?.lastName}
+                  </Link>
+                  <span className="text-church-500">· {s.dripTemplate?.name}</span>
+                  <span className="badge bg-church-100 text-church-700 text-[10px]">{s.dripTemplate?.channel}</span>
+                </div>
+                <span className="text-xs text-church-600">{formatDate(s.scheduledFor)}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Failed in last 30 days */}
+      <div className="card border-l-4 border-l-red-400">
+        <h2 className="section-header text-red-700 mb-3">
+          ⚠️ Failed Sends — Last 30 Days ({failedLast30d.length})
+        </h2>
+        {failedLast30d.length === 0 ? (
+          <p className="text-sm text-green-600">No failed sends in the last 30 days ✓</p>
+        ) : (
+          <div className="space-y-2 max-h-80 overflow-y-auto">
+            {failedLast30d.map((s: any) => (
+              <div key={s.id} className="p-2 bg-red-50 rounded text-sm">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <Link href={`/dashboard/guests/${s.guest?.id}`} className="font-medium text-brand-600 hover:text-brand-700 underline">
+                      {s.guest?.firstName} {s.guest?.lastName}
+                    </Link>
+                    <span className="text-church-500">· {s.dripTemplate?.name}</span>
+                    <span className="badge bg-church-100 text-church-700 text-[10px]">{s.dripTemplate?.channel}</span>
+                  </div>
+                  <span className="text-xs text-church-500">{formatDate(s.updatedAt)}</span>
+                </div>
+                {s.errorMessage && (
+                  <div className="text-xs text-red-700 mt-1 font-mono truncate">{s.errorMessage}</div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Paused >14d */}
+      <div className="card border-l-4 border-l-amber-400">
+        <h2 className="section-header text-amber-700 mb-3">
+          ⏸ Guests Paused &gt;14 Days ({pausedGuests.length})
+        </h2>
+        {pausedGuests.length === 0 ? (
+          <p className="text-sm text-green-600">No guests paused for more than 14 days ✓</p>
+        ) : (
+          <div className="space-y-2 max-h-64 overflow-y-auto">
+            {pausedGuests.map((g: any) => (
+              <Link key={g.id} href={`/dashboard/guests/${g.id}`}
+                className="flex justify-between items-center p-2 bg-amber-50 rounded text-sm hover:bg-amber-100">
+                <span className="font-medium">{g.firstName} {g.lastName}</span>
+                <span className="text-xs text-church-600">Paused: {formatDate(g.dripPausedAt)}</span>
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="text-xs text-church-400 text-right">
+        Generated {data.generatedAt ? new Date(data.generatedAt).toLocaleString() : '—'}
       </div>
     </div>
   );
