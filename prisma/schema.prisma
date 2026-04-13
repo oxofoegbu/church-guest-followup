@@ -285,14 +285,13 @@ model ServiceSchedule {
   worshipLeader          User?     @relation("ScheduleWorshipLeader",   fields: [worshipLeaderId],      references: [id])
 
   isSeminar              Boolean   @default(false)
-  panelSpeakers          Json?     // [{name, userId?, title?
-  orderCustomized Boolean @default(false)
-}]
+  panelSpeakers          Json?     // [{name, userId?, title?}]
   reminder60Sent         Boolean   @default(false)
   reminder30Sent         Boolean   @default(false)
   reminder14Sent         Boolean   @default(false)
   reminder7Sent          Boolean   @default(false)
   orderOfService         Json?     // Run 1 v3 - section/item array
+  orderCustomized        Boolean   @default(false)
   notes                  String?
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
