@@ -1,11 +1,14 @@
 // scripts/run4-backfill.mjs
 // Run 4 backfill: for every existing guest with dripEnabled=true AND no
-// GuestDripStep rows, schedule their future drip steps.
+// ACTIVE GuestDripStep rows, schedule their future drip steps.
 //
 // Idempotent: can be re-run safely. Guests whose firstVisitDate is >14 days
 // ago will get 0 (or fewer) steps because the scheduler skips past-dated
 // entries — that is the intended behavior. We do NOT backfill messages we
 // never sent.
+//
+// v1.1 hotfix: aligns the per-template idempotency guard with the fixed
+// scheduler — SKIPPED/FAILED rows don't block re-scheduling.
 //
 // Pure JS — no TypeScript syntax (Pitfall #35).
 
@@ -32,11 +35,11 @@ async function main() {
     return;
   }
 
-  // Find guests with dripEnabled and no existing drip steps.
-  const guests = await prisma.guest.findMany({
+  // Eligible guests: dripEnabled=true AND zero ACTIVE (PENDING|SENT) drip steps.
+  const eligible = await prisma.guest.findMany({
     where: {
       dripEnabled: true,
-      guestDripSteps: { none: {} },
+      guestDripSteps: { none: { status: { in: ['PENDING', 'SENT'] } } },
     },
     select: {
       id: true,
@@ -47,14 +50,14 @@ async function main() {
     },
   });
 
-  console.log(`  Found ${guests.length} guests with dripEnabled=true and no existing steps\n`);
+  console.log(`  Found ${eligible.length} guests with dripEnabled=true and no active steps\n`);
 
   const now = new Date();
   let totalCreated = 0;
   let guestsTouched = 0;
   let guestsWithZeroFuture = 0;
 
-  for (const g of guests) {
+  for (const g of eligible) {
     const anchor = g.firstVisitDate || g.createdAt;
     if (!anchor) continue;
 
@@ -63,9 +66,12 @@ async function main() {
       const scheduledFor = anchorPlusOffset(new Date(anchor), t.dayOffset);
       if (scheduledFor <= now) continue;
 
-      // Defensive idempotency check in case this script is re-run mid-way.
       const existing = await prisma.guestDripStep.findFirst({
-        where: { guestId: g.id, dripTemplateId: t.id },
+        where: {
+          guestId: g.id,
+          dripTemplateId: t.id,
+          status: { in: ['PENDING', 'SENT'] },
+        },
       });
       if (existing) continue;
 
@@ -90,7 +96,7 @@ async function main() {
   }
 
   console.log(`\n✅ Backfill complete`);
-  console.log(`   ${guests.length} guest(s) processed`);
+  console.log(`   ${eligible.length} guest(s) processed`);
   console.log(`   ${guestsTouched} guest(s) received new steps`);
   console.log(`   ${totalCreated} total step(s) created`);
   console.log(`   ${guestsWithZeroFuture} guest(s) had only past-dated steps — skipped (expected)`);

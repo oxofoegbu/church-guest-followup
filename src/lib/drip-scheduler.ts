@@ -12,6 +12,11 @@ import prisma from './db';
  * Audit logging is handled by the API routes (they own user context).
  * These helpers are pure data operations so they can be reused by the
  * intake hook and the prospect-conversion hook without faking a session.
+ *
+ * v1.1 hotfix: idempotency guard now only blocks on ACTIVE rows
+ * (PENDING or SENT). Historical SKIPPED/FAILED rows are preserved as
+ * audit trail but do not prevent re-scheduling after an enable/disable
+ * cycle. (Option A per the v1 review.)
  */
 
 function anchorPlusOffset(anchor: Date, dayOffset: number): Date {
@@ -46,9 +51,15 @@ export async function scheduleDripStepsForGuest(guestId: string): Promise<{ crea
       continue;
     }
 
-    // Idempotency: don't duplicate an existing (guest, template) row.
+    // Idempotency: only block if there's an ACTIVE row (PENDING or SENT)
+    // for this (guest, template) pair. Historical SKIPPED / FAILED rows
+    // are kept as audit trail but must not block re-scheduling.
     const existing = await (prisma as any).guestDripStep.findFirst({
-      where: { guestId, dripTemplateId: t.id },
+      where: {
+        guestId,
+        dripTemplateId: t.id,
+        status: { in: ['PENDING', 'SENT'] },
+      },
     });
     if (existing) {
       skipped++;
