@@ -1,4 +1,5 @@
 'use client';
+import OrderOfServiceTemplatesSection from '@/components/OrderOfServiceTemplatesSection';
 import PageHelp from '@/components/PageHelp';
 
 import { useState, useEffect } from 'react';
@@ -233,7 +234,8 @@ export default function SettingsPage() {
           </p>
         </div>
 
-        {/* ── Roles & Permissions ── */}
+        {/* ── <OrderOfServiceTemplatesSection />
+      Roles & Permissions ── */}
         <div className="card">
           <h2 className="section-header mb-1">🔐 Roles & Permissions</h2>
           <p className="text-sm text-church-500 mb-4">

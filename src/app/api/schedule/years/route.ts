@@ -74,6 +74,8 @@ export async function POST(request: NextRequest) {
 
     // Auto-generate all Sundays for this year with blank topics
     const sundays = getSundaysForYear(year);
+    const _defaultTpl = await (prisma as any).orderOfServiceTemplate.findFirst({ where: { isDefault: true } });
+    const _defaultItems = _defaultTpl?.items ?? null;
     await prisma.serviceSchedule.createMany({
       data: sundays.map((date) => ({
         date,

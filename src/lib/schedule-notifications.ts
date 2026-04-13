@@ -165,3 +165,39 @@ export async function notifyServiceRoleAssignment(p: RoleAssignmentParams): Prom
 
   await Promise.allSettled(tasks);
 }
+
+
+// ——— Run 2: Order of Service helpers ———
+type OoSItem = { type: 'section' | 'item'; time?: string; title: string; person?: string; durationMin?: number; notes?: string };
+
+export function renderOrderOfServiceHtml(items: OoSItem[] | null | undefined): string {
+  if (!items || items.length === 0) return '';
+  const rows = items.map(it => {
+    if (it.type === 'section') {
+      return `<tr><td colspan="4" style="background:#f3efe7;padding:8px;font-weight:700;">${escapeHtml(it.title)}</td></tr>`;
+    }
+    return `<tr>
+      <td style="padding:6px;border-bottom:1px solid #eee;">${escapeHtml(it.time ?? '')}</td>
+      <td style="padding:6px;border-bottom:1px solid #eee;">${escapeHtml(it.title)}</td>
+      <td style="padding:6px;border-bottom:1px solid #eee;">${escapeHtml(it.person ?? '')}</td>
+      <td style="padding:6px;border-bottom:1px solid #eee;text-align:right;">${it.durationMin ? it.durationMin + ' min' : ''}</td>
+    </tr>`;
+  }).join('');
+  return `<h3>Order of Service</h3><table style="width:100%;border-collapse:collapse;font-size:14px;">${rows}</table>`;
+}
+
+export function renderOrderOfServiceWhatsApp(items: OoSItem[] | null | undefined, maxLen = 1500): string {
+  if (!items || items.length === 0) return '';
+  const lines: string[] = ['*Order of Service*'];
+  for (const it of items) {
+    if (it.type === 'section') lines.push(`\n*${it.title}*`);
+    else lines.push(`• ${it.time ? it.time + ' — ' : ''}${it.title}${it.person ? ' (' + it.person + ')' : ''}`);
+  }
+  let out = lines.join('\n');
+  if (out.length > maxLen) out = out.slice(0, maxLen - 3) + '...';
+  return out;
+}
+
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}

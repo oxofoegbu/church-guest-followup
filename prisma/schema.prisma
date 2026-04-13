@@ -285,7 +285,9 @@ model ServiceSchedule {
   worshipLeader          User?     @relation("ScheduleWorshipLeader",   fields: [worshipLeaderId],      references: [id])
 
   isSeminar              Boolean   @default(false)
-  panelSpeakers          Json?     // [{name, userId?, title?}]
+  panelSpeakers          Json?     // [{name, userId?, title?
+  orderCustomized Boolean @default(false)
+}]
   reminder60Sent         Boolean   @default(false)
   reminder30Sent         Boolean   @default(false)
   reminder14Sent         Boolean   @default(false)
@@ -378,4 +380,16 @@ model MagicLinkToken {
   createdAt DateTime @default(now())
   user      User     @relation("MagicLinks", fields: [userId], references: [id], onDelete: Cascade)
   @@map("magic_link_tokens")
+}
+
+
+model OrderOfServiceTemplate {
+  id        String   @id @default(cuid())
+  name      String
+  items     Json
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("order_of_service_templates")
 }
