@@ -43,6 +43,11 @@ export default function OrderOfServiceTemplatesSection() {
     load();
   }
 
+  async function duplicate(t: Template) {
+    await fetch(`/api/settings/order-templates/${t.id}/duplicate`, { method: 'POST' });
+    load();
+  }
+
   return (
     <div>
       <h2 className="section-header">📜 Order of Service Templates</h2>
@@ -63,6 +68,7 @@ export default function OrderOfServiceTemplatesSection() {
                 <div className="flex gap-2">
                   {!t.isDefault && <button className="btn-secondary text-xs" onClick={() => setDefault(t.id)}>Set Default</button>}
                   <button className="btn-secondary text-xs" onClick={() => setEditing(t)}>Edit</button>
+                  <button className="btn-secondary text-xs" onClick={() => duplicate(t)}>Duplicate</button>
                   <button className="btn-secondary text-xs" onClick={() => setApplying(t)}>Apply to Schedules…</button>
                   <button className="btn-secondary text-xs text-red-600" onClick={() => remove(t)}>Delete</button>
                 </div>
