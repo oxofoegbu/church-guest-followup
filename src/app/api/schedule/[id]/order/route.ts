@@ -68,7 +68,6 @@ export async function GET(
   const schedule = await prisma.serviceSchedule.findUnique({
     where: { id: params.id },
     select: { id: true, date: true, topic: true, orderOfService: true } as any,
-      orderCustomized: true,
   });
   if (!schedule) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
@@ -113,8 +112,7 @@ export async function PUT(
 
   const updated = await (prisma.serviceSchedule.update as any)({
     where: { id: params.id },
-    data: { orderOfService: order 
-      },
+    data: { orderOfService: order, orderCustomized: true } as any,
   });
 
   await logAudit({
