@@ -128,7 +128,7 @@ function TemplateEditor({ template, onClose }: { template: Template; onClose: ()
                 {it.type === 'item' && (
                   <>
                     <div className="flex gap-2 items-center pl-16">
-                      <input className="input-field w-24" placeholder="Time (09:00)" value={it.time ?? ''} onChange={e => update(i, { time: e.target.value })} />
+                      <input type="time" className="input-field w-32" value={it.time ?? ''} onChange={e => update(i, { time: e.target.value })} />
                       <input className="input-field flex-1" placeholder="Person (optional)" value={it.person ?? ''} onChange={e => update(i, { person: e.target.value })} />
                       <input className="input-field w-24" placeholder="Min" type="number" value={it.durationMin ?? ''} onChange={e => update(i, { durationMin: e.target.value ? Number(e.target.value) : undefined })} />
                     </div>
