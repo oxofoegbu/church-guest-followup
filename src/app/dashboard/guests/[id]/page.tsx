@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { STATUS_LABELS, STATUS_COLORS, ACTIVITY_LABELS, ACTIVITY_ICONS, PREFERRED_CONTACT_LABELS, BUILTIN_TARGETS, PROSPECT_STATUSES, SPIRITUAL_STATUS_LABELS, SOURCE_LABELS, formatDate, formatDateTime } from '@/lib/utils';
+import GuestDripPanel from '@/components/GuestDripPanel';
 
 export default function GuestDetailPage() {
   const params = useParams();
@@ -18,6 +19,8 @@ export default function GuestDetailPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showConvertModal, setShowConvertModal] = useState(false);
   const [showRequestDeletionModal, setShowRequestDeletionModal] = useState(false);
+  const [rescheduleStep, setRescheduleStep] = useState<{ stepId: string; scheduledFor: string } | null>(null);
+  const [dripRefreshToken, setDripRefreshToken] = useState(0);
 
   const fetchGuest = async () => {
     const res = await fetch(`/api/guests/${params.id}`);
@@ -266,6 +269,14 @@ export default function GuestDetailPage() {
               </div>
             )}
           </div>
+
+          {/* Drip Campaign (Run 4) */}
+          <GuestDripPanel
+            guestId={guest.id}
+            canEdit={canAssign}
+            refreshToken={dripRefreshToken}
+            onRescheduleOpen={(stepId, scheduledFor) => setRescheduleStep({ stepId, scheduledFor })}
+          />
         </div>
 
         {/* Right Column - Status, Assignment, Returns */}
@@ -357,6 +368,7 @@ export default function GuestDetailPage() {
       {showDeleteModal && <DeleteModal guestId={guest.id} guestName={`${guest.firstName} ${guest.lastName}`} onClose={() => setShowDeleteModal(false)} onDeleted={() => router.push('/dashboard/guests')} />}
       {showConvertModal && <ConvertModal guestId={guest.id} guestName={`${guest.firstName} ${guest.lastName}`} onClose={() => { setShowConvertModal(false); fetchGuest(); }} />}
       {showRequestDeletionModal && <RequestDeletionModal guestId={guest.id} guestName={`${guest.firstName} ${guest.lastName}`} onClose={() => { setShowRequestDeletionModal(false); fetchGuest(); }} />}
+      {rescheduleStep && <RescheduleStepModal guestId={guest.id} stepId={rescheduleStep.stepId} currentScheduledFor={rescheduleStep.scheduledFor} onClose={() => { setRescheduleStep(null); setDripRefreshToken(x => x + 1); }} />}
     </div>
   );
 }
@@ -557,6 +569,56 @@ function ConvertModal({ guestId, guestName, onClose }: { guestId: string; guestN
             <button onClick={onClose} className="btn-secondary">Cancel</button>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function RescheduleStepModal({ guestId, stepId, currentScheduledFor, onClose }: { guestId: string; stepId: string; currentScheduledFor: string; onClose: () => void }) {
+  // Format initial value for datetime-local input (YYYY-MM-DDTHH:mm)
+  const initial = (() => {
+    const d = new Date(currentScheduledFor);
+    if (isNaN(d.getTime())) return '';
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  })();
+  const [value, setValue] = useState(initial);
+  const [saving, setSaving] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!value) return;
+    setSaving(true);
+    const res = await fetch(`/api/guests/${guestId}/drip/steps/${stepId}/reschedule`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ scheduledFor: new Date(value).toISOString() }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      alert(err.error || 'Reschedule failed');
+      setSaving(false);
+      return;
+    }
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="card max-w-md w-full" onClick={e => e.stopPropagation()}>
+        <h2 className="section-header mb-4">Reschedule drip step</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="label">New date & time</label>
+            <input type="datetime-local" value={value} onChange={e => setValue(e.target.value)} required className="input-field" />
+          </div>
+          <div className="flex gap-3 pt-2">
+            <button type="submit" disabled={saving || !value} className="btn-primary flex-1">
+              {saving ? 'Saving...' : 'Reschedule'}
+            </button>
+            <button type="button" onClick={onClose} className="btn-secondary">Cancel</button>
+          </div>
+        </form>
       </div>
     </div>
   );

@@ -59,6 +59,14 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    // Run 4: schedule drip steps for the new guest (best-effort)
+    try {
+      const { scheduleDripStepsForGuest } = await import('@/lib/drip-scheduler');
+      await scheduleDripStepsForGuest(guest.id);
+    } catch (dripErr) {
+      console.error('Drip scheduling failed for new guest', guest.id, dripErr);
+    }
+
     const guestName = `${guest.firstName} ${guest.lastName}`;
 
     // Audit log

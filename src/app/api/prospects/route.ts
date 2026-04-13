@@ -86,6 +86,14 @@ async function convertToGuest(request: NextRequest, session: any, body: any) {
     },
   });
 
+    // Run 4: schedule drip steps now that firstVisitDate is set (best-effort)
+    try {
+      const { rescheduleDripStepsForGuest } = await import('@/lib/drip-scheduler');
+      await rescheduleDripStepsForGuest(guestId);
+    } catch (dripErr) {
+      console.error('Drip scheduling failed on convert', guestId, dripErr);
+    }
+
   const name = `${updated.firstName} ${updated.lastName}`;
 
   logAudit({
