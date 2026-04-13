@@ -61,6 +61,7 @@ export interface RoleAssignmentParams {
   topic:     string;
   monthTheme: string | null;
   scheduleId: string;
+  orderOfService?: any[] | null;
 }
 
 function buildRoleEmailHtml(p: RoleAssignmentParams): string {
@@ -115,6 +116,8 @@ function buildRoleEmailHtml(p: RoleAssignmentParams): string {
           View Full Schedule →
         </a>` : ''}
 
+        ${p.orderOfService && p.orderOfService.length ? renderOrderOfServiceHtml(p.orderOfService) : ''}
+
         <p style="margin-top:24px;color:#829ab1;font-size:13px;">
           Please prepare accordingly. God bless your service!<br/>
           — ${CHURCH_NAME} Team
@@ -142,6 +145,7 @@ function buildRoleWhatsAppMessage(p: RoleAssignmentParams): string {
   if (p.monthTheme) msg += `\n🗓️ ${p.monthTheme.replace(/^[A-Z]+ THEME:\s*/i,'')}`;
   msg += `\n\n✅ This has been added to your calendar.\n`;
   if (appUrl) msg += `👉 ${appUrl}/dashboard/schedule`;
+  if (p.orderOfService && p.orderOfService.length) msg += `\n\n` + renderOrderOfServiceWhatsApp(p.orderOfService as any);
   return msg;
 }
 

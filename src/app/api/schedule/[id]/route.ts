@@ -120,6 +120,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
             date:       before.date,
             topic:      before.topic,
             monthTheme: before.monthTheme,
+            orderOfService: (before as any).orderOfService ?? null,
             scheduleId: params.id,
           }).catch(e => console.error('[schedule notify]', e));
         }
@@ -168,6 +169,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
             date:       before.date,
             topic:      before.topic,
             monthTheme: before.monthTheme,
+            orderOfService: (before as any).orderOfService ?? null,
             scheduleId: params.id,
           }).catch(e => console.error('[seminar notify]', e));
         }
