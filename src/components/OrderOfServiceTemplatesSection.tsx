@@ -126,11 +126,16 @@ function TemplateEditor({ template, onClose }: { template: Template; onClose: ()
                   <button className="btn-secondary text-xs px-2 text-red-600" onClick={() => remove(i)}>✕</button>
                 </div>
                 {it.type === 'item' && (
-                  <div className="flex gap-2 items-center pl-16">
-                    <input className="input-field w-24" placeholder="Time (09:00)" value={it.time ?? ''} onChange={e => update(i, { time: e.target.value })} />
-                    <input className="input-field flex-1" placeholder="Person" value={it.person ?? ''} onChange={e => update(i, { person: e.target.value })} />
-                    <input className="input-field w-24" placeholder="Min" type="number" value={it.durationMin ?? ''} onChange={e => update(i, { durationMin: e.target.value ? Number(e.target.value) : undefined })} />
-                  </div>
+                  <>
+                    <div className="flex gap-2 items-center pl-16">
+                      <input className="input-field w-24" placeholder="Time (09:00)" value={it.time ?? ''} onChange={e => update(i, { time: e.target.value })} />
+                      <input className="input-field flex-1" placeholder="Person (optional)" value={it.person ?? ''} onChange={e => update(i, { person: e.target.value })} />
+                      <input className="input-field w-24" placeholder="Min" type="number" value={it.durationMin ?? ''} onChange={e => update(i, { durationMin: e.target.value ? Number(e.target.value) : undefined })} />
+                    </div>
+                    <div className="pl-16">
+                      <textarea className="textarea-field w-full" rows={2} placeholder="Notes (optional)" value={it.notes ?? ''} onChange={e => update(i, { notes: e.target.value })} />
+                    </div>
+                  </>
                 )}
               </div>
             </div>
