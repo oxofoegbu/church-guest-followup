@@ -3,8 +3,10 @@ import prisma from '@/lib/db';
 import { requireAuth } from '@/lib/auth';
 import { auditSettingsChanged } from '@/lib/audit';
 
-// Keys any authenticated user can read (non-sensitive)
-const PUBLIC_KEYS = ['target_config', 'custom_roles', 'schedule_coordinators'];
+// Keys any authenticated user can read (non-sensitive).
+// Run 6.1: added 'church_name' — it's not sensitive (appears in every drip
+// email header) and the drip scheduler / executor read it at runtime.
+const PUBLIC_KEYS = ['target_config', 'custom_roles', 'schedule_coordinators', 'church_name'];
 
 // Keys only admins can read
 const ADMIN_KEYS  = ['notify_emails', 'notify_whatsapp', 'notify_on_new_guest', 'notify_on_assignment'];

@@ -21,6 +21,7 @@ interface CoordAssignment { userId: string; userName: string; role: CoordRoleKey
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState({
+    church_name: 'Grace Life Center',
     notify_emails: '',
     notify_whatsapp: '',
     notify_on_new_guest: 'true',
@@ -152,6 +153,7 @@ export default function SettingsPage() {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          church_name:            (settings.church_name || '').trim() || 'Grace Life Center',
           notify_emails:          settings.notify_emails,
           notify_whatsapp:        settings.notify_whatsapp,
           notify_on_new_guest:    settings.notify_on_new_guest,
@@ -197,6 +199,28 @@ export default function SettingsPage() {
       )}
 
       <div className="space-y-6">
+
+        {/* ── General (Run 6.1) ── */}
+        <div className="card">
+          <h2 className="section-header mb-1">🏛️ General</h2>
+          <p className="text-sm text-church-500 mb-4">
+            Core identity settings. The church name appears in drip email headers and is available in templates as <code className="text-xs bg-church-100 px-1 py-0.5 rounded">{'{{churchName}}'}</code>.
+          </p>
+          <div>
+            <label className="label">Church Name</label>
+            <input
+              type="text"
+              value={settings.church_name}
+              onChange={e => setSettings(s => ({ ...s, church_name: e.target.value }))}
+              placeholder="e.g. Grace Life Center"
+              className="input-field"
+              maxLength={120}
+            />
+            <p className="text-xs text-church-400 mt-1">
+              Blank values revert to <span className="font-medium">Grace Life Center</span> on save.
+            </p>
+          </div>
+        </div>
 
         {/* ── Schedule Coordinators ── */}
         <div className="card">
