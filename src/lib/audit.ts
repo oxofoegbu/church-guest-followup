@@ -2,7 +2,7 @@ import prisma from './db';
 
 interface AuditParams {
   action: string;
-  category: 'GUEST' | 'USER' | 'ASSIGNMENT' | 'SETTINGS' | 'AUTH' | 'NOTIFICATION';
+  category: 'GUEST' | 'USER' | 'ASSIGNMENT' | 'SETTINGS' | 'AUTH' | 'NOTIFICATION' | 'SCHEDULE';
   description: string;
   userId?: string;
   userName?: string;
