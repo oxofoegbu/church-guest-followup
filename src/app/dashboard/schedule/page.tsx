@@ -38,10 +38,16 @@ function getDisplayName(name: string | null, user: UserRef): string {
   return 'TBD';
 }
 
-function AssignModal({ service, onClose, onSaved }: { service: ServiceSchedule; onClose: () => void; onSaved: () => void }) {
+function AssignModal({ service, canEditTopic, onClose, onSaved }: { service: ServiceSchedule; canEditTopic: boolean; onClose: () => void; onSaved: () => void }) {
   const [users, setUsers] = useState<any[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  // Topic is stored as "Title (Scripture Ref)" — split it for editing
+  const initialScriptureMatch = service.topic.match(/\(([^)]+)\)\s*$/);
+  const [topicTitle, setTopicTitle] = useState(
+    initialScriptureMatch ? service.topic.replace(/\s*\([^)]+\)\s*$/, '') : service.topic
+  );
+  const [topicScripture, setTopicScripture] = useState(initialScriptureMatch?.[1] || '');
   const [form, setForm] = useState({
     speakerId: service.speakerId,             speakerName: service.speakerName || '',
     serviceCoordinatorId: service.serviceCoordinatorId, serviceCoordinatorName: service.serviceCoordinatorName || '',
@@ -64,9 +70,14 @@ function AssignModal({ service, onClose, onSaved }: { service: ServiceSchedule; 
   const handleSave = async () => {
     setSaving(true); setError('');
     try {
+      const payload: any = { ...form, panelSpeakers: form.isSeminar ? form.panelSpeakers.filter((s: any) => s.name.trim()) : null };
+      if (canEditTopic) {
+        const title = topicTitle.trim() || 'TBD — Topic to be assigned';
+        payload.topic = topicScripture.trim() ? `${title} (${topicScripture.trim()})` : title;
+      }
       const res = await fetch(`/api/schedule/${service.id}`, {
         method: 'PATCH', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, panelSpeakers: form.isSeminar ? form.panelSpeakers.filter((s: any) => s.name.trim()) : null }),
+        body: JSON.stringify(payload),
       });
       if (!res.ok) throw new Error(await res.text());
       onSaved();
@@ -94,6 +105,26 @@ function AssignModal({ service, onClose, onSaved }: { service: ServiceSchedule; 
           <button onClick={onClose} className="p-2 text-church-400 hover:text-church-600 rounded-lg">✕</button>
         </div>
         <div className="px-6 py-4 space-y-4">
+          {/* Topic + Scripture — admin only */}
+          {canEditTopic && (
+            <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg space-y-2">
+              <div>
+                <label className="label">📖 Topic / Sermon Title</label>
+                <input type="text" value={topicTitle}
+                  onChange={e => setTopicTitle(e.target.value)}
+                  placeholder="e.g. Here I Am—Send Me: The Heart That Sees Harvest"
+                  className="input-field text-sm" />
+              </div>
+              <div>
+                <label className="label">📜 Scripture Reference (optional)</label>
+                <input type="text" value={topicScripture}
+                  onChange={e => setTopicScripture(e.target.value)}
+                  placeholder="e.g. Isaiah 6:8"
+                  className="input-field text-sm" />
+              </div>
+            </div>
+          )}
+
           {/* Seminar toggle — shown above speaker slot */}
           <div className="flex items-center gap-3 p-3 bg-purple-50 border border-purple-200 rounded-lg">
             <input type="checkbox" id="isSeminar" checked={form.isSeminar}
@@ -197,6 +228,105 @@ function AssignModal({ service, onClose, onSaved }: { service: ServiceSchedule; 
   );
 }
 
+function SwapModal({ service, allServices, onClose, onSaved }: { service: ServiceSchedule; allServices: ServiceSchedule[]; onClose: () => void; onSaved: () => void }) {
+  const [targetId, setTargetId] = useState('');
+  const [mode, setMode] = useState<'swap' | 'move'>('swap');
+  const [notify, setNotify] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+
+  const fmtDate = (iso: string) => new Date(iso).toLocaleDateString('en-US', {
+    weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC',
+  });
+  const shortTopic = (t: string) => t.length > 45 ? t.slice(0, 45) + '…' : t;
+
+  const targets = allServices.filter(s => s.id !== service.id);
+  const target = targets.find(s => s.id === targetId);
+
+  const handleSave = async () => {
+    if (!targetId) { setError('Please pick a target Sunday.'); return; }
+    setSaving(true); setError('');
+    try {
+      const res = await fetch('/api/schedule/swap', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sourceId: service.id, targetId, mode, notify }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed');
+      onSaved();
+    } catch (e: any) { setError(e.message || 'Failed to save'); }
+    finally { setSaving(false); }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+      <div className="absolute inset-0 z-0 bg-black/40" onClick={onClose} />
+      <div className="relative z-10 w-full sm:max-w-lg bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto">
+        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-start justify-between rounded-t-2xl">
+          <div>
+            <h2 className="text-lg font-bold text-church-900">⇄ Move / Swap Sunday</h2>
+            <p className="text-sm text-church-500">{fmtDate(service.date)}</p>
+            <p className="text-xs text-church-400 mt-0.5 italic line-clamp-1">{service.topic}</p>
+          </div>
+          <button onClick={onClose} className="p-2 text-church-400 hover:text-church-600 rounded-lg">✕</button>
+        </div>
+        <div className="px-6 py-4 space-y-4">
+          <div>
+            <label className="label">🎯 Target Sunday</label>
+            <select value={targetId} onChange={e => setTargetId(e.target.value)} className="select-field">
+              <option value="">— Select a Sunday —</option>
+              {targets.map(s => (
+                <option key={s.id} value={s.id}>{fmtDate(s.date)} — {shortTopic(s.topic)}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="label">Mode</label>
+            <div className="space-y-2">
+              <label className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer ${mode === 'swap' ? 'border-brand-400 bg-brand-50' : 'border-gray-200 bg-white'}`}>
+                <input type="radio" name="swapMode" checked={mode === 'swap'} onChange={() => setMode('swap')} className="mt-0.5 accent-brand-600" />
+                <div>
+                  <p className="text-sm font-semibold text-church-800">⇄ Swap both Sundays</p>
+                  <p className="text-xs text-church-500">Everything on each Sunday trades places — topic, roles, seminar panel, notes, and Order of Service.</p>
+                </div>
+              </label>
+              <label className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer ${mode === 'move' ? 'border-brand-400 bg-brand-50' : 'border-gray-200 bg-white'}`}>
+                <input type="radio" name="swapMode" checked={mode === 'move'} onChange={() => setMode('move')} className="mt-0.5 accent-brand-600" />
+                <div>
+                  <p className="text-sm font-semibold text-church-800">→ Move to target only</p>
+                  <p className="text-xs text-church-500">This Sunday's content moves to the target. This Sunday becomes blank (TBD). Anything on the target is overwritten.</p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          {target && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-700 space-y-1">
+              <p><strong>{fmtDate(service.date)}</strong> {mode === 'swap' ? `will get: "${shortTopic(target.topic)}"` : 'will become blank (TBD)'}</p>
+              <p><strong>{fmtDate(target.date)}</strong> will get: "{shortTopic(service.topic)}"</p>
+              <p className="text-blue-500">Dates and month themes stay in place — only the content moves. Calendar entries update automatically.</p>
+            </div>
+          )}
+
+          <label className="flex items-center gap-3 p-3 bg-purple-50 border border-purple-200 rounded-lg cursor-pointer">
+            <input type="checkbox" checked={notify} onChange={e => setNotify(e.target.checked)} className="w-4 h-4 accent-purple-600" />
+            <span className="text-sm text-purple-800">📣 Notify affected people (email + WhatsApp with their new date)</span>
+          </label>
+
+          {error && <div className="px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{error}</div>}
+        </div>
+        <div className="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 flex gap-3">
+          <button onClick={onClose} className="flex-1 btn-secondary">Cancel</button>
+          <button onClick={handleSave} disabled={saving || !targetId} className="flex-1 btn-primary">
+            {saving ? 'Working…' : mode === 'swap' ? '⇄ Swap Sundays' : '→ Move Sunday'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function NewYearModal({ onClose, onCreated }: { onClose: () => void; onCreated: (year: number) => void }) {
   const nextYear = new Date().getFullYear() + 1;
   const [form, setForm] = useState({ year: nextYear, label: `${nextYear} Sunday Schedule`, theme: '' });
@@ -269,6 +399,7 @@ export default function SchedulePage() {
   const [user, setUser] = useState<any>(null);
   const [coordinatorUserIds, setCoordinatorUserIds] = useState<string[]>([]);
   const [editing, setEditing] = useState<ServiceSchedule | null>(null);
+  const [swapping, setSwapping] = useState<ServiceSchedule | null>(null);
   const [orderEditor, setOrderEditor] = useState<{id: string; label: string} | null>(null);
   const [showNewYear, setShowNewYear] = useState(false);
   const [showArchived, setShowArchived] = useState(false);
@@ -406,7 +537,8 @@ export default function SchedulePage() {
         <PageHelp docSection="sunday-schedule" tips={[
           { icon: "✏️", title: "Assigning roles", body: "Click the pencil icon on any Sunday card. Select a user from the dropdown to link them — they get an immediate notification and a calendar entry. Or type a name manually for guests or TBD." },
           { icon: "🔗", title: "Linking sends notifications", body: "Only roles linked to a user account trigger email + WhatsApp notifications and 7-day advance reminders. Plain text names do not." },
-          { icon: "🌐", title: "Share publicly", body: "Use Copy Share Link to send the full schedule to anyone — no login required. Great for the church WhatsApp group." }
+          { icon: "🌐", title: "Share publicly", body: "Use Copy Share Link to send the full schedule to anyone — no login required. Great for the church WhatsApp group." },
+          { icon: "⇄", title: "Move or swap Sundays (admin)", body: "Click the ⇄ icon on any Sunday to swap its full content (topic, roles, panel, Order of Service) with another Sunday, or move it one-way. Admins can also edit the topic and scripture inside the ✏️ modal." }
         ]} />
           <p className="text-church-500 text-sm mt-1">Grace Life Center — {selectedYearData?.label || selectedYear}</p>
         </div>
@@ -555,15 +687,26 @@ export default function SchedulePage() {
                                   </div>
                                   {isToday && <span className="text-[10px] font-bold bg-brand-500 text-white px-2 py-0.5 rounded-full uppercase">Today</span>}
                                 </div>
-                                {canEdit && (
-                                  <button
-                                    onClick={(e) => { e.stopPropagation(); setEditing(svc); }}
-                                    className="p-1.5 text-church-300 hover:text-brand-500 hover:bg-brand-50 rounded-lg transition-colors"
-                                    title="Assign roles"
-                                  >
-                                    ✏️
-                                  </button>
-                                )}
+                                <div className="flex items-center gap-0.5">
+                                  {isAdmin && (
+                                    <button
+                                      onClick={(e) => { e.stopPropagation(); setSwapping(svc); }}
+                                      className="p-1.5 text-church-300 hover:text-purple-500 hover:bg-purple-50 rounded-lg transition-colors"
+                                      title="Move / swap this Sunday"
+                                    >
+                                      ⇄
+                                    </button>
+                                  )}
+                                  {canEdit && (
+                                    <button
+                                      onClick={(e) => { e.stopPropagation(); setEditing(svc); }}
+                                      className="p-1.5 text-church-300 hover:text-brand-500 hover:bg-brand-50 rounded-lg transition-colors"
+                                      title="Assign roles"
+                                    >
+                                      ✏️
+                                    </button>
+                                  )}
+                                </div>
                               </div>
                               <h3 className={`text-sm font-semibold leading-snug line-clamp-2 mb-1 ${title.startsWith('TBD') ? 'text-church-400 italic' : 'text-gray-900'}`}>
                                 {title}
@@ -616,7 +759,10 @@ export default function SchedulePage() {
         />
       )}
       {editing && (
-        <AssignModal service={editing} onClose={() => setEditing(null)} onSaved={() => { setEditing(null); doFetch(); }} />
+        <AssignModal service={editing} canEditTopic={!!isAdmin} onClose={() => setEditing(null)} onSaved={() => { setEditing(null); doFetch(); }} />
+      )}
+      {swapping && (
+        <SwapModal service={swapping} allServices={schedules} onClose={() => setSwapping(null)} onSaved={() => { setSwapping(null); doFetch(); }} />
       )}
       {showNewYear && (
         <NewYearModal

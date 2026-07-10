@@ -79,6 +79,23 @@ export async function PATCH(request: NextRequest, { params }: Params) {
       weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC',
     });
 
+    // If the topic changed, refresh notes on existing calendar entries so
+    // assignees don't see a stale topic (role-change blocks below recreate
+    // their own entries with the new topic already).
+    if ('topic' in data && updated.topic !== before.topic) {
+      const items = await prisma.actionItem.findMany({
+        where: { scheduleId: params.id },
+        select: { id: true, notes: true },
+      });
+      for (const item of items) {
+        if (!item.notes) continue;
+        const newNotes = item.notes.split(before.topic).join(updated.topic);
+        if (newNotes !== item.notes) {
+          await prisma.actionItem.update({ where: { id: item.id }, data: { notes: newNotes } });
+        }
+      }
+    }
+
     for (const { idKey, emoji, label } of ROLE_DEFINITIONS) {
       const prevUserId = (before as any)[idKey] as string | null;
       const newUserId  = (updated as any)[idKey] as string | null;
@@ -103,7 +120,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
               userId: newUserId,
               actionType: 'APPOINTMENT',
               title: `${emoji} ${label}`,
-              notes: `📅 ${dateStr}\n📖 Topic: ${before.topic}`,
+              notes: `📅 ${dateStr}\n📖 Topic: ${updated.topic}`,
               dueDate: before.date,
               dueTime: '10:00',
               reminderMinutes: 1440,
@@ -118,7 +135,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
             userPhone:  user.phone,
             role:       label,
             date:       before.date,
-            topic:      before.topic,
+            topic:      updated.topic,
             monthTheme: before.monthTheme,
             orderOfService: (before as any).orderOfService ?? null,
             scheduleId: params.id,
@@ -152,7 +169,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
               userId: user.id,
               actionType: 'APPOINTMENT',
               title: `🎓 Seminar Speaker${panelist.title ? ' — ' + panelist.title : ''}`,
-              notes: `📅 ${dateStr} | 📖 Topic: ${before.topic}` + (panelist.title ? ` | 🎤 Your topic: ${panelist.title}` : ''),
+              notes: `📅 ${dateStr} | 📖 Topic: ${updated.topic}` + (panelist.title ? ` | 🎤 Your topic: ${panelist.title}` : ''),
               dueDate: before.date,
               dueTime: '10:00',
               reminderMinutes: 1440,
@@ -167,7 +184,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
             userPhone:  user.phone,
             role:       `🎓 Seminar Speaker${panelist.title ? ' — ' + panelist.title : ''}`,
             date:       before.date,
-            topic:      before.topic,
+            topic:      updated.topic,
             monthTheme: before.monthTheme,
             orderOfService: (before as any).orderOfService ?? null,
             scheduleId: params.id,
