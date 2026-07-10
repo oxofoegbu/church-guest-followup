@@ -24,6 +24,8 @@ export default function SettingsPage() {
     church_name: 'Grace Life Center',
     notify_emails: '',
     notify_whatsapp: '',
+    summary_emails: '',
+    summary_whatsapp: '',
     notify_on_new_guest: 'true',
     notify_on_assignment: 'true',
     custom_targets: '[]',
@@ -156,6 +158,8 @@ export default function SettingsPage() {
           church_name:            (settings.church_name || '').trim() || 'Grace Life Center',
           notify_emails:          settings.notify_emails,
           notify_whatsapp:        settings.notify_whatsapp,
+          summary_emails:         settings.summary_emails,
+          summary_whatsapp:       settings.summary_whatsapp,
           notify_on_new_guest:    settings.notify_on_new_guest,
           notify_on_assignment:   settings.notify_on_assignment,
           custom_roles:           settings.custom_roles,
@@ -409,6 +413,32 @@ export default function SettingsPage() {
               <div className="w-11 h-6 bg-church-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-500"></div>
             </label>
             <span className="text-sm font-medium text-church-700">Enable assignment notifications</span>
+          </div>
+        </div>
+
+        {/* ── Weekly Lineup Summary (Run 8) ── */}
+        <div className="card">
+          <h2 className="section-header mb-1">🗒️ Weekly Lineup Summary</h2>
+          <p className="text-sm text-church-500 mb-4">
+            When 7-day reminders go out for a Sunday, these leaders receive a summary of who is
+            handling that service and confirmation that they have been reminded — with the
+            Order of Service PDF link.
+          </p>
+          <div className="space-y-4">
+            <div>
+              <label className="label">📧 Leader Emails</label>
+              <input type="text" value={settings.summary_emails}
+                onChange={e => setSettings(s => ({ ...s, summary_emails: e.target.value }))}
+                placeholder="pastor1@church.com, pastor2@church.com" className="input-field" />
+              <p className="text-xs text-church-400 mt-1">Separate multiple emails with commas</p>
+            </div>
+            <div>
+              <label className="label">📱 Leader WhatsApp Numbers</label>
+              <input type="text" value={settings.summary_whatsapp}
+                onChange={e => setSettings(s => ({ ...s, summary_whatsapp: e.target.value }))}
+                placeholder="+12025551234, +12025555678" className="input-field" />
+              <p className="text-xs text-church-400 mt-1">Include country code. Separate with commas.</p>
+            </div>
           </div>
         </div>
 
