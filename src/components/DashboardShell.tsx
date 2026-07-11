@@ -125,6 +125,7 @@ export default function DashboardShell({ user, children }: { user: User; childre
             </div>
           </div>
           <div className="flex gap-3">
+            <Link href="/dashboard/profile" className="text-xs text-church-400 hover:text-brand-300 transition-colors px-1">My Profile</Link>
             <Link href="/change-password" className="text-xs text-church-400 hover:text-brand-300 transition-colors px-1">Change Password</Link>
             <button onClick={handleLogout} className="text-xs text-church-400 hover:text-red-400 transition-colors px-1">Sign Out →</button>
           </div>

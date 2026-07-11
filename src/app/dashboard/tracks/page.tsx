@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import PageHelp from '@/components/PageHelp';
 import { getPermissionLevel } from '@/lib/roles';
@@ -36,6 +36,38 @@ function TrackModal({ track, onClose, onSaved }: {
   const [isActive, setIsActive] = useState<boolean>(track?.isActive ?? true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [uploadingPdf, setUploadingPdf] = useState(false);
+  const pdfFileRef = useRef<HTMLInputElement>(null);
+
+  const handlePdfFile = async (file: File | null) => {
+    if (!file || !isEdit) return;
+    if (file.type !== 'application/pdf') { setError('Please choose a PDF file'); return; }
+    if (file.size > 50 * 1024 * 1024) { setError('PDF is too large (max 50 MB)'); return; }
+    setUploadingPdf(true); setError('');
+    try {
+      // 1. Get a signed URL from Harvest (admin-gated)
+      const signRes = await fetch(`/api/tracks/${track!.id}/workbook-upload-url`, { method: 'POST' });
+      const sign = await signRes.json();
+      if (!signRes.ok) throw new Error(sign.error || 'Could not prepare upload');
+      // 2. Upload the PDF DIRECTLY to storage (bypasses server size limits)
+      const putRes = await fetch(sign.uploadUrl, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/pdf', 'x-upsert': 'true' },
+        body: file,
+      });
+      if (!putRes.ok) {
+        const t = await putRes.text().catch(() => '');
+        throw new Error(`Upload failed (${putRes.status})${t ? `: ${t.slice(0, 120)}` : ''}`);
+      }
+      // 3. Fill the URL field — Save Changes persists it on the track
+      setWorkbookUrl(sign.publicUrl);
+    } catch (err: any) {
+      setError(err.message || 'Workbook upload failed');
+    } finally {
+      setUploadingPdf(false);
+      if (pdfFileRef.current) pdfFileRef.current.value = '';
+    }
+  };
 
   const handleSave = async () => {
     if (!name.trim()) { setError('Track name is required'); return; }
@@ -86,6 +118,19 @@ function TrackModal({ track, onClose, onSaved }: {
             <label className="label">Workbook PDF URL (optional)</label>
             <input type="text" value={workbookUrl} onChange={e => setWorkbookUrl(e.target.value)}
               className="input-field" placeholder="https://…" />
+            {isEdit ? (
+              <div className="mt-2">
+                <button type="button" onClick={() => pdfFileRef.current?.click()} disabled={uploadingPdf}
+                  className="btn-secondary btn-sm">
+                  {uploadingPdf ? 'Uploading PDF…' : '📕 Upload Workbook PDF'}
+                </button>
+                <input ref={pdfFileRef} type="file" accept="application/pdf" className="hidden"
+                  onChange={e => handlePdfFile(e.target.files?.[0] || null)} />
+                <span className="text-xs text-church-400 ml-2">Fills the URL above — click Save Changes after.</span>
+              </div>
+            ) : (
+              <p className="text-xs text-church-400 mt-1">Create the track first, then edit it to upload a PDF.</p>
+            )}
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>

@@ -1,8 +1,9 @@
 'use client';
 import PageHelp from '@/components/PageHelp';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import type { RoleConfig } from '@/lib/roles';
+import { resizeImageToJpeg } from '@/lib/client-image';
 
 export default function UsersPage() {
   const [users, setUsers] = useState<any[]>([]);
@@ -224,6 +225,27 @@ function UserModal({ user, roles, onClose }: { user: any; roles: RoleConfig[]; o
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const photoFileRef = useRef<HTMLInputElement>(null);
+
+  const handlePhotoFile = async (file: File | null) => {
+    if (!file || !isEdit) return;
+    setUploadingPhoto(true); setError('');
+    try {
+      const blob = await resizeImageToJpeg(file, 512, 0.85);
+      const fd = new FormData();
+      fd.append('file', blob, 'photo.jpg');
+      const res = await fetch(`/api/users/${user.id}/photo`, { method: 'POST', body: fd });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error || 'Upload failed');
+      setForm(prev => ({ ...prev, photoUrl: d.photoUrl }));
+    } catch (err: any) {
+      setError(err.message || 'Photo upload failed');
+    } finally {
+      setUploadingPhoto(false);
+      if (photoFileRef.current) photoFileRef.current.value = '';
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -288,6 +310,17 @@ function UserModal({ user, roles, onClose }: { user: any; roles: RoleConfig[]; o
               <input value={form.photoUrl} onChange={e => setForm({ ...form, photoUrl: e.target.value })}
                 className="input-field" placeholder="https://…/photo.jpg" />
             </div>
+            {isEdit && (
+              <div className="mt-2">
+                <button type="button" onClick={() => photoFileRef.current?.click()} disabled={uploadingPhoto}
+                  className="btn-secondary btn-sm">
+                  {uploadingPhoto ? 'Uploading…' : '📷 Upload Photo'}
+                </button>
+                <input ref={photoFileRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden"
+                  onChange={e => handlePhotoFile(e.target.files?.[0] || null)} />
+                <span className="text-xs text-church-400 ml-2">Uploads immediately and fills the URL for you.</span>
+              </div>
+            )}
           </div>
           <div>
             <label className="label">Role</label>
