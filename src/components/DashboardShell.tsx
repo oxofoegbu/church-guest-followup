@@ -17,6 +17,7 @@ const NAV_BY_PERMISSION = {
     { href: '/dashboard/calendar',  label: 'My Calendar',      icon: '📅' },
     { href: '/dashboard/schedule',  label: 'Sunday Schedule',  icon: '⛪' },
     { href: '/dashboard/clusters',  label: 'Clusters',         icon: '👥' },
+    { href: '/dashboard/tracks',    label: 'Tracks',           icon: '🌱' },
     { href: '/dashboard/users',     label: 'Users',            icon: '⚙️' },
     { href: '/dashboard/reports',   label: 'Reports',          icon: '📈' },
     { href: '/dashboard/audit',     label: 'Audit Trail',      icon: '📜' },
@@ -31,6 +32,7 @@ const NAV_BY_PERMISSION = {
     { href: '/dashboard/calendar',  label: 'My Calendar',      icon: '📅' },
     { href: '/dashboard/schedule',  label: 'Sunday Schedule',  icon: '⛪' },
     { href: '/dashboard/clusters',  label: 'Clusters',         icon: '👥' },
+    { href: '/dashboard/tracks',    label: 'Tracks',           icon: '🌱' },
     { href: '/dashboard/reports',   label: 'Reports',          icon: '📈' },
   ],
   VOLUNTEER_ACCESS: [

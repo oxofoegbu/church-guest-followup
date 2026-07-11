@@ -93,6 +93,11 @@ model User {
   clusterMemberships   ClusterMember[]      @relation("ClusterMemberships")
   clustersCreated      Cluster[]            @relation("ClusterCreatedBy")
 
+  // Run 9 — Tracks engine
+  cohortsFacilitated    TrackCohort[]     @relation("CohortFacilitator")
+  trackEnrollments      TrackEnrollment[] @relation("UserEnrollments")
+  disciplingEnrollments TrackEnrollment[] @relation("DisciplerEnrollments")
+
 }
 
 model Guest {
@@ -154,6 +159,9 @@ model Guest {
 
   guestDripSteps GuestDripStep[]
   dripSendLogs   DripSendLog[]
+
+  // Run 9 — Tracks engine
+  trackEnrollments TrackEnrollment[] @relation("GuestEnrollments")
 
   @@map("guests")
 }
@@ -469,4 +477,110 @@ model DripSendLog {
   @@index([guestDripStepId])
   @@index([createdAt])
   @@map("drip_send_logs")
+}
+
+// ── Discipleship Tracks Engine (Run 9) ─────────────────────────
+enum TrackEnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  PAUSED
+  WITHDRAWN
+}
+
+model Track {
+  id             String   @id @default(cuid())
+  name           String
+  slug           String   @unique
+  description    String?
+  ordering       Int      @default(0)
+  isActive       Boolean  @default(true)
+  milestoneLabel String?  // e.g. "Water & Holy Spirit Baptism"
+  workbookUrl    String?  // link to the participant workbook PDF
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  modules     TrackModule[]
+  cohorts     TrackCohort[]
+  enrollments TrackEnrollment[]
+
+  @@map("tracks")
+}
+
+model TrackModule {
+  id         String   @id @default(cuid())
+  trackId    String
+  weekNumber Int
+  title      String
+  summary    String?
+  content    Json?    // Phase 3: in-app workbook content blocks
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  track    Track            @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  progress ModuleProgress[]
+
+  @@unique([trackId, weekNumber])
+  @@map("track_modules")
+}
+
+model TrackCohort {
+  id                String    @id @default(cuid())
+  trackId           String
+  name              String
+  startDate         DateTime?
+  meetingDay        String?   // e.g. "Wednesday"
+  meetingTime       String?   // e.g. "19:00"
+  facilitatorUserId String?
+  status            String    @default("ACTIVE") // ACTIVE | COMPLETED | ARCHIVED
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  track       Track             @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  facilitator User?             @relation("CohortFacilitator", fields: [facilitatorUserId], references: [id], onDelete: SetNull)
+  enrollments TrackEnrollment[]
+
+  @@map("track_cohorts")
+}
+
+model TrackEnrollment {
+  id              String                @id @default(cuid())
+  trackId         String
+  guestId         String?               // participant is a Guest (pre-membership) ...
+  userId          String?               // ... OR an existing User (member) — exactly one set
+  disciplerUserId String?
+  cohortId        String?
+  status          TrackEnrollmentStatus @default(ACTIVE)
+  portalToken     String                @unique @default(cuid()) // Phase 2 participant portal
+  startedAt       DateTime              @default(now())
+  completedAt     DateTime?
+  notes           String?
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+
+  track     Track            @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  guest     Guest?           @relation("GuestEnrollments", fields: [guestId], references: [id], onDelete: Cascade)
+  user      User?            @relation("UserEnrollments", fields: [userId], references: [id], onDelete: Cascade)
+  discipler User?            @relation("DisciplerEnrollments", fields: [disciplerUserId], references: [id], onDelete: SetNull)
+  cohort    TrackCohort?     @relation(fields: [cohortId], references: [id], onDelete: SetNull)
+  progress  ModuleProgress[]
+
+  @@index([trackId, status])
+  @@index([guestId])
+  @@index([userId])
+  @@map("track_enrollments")
+}
+
+model ModuleProgress {
+  id             String   @id @default(cuid())
+  enrollmentId   String
+  moduleId       String
+  completedAt    DateTime @default(now())
+  markedByUserId String?
+  createdAt      DateTime @default(now())
+
+  enrollment TrackEnrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  module     TrackModule     @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@unique([enrollmentId, moduleId])
+  @@map("module_progress")
 }
