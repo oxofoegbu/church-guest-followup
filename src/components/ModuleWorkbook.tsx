@@ -223,6 +223,89 @@ export default function ModuleWorkbook({ blocks, reflections, readOnly, onSave }
               </div>
             );
           }
+          case 'comparison': {
+            // Run 16 — read-only Before/After growth comparison. Values come
+            // from `responses`, so it updates live as ratings are tapped. The
+            // referenced Before ids may belong to another module — the module
+            // GET routes merge those reflections in (getComparisonRefIds).
+            const sumOf = (promptId: string): number | null => {
+              const values = parseJsonSafe<Record<string, number>>(responses[promptId], {});
+              const nums = Object.values(values).filter(v => typeof v === 'number');
+              return nums.length > 0 ? nums.reduce((a, b) => a + b, 0) : null;
+            };
+            const rows = block.pairs.map(pair => ({
+              pair,
+              before: sumOf(pair.before),
+              after: sumOf(pair.after),
+            }));
+            const totalBefore = rows.reduce<number>((a, r) => a + (r.before ?? 0), 0);
+            const totalAfter = rows.reduce<number>((a, r) => a + (r.after ?? 0), 0);
+            const complete = rows.every(r => r.before !== null && r.after !== null);
+            const Delta = ({ b, a }: { b: number | null; a: number | null }) => {
+              if (b === null || a === null) return <span className="text-church-300">—</span>;
+              const d = a - b;
+              if (d > 0) return <span className="font-bold text-green-600">▲ +{d}</span>;
+              if (d < 0) return <span className="font-bold text-red-500">▼ {d}</span>;
+              return <span className="font-semibold text-church-400">＝</span>;
+            };
+            const singlePair = block.pairs.length === 1 ? block.pairs[0] : null;
+            const itemValues = (promptId: string) =>
+              parseJsonSafe<Record<string, number>>(responses[promptId], {});
+            return (
+              <div key={i} className="bg-brand-50/60 border border-brand-200 rounded-xl px-4 py-3">
+                <p className="text-sm font-bold text-church-900 mb-2">📈 {block.title}</p>
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="text-xs text-church-400 uppercase">
+                      <th className="text-left py-1 font-semibold"></th>
+                      <th className="text-center py-1 font-semibold w-16">{block.beforeLabel}</th>
+                      <th className="text-center py-1 font-semibold w-16">{block.afterLabel}</th>
+                      <th className="text-center py-1 font-semibold w-16">Growth</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {singlePair && singlePair.items ? (
+                      <>
+                        {singlePair.items.map((label, j) => {
+                          const b = itemValues(singlePair.before)[label] ?? null;
+                          const a = itemValues(singlePair.after)[label] ?? null;
+                          return (
+                            <tr key={j} className="border-t border-brand-100">
+                              <td className="py-1.5 text-church-700">{label}</td>
+                              <td className="py-1.5 text-center text-church-800">{b ?? <span className="text-church-300">—</span>}</td>
+                              <td className="py-1.5 text-center text-church-800">{a ?? <span className="text-church-300">—</span>}</td>
+                              <td className="py-1.5 text-center"><Delta b={b} a={a} /></td>
+                            </tr>
+                          );
+                        })}
+                      </>
+                    ) : (
+                      rows.map((r, j) => (
+                        <tr key={j} className="border-t border-brand-100">
+                          <td className="py-1.5 text-church-700">{r.pair.title}</td>
+                          <td className="py-1.5 text-center text-church-800">{r.before ?? <span className="text-church-300">—</span>}</td>
+                          <td className="py-1.5 text-center text-church-800">{r.after ?? <span className="text-church-300">—</span>}</td>
+                          <td className="py-1.5 text-center"><Delta b={r.before} a={r.after} /></td>
+                        </tr>
+                      ))
+                    )}
+                    <tr className="border-t-2 border-brand-200 font-bold text-church-900">
+                      <td className="py-1.5">Total</td>
+                      <td className="py-1.5 text-center">{rows.some(r => r.before !== null) ? totalBefore : <span className="text-church-300 font-normal">—</span>}</td>
+                      <td className="py-1.5 text-center">{rows.some(r => r.after !== null) ? totalAfter : <span className="text-church-300 font-normal">—</span>}</td>
+                      <td className="py-1.5 text-center">{complete ? <Delta b={totalBefore} a={totalAfter} /> : <span className="text-church-300 font-normal">—</span>}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                {!complete && (
+                  <p className="text-xs text-church-500 mt-2">
+                    Complete both the {block.beforeLabel} and {block.afterLabel} assessments to see your full growth comparison.
+                  </p>
+                )}
+                {block.note && <p className="text-xs text-church-500 italic mt-2">{block.note}</p>}
+              </div>
+            );
+          }
           default:
             return null;
         }

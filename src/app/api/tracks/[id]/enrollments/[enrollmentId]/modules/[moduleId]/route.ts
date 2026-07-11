@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { requireAuth, handleAuthError } from '@/lib/auth';
 import { getPermissionLevel } from '@/lib/roles';
-import { getSavableIds, MAX_REFLECTION_LENGTH } from '@/lib/workbook';
+import { getSavableIds, getComparisonRefIds, MAX_REFLECTION_LENGTH } from '@/lib/workbook';
 
 // Run 12 — session-authenticated module content + reflections.
 //
@@ -54,6 +54,23 @@ export async function GET(
       where: { enrollmentId: enrollment.id, moduleId: module_.id },
       select: { promptId: true, response: true, updatedAt: true },
     });
+
+    // Run 16 — comparison blocks may reference rating ids saved in OTHER
+    // modules (e.g. the Before assessment lives in the Introduction module).
+    // Fetch those across the whole enrollment and merge; the module's own
+    // reflections win on any overlap.
+    const refIds = getComparisonRefIds(module_.content);
+    if (refIds.length > 0) {
+      const own = new Set(reflections.map((r: any) => r.promptId));
+      const missing = refIds.filter(id => !own.has(id));
+      if (missing.length > 0) {
+        const extra = await (prisma as any).moduleReflection.findMany({
+          where: { enrollmentId: enrollment.id, promptId: { in: missing } },
+          select: { promptId: true, response: true, updatedAt: true },
+        });
+        reflections.push(...extra);
+      }
+    }
     return NextResponse.json({ module: module_, reflections });
   } catch (error) {
     return handleAuthError(error);

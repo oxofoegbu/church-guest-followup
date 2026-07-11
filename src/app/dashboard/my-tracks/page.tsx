@@ -9,7 +9,7 @@ type Enrollment = {
   track: {
     id: string; name: string; description: string | null;
     milestoneLabel: string | null; workbookUrl: string | null;
-    modules: { id: string; weekNumber: number; title: string; summary: string | null; hasContent: boolean }[];
+    modules: { id: string; weekNumber: number; title: string; summary: string | null; kind: string; hasContent: boolean }[];
   };
   discipler: { name: string; email: string; phone: string | null; photoUrl: string | null } | null;
   cohort: { name: string; meetingDay: string | null; meetingTime: string | null } | null;
@@ -36,10 +36,26 @@ export default function MyTracksPage() {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [moduleData, setModuleData] = useState<Record<string, ModuleData>>({});
   const [moduleLoading, setModuleLoading] = useState<string | null>(null);
+  // Run 16 — track panels are collapsible; the first track starts open.
+  const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
+
+  // Run 16 — Introduction/Appendix modules are content-only: no completion
+  // circle, and they never count toward the N/weeks progress.
+  const isCore = (m: { kind?: string }) => !m.kind || m.kind === 'CORE';
 
   const fetchMine = useCallback(async () => {
     const res = await fetch('/api/my-tracks');
-    if (res.ok) { const d = await res.json(); setEnrollments(d.enrollments || []); }
+    if (res.ok) {
+      const d = await res.json();
+      const list = d.enrollments || [];
+      setEnrollments(list);
+      setCollapsed(prev => {
+        if (Object.keys(prev).length > 0) return prev; // keep the user's choices on refetch
+        const init: Record<string, boolean> = {};
+        list.forEach((e: Enrollment, i: number) => { init[e.id] = i > 0; });
+        return init;
+      });
+    }
     setLoading(false);
   }, []);
 
@@ -108,20 +124,31 @@ export default function MyTracksPage() {
       ) : (
         <div className="space-y-6">
           {enrollments.map(e => {
-            const total = e.track.modules.length;
-            const doneCount = e.progress.length;
+            const coreIds = new Set(e.track.modules.filter(isCore).map(m => m.id));
+            const total = coreIds.size;
+            const doneCount = e.progress.filter(p => coreIds.has(p.moduleId)).length;
             const pct = total > 0 ? Math.round((doneCount / total) * 100) : 0;
             const anyContent = e.track.modules.some(m => m.hasContent);
+            const isCollapsed = !!collapsed[e.id];
             return (
               <div key={e.id} className="card">
-                <div className="flex items-start justify-between gap-3 mb-2">
+                {/* Run 16 — clickable panel header: tap to expand/collapse this track */}
+                <div
+                  className="flex items-start justify-between gap-3 mb-2 cursor-pointer select-none -m-2 p-2 rounded-xl hover:bg-warm-50/70 transition-colors"
+                  onClick={() => setCollapsed(prev => ({ ...prev, [e.id]: !prev[e.id] }))}
+                  role="button"
+                  aria-expanded={!isCollapsed}
+                  aria-label={`${isCollapsed ? 'Expand' : 'Collapse'} ${e.track.name}`}>
                   <div>
                     <h2 className="font-bold text-church-900 text-lg">{e.track.name}</h2>
                     {e.track.milestoneLabel && (
                       <p className="text-xs text-brand-600 mt-0.5">🏁 Leads to: {e.track.milestoneLabel}</p>
                     )}
                   </div>
-                  <span className={`badge ${STATUS_STYLES[e.status] || 'bg-gray-100 text-gray-500'}`}>{e.status}</span>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <span className={`badge ${STATUS_STYLES[e.status] || 'bg-gray-100 text-gray-500'}`}>{e.status}</span>
+                    <span className={`text-church-400 text-sm transition-transform ${isCollapsed ? '' : 'rotate-90'}`}>▶</span>
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-3 mb-4">
@@ -131,6 +158,7 @@ export default function MyTracksPage() {
                   <span className="text-xs font-semibold text-church-600">{doneCount}/{total}</span>
                 </div>
 
+                {!isCollapsed && (<>
                 {(e.discipler || e.cohort) && (
                   <div className="flex flex-wrap gap-4 mb-4 text-sm">
                     {e.discipler && (
@@ -164,7 +192,8 @@ export default function MyTracksPage() {
 
                 <div className="space-y-2">
                   {e.track.modules.map(m => {
-                    const done = e.progress.some(p => p.moduleId === m.id);
+                    const core = isCore(m);
+                    const done = core && e.progress.some(p => p.moduleId === m.id);
                     const busy = toggling === m.id;
                     const key = `${e.id}:${m.id}`;
                     const isOpen = expanded === key;
@@ -175,16 +204,22 @@ export default function MyTracksPage() {
                         <div
                           className={`flex items-center gap-3 ${m.hasContent ? 'cursor-pointer' : ''}`}
                           onClick={() => { if (m.hasContent) expandWeek(e, m.id); }}>
-                          <button
-                            onClick={ev => { ev.stopPropagation(); toggleWeek(e, m.id); }}
-                            disabled={e.status !== 'ACTIVE' || busy}
-                            aria-label={done ? `Mark week ${m.weekNumber} as not complete` : `Mark week ${m.weekNumber} complete`}
-                            className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 transition-colors ${done ? 'bg-green-500 text-white' : 'bg-church-100 text-church-400'} ${e.status === 'ACTIVE' ? 'hover:ring-2 hover:ring-green-200' : 'cursor-default'}`}>
-                            {busy ? '…' : done ? '✓' : m.weekNumber}
-                          </button>
+                          {core ? (
+                            <button
+                              onClick={ev => { ev.stopPropagation(); toggleWeek(e, m.id); }}
+                              disabled={e.status !== 'ACTIVE' || busy}
+                              aria-label={done ? `Mark week ${m.weekNumber} as not complete` : `Mark week ${m.weekNumber} complete`}
+                              className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 transition-colors ${done ? 'bg-green-500 text-white' : 'bg-church-100 text-church-400'} ${e.status === 'ACTIVE' ? 'hover:ring-2 hover:ring-green-200' : 'cursor-default'}`}>
+                              {busy ? '…' : done ? '✓' : m.weekNumber}
+                            </button>
+                          ) : (
+                            <div className="w-7 h-7 rounded-full bg-brand-50 border border-brand-200 flex items-center justify-center text-sm flex-shrink-0">
+                              {m.kind === 'INTRO' ? '📖' : '📋'}
+                            </div>
+                          )}
                           <div className="min-w-0 flex-1">
                             <p className={`text-sm font-medium ${done ? 'text-green-800' : 'text-church-800'}`}>
-                              Week {m.weekNumber}: {m.title}
+                              {core ? `Week ${m.weekNumber}: ${m.title}` : m.title}
                             </p>
                           </div>
                           {m.hasContent && (
@@ -220,6 +255,7 @@ export default function MyTracksPage() {
                   <a href={e.track.workbookUrl} target="_blank" rel="noopener noreferrer"
                     className="btn-secondary btn-sm inline-block mt-4">📕 Open Workbook</a>
                 )}
+                </>)}
               </div>
             );
           })}

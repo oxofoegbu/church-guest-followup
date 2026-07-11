@@ -29,6 +29,7 @@ export async function GET(request: NextRequest) {
           weekNumber: m.weekNumber,
           title: m.title,
           summary: m.summary,
+          kind: m.kind || 'CORE', // Run 16 — CORE | INTRO | APPENDIX
           hasContent: !!m.content,
         })),
       },

@@ -1,0 +1,2423 @@
+{
+ "modules": [
+  {
+   "op": "upsert",
+   "id": "bec_m0",
+   "trackId": "trk_become",
+   "weekNumber": 0,
+   "kind": "INTRO",
+   "title": "Introduction & Before Assessment",
+   "summary": "Welcome to BECOME® — why this journey matters, plus your Before discipleship self-assessment.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "heading",
+      "text": "Welcome to BECOME®",
+      "subtitle": "Living Life The Jesus Way — “Becoming like Jesus in EVERYWAY so we can live like Jesus EVERYDAY”"
+     },
+     {
+      "type": "subheading",
+      "text": "A 12-Week Journey to Living Life the Jesus Way"
+     },
+     {
+      "type": "paragraph",
+      "text": "What if the life you’re living right now could become deeper… quieter… cleaner… stronger… more powerful… just like Jesus’ life?"
+     },
+     {
+      "type": "paragraph",
+      "text": "What if:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "you could finally break patterns that keep pulling you down?",
+       "you didn’t react in anger the way you used to?",
+       "you could live free from anxiety, lust, worry, or secret struggles?",
+       "you could love people, even those who are hard to love?",
+       "you could hear God more clearly and walk with Him more closely?",
+       "you could wake up each day with courage, peace, and purpose?",
+       "you could bring life, joy and healing to the life of people around you?",
+       "What if the Jesus you believe in could actually shape the kind of person you are becoming — not just what you believe?"
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "At Grace Life Center, we believe Jesus didn’t just call us to believe in Him — He called us to believe in Him so we could become like Him. And by becoming like Jesus in every way, we can live like Jesus every day."
+     },
+     {
+      "type": "paragraph",
+      "text": "That is the heart behind our new discipleship experience: BECOME®: Living Life the Jesus Way."
+     },
+     {
+      "type": "paragraph",
+      "text": "There are moments in life when God invites us into something deeper — something that marks us, transforms us, and redefines how we live. This discipleship journey is an invitation to one of such moments."
+     },
+     {
+      "type": "paragraph",
+      "text": "You are about to begin a journey unlike anything you’ve ever experienced — a journey not of trying harder, not of striving, not of religious performance, but of inner transformation through the teachings of Jesus."
+     },
+     {
+      "type": "paragraph",
+      "text": "For centuries, Christians have admired Jesus. Many have sung to Him, prayed to Him, and studied His words. But far fewer have actually built their lives on His teachings."
+     },
+     {
+      "type": "paragraph",
+      "text": "One place we can find Jesus’ teaching is in the Sermon on the Mount (Matthew 5–7). The Sermon on the Mount is not a list of rules. It is Jesus forming the character of heaven inside the people of earth. Yet Jesus ends His Sermon on the Mount with a clear warning and a powerful promise:"
+     },
+     {
+      "type": "verse",
+      "text": "“Whoever hears these words of Mine and does them is like a wise man who built his house on the rock.”",
+      "reference": "Matthew 7:24"
+     },
+     {
+      "type": "lesson",
+      "text": "Most Christian programs focus on what we do. This one focuses on who we are becoming."
+     },
+     {
+      "type": "paragraph",
+      "text": "This is not a course about knowledge. This is not a course about spiritual theory. This is not a course about doctrines alone."
+     },
+     {
+      "type": "paragraph",
+      "text": "This is a course about becoming like Jesus by doing what Jesus taught — through the power of Jesus Himself."
+     },
+     {
+      "type": "paragraph",
+      "text": "And here is the good news: You do not become like Jesus by willpower. You become like Jesus by apprenticeship to Jesus."
+     },
+     {
+      "type": "paragraph",
+      "text": "You learn from Him. You walk with Him. You listen to Him. You practice His words. And as you practice, He transforms your inner nature. This is the essence of discipleship."
+     },
+     {
+      "type": "subheading",
+      "text": "Why This Program Matters"
+     },
+     {
+      "type": "paragraph",
+      "text": "When Jesus rose from the dead, He gave His disciples one final assignment — the mission that defines Christianity to this very day and our mission at Grace Life Center:"
+     },
+     {
+      "type": "verse",
+      "text": "“Go and make apprentices of me (people committed to becoming like me in every way)… teaching them to obey everything I have commanded you.”",
+      "reference": "Matthew 28:19–20"
+     },
+     {
+      "type": "paragraph",
+      "text": "BECOME® is our answer to that call. BECOME® exists to do exactly that. Not merely to teach what Jesus commanded, but to teach you how to obey what Jesus commanded."
+     },
+     {
+      "type": "paragraph",
+      "text": "This is the missing piece of modern Christianity. Most Christians have heard Jesus’ teachings. Very few have been trained to actually live them. This program closes that gap."
+     },
+     {
+      "type": "paragraph",
+      "text": "Notice the words:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Not “teach them to know everything I commanded.”",
+       "Not “teach them to memorize everything I commanded.”",
+       "Not “teach them to pray about everything I commanded.”",
+       "But “teach them to obey…”"
+      ]
+     },
+     {
+      "type": "lesson",
+      "text": "Because Jesus knows this secret: Obedience is how we receive the transformation of our salvation."
+     },
+     {
+      "type": "paragraph",
+      "text": "Our efforts to obey is not how we earn salvation. They are, however, how we receive transformation from our Savior Jesus. Every time we do what Jesus teaches, simply because it is what Jesus taught, we are stepping into His grace. We are cooperating with His Spirit. We are allowing Him to make the tree good so the fruit can be good."
+     },
+     {
+      "type": "verse",
+      "text": "“Make the tree good and its fruit will be good.”",
+      "reference": "Matthew 12:33"
+     },
+     {
+      "type": "lesson",
+      "text": "Jesus’ commands are not about controlling us. They are about forming us."
+     },
+     {
+      "type": "subheading",
+      "text": "Sermon on the Mount: Jesus’ Masterpiece for Inner Transformation"
+     },
+     {
+      "type": "paragraph",
+      "text": "The Sermon on the Mount (Matthew 5–7) is the greatest moral and spiritual teaching ever delivered. It is Jesus’ own curriculum for transforming the inner life of His disciples. It is the Constitution of the Kingdom, the blueprint for Christlikeness, and the clearest picture of what a Spirit-formed life looks like."
+     },
+     {
+      "type": "paragraph",
+      "text": "But it is not meant to be admired. It is meant to be applied. And through application, it becomes a means of grace. Over these weeks, you will explore:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "the inner life (anger, lust, motives)",
+       "the relational life (forgiveness, reconciliation, love)",
+       "the spiritual life (prayer, fasting, secret devotion)",
+       "the trusting life (freedom from worry and fear)",
+       "the discerning life (judgment and boundaries)",
+       "the obedient life (entering the narrow gate, doing Jesus’ words)"
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "Every week is designed to help Jesus “make the tree (you) good so that the fruit (your actions) is good”. Therefore, this program will work for you, to the extent that you follow Jesus’ own method:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "HEAR — Listen to the words of Jesus, allowing His words to grip our hearts",
+       "PRACTICE — Put into action one concrete step each week, not perfectly, but consistently",
+       "UNDERSTAND — as we practice, we begin to grasp His meaning and His intent, allowing his Spirit to change our inner desires, motives, attitudes and reactions.",
+       "DEPEND ON JESUS — Lean on the Holy Spirit for strength and grace, again and again",
+       "REFLECT — Notice shifts in your reactions, motives, and desires.",
+       "REPEAT — Obedience becomes a lifestyle."
+      ],
+      "ordered": true
+     },
+     {
+      "type": "paragraph",
+      "text": "This is not about perfection. This is about direction and transformation. The goal is simple:"
+     },
+     {
+      "type": "bigIdea",
+      "text": "At the end of 12 weeks, you will not be the same person who began."
+     },
+     {
+      "type": "paragraph",
+      "text": "This is not self-help. This is Christ-in-you formation. This is not behavior management. This is heart renovation. This is not “try harder.” This is “practice with Jesus until it becomes your new nature.”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Over 12 weeks, you will discover that Jesus is not calling you to perfection by effort, but to transformation by union with Him. This journey is built on a simple but profound spiritual truth:"
+     },
+     {
+      "type": "quote",
+      "text": "Grace is opposed to earning, but grace is not opposed to effort. — Dallas Willard"
+     },
+     {
+      "type": "paragraph",
+      "text": "You are not earning transformation. You are positioning yourself for it. This discipleship journey is built around the conviction that we do not grow by trying harder."
+     },
+     {
+      "type": "subheading",
+      "text": "What You Will Experience in These 12 Weeks"
+     },
+     {
+      "type": "paragraph",
+      "text": "This is what you can expect as you engage this program with humility and hunger:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Freedom from inner anger, lust, fear, pride, and anxiety",
+       "Deeper intimacy with Jesus through secret devotion",
+       "Stronger relational peace and reconciliation",
+       "A renewed heart that desires holiness",
+       "The ability to hear God and follow Him more clearly",
+       "A new inner stability — a life built on rock, not sand",
+       "A powerful sense of spiritual identity and purpose",
+       "Transformation in your hidden motives, not just outward behavior"
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "Because you’re not just learning what Jesus said but becoming the kind of person who naturally lives His teachings, your life will begin to look like: more patience, more peace, more gentleness, more courage, more purity, more love, more joy, more stability… more Jesus."
+     },
+     {
+      "type": "subheading",
+      "text": "A Word from Jesus"
+     },
+     {
+      "type": "paragraph",
+      "text": "This journey is not easy. It was never meant to be. But hear Jesus’ promise:"
+     },
+     {
+      "type": "verse",
+      "text": "“Take My yoke upon you and learn from Me… and you will find rest for your souls.”",
+      "reference": "Matthew 11:29"
+     },
+     {
+      "type": "paragraph",
+      "text": "Jesus Himself will walk with you. He will teach you. He will strengthen you. He will form His life in you. All you need is a willing heart."
+     },
+     {
+      "type": "lesson",
+      "text": "WELCOME TO BECOME®"
+     },
+     {
+      "type": "heading",
+      "text": "Before-and-After Discipleship Assessment (Before)"
+     },
+     {
+      "type": "paragraph",
+      "text": "Use this tool to gauge your growth as a disciple over the next 12 weeks. Be honest. Give yourself space to reflect. This is between you and Jesus."
+     },
+     {
+      "type": "paragraph",
+      "text": "Instructions: Rate each statement on a scale from 1 to 5 (1 = Not true of me at all, 5 = Consistently true of me). You will fill this again in Week 12 to see how Jesus has shaped your heart. You are not comparing yourself to others. You are measuring your own spiritual transformation."
+     },
+     {
+      "type": "rating",
+      "id": "b0_assess_heart",
+      "title": "Heart & Character",
+      "items": [
+       "I respond to conflict with calmness, not anger.",
+       "I seek reconciliation quickly.",
+       "I guard my heart, eyes and imagination from lust.",
+       "I remove things that cause me to sin."
+      ],
+      "scaleMax": 5
+     },
+     {
+      "type": "rating",
+      "id": "b0_assess_speech",
+      "title": "Speech & Integrity",
+      "items": [
+       "My “yes” is yes and my “no” is no.",
+       "My words are true, consistent, and dependable.",
+       "I speak simply without exaggeration.",
+       "I honor commitments."
+      ],
+      "scaleMax": 5
+     },
+     {
+      "type": "rating",
+      "id": "b0_assess_love",
+      "title": "Love & Mercy",
+      "items": [
+       "I forgive easily and completely.",
+       "I bless and pray for those who hurt me.",
+       "I treat others as I want to be treated."
+      ],
+      "scaleMax": 5
+     },
+     {
+      "type": "rating",
+      "id": "b0_assess_devotion",
+      "title": "Spiritual Devotion",
+      "items": [
+       "I pray privately.",
+       "I pray consistently.",
+       "I give generously without seeking credit.",
+       "I fast with joyful heart privately and focus."
+      ],
+      "scaleMax": 5
+     },
+     {
+      "type": "rating",
+      "id": "b0_assess_discernment",
+      "title": "Discernment & Humility",
+      "items": [
+       "I do not harshly judge others.",
+       "I examine my own heart before correcting others.",
+       "I set healthy boundaries in relationships.",
+       "I quickly own up to my own weaknesses."
+      ],
+      "scaleMax": 5
+     },
+     {
+      "type": "rating",
+      "id": "b0_assess_trust",
+      "title": "Trust & Freedom from Worry",
+      "items": [
+       "I do not live in fear of the future.",
+       "I do not worry about tomorrow.",
+       "I trust God for my needs.",
+       "I orient my life around the Kingdom first."
+      ],
+      "scaleMax": 5
+     },
+     {
+      "type": "rating",
+      "id": "b0_assess_faith",
+      "title": "Faith & Spiritual Pursuit",
+      "items": [
+       "I ask boldly.",
+       "I seek persistently.",
+       "I knock faithfully.",
+       "I take steps of faith even when unsure."
+      ],
+      "scaleMax": 5
+     },
+     {
+      "type": "rating",
+      "id": "b0_assess_obedience",
+      "title": "Obedience & Practice",
+      "items": [
+       "I build my life around Jesus’ teachings.",
+       "I constantly rely on Jesus’ grace to obey His teachings.",
+       "I try to obey Jesus’ words even when it costs me.",
+       "I am becoming more like Jesus in my inner attitudes and reactions, not just my intentions."
+      ],
+      "scaleMax": 5
+     },
+     {
+      "type": "prompt",
+      "id": "b0_assess_total",
+      "question": "TOTAL SCORE (Before): add up all your ratings above and record your total here.",
+      "hint": "You will compare this with your After assessment at the end of the journey — the app calculates the comparison for you."
+     },
+     {
+      "type": "prayer",
+      "text": "Lord Jesus, I surrender my life to YOU. Over the next 12 weeks, teach me, shape me, correct me, heal me. I want to BECOME like YOU in EVERYWAY. Transform me from the inside out. I cannot transform myself, but I can, with Your help, practice your commands and You will transform my heart as I walk with You. So here I am, ready to follow, ready to learn, ready to be changed. Shape my thoughts, my desires, my reactions, my character. Form Your life in me. In Jesus Name, Amen.",
+      "title": "Commitment Prayer"
+     }
+    ]
+   }
+  },
+  {
+   "op": "update",
+   "id": "bec_m1",
+   "title": "A Life Founded on Rock",
+   "summary": "Becoming the kind of person who naturally obeys Jesus.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "heading",
+      "text": "Week 1 — A Life Founded on Rock",
+      "subtitle": "Becoming the Kind of Person Who Naturally Obeys Jesus"
+     },
+     {
+      "type": "subheading",
+      "text": "Overview"
+     },
+     {
+      "type": "paragraph",
+      "text": "Week 1 is not about doing something for Jesus. It is about becoming someone with Jesus."
+     },
+     {
+      "type": "paragraph",
+      "text": "Jesus ends the Sermon on the Mount with one of the most penetrating and transformational images in Scripture — the wise and foolish builders. It is a picture so striking, so unforgettable, it shapes the whole curriculum:"
+     },
+     {
+      "type": "verse",
+      "text": "“Everyone who hears these words of Mine and does them is like a wise man who built his house on the rock.”",
+      "reference": "Matthew 7:24"
+     },
+     {
+      "type": "paragraph",
+      "text": "This is where discipleship begins:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Not with hearing.",
+       "Not with agreeing.",
+       "Not with admiring Jesus.",
+       "But with doing what Jesus says."
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "But this story is not primarily about storms. Not about houses. Not about wind or water. It’s about the inner life. It’s about becoming a kind of person – someone whose inner, unseen (i.e. foundation) life is rooted so deeply in Jesus that storms cannot uproot them."
+     },
+     {
+      "type": "bigIdea",
+      "text": "Discipleship is not about trying harder; it is about training with Jesus until your inner life is transformed so you can become like Jesus in every way."
+     },
+     {
+      "type": "paragraph",
+      "text": "The question for Week 1 is simple: What am I building my life on?"
+     },
+     {
+      "type": "subheading",
+      "text": "Two Builders, Two Foundations, One Storm"
+     },
+     {
+      "type": "paragraph",
+      "text": "Imagine two houses side by side. Same design. Same paint. Same neighborhood. Same weather. From the outside, they look identical."
+     },
+     {
+      "type": "paragraph",
+      "text": "But inside, in that which is hidden and unseen, the FOUNDATION, they could not be more different. One is built on solid rock. The other on soft sand."
+     },
+     {
+      "type": "paragraph",
+      "text": "When the storm comes, something unexpected happens:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "The storm reveals what was invisible.",
+       "The storm unveils what the surface hid.",
+       "The storm exposes the foundation."
+      ]
+     },
+     {
+      "type": "lesson",
+      "text": "The houses did not stand or fall because of the severity of the storm. The houses stood or fell because of what was INSIDE – the foundation."
+     },
+     {
+      "type": "paragraph",
+      "text": "Jesus’ point is clear: When (not if) the storm comes, what your life is built on, who you really are, will be ALL that matters. And who you really are, your foundation, depends on what you have been practicing."
+     },
+     {
+      "type": "paragraph",
+      "text": "Two people heard the same sermon. Two sat in the same crowd. Two nodded at the same truths. But only one practiced. Only one partnered with Jesus. Only one built something strong. Only one became different from within."
+     },
+     {
+      "type": "bigIdea",
+      "text": "Hearing + Practicing = Transformation. BUT Hearing without practicing = Illusion."
+     },
+     {
+      "type": "prompt",
+      "id": "b1_fill_goal",
+      "question": "Fill-in: The goal of discipleship is not information but ____________.",
+      "hint": "Hint: transformation / Christlikeness"
+     },
+     {
+      "type": "paragraph",
+      "text": "The storm didn’t create the difference. The storm revealed the difference. A storm is a truth-teller. The storm revealed what was inside, who they really were. Storms will always reveal what you’re built on."
+     },
+     {
+      "type": "subheading",
+      "text": "Three Types of Believers"
+     },
+     {
+      "type": "paragraph",
+      "text": "In the Sermon on the Mount, Jesus indirectly describes three kinds of believers:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "The Hearer: Admits the teachings are good. Nods in agreement. Takes notes. But never applies them.",
+       "The Admirer: Loves Jesus’ words. Quotes them. Memorizes them. Builds a religious identity around them. But does not change their habits.",
+       "The Disciple: Actually practices His words. Fails often times but keeps practicing. Builds habits, not just intentions. Builds a life on rock, not sand."
+      ],
+      "ordered": true
+     },
+     {
+      "type": "subheading",
+      "text": "The Core Truth of This Week"
+     },
+     {
+      "type": "lesson",
+      "text": "Doing what Jesus teaches is how we partner with Him as He transforms us into who we are becoming. Jesus is not after behavior modification. He is after heart renovation."
+     },
+     {
+      "type": "paragraph",
+      "text": "Our obedience is not the cause of transformation — it is the posture for transformation. Jesus is the one who does the transformation – not our obedience. Dallas Willard said it beautifully:"
+     },
+     {
+      "type": "quote",
+      "text": "“Grace is not opposed to effort, but it is opposed to earning.” — Dallas Willard"
+     },
+     {
+      "type": "paragraph",
+      "text": "You cannot earn transformation. But you can position yourself for it. How? By making effort to do what Jesus says through Jesus’ help. As you practice with Jesus, He strengthens your inner life."
+     },
+     {
+      "type": "subheading",
+      "text": "Illustration: The Piano Student"
+     },
+     {
+      "type": "paragraph",
+      "text": "A child sits before a grand piano. A grand master is by her side to help her and train her. She places her fingers on the keys and tries to play Handel. She cannot. But she tries again… and again… and again…"
+     },
+     {
+      "type": "paragraph",
+      "text": "Each practice is imperfect, flawed, clumsy. But she is not trying to be perfect. She is training to become someone who can play beautifully. But she listens to her grand master, yields to the instructions and hand placements he shows her."
+     },
+     {
+      "type": "paragraph",
+      "text": "Jesus’ teachings work the same way. We do not practice them because we are already good at them or to prove or show that we are good. We practice them because in the practice, Jesus is making us good."
+     },
+     {
+      "type": "prompt",
+      "id": "b1_fill_practice",
+      "question": "Fill-in: Practice is not about perfection; it is about ____________________.",
+      "hint": "Answer: becoming"
+     },
+     {
+      "type": "lesson",
+      "text": "The strength of a disciple is not in what they know, but in what they practice. Knowledge inspires. Obedience transforms. Practice builds spiritual muscle memory."
+     },
+     {
+      "type": "quote",
+      "text": "“Transformation doesn’t come from trying harder, but from training wiser.”"
+     },
+     {
+      "type": "subheading",
+      "text": "Why We Practice"
+     },
+     {
+      "type": "paragraph",
+      "text": "In every skill of life, we learn by practice:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "You don’t learn piano by hearing a lecture on piano.",
+       "You don’t learn driving by watching someone else drive.",
+       "You don’t learn fitness by reading gym manuals."
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "Likewise, you don’t become like Jesus by reading about Jesus. You become like Jesus by walking with Jesus – by being an apprentice of Jesus."
+     },
+     {
+      "type": "prompt",
+      "id": "b1_fill_teacher",
+      "question": "Fill-in: Jesus is not just a Savior to believe in; He is a _______________________ to learn from.",
+      "hint": "Answer: Teacher / Master / Lord"
+     },
+     {
+      "type": "subheading",
+      "text": "The Discipleship Model of Jesus"
+     },
+     {
+      "type": "paragraph",
+      "text": "Every week in this program follows Jesus’ pattern:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Learn the teaching (hear)",
+       "Understand what it means (reflect)",
+       "Practice one step this week (do)",
+       "Lean on the Spirit for strength (depend)",
+       "Repeat"
+      ],
+      "ordered": true
+     },
+     {
+      "type": "paragraph",
+      "text": "This is how the early church became unstoppable."
+     },
+     {
+      "type": "subheading",
+      "text": "Please Note"
+     },
+     {
+      "type": "paragraph",
+      "text": "JESUS IS NOT OFFERING: rules, more pressure, more guilt, self-effort, performance, religious striving."
+     },
+     {
+      "type": "paragraph",
+      "text": "JESUS IS OFFERING: ✔ a new heart ✔ a new inner strength ✔ a new nature ✔ a new way of reacting ✔ a new peace ✔ a new stability ✔ a new life built on the rock."
+     },
+     {
+      "type": "paragraph",
+      "text": "He is offering to teach you how to live."
+     },
+     {
+      "type": "verse",
+      "text": "“Take My yoke upon you and learn from Me.”",
+      "reference": "Matthew 11:29"
+     },
+     {
+      "type": "paragraph",
+      "text": "This is apprenticeship. This is formation. This is transformation."
+     },
+     {
+      "type": "subheading",
+      "text": "What It Means to Build on the Rock"
+     },
+     {
+      "type": "paragraph",
+      "text": "Therefore, we must always remember that to build on the rock does not mean:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "reading more devotionals, though you may find yourself reading devotionals",
+       "attending more services, though you may find yourself attending services",
+       "learning more doctrines, though you will find yourself learning new doctrines",
+       "doing more religious activities, though you may be involved in religious activities"
+      ]
+     },
+     {
+      "type": "lesson",
+      "text": "Jesus defines building on the rock very specifically: it is WHO YOU ARE BECOMING inside because of PRACTICING Jesus’ commands (doing what Jesus teaches as He transforms your heart)."
+     },
+     {
+      "type": "subheading",
+      "text": "Illustration: The House That Still Stood"
+     },
+     {
+      "type": "paragraph",
+      "text": "After Hurricane Andrew (1992), one Florida neighborhood was wiped out. Homes destroyed. Streets submerged. But one house stood almost untouched. Reporters asked the owner how it survived."
+     },
+     {
+      "type": "paragraph",
+      "text": "He answered: “I built the house according to the updated hurricane building code. Most people ignored it. I didn’t.” Then he added a sentence that should awaken every believer: “I built it right. And when you build something right, it stands.”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Christian discipleship is not building for fair weather. It is built for the inevitable storms of life: loss, grief, temptation, betrayal, disappointment, pressure, stress, spiritual warfare."
+     },
+     {
+      "type": "paragraph",
+      "text": "Jesus trains you now for the storms that will come later. Jesus is the Master Architect. He hands us the blueprint. Those who follow it stand. Those who improvise fall."
+     },
+     {
+      "type": "subheading",
+      "text": "The Three Spiritual Realities of Week One"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Everyone is building something: Your habits, choices, desires, and reactions are forming a structure — a life.",
+       "The structure is only as strong as the foundation: Foundations are hidden. No one sees yours. Except Jesus.",
+       "The foundation is determined by your practices: Not by your intentions. Not by your feelings. Not by your theological accuracy. But by your lived obedience."
+      ],
+      "ordered": true
+     },
+     {
+      "type": "heading",
+      "text": "This Week’s Fill-in Reflections"
+     },
+     {
+      "type": "prompt",
+      "id": "b1_foundations",
+      "question": "A. What am I actually building my life on? My current foundation(s):",
+      "hint": "Write out some of your foundational realities e.g. my emotions, my achievements, my religion, my habits, my desires / ambitions, my wounds or trauma, the opinions of others, Jesus’ teachings etc"
+     },
+     {
+      "type": "prompt",
+      "id": "b1_instability",
+      "question": "B. Where do I sense instability in my life? Storms expose weak foundations. List areas that shake easily:"
+     },
+     {
+      "type": "prompt",
+      "id": "b1_build_differently",
+      "question": "C. Where might Jesus be inviting me to build differently?"
+     },
+     {
+      "type": "heading",
+      "text": "Discussion / Journal Questions"
+     },
+     {
+      "type": "prompt",
+      "id": "b1_d1",
+      "question": "1. Which past storms have revealed your life foundations?"
+     },
+     {
+      "type": "prompt",
+      "id": "b1_d2",
+      "question": "2. What’s the difference between “trying hard to obey” and “training with Jesus”?"
+     },
+     {
+      "type": "prompt",
+      "id": "b1_d3",
+      "question": "3. What parts of your life feel “built on sand” right now?"
+     },
+     {
+      "type": "prompt",
+      "id": "b1_d4",
+      "question": "4. In what areas of your life do you “admire” Jesus’ teachings more than “practice” them?"
+     },
+     {
+      "type": "prompt",
+      "id": "b1_d5",
+      "question": "5. What is one area you sense Jesus wants to rebuild or strengthen in your foundation this season?"
+     },
+     {
+      "type": "heading",
+      "text": "This Week’s Activation Practice — Identify Your First Partnership Area"
+     },
+     {
+      "type": "paragraph",
+      "text": "Each week, Jesus will give you one practice to partner with Him. This week is simple: Choose one area of your life where you want Jesus to begin rebuilding your foundation."
+     },
+     {
+      "type": "prompt",
+      "id": "b1_partnership_area",
+      "question": "Write it clearly: My Week 1 Partnership Area:",
+      "hint": "Examples: reacting with anger, emotional reactions, secret thought life, money habits, time management, responding to stress, insecurity, relationships, lust, hidden habits, fear, worry, unforgiveness, consistency in prayer, people pleasing"
+     },
+     {
+      "type": "prayer",
+      "text": "Jesus, this area is sand. Begin making it rock. Make the tree good. Change me from the inside out. In Jesus Name, Amen.",
+      "title": "Then Pray"
+     },
+     {
+      "type": "heading",
+      "text": "Memory Verse for Week 1"
+     },
+     {
+      "type": "verse",
+      "text": "“Everyone who hears these words of Mine and puts them into practice is like a wise man who built his house on the rock.”",
+      "reference": "Matthew 7:24"
+     },
+     {
+      "type": "heading",
+      "text": "End-of-Week Reflection",
+      "subtitle": "Review before the next session"
+     },
+     {
+      "type": "prompt",
+      "id": "b1_e1",
+      "question": "1. What did Jesus reveal about my foundation this week?"
+     },
+     {
+      "type": "prompt",
+      "id": "b1_e2",
+      "question": "2. What small but meaningful act of obedience did I practice?"
+     },
+     {
+      "type": "prompt",
+      "id": "b1_e3",
+      "question": "3. How did I sense Jesus working in me as I practiced?"
+     },
+     {
+      "type": "prompt",
+      "id": "b1_e4",
+      "question": "4. What do I want to carry with me into Week 2?"
+     },
+     {
+      "type": "heading",
+      "text": "Closing Thought for Week 1"
+     },
+     {
+      "type": "lesson",
+      "text": "If Week 1 teaches us anything, it is this: Jesus does not want better behavior from you. He wants a better you. And He is ready to build that — one week, one practice, one transformed reaction at a time."
+     },
+     {
+      "type": "prayer",
+      "text": "Whisper this prayer daily: Jesus, teach me how to live. Make me become the kind of person who is a natural doer of Your words. Rebuild my life on the rock. Amen. Then listen as Jesus gives you a word(s) to practice — and commit to practicing it this week.",
+      "title": "Dependence Practice Prayer"
+     },
+     {
+      "type": "prompt",
+      "id": "b1_notes",
+      "question": "Notes & Insights"
+     }
+    ]
+   }
+  },
+  {
+   "op": "update",
+   "id": "bec_m12",
+   "title": "The Narrow Way & Building a Life That Stands",
+   "summary": "Becoming a true disciple who lives the teachings of Jesus from the inside out.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "heading",
+      "text": "Week 12 — The Narrow Way & Building a Life That Stands",
+      "subtitle": "Becoming a True Disciple Who Lives the Teachings of Jesus from the Inside Out"
+     },
+     {
+      "type": "subheading",
+      "text": "Introduction"
+     },
+     {
+      "type": "paragraph",
+      "text": "We have reached the final week of this 12-week journey. But in Jesus’ mind, this is not the end. This is the beginning of a new way of living — a life that is shaped by: love, purity, forgiveness, prayer, trust, integrity, wisdom, generosity, mercy, courage, intimacy with God, the formed heart of a disciple."
+     },
+     {
+      "type": "paragraph",
+      "text": "This week Jesus gives three final images that pull everything together:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "The Narrow Gate – A clear decision.",
+       "The Good Tree and Its Fruit – A formed character.",
+       "The Wise Builder – A life established on obedience."
+      ],
+      "ordered": true
+     },
+     {
+      "type": "paragraph",
+      "text": "These three bring the whole Sermon on the Mount to its climax."
+     },
+     {
+      "type": "subheading",
+      "text": "The Heart of Jesus’ Final Teachings (Matthew 7:13–27)"
+     },
+     {
+      "type": "subheading",
+      "text": "1. The Narrow Gate — The Path of True Discipleship"
+     },
+     {
+      "type": "paragraph",
+      "text": "Jesus says: “Enter through the narrow gate.”"
+     },
+     {
+      "type": "paragraph",
+      "text": "The wide gate is: the easy path, the crowd’s direction, the path of least resistance, the path of self-will, the path of culture."
+     },
+     {
+      "type": "paragraph",
+      "text": "The narrow gate is: the path of Jesus, the path of transformation, the path of intentionality, the path of practiced obedience, the path that leads to life."
+     },
+     {
+      "type": "lesson",
+      "text": "The narrow way is not restrictive — it is formational. It leads to the life you were created for."
+     },
+     {
+      "type": "subheading",
+      "text": "2. The Tree & Its Fruit — Becoming Good From the Inside Out"
+     },
+     {
+      "type": "paragraph",
+      "text": "Jesus says: “A good tree cannot bear bad fruit.” Meaning: You don’t become holy by forcing fruit. You become holy by letting Jesus make the tree good."
+     },
+     {
+      "type": "paragraph",
+      "text": "Every week of this curriculum has been about: pulling out old roots, shaping inner habits, healing the heart, building spiritual muscle, planting new desires, forming new reactions."
+     },
+     {
+      "type": "lesson",
+      "text": "This is how fruit grows naturally: You don’t try to produce fruit. You become the kind of tree that produces good fruit. This is the heart of everything Jesus taught."
+     },
+     {
+      "type": "subheading",
+      "text": "3. The Wise Builder — Building a Life That Lasts"
+     },
+     {
+      "type": "paragraph",
+      "text": "Jesus ends with this:"
+     },
+     {
+      "type": "verse",
+      "text": "“Everyone who hears My words and puts them into practice is like a wise man who built his house on the rock.”",
+      "reference": "Matthew 7:24"
+     },
+     {
+      "type": "paragraph",
+      "text": "Two people built. Two houses stood tall. Two structures looked solid. But when the storm came, one remained."
+     },
+     {
+      "type": "bigIdea",
+      "text": "This is the whole Sermon in a single sentence: Hearing + Practicing = Transformation & Stability. Hearing without practicing = Illusion & Collapse."
+     },
+     {
+      "type": "paragraph",
+      "text": "Obedience is not about earning favor — it is about establishing foundations. The storms will come, but Jesus forms you into the kind of person who can stand."
+     },
+     {
+      "type": "subheading",
+      "text": "Becoming, Not Just Doing"
+     },
+     {
+      "type": "paragraph",
+      "text": "Week 12 is not saying: “Try harder.” “Do more.” “Be perfect.” “Earn your way.”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Instead, Jesus is saying: “Choose the path where I can shape you.” “Let Me make you good inside.” “Practice My words with Me.” “Build with Me.”"
+     },
+     {
+      "type": "lesson",
+      "text": "Discipleship is partnership. You practice; Jesus transforms. You open your heart; He reshapes it. You choose the narrow path; He walks it with you."
+     },
+     {
+      "type": "subheading",
+      "text": "Illustration: The Building Code"
+     },
+     {
+      "type": "paragraph",
+      "text": "After a massive earthquake, engineers discovered that some buildings survived because they had been built with deep foundations and reinforced structures — they were built according to the code. Others, though beautiful on the outside, collapsed quickly."
+     },
+     {
+      "type": "paragraph",
+      "text": "Jesus is the Master Architect. He gives a “spiritual building code” — not to restrict you, but to protect you, sustain you, and strengthen you. Everything He commands is for your good."
+     },
+     {
+      "type": "lesson",
+      "text": "The one who practices His teachings lives a life that cannot be easily shaken."
+     },
+     {
+      "type": "heading",
+      "text": "Reflection Questions"
+     },
+     {
+      "type": "prompt",
+      "id": "b12_d1",
+      "question": "1. What has Jesus done in me over these 12 weeks?"
+     },
+     {
+      "type": "prompt",
+      "id": "b12_d2",
+      "question": "2. How has my heart changed?"
+     },
+     {
+      "type": "prompt",
+      "id": "b12_d3",
+      "question": "3. What fruit do I see growing in my life right now?"
+     },
+     {
+      "type": "prompt",
+      "id": "b12_d4",
+      "question": "4. What is the “narrow gate” Jesus is inviting me to walk through today?"
+     },
+     {
+      "type": "prompt",
+      "id": "b12_d5",
+      "question": "5. What part of my life still needs deeper foundation on the rock?"
+     },
+     {
+      "type": "heading",
+      "text": "This Week’s Practices"
+     },
+     {
+      "type": "subheading",
+      "text": "Practice #1 — “Choose the Narrow Way”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Write one specific decision — a real, practical step — that represents the narrow way for you right now. Examples: ending a destructive habit; stepping into service; reconciling with someone; reducing distractions; committing to a prayer rhythm; embracing accountability; forgiving someone fully; adjusting priorities."
+     },
+     {
+      "type": "prompt",
+      "id": "b12_narrow_decision",
+      "question": "My Narrow Way Decision:"
+     },
+     {
+      "type": "subheading",
+      "text": "Practice #2 — “Fruit Inventory”"
+     },
+     {
+      "type": "paragraph",
+      "text": "List the good fruit you now see in your life. Celebrate what Jesus has formed."
+     },
+     {
+      "type": "prompt",
+      "id": "b12_fruit_inventory",
+      "question": "My Fruit Inventory:"
+     },
+     {
+      "type": "subheading",
+      "text": "Practice #3 — “Build on the Rock Commitment”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Choose one teaching of Jesus from these 12 weeks that you will intentionally keep practicing:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "anger → reconciliation",
+       "purity → guarding your heart",
+       "integrity → truth in speech",
+       "meekness → second-mile living",
+       "love for enemies → praying for persecutors",
+       "secret devotion → giving, prayer, fasting",
+       "forgiveness → blessing those who hurt you",
+       "trust → releasing worry",
+       "boundaries → removing the plank",
+       "bold faith → asking, seeking, knocking"
+      ]
+     },
+     {
+      "type": "prompt",
+      "id": "b12_rock_practice",
+      "question": "Write yours: My Rock Practice:"
+     },
+     {
+      "type": "heading",
+      "text": "Fill-in Reflections"
+     },
+     {
+      "type": "prompt",
+      "id": "b12_f1",
+      "question": "1. Jesus is forming in me a heart of …"
+     },
+     {
+      "type": "prompt",
+      "id": "b12_f2",
+      "question": "2. I want to become a disciple who …"
+     },
+     {
+      "type": "prompt",
+      "id": "b12_f3",
+      "question": "3. One truth from the Sermon on the Mount that changed me is …"
+     },
+     {
+      "type": "prompt",
+      "id": "b12_f4",
+      "question": "4. I believe Jesus is inviting me into … next."
+     },
+     {
+      "type": "heading",
+      "text": "Memory Verse for Week 12"
+     },
+     {
+      "type": "verse",
+      "text": "“Everyone who hears these words of Mine and puts them into practice is like a wise man who built his house on the rock.”",
+      "reference": "Matthew 7:24"
+     },
+     {
+      "type": "paragraph",
+      "text": "This is your life verse for ongoing discipleship."
+     },
+     {
+      "type": "heading",
+      "text": "End-of-Week Reflection"
+     },
+     {
+      "type": "prompt",
+      "id": "b12_e1",
+      "question": "1. How did I choose the narrow path this week?"
+     },
+     {
+      "type": "prompt",
+      "id": "b12_e2",
+      "question": "2. What fruit did I notice growing in my reactions, decisions, or relationships?"
+     },
+     {
+      "type": "prompt",
+      "id": "b12_e3",
+      "question": "3. What “rock practice” is becoming a habit?"
+     },
+     {
+      "type": "prompt",
+      "id": "b12_e4",
+      "question": "4. How do I sense Jesus inviting me to continue growing beyond this program?"
+     },
+     {
+      "type": "prompt",
+      "id": "b12_e5",
+      "question": "5. What part of me feels most transformed after these 12 weeks?"
+     },
+     {
+      "type": "heading",
+      "text": "Closing Thought for Week 12 — and for Your Whole Journey"
+     },
+     {
+      "type": "paragraph",
+      "text": "Always remember: Discipleship is not a 12-week program. It is BECOMING. It is SPIRITUAL FORMATION. It is a lifelong apprenticeship to Jesus. This curriculum was the beginning — not the destination."
+     },
+     {
+      "type": "paragraph",
+      "text": "Jesus is not done forming you. He will keep shaping your heart: through His Spirit, through His Word, through your practices, through your daily walk, through community, through grace."
+     },
+     {
+      "type": "lesson",
+      "text": "You have entered the narrow way. You are becoming the good tree. You are building on the rock. Your life will stand. Because Jesus Himself is your foundation. ALLELUIA!"
+     },
+     {
+      "type": "prompt",
+      "id": "b12_notes",
+      "question": "Notes & Insights"
+     }
+    ]
+   }
+  },
+  {
+   "op": "upsert",
+   "id": "bec_m13",
+   "trackId": "trk_become",
+   "weekNumber": 13,
+   "kind": "APPENDIX",
+   "title": "Appendices — Covenant, After Assessment & Growth",
+   "summary": "The Discipleship Covenant, your After assessment with an automatic Before/After growth comparison, the FAQ, and the Meeting With Jesus Daily guide.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "heading",
+      "text": "Appendices",
+      "subtitle": "Covenant · After Assessment & Growth Comparison · FAQ · Meeting With Jesus Daily"
+     },
+     {
+      "type": "heading",
+      "text": "Discipleship & Apprenticeship Covenant",
+      "subtitle": "For Participants on the 12-Week Sermon on the Mount Journey"
+     },
+     {
+      "type": "paragraph",
+      "text": "Following Jesus is not simply learning information — it is entering into a life of apprenticeship to Jesus. This covenant expresses the heart posture of a disciple who desires to practice the teachings of Jesus, not merely hear them. It reflects the themes and practices of the 12-week curriculum and serves as a commitment to becoming the kind of person Jesus is forming you to be. This covenant is made not out of pressure, performance, or perfectionism — but out of love, desire, and the longing to walk closely with Jesus."
+     },
+     {
+      "type": "subheading",
+      "text": "My Discipleship & Apprenticeship to Jesus Covenant"
+     },
+     {
+      "type": "subheading",
+      "text": "1. A Covenant of the Heart"
+     },
+     {
+      "type": "paragraph",
+      "text": "I commit to walk through this journey with a heart open to Jesus’ transforming work. I recognize discipleship is about who I am becoming more than what I am doing."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Allow Jesus to form my inner life.",
+       "Welcome correction, healing, and growth.",
+       "Walk in humility, honesty, and surrender."
+      ]
+     },
+     {
+      "type": "verse",
+      "text": "“Make the tree good and its fruit will be good.”",
+      "reference": "Matthew 12:33"
+     },
+     {
+      "type": "subheading",
+      "text": "2. A Covenant of Practice"
+     },
+     {
+      "type": "paragraph",
+      "text": "I understand that Jesus changes me as I practice His teachings. I commit to take each weekly practice seriously, trusting that Christ meets me in the doing."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Practice Jesus’ teachings daily.",
+       "Participate fully in weekly exercises.",
+       "Take small, consistent steps of obedience."
+      ]
+     },
+     {
+      "type": "verse",
+      "text": "“Everyone who hears these words of Mine and puts them into practice…”",
+      "reference": "Matthew 7:24"
+     },
+     {
+      "type": "subheading",
+      "text": "3. A Covenant of Purity & Inner Wholeness"
+     },
+     {
+      "type": "paragraph",
+      "text": "I commit to allow Jesus to purify my heart — my thoughts, desires, emotions, and motives."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Guard my heart from anger, contempt, and lust.",
+       "Pursue reconciliation quickly.",
+       "Remove anything that weakens my purity or integrity."
+      ]
+     },
+     {
+      "type": "verse",
+      "text": "“Blessed are the pure in heart, for they shall see God.”",
+      "reference": "Matthew 5:8"
+     },
+     {
+      "type": "subheading",
+      "text": "4. A Covenant of Speech & Integrity"
+     },
+     {
+      "type": "paragraph",
+      "text": "I commit to speak truthfully, gently, and clearly. I want my words to match my heart."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Let my “Yes” be Yes and my “No” be No.",
+       "Avoid exaggeration, deception, or manipulation.",
+       "Use my words to build and bless, not tear down."
+      ]
+     },
+     {
+      "type": "verse",
+      "text": "“Out of the abundance of the heart the mouth speaks.”",
+      "reference": "Matthew 12:34"
+     },
+     {
+      "type": "subheading",
+      "text": "5. A Covenant of Meekness, Generosity & Non-Retaliation"
+     },
+     {
+      "type": "paragraph",
+      "text": "I commit to letting Jesus shape how I respond to provocation, injustice, or inconvenience."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Respond gently when wronged.",
+       "Go the second mile when needed.",
+       "Give freely to those in need."
+      ]
+     },
+     {
+      "type": "verse",
+      "text": "“Do not resist an evil person… go with him two miles.”",
+      "reference": "Matthew 5:39–41"
+     },
+     {
+      "type": "subheading",
+      "text": "6. A Covenant of Love & Mercy"
+     },
+     {
+      "type": "paragraph",
+      "text": "I commit, with God’s help, to love even when it is hard, and to bless those who oppose me."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Pray for my enemies.",
+       "Release bitterness and forgive freely.",
+       "Respond to hostility with mercy."
+      ]
+     },
+     {
+      "type": "verse",
+      "text": "“Love your enemies and pray for those who persecute you.”",
+      "reference": "Matthew 5:44"
+     },
+     {
+      "type": "subheading",
+      "text": "7. A Covenant of Secret Devotion"
+     },
+     {
+      "type": "paragraph",
+      "text": "I commit to develop a hidden life with God — unseen by others and rooted in intimacy."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Give in secret.",
+       "Pray in secret.",
+       "Fast in secret."
+      ]
+     },
+     {
+      "type": "verse",
+      "text": "“Your Father who sees in secret will reward you.”",
+      "reference": "Matthew 6:4–6"
+     },
+     {
+      "type": "subheading",
+      "text": "8. A Covenant of Forgiveness & Emotional Freedom"
+     },
+     {
+      "type": "paragraph",
+      "text": "I commit to walk in mercy, letting Jesus free my heart from bitterness, wounds, and offense."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Practice forgiveness regularly.",
+       "Bless those who have hurt me.",
+       "Release the weight of past pain."
+      ]
+     },
+     {
+      "type": "verse",
+      "text": "“Forgive, and you will be forgiven.”",
+      "reference": "Luke 6:37"
+     },
+     {
+      "type": "subheading",
+      "text": "9. A Covenant of Trust & Kingdom Priority"
+     },
+     {
+      "type": "paragraph",
+      "text": "I commit to place God’s Kingdom above my fears, worries, and anxieties."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Seek first the Kingdom.",
+       "Release daily worry to God.",
+       "Trust the Father’s care."
+      ]
+     },
+     {
+      "type": "verse",
+      "text": "“Your Father knows what you need.”",
+      "reference": "Matthew 6:32"
+     },
+     {
+      "type": "subheading",
+      "text": "10. A Covenant of Humility, Discernment & Healthy Boundaries"
+     },
+     {
+      "type": "paragraph",
+      "text": "I commit to see myself clearly, correct others gently, and live with wise boundaries."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Remove the plank from my own eye.",
+       "Judge not with condemnation.",
+       "Guard what is holy and set safe boundaries."
+      ]
+     },
+     {
+      "type": "verse",
+      "text": "“First remove the plank… then you will see clearly.”",
+      "reference": "Matthew 7:5"
+     },
+     {
+      "type": "subheading",
+      "text": "11. A Covenant of Persistent Faith"
+     },
+     {
+      "type": "paragraph",
+      "text": "I commit to ask boldly, seek passionately, and knock persistently."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Pray with expectation.",
+       "Return to prayer when discouraged.",
+       "Trust the Father’s goodness."
+      ]
+     },
+     {
+      "type": "verse",
+      "text": "“Ask… seek… knock.”",
+      "reference": "Matthew 7:7"
+     },
+     {
+      "type": "subheading",
+      "text": "12. A Covenant of the Narrow Way & Christlike Living"
+     },
+     {
+      "type": "paragraph",
+      "text": "I commit to enter through the narrow gate and build my life on the teachings of Jesus."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Choose the narrow way daily.",
+       "Become the good tree that bears good fruit.",
+       "Build my life on the rock of obedience."
+      ]
+     },
+     {
+      "type": "verse",
+      "text": "“Enter through the narrow gate.”",
+      "reference": "Matthew 7:13"
+     },
+     {
+      "type": "verse",
+      "text": "“The wise man built his house on the rock.”",
+      "reference": "Matthew 7:24"
+     },
+     {
+      "type": "subheading",
+      "text": "My Commitment"
+     },
+     {
+      "type": "paragraph",
+      "text": "By signing this covenant, I am not promising perfection. I am presenting my heart to Jesus for transformation."
+     },
+     {
+      "type": "checklist",
+      "id": "b13_covenant_commit",
+      "title": "I am committing to:",
+      "options": [
+       "Walk through this journey with sincerity and desire.",
+       "Practice His teachings with humility.",
+       "Allow Jesus to form His life within me.",
+       "Continue this apprenticeship beyond the 12 weeks."
+      ]
+     },
+     {
+      "type": "prompt",
+      "id": "b13_covenant_signature",
+      "question": "Signature — type your full name and today’s date to sign this covenant:",
+      "hint": "Name / Date"
+     },
+     {
+      "type": "heading",
+      "text": "Before-and-After Discipleship Assessment (After)"
+     },
+     {
+      "type": "paragraph",
+      "text": "Use this tool to gauge your growth as a disciple over these 12 weeks. Be honest. Give yourself space to reflect. This is between you and Jesus."
+     },
+     {
+      "type": "paragraph",
+      "text": "Instructions: Rate each statement on a scale from 1 to 5 (1 = Not true of me at all, 5 = Consistently true of me). Compare this score with your Before assessment from the start of the journey to see how Jesus has shaped your heart. It is NEVER about comparing yourself to others. It is always about measuring your own spiritual transformation."
+     },
+     {
+      "type": "rating",
+      "id": "b13_after_heart",
+      "title": "Heart & Character",
+      "items": [
+       "I respond to conflict with calmness, not anger.",
+       "I seek reconciliation quickly.",
+       "I guard my heart, eyes and imagination from lust.",
+       "I remove things that cause me to sin."
+      ],
+      "scaleMax": 5
+     },
+     {
+      "type": "rating",
+      "id": "b13_after_speech",
+      "title": "Speech & Integrity",
+      "items": [
+       "My “yes” is yes and my “no” is no.",
+       "My words are true, consistent, and dependable.",
+       "I speak simply without exaggeration.",
+       "I honor commitments."
+      ],
+      "scaleMax": 5
+     },
+     {
+      "type": "rating",
+      "id": "b13_after_love",
+      "title": "Love & Mercy",
+      "items": [
+       "I forgive easily and completely.",
+       "I bless and pray for those who hurt me.",
+       "I treat others as I want to be treated."
+      ],
+      "scaleMax": 5
+     },
+     {
+      "type": "rating",
+      "id": "b13_after_devotion",
+      "title": "Spiritual Devotion",
+      "items": [
+       "I pray privately.",
+       "I pray consistently.",
+       "I give generously without seeking credit.",
+       "I fast with joyful heart privately and focus."
+      ],
+      "scaleMax": 5
+     },
+     {
+      "type": "rating",
+      "id": "b13_after_discernment",
+      "title": "Discernment & Humility",
+      "items": [
+       "I do not harshly judge others.",
+       "I examine my own heart before correcting others.",
+       "I set healthy boundaries in relationships.",
+       "I quickly own up to my own weaknesses."
+      ],
+      "scaleMax": 5
+     },
+     {
+      "type": "rating",
+      "id": "b13_after_trust",
+      "title": "Trust & Freedom from Worry",
+      "items": [
+       "I do not live in fear of the future.",
+       "I do not worry about tomorrow.",
+       "I trust God for my needs.",
+       "I orient my life around the Kingdom first."
+      ],
+      "scaleMax": 5
+     },
+     {
+      "type": "rating",
+      "id": "b13_after_faith",
+      "title": "Faith & Spiritual Pursuit",
+      "items": [
+       "I ask boldly.",
+       "I seek persistently.",
+       "I knock faithfully.",
+       "I take steps of faith even when unsure."
+      ],
+      "scaleMax": 5
+     },
+     {
+      "type": "rating",
+      "id": "b13_after_obedience",
+      "title": "Obedience & Practice",
+      "items": [
+       "I build my life around Jesus’ teachings.",
+       "I constantly rely on Jesus’ grace to obey His teachings.",
+       "I try to obey Jesus’ words even when it costs me.",
+       "I am becoming more like Jesus in my inner attitudes and reactions, not just my intentions."
+      ],
+      "scaleMax": 5
+     },
+     {
+      "type": "prompt",
+      "id": "b13_after_total",
+      "question": "TOTAL SCORE (After): add up all your ratings above and record your total here. The comparison below is calculated for you automatically.",
+      "hint": "Growth, not comparison with others."
+     },
+     {
+      "type": "comparison",
+      "title": "Your Growth — Before vs. After",
+      "beforeLabel": "Before",
+      "afterLabel": "After",
+      "note": "Scores are added up automatically from your two assessments. This is never about comparing yourself to others — it is about seeing how Jesus has shaped your heart over these 12 weeks.",
+      "pairs": [
+       {
+        "title": "Heart & Character",
+        "before": "b0_assess_heart",
+        "after": "b13_after_heart"
+       },
+       {
+        "title": "Speech & Integrity",
+        "before": "b0_assess_speech",
+        "after": "b13_after_speech"
+       },
+       {
+        "title": "Love & Mercy",
+        "before": "b0_assess_love",
+        "after": "b13_after_love"
+       },
+       {
+        "title": "Spiritual Devotion",
+        "before": "b0_assess_devotion",
+        "after": "b13_after_devotion"
+       },
+       {
+        "title": "Discernment & Humility",
+        "before": "b0_assess_discernment",
+        "after": "b13_after_discernment"
+       },
+       {
+        "title": "Trust & Freedom from Worry",
+        "before": "b0_assess_trust",
+        "after": "b13_after_trust"
+       },
+       {
+        "title": "Faith & Spiritual Pursuit",
+        "before": "b0_assess_faith",
+        "after": "b13_after_faith"
+       },
+       {
+        "title": "Obedience & Practice",
+        "before": "b0_assess_obedience",
+        "after": "b13_after_obedience"
+       }
+      ]
+     },
+     {
+      "type": "prayer",
+      "text": "Lord Jesus, I thank You for walking with me over these past 12 weeks. Thank You for teaching me, shaping me, correcting me, and healing me. I am grateful for Your transforming work in my life, making me more like You in every way. I acknowledge that I could not change myself, but through Your help and by practicing Your commands, You have renewed my heart as I have journeyed with You. Thank You for guiding my thoughts, desires, reactions, and character, and for forming Your life within me. I praise You for Your faithfulness and love. In Jesus’ Name, Amen.",
+      "title": "Thanksgiving Prayer"
+     },
+     {
+      "type": "heading",
+      "text": "Frequently Asked Questions (FAQ)",
+      "subtitle": "Honest questions. Simple answers. Real help for the journey."
+     },
+     {
+      "type": "subheading",
+      "text": "1. What if I fail a lot while trying to follow Jesus?"
+     },
+     {
+      "type": "paragraph",
+      "text": "You will. Everyone does. Jesus is not surprised, disappointed, or angry when you stumble. He helps you back up and teaches you to walk again. Remember: God looks at who you are becoming, not how many times you fall. See: Proverbs 24:16, 1 John 1:9"
+     },
+     {
+      "type": "subheading",
+      "text": "2. What if I don’t feel anything when I pray or read the Bible?"
+     },
+     {
+      "type": "paragraph",
+      "text": "Feelings come and go. Jesus is with you even when you feel nothing. Keep showing up. God often works the most when we don’t feel it. See: Matthew 28:20, Psalm 46:10"
+     },
+     {
+      "type": "subheading",
+      "text": "3. What if I find some of Jesus’ teachings hard?"
+     },
+     {
+      "type": "paragraph",
+      "text": "You’re not alone. His disciples also struggled. Hard teachings usually mean big growth is coming. Ask Jesus for help. He shapes your heart to make His way possible. See: John 6:60, Philippians 4:13"
+     },
+     {
+      "type": "subheading",
+      "text": "4. How do I know if I’m really growing?"
+     },
+     {
+      "type": "paragraph",
+      "text": "There are several signs that confirm your spiritual growth. You know you are growing when you notice yourself reacting differently than you did before, your heart becomes softer, and you find yourself apologizing more quickly. You begin to desire what is good, resist things that could harm you, love others more deeply, and place your trust in God sooner than you used to. Growth is often slow and gentle — like a tree. So be patient with yourself. See: Mark 4:26–28, John 15:1–5"
+     },
+     {
+      "type": "subheading",
+      "text": "5. What should I do when I feel spiritually dry?"
+     },
+     {
+      "type": "paragraph",
+      "text": "Stay close to Jesus even if you feel empty. Dry seasons are normal. Keep reading, keep praying, keep coming to group. Rain always comes. God never wastes dryness. See: Psalm 63:1, Isaiah 44:3"
+     },
+     {
+      "type": "subheading",
+      "text": "6. What if some sins keep repeating in my life?"
+     },
+     {
+      "type": "paragraph",
+      "text": "Jesus does not give up on you. He walks with you step by step. Confess quickly, talk to a trusted believer, and practice the weekly exercises. Small steps break big chains. See: James 5:16, John 8:36"
+     },
+     {
+      "type": "subheading",
+      "text": "7. Why do I need community? Can’t I just follow Jesus alone?"
+     },
+     {
+      "type": "paragraph",
+      "text": "No one follows Jesus alone — even Jesus walked with friends. We grow faster, safer, and deeper with others. Community helps you stay encouraged and honest. See: Hebrews 10:24–25, Acts 2:42"
+     },
+     {
+      "type": "subheading",
+      "text": "8. What if I feel unworthy or too broken to be a disciple?"
+     },
+     {
+      "type": "paragraph",
+      "text": "Jesus chooses the broken, the weak, and the ordinary. Your weakness is the doorway to His strength. He wants you, all of you, right now, as you are. See: 2 Corinthians 12:9, Psalm 147:3"
+     },
+     {
+      "type": "subheading",
+      "text": "9. How do I forgive someone who hurt me deeply?"
+     },
+     {
+      "type": "paragraph",
+      "text": "Forgiveness is a process, not a moment. Start by giving the pain to God. Ask Jesus to help you take small steps toward letting go. Forgiveness does not mean the hurt was okay — it means you’re letting God heal you. See: Matthew 6:14–15, Ephesians 4:32"
+     },
+     {
+      "type": "subheading",
+      "text": "10. Why does Jesus ask us to love our enemies? Isn’t that too much?"
+     },
+     {
+      "type": "paragraph",
+      "text": "It is too much — for our old selves. But Jesus gives new hearts. Loving enemies frees you from anger, bitterness, and revenge. It is not weakness. It is real strength. See: Matthew 5:44, Romans 12:21"
+     },
+     {
+      "type": "subheading",
+      "text": "11. What if I’m afraid God will give up on me?"
+     },
+     {
+      "type": "paragraph",
+      "text": "He won’t. God finishes what He starts. He is more committed to your growth than you are. See: Philippians 1:6, John 10:28–29"
+     },
+     {
+      "type": "subheading",
+      "text": "12. How long will it take for me to change?"
+     },
+     {
+      "type": "paragraph",
+      "text": "Change is slow, steady, and beautiful. Some things change fast. Other things take years. God is not in a hurry — but He is always working. Think tree, not microwave. See: Galatians 5:22–23, 2 Corinthians 3:18"
+     },
+     {
+      "type": "subheading",
+      "text": "13. Is God disappointed with me when I worry or doubt?"
+     },
+     {
+      "type": "paragraph",
+      "text": "No. God understands your fear and meets you with compassion. Worry and doubt are invitations to trust Him more, not reasons for shame. See: Matthew 6:32–33, Mark 9:24"
+     },
+     {
+      "type": "subheading",
+      "text": "14. How do I stay strong after this 12-week course ends?"
+     },
+     {
+      "type": "paragraph",
+      "text": "To stay strong after this 12-week course ends, keep practicing important habits like reading Scripture, praying, spending time with a supportive community, worshiping, obeying God, serving others, and being generous. These small daily actions will help you stay rooted in Jesus and continue growing in your faith. See: Acts 2:42–47, Colossians 2:6–7"
+     },
+     {
+      "type": "subheading",
+      "text": "15. What if I feel tempted to go back to my old life?"
+     },
+     {
+      "type": "paragraph",
+      "text": "Temptation is normal. The fact that you even care shows you have a new heart. Call a friend, pray, remember who you are in Christ, and take the small step Jesus is showing you. See: 1 Corinthians 10:13, Galatians 5:16"
+     },
+     {
+      "type": "subheading",
+      "text": "16. How do I hear God’s voice?"
+     },
+     {
+      "type": "paragraph",
+      "text": "Through Scripture first and most. Through peace in your heart. Through wise believers. Through gentle nudges from the Holy Spirit within you. Through circumstances that open or close doors. If you are seeking Jesus, He knows how to speak so you can understand. See: John 10:27, Psalm 119:105"
+     },
+     {
+      "type": "heading",
+      "text": "Meeting With Jesus Daily",
+      "subtitle": "A Simple Guide For Beginning and Growing a Daily Life With God"
+     },
+     {
+      "type": "subheading",
+      "text": "Why Meet with Jesus Daily?"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Because following Jesus is a relationship, not a theory.",
+       "Because your soul needs His voice more than your phone’s voice.",
+       "Because His presence makes the tree good from the inside out.",
+       "Jesus Himself often withdrew to meet with the Father (Luke 5:16).",
+       "If the Son of God needed daily connection, we certainly do."
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "This guide will help you develop a simple, life-giving rhythm that keeps your heart open and your life rooted in Him."
+     },
+     {
+      "type": "subheading",
+      "text": "A Simple Daily Rhythm"
+     },
+     {
+      "type": "paragraph",
+      "text": "Below is a 10–20-minute pattern anyone can do — beginner or mature believer. Think of it as a gentle, relational meeting with Jesus."
+     },
+     {
+      "type": "subheading",
+      "text": "1. Pause & Settle (1 minute)"
+     },
+     {
+      "type": "paragraph",
+      "text": "Sit quietly. Breathe deeply. Let your heart slow down. Pray: “Jesus, here I am. I open my heart to You.” Even 20 seconds of stillness changes everything."
+     },
+     {
+      "type": "subheading",
+      "text": "2. Read the Word (5 minutes)"
+     },
+     {
+      "type": "paragraph",
+      "text": "Pick a short passage — one paragraph is enough. Preferably from the Gospels, Psalms, or the BECOME® reading for the week. Read slowly. Read again if needed. Ask: What is Jesus saying? What stands out? What do I feel stirred by? Don’t rush. Don’t analyze deeply. Just listen."
+     },
+     {
+      "type": "subheading",
+      "text": "3. Talk with Jesus (5 minutes)"
+     },
+     {
+      "type": "paragraph",
+      "text": "Be honest. Be simple. Be yourself. Share your heart: your fears, your joys, your frustrations, your hopes, your temptations, your dreams, your weakness. Then pray the week’s formation prayer (from the workbook). This makes daily prayer deeply connected to the Jesus Way."
+     },
+     {
+      "type": "subheading",
+      "text": "4. Listen in Silence (2 minutes)"
+     },
+     {
+      "type": "paragraph",
+      "text": "Sit still again. Let Jesus speak — not always in words but in: peace, clarity, conviction, rest, quiet joy. Listening is where formation happens."
+     },
+     {
+      "type": "subheading",
+      "text": "5. Respond & Obey (1 minute)"
+     },
+     {
+      "type": "paragraph",
+      "text": "End by asking: “Jesus, what do You want me to DO today?” It may be: forgive someone; be quiet instead of reacting; bless someone; apologize humbly; let something go; remove a temptation; give something; pray for someone; trust instead of worrying. Write it down. Ask Jesus’ help. Do it. Because transformation happens in the doing, with Jesus’ help."
+     },
+     {
+      "type": "subheading",
+      "text": "Bonus: Morning & Evening Breath Prayers"
+     },
+     {
+      "type": "paragraph",
+      "text": "These are short, powerful prayers you can pray anytime during your day."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Morning: “Jesus, make the tree good.” (Matthew 12:33)",
+       "Midday: “Your Kingdom come in me.” (Matthew 6:10)",
+       "Evening: “Lord, I give everyone and everything to You.” (Dallas Willard)"
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "These 8-second prayers anchor your heart in grace all day long."
+     },
+     {
+      "type": "subheading",
+      "text": "Tips for a Consistent Daily Practice"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Keep it simple — Don’t try to do too much. Just be real with Jesus.",
+       "Be consistent, not perfect — Daily is ideal, but missing a day doesn’t break anything. Start again the next day.",
+       "Pick a place — A chair. A corner. A space in your room. Let your body learn the rhythm.",
+       "Use Scripture, not random inspiration — Jesus forms us most deeply through His words.",
+       "Bring your whole heart — Don’t hide. He already knows. He is already smiling at you."
+      ],
+      "ordered": true
+     },
+     {
+      "type": "subheading",
+      "text": "A Simple Model You Can Remember — SPLO"
+     },
+     {
+      "type": "paragraph",
+      "text": "Easy, relational, powerful:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "S → Scripture – Read the Word.",
+       "P → Prayer – Talk honestly with Jesus.",
+       "L → Listen – Sit in silence. Receive His peace.",
+       "O → Obey – Do the one thing He showed you."
+      ]
+     },
+     {
+      "type": "subheading",
+      "text": "The Goal"
+     },
+     {
+      "type": "paragraph",
+      "text": "Not finishing a reading plan. Not “having devotions.” Not spiritual performance."
+     },
+     {
+      "type": "lesson",
+      "text": "The goal is: To walk with Jesus daily so you can become like Jesus deeply and live like Jesus freely. That’s how a disciple grows."
+     },
+     {
+      "type": "prompt",
+      "id": "b13_notes",
+      "question": "Notes & Insights"
+     }
+    ]
+   }
+  },
+  {
+   "op": "upsert",
+   "id": "lea_m0",
+   "trackId": "trk_leaders",
+   "weekNumber": 0,
+   "kind": "INTRO",
+   "title": "Introduction & Leadership Self-Assessment",
+   "summary": "Welcome to Leaders Track, plus your Before F.L.O.P.A. leadership self-assessment.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "heading",
+      "text": "Welcome to Leaders Track",
+      "subtitle": "“Come. Follow. Be Made. Be Sent.” — A Leadership Formation Journey for Charismatic Renewal Ministries."
+     },
+     {
+      "type": "paragraph",
+      "text": "You are holding a transformational journey — a roadmap to becoming the kind of leader Jesus can trust, Heaven can deploy, and people can follow. This is more than a class. This is a process of becoming. Jesus never invited anyone to a course. He extended a call:"
+     },
+     {
+      "type": "verse",
+      "text": "“Come, follow Me, and I will make you…”",
+      "reference": "Matthew 4:19"
+     },
+     {
+      "type": "paragraph",
+      "text": "Leaders Track is the “I will make you” part. Over the coming weeks, you will be shaped, sharpened, stretched, and strengthened — not just by what you learn, but by who you become."
+     },
+     {
+      "type": "subheading",
+      "text": "Why This Training?"
+     },
+     {
+      "type": "paragraph",
+      "text": "Charismatic Renewal Ministries is a revival ministry with a leadership culture. We believe spiritual maturity is not measured by how long you’ve been in church, but how faithfully and fruitfully you follow Jesus and help others do the same. Every move of God rises or falls on leadership. Our ministry cannot grow beyond the quality of its leaders."
+     },
+     {
+      "type": "paragraph",
+      "text": "This is why Leaders Track exists: to raise leaders who carry fire, character, humility, unity, and skill — leaders who can support what God is building among us."
+     },
+     {
+      "type": "subheading",
+      "text": "What You Can Expect"
+     },
+     {
+      "type": "paragraph",
+      "text": "If you commit fully to this journey, you can expect:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Personal Transformation — God will work deeply in your heart, mindset, habits, and spirit.",
+       "Stronger Leadership Skills — You will grow in communication, teamwork, self-awareness, and influence.",
+       "Spiritual Maturity — Your prayer life, knowledge of Scripture, and intimacy with God will deepen.",
+       "Clear Vision & Direction — You’ll understand where you fit in the mission of CRM and the Kingdom.",
+       "A Leadership Identity — You will finish this track knowing: “I am a leader. I am called. I am sent.”"
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "But here’s the truth… You will only get out of this training what you are willing to put into it. You will be shaped to the degree that you show up hungry, humble, teachable, and engaged. This is not passive learning. This is active formation."
+     },
+     {
+      "type": "subheading",
+      "text": "How to Get the Most Out of Leaders Track"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Show Up With Hunger — Come ready to learn, listen, and grow every single week.",
+       "Do the Work — Engage with the workbook. Fill in answers honestly. Reflect deeply.",
+       "Be Teachable — Leadership begins where defensiveness ends. Come as a learner — not an expert.",
+       "Be Honest With Yourself — Growth requires truth. Let God confront what He needs to confront.",
+       "Practice What You Learn — Spiritual formation is behavioral, not informational.",
+       "Participate Actively — Ask questions. Share insights. Lean into community.",
+       "Embrace Accountability — Let others speak into your life — especially your mentor.",
+       "Fight for Unity — Honor others. Speak life. Protect the atmosphere.",
+       "Pray Daily — Only the Spirit can transform the heart. Stay plugged into Him.",
+       "Don’t Quit — It’s not about perfection… it’s about consistency."
+      ],
+      "ordered": true
+     },
+     {
+      "type": "subheading",
+      "text": "The Mentorship Requirement"
+     },
+     {
+      "type": "paragraph",
+      "text": "One of the most important elements of Leaders Track is your Leadership Mentor. You will be assigned a mentor who will walk with you through the material, help you apply the lessons, pray with and for you, challenge you where needed, and confirm your readiness for leadership."
+     },
+     {
+      "type": "paragraph",
+      "text": "Your responsibility: you must meet with your mentor at least once every week — no exceptions. This meeting can be in person or virtual, but it must happen weekly. You are the leader — it is your job to schedule and ensure the meeting holds."
+     },
+     {
+      "type": "paragraph",
+      "text": "If you fail to meet with your mentor, you fail the course. Your mentor’s report at the end of the journey will help determine whether you graduate and whether you are commissioned as a leader in CRM. Accountability is not punishment. It is the secret ingredient of transformation."
+     },
+     {
+      "type": "quote",
+      "text": "This is your moment. This is your invitation. This is your turning point. You were born for more than Sunday attendance. You were born to lead, to shape lives, to carry revival, to change the world. Welcome to Leaders Track."
+     },
+     {
+      "type": "heading",
+      "text": "Leadership Self-Assessment — Before",
+      "subtitle": "F.L.O.P.A. — the five core values of a CRM leader"
+     },
+     {
+      "type": "paragraph",
+      "text": "Before you begin Week 1, take an honest snapshot of where you are today. Rate yourself 1–5 in each area (1 = needs a lot of growth; 5 = doing very well in this area). You will take this same assessment again after Week 11, and the app will show you a side-by-side comparison of your growth. This is never about comparing yourself to others — it is about measuring your own formation as a leader."
+     },
+     {
+      "type": "rating",
+      "id": "w0_flopa_before",
+      "title": "Rate yourself in each F.L.O.P.A. core value:",
+      "items": [
+       "Faithfulness",
+       "Love",
+       "Obedience",
+       "Prayerfulness",
+       "Authority"
+      ],
+      "scaleMax": 5
+     },
+     {
+      "type": "prompt",
+      "id": "w0_flopa_growth",
+      "question": "Where do you most need growth right now? Why?"
+     },
+     {
+      "type": "prayer",
+      "title": "Opening Prayer",
+      "text": "Father, thank You for calling me into leadership. As I begin this journey, shape me into a leader after Your own heart — faithful, loving, obedient, prayerful, and walking in Your authority. Teach me, correct me, and use me for Your glory. In Jesus’ Name, Amen."
+     }
+    ]
+   }
+  },
+  {
+   "op": "update",
+   "id": "lea_m1",
+   "title": "The Call to Lead",
+   "summary": "Discover your identity, calling, and the heart behind biblical leadership.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "heading",
+      "text": "Week 1 — The Call to Lead"
+     },
+     {
+      "type": "verse",
+      "text": "“Follow Me, and I will make you…”",
+      "reference": "Matthew 4:19"
+     },
+     {
+      "type": "bigIdea",
+      "text": "Leadership begins with a call — not a position. God calls ordinary people to lead extraordinary lives through simple obedience."
+     },
+     {
+      "type": "heading",
+      "text": "Opening Devotional — “When God Calls Your Name”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Every story of divine leadership begins with a moment when Heaven breaks into an ordinary life."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Moses was tending sheep when God called from the bush.",
+       "Mary was a young girl in a small town when an angel appeared.",
+       "Peter was casting nets when Jesus said, “Follow Me.”"
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "God’s call rarely begins on a stage — it begins in the ordinary. But when we say “Yes, Lord,” our ordinary moments become holy ground."
+     },
+     {
+      "type": "verse",
+      "text": "“For you did not choose Me, but I chose you and appointed you to go and bear fruit — fruit that will last.”",
+      "reference": "John 15:16"
+     },
+     {
+      "type": "paragraph",
+      "text": "Leadership in the Kingdom is not self-promotion, it’s God-invitation. It’s not about getting people to follow us but helping people follow Jesus better."
+     },
+     {
+      "type": "heading",
+      "text": "Reflection — “My Call Moment”",
+      "subtitle": "Take a few minutes to reflect on when God first stirred your heart to serve, influence, or lead. Write it out below. Be honest. It doesn’t have to sound “spiritual” — just real."
+     },
+     {
+      "type": "prompt",
+      "id": "w1_call_moment",
+      "question": "When did I first sense God’s call to leadership or influence?"
+     },
+     {
+      "type": "prompt",
+      "id": "w1_fears",
+      "question": "What fears or doubts did I feel when I first sensed this call?"
+     },
+     {
+      "type": "prompt",
+      "id": "w1_confirmation",
+      "question": "How did God confirm or remind me of His call recently?"
+     },
+     {
+      "type": "heading",
+      "text": "Bible Study — “The God Who Calls Ordinary People”"
+     },
+     {
+      "type": "subheading",
+      "text": "1. Moses: Called from the Desert (Exodus 3)"
+     },
+     {
+      "type": "list",
+      "items": [
+       "God uses your wilderness to prepare your voice.",
+       "Moses said, “Who am I?” — and God answered, “I will be with you.”"
+      ]
+     },
+     {
+      "type": "lesson",
+      "text": "God’s call is not about who you are but who is with you."
+     },
+     {
+      "type": "subheading",
+      "text": "2. Mary: Called in Obscurity (Luke 1:26–38)"
+     },
+     {
+      "type": "list",
+      "items": [
+       "A young girl from a forgotten town becomes the vessel of divine purpose.",
+       "Her response: “Be it unto me according to Your word.”"
+      ]
+     },
+     {
+      "type": "lesson",
+      "text": "Divine leadership begins with surrender, not status."
+     },
+     {
+      "type": "subheading",
+      "text": "3. Peter: Called from His Nets (Matthew 4:18–20)"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Jesus doesn’t just call us to believe — He calls us to become.",
+       "Peter’s “Yes” changed history."
+      ]
+     },
+     {
+      "type": "lesson",
+      "text": "The call is not to comfort but to transformation."
+     },
+     {
+      "type": "heading",
+      "text": "Discussion"
+     },
+     {
+      "type": "prompt",
+      "id": "w1_d1",
+      "question": "Which of these three calls feels most like your own journey right now? Why?"
+     },
+     {
+      "type": "prompt",
+      "id": "w1_d2",
+      "question": "What might God be asking you to leave behind in order to say “yes” fully?"
+     },
+     {
+      "type": "prompt",
+      "id": "w1_d3",
+      "question": "How can you cultivate a “be it unto me” attitude in daily life?"
+     },
+     {
+      "type": "heading",
+      "text": "Activation — “My Leadership Testimony”"
+     },
+     {
+      "type": "paragraph",
+      "text": "This week, take time to write or record your Leadership Testimony — the story of how you began to sense God’s call to serve and influence others. Use the outline below as a guide."
+     },
+     {
+      "type": "prompt",
+      "id": "w1_testimony",
+      "question": "Write your Leadership Testimony:",
+      "hint": "1. My background or life before the call • 2. The moment I felt stirred or called • 3. How I responded (or resisted) • 4. What I’ve learned since saying “yes” • 5. Where I sense God leading me next"
+     },
+     {
+      "type": "paragraph",
+      "text": "Challenge: Share your testimony with one other person this week. (It could be in your group or a trusted friend.) Your story will ignite courage in others."
+     },
+     {
+      "type": "heading",
+      "text": "Personal Reflection — “What’s in My Hand?”"
+     },
+     {
+      "type": "verse",
+      "text": "“Then the Lord said to him, ‘What is that in your hand?’”",
+      "reference": "Exodus 4:2"
+     },
+     {
+      "type": "paragraph",
+      "text": "God never calls us empty-handed. There’s something already in your life He wants to use — a skill, a story, a relationship, a passion."
+     },
+     {
+      "type": "prompt",
+      "id": "w1_in_my_hand",
+      "question": "List three “ordinary” things in your hand right now that God might want to use:",
+      "hint": "Then pray: “Lord, I give You what’s in my hand. Use it to fulfill what’s in Your heart.”"
+     },
+     {
+      "type": "heading",
+      "text": "Memory Verse"
+     },
+     {
+      "type": "verse",
+      "text": "“Come, follow Me,” Jesus said, “and I will make you fishers of men.”",
+      "reference": "Matthew 4:19"
+     },
+     {
+      "type": "prompt",
+      "id": "w1_memory",
+      "question": "Write it out below three times this week to commit it to memory:"
+     },
+     {
+      "type": "prayer",
+      "title": "Closing Prayer — “Here Am I, Lord”",
+      "text": "Father, thank You for calling me out of the ordinary and into Your purpose. I may not feel qualified, but You qualify those You call. Teach me to follow before I try to lead. Shape my heart to reflect Yours, and use my life to serve Your people. Here am I, Lord. Send me. Amen."
+     },
+     {
+      "type": "prompt",
+      "id": "w1_notes",
+      "question": "Leadership Notes",
+      "hint": "Use this space during the teaching session for personal notes or insights."
+     },
+     {
+      "type": "heading",
+      "text": "Week 1 Commitment",
+      "subtitle": "Before you begin Week 2, check your heart and write your response below."
+     },
+     {
+      "type": "prompt",
+      "id": "w1_commitment",
+      "question": "My Week 1 Commitment:",
+      "hint": "• This week, I will say YES to God’s call by… (e.g., praying daily, reaching out to someone, starting a new discipline) • I believe God has called me to influence others through…"
+     }
+    ]
+   }
+  },
+  {
+   "op": "upsert",
+   "id": "lea_m12",
+   "trackId": "trk_leaders",
+   "weekNumber": 12,
+   "kind": "APPENDIX",
+   "title": "Appendix — After Assessment & Growth Review",
+   "summary": "Your After F.L.O.P.A. assessment with an automatic Before/After growth comparison, and a review of your Leadership Covenant.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "heading",
+      "text": "Appendix — After Assessment & Growth Review",
+      "subtitle": "Complete this after Week 11 — Commissioning & Anointing Service"
+     },
+     {
+      "type": "paragraph",
+      "text": "You have walked through all eleven weeks of the Leaders Track. Before you step fully into your commissioning, take the F.L.O.P.A. self-assessment one more time — the same five core values you rated at the very beginning — and let the comparison below show you what God has done in you."
+     },
+     {
+      "type": "rating",
+      "id": "w12_flopa_after",
+      "title": "Rate yourself in each F.L.O.P.A. core value:",
+      "items": [
+       "Faithfulness",
+       "Love",
+       "Obedience",
+       "Prayerfulness",
+       "Authority"
+      ],
+      "scaleMax": 5
+     },
+     {
+      "type": "comparison",
+      "title": "Your Growth as a Leader — Before vs. After",
+      "beforeLabel": "Before",
+      "afterLabel": "After",
+      "note": "Calculated automatically from your two F.L.O.P.A. assessments. Celebrate the growth — and be honest about the next edge.",
+      "pairs": [
+       {
+        "title": "F.L.O.P.A. Core Values",
+        "before": "w0_flopa_before",
+        "after": "w12_flopa_after",
+        "items": [
+         "Faithfulness",
+         "Love",
+         "Obedience",
+         "Prayerfulness",
+         "Authority"
+        ]
+       }
+      ]
+     },
+     {
+      "type": "prompt",
+      "id": "w12_growth",
+      "question": "Looking at your Before and After scores: where did you grow the most? What is your next growth edge as a leader?"
+     },
+     {
+      "type": "subheading",
+      "text": "Your Leadership Covenant"
+     },
+     {
+      "type": "paragraph",
+      "text": "Your Leadership Covenant — including your signed commitment — lives in Week 11: Commissioning & Anointing Service. Open Week 11 any time to revisit the covenant you signed and the Declaration of Sending spoken over you."
+     },
+     {
+      "type": "lesson",
+      "text": "Commissioning is not the end of your formation — it is the beginning of your assignment. Keep practicing, keep serving, keep multiplying."
+     },
+     {
+      "type": "prompt",
+      "id": "w12_notes",
+      "question": "Notes & Insights"
+     }
+    ]
+   }
+  }
+ ],
+ "reflectionMigrations": [
+  {
+   "fromModuleId": "bec_m1",
+   "toModuleId": "bec_m0",
+   "fromPromptId": "b1_assess_heart",
+   "toPromptId": "b0_assess_heart"
+  },
+  {
+   "fromModuleId": "bec_m1",
+   "toModuleId": "bec_m0",
+   "fromPromptId": "b1_assess_speech",
+   "toPromptId": "b0_assess_speech"
+  },
+  {
+   "fromModuleId": "bec_m1",
+   "toModuleId": "bec_m0",
+   "fromPromptId": "b1_assess_love",
+   "toPromptId": "b0_assess_love"
+  },
+  {
+   "fromModuleId": "bec_m1",
+   "toModuleId": "bec_m0",
+   "fromPromptId": "b1_assess_devotion",
+   "toPromptId": "b0_assess_devotion"
+  },
+  {
+   "fromModuleId": "bec_m1",
+   "toModuleId": "bec_m0",
+   "fromPromptId": "b1_assess_discernment",
+   "toPromptId": "b0_assess_discernment"
+  },
+  {
+   "fromModuleId": "bec_m1",
+   "toModuleId": "bec_m0",
+   "fromPromptId": "b1_assess_trust",
+   "toPromptId": "b0_assess_trust"
+  },
+  {
+   "fromModuleId": "bec_m1",
+   "toModuleId": "bec_m0",
+   "fromPromptId": "b1_assess_faith",
+   "toPromptId": "b0_assess_faith"
+  },
+  {
+   "fromModuleId": "bec_m1",
+   "toModuleId": "bec_m0",
+   "fromPromptId": "b1_assess_obedience",
+   "toPromptId": "b0_assess_obedience"
+  },
+  {
+   "fromModuleId": "bec_m1",
+   "toModuleId": "bec_m0",
+   "fromPromptId": "b1_assess_total",
+   "toPromptId": "b0_assess_total"
+  },
+  {
+   "fromModuleId": "bec_m12",
+   "toModuleId": "bec_m13",
+   "fromPromptId": "b12_after_heart",
+   "toPromptId": "b13_after_heart"
+  },
+  {
+   "fromModuleId": "bec_m12",
+   "toModuleId": "bec_m13",
+   "fromPromptId": "b12_after_speech",
+   "toPromptId": "b13_after_speech"
+  },
+  {
+   "fromModuleId": "bec_m12",
+   "toModuleId": "bec_m13",
+   "fromPromptId": "b12_after_love",
+   "toPromptId": "b13_after_love"
+  },
+  {
+   "fromModuleId": "bec_m12",
+   "toModuleId": "bec_m13",
+   "fromPromptId": "b12_after_devotion",
+   "toPromptId": "b13_after_devotion"
+  },
+  {
+   "fromModuleId": "bec_m12",
+   "toModuleId": "bec_m13",
+   "fromPromptId": "b12_after_discernment",
+   "toPromptId": "b13_after_discernment"
+  },
+  {
+   "fromModuleId": "bec_m12",
+   "toModuleId": "bec_m13",
+   "fromPromptId": "b12_after_trust",
+   "toPromptId": "b13_after_trust"
+  },
+  {
+   "fromModuleId": "bec_m12",
+   "toModuleId": "bec_m13",
+   "fromPromptId": "b12_after_faith",
+   "toPromptId": "b13_after_faith"
+  },
+  {
+   "fromModuleId": "bec_m12",
+   "toModuleId": "bec_m13",
+   "fromPromptId": "b12_after_obedience",
+   "toPromptId": "b13_after_obedience"
+  },
+  {
+   "fromModuleId": "bec_m12",
+   "toModuleId": "bec_m13",
+   "fromPromptId": "b12_after_total",
+   "toPromptId": "b13_after_total"
+  },
+  {
+   "fromModuleId": "bec_m12",
+   "toModuleId": "bec_m13",
+   "fromPromptId": "b12_covenant_commit",
+   "toPromptId": "b13_covenant_commit"
+  },
+  {
+   "fromModuleId": "bec_m12",
+   "toModuleId": "bec_m13",
+   "fromPromptId": "b12_covenant_signature",
+   "toPromptId": "b13_covenant_signature"
+  },
+  {
+   "fromModuleId": "bec_m12",
+   "toModuleId": "bec_m13",
+   "fromPromptId": "b12_notes",
+   "toPromptId": "b13_notes"
+  }
+ ]
+}

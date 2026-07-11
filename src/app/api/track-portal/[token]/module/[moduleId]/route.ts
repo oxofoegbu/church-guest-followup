@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
-import { getSavableIds, MAX_REFLECTION_LENGTH } from '@/lib/workbook';
+import { getSavableIds, getComparisonRefIds, MAX_REFLECTION_LENGTH } from '@/lib/workbook';
 
 // Run 12 — public endpoint, secured only by the unguessable portalToken
 // (same trust model as /api/track-portal/[token]). Serves one module's
@@ -34,6 +34,23 @@ export async function GET(
       where: { enrollmentId: enrollment.id, moduleId: module.id },
       select: { promptId: true, response: true, updatedAt: true },
     });
+
+    // Run 16 — comparison blocks may reference rating ids saved in OTHER
+    // modules (e.g. the Before assessment lives in the Introduction module).
+    // Fetch those across the whole enrollment and merge; the module's own
+    // reflections win on any overlap.
+    const refIds = getComparisonRefIds(module.content);
+    if (refIds.length > 0) {
+      const own = new Set(reflections.map((r: any) => r.promptId));
+      const missing = refIds.filter(id => !own.has(id));
+      if (missing.length > 0) {
+        const extra = await (prisma as any).moduleReflection.findMany({
+          where: { enrollmentId: enrollment.id, promptId: { in: missing } },
+          select: { promptId: true, response: true, updatedAt: true },
+        });
+        reflections.push(...extra);
+      }
+    }
     return NextResponse.json({ module, reflections });
   } catch (error) {
     console.error('Portal module GET error:', error);

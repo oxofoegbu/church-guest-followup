@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { getPermissionLevel } from '@/lib/roles';
 
-type Module = { id: string; weekNumber: number; title: string; summary: string | null };
+type Module = { id: string; weekNumber: number; title: string; summary: string | null; kind?: string };
 type Cohort = {
   id: string; name: string; startDate: string | null;
   meetingDay: string | null; meetingTime: string | null; status: string;
@@ -38,6 +38,12 @@ const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frida
 
 function participantName(e: Enrollment) {
   return e.guest ? `${e.guest.firstName} ${e.guest.lastName}` : e.user?.name || 'Unknown';
+}
+
+// Run 16 — Introduction/Appendix modules are content-only. Only CORE modules
+// appear as progress columns and count toward completion.
+function isCoreModule(m: Module) {
+  return !m.kind || m.kind === 'CORE';
 }
 
 // ─── Module modal ────────────────────────────────────────────────
@@ -549,7 +555,7 @@ export default function TrackDetailPage() {
                     <th className="px-2 py-3 min-w-[120px]">Discipler</th>
                     <th className="px-2 py-3 min-w-[100px]">Cohort</th>
                     <th className="px-2 py-3">Status</th>
-                    {track.modules.map(m => (
+                    {track.modules.filter(isCoreModule).map(m => (
                       <th key={m.id} className="px-1 py-3 text-center" title={`Week ${m.weekNumber}: ${m.title}`}>
                         W{m.weekNumber}
                       </th>
@@ -560,8 +566,10 @@ export default function TrackDetailPage() {
                 </thead>
                 <tbody>
                   {sortedEnrollments.map(e => {
-                    const doneCount = e.progress.length;
-                    const total = track.modules.length;
+                    const coreModules = track.modules.filter(isCoreModule);
+                    const coreIds = new Set(coreModules.map(m => m.id));
+                    const doneCount = e.progress.filter(p => coreIds.has(p.moduleId)).length;
+                    const total = coreModules.length;
                     const pct = total > 0 ? Math.round((doneCount / total) * 100) : 0;
                     const allDone = total > 0 && doneCount >= total;
                     return (
@@ -582,7 +590,7 @@ export default function TrackDetailPage() {
                         <td className="px-2 py-3">
                           <span className={`badge ${STATUS_STYLES[e.status] || 'bg-gray-100 text-gray-500'}`}>{e.status}</span>
                         </td>
-                        {track.modules.map(m => {
+                        {track.modules.filter(isCoreModule).map(m => {
                           const done = e.progress.some(p => p.moduleId === m.id);
                           return (
                             <td key={m.id} className="px-1 py-3 text-center">
@@ -655,10 +663,17 @@ export default function TrackDetailPage() {
             ) : track.modules.map(m => (
               <div key={m.id} className="card flex items-start gap-4">
                 <div className="w-10 h-10 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center font-bold flex-shrink-0">
-                  {m.weekNumber}
+                  {isCoreModule(m) ? m.weekNumber : (m.kind === 'INTRO' ? '📖' : '📋')}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-church-900">{m.title}</h3>
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-bold text-church-900">{m.title}</h3>
+                    {!isCoreModule(m) && (
+                      <span className="badge bg-brand-50 text-brand-600 border border-brand-200 text-xs">
+                        {m.kind === 'INTRO' ? 'Introduction' : 'Appendix'}
+                      </span>
+                    )}
+                  </div>
                   {m.summary && <p className="text-sm text-church-500 mt-0.5">{m.summary}</p>}
                 </div>
                 {isAdmin && (
@@ -733,7 +748,7 @@ export default function TrackDetailPage() {
       )}
       {showAddModule && (
         <ModuleModal trackId={trackId}
-          nextWeek={(track.modules[track.modules.length - 1]?.weekNumber || 0) + 1}
+          nextWeek={(track.modules.filter(isCoreModule).slice(-1)[0]?.weekNumber || 0) + 1}
           onClose={() => setShowAddModule(false)}
           onSaved={() => { setShowAddModule(false); fetchTrack(); }} />
       )}

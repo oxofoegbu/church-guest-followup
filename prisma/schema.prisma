@@ -514,6 +514,7 @@ model TrackModule {
   id         String   @id @default(cuid())
   trackId    String
   weekNumber Int
+  kind       String   @default("CORE") // Run 16: CORE | INTRO | APPENDIX — intro/appendix are content-only (no completion circle, excluded from N/weeks progress)
   title      String
   summary    String?
   content    Json?    // Phase 3: in-app workbook content blocks

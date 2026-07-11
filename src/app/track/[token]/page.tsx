@@ -12,7 +12,7 @@ type Portal = {
   track: {
     name: string; description: string | null;
     milestoneLabel: string | null; workbookUrl: string | null;
-    modules: { id: string; weekNumber: number; title: string; summary: string | null; hasContent: boolean }[];
+    modules: { id: string; weekNumber: number; title: string; summary: string | null; kind: string; hasContent: boolean }[];
   };
   discipler: { name: string; email: string; phone: string | null; photoUrl: string | null } | null;
   cohort: { name: string; meetingDay: string | null; meetingTime: string | null } | null;
@@ -106,8 +106,12 @@ export default function TrackPortalPage() {
     );
   }
 
-  const total = portal.track.modules.length;
-  const doneCount = portal.progress.length;
+  // Run 16 — Introduction/Appendix modules are content-only: no completion
+  // circle, and they never count toward the N/weeks progress.
+  const isCore = (m: { kind?: string }) => !m.kind || m.kind === 'CORE';
+  const coreIds = new Set(portal.track.modules.filter(isCore).map(m => m.id));
+  const total = coreIds.size;
+  const doneCount = portal.progress.filter(p => coreIds.has(p.moduleId)).length;
   const pct = total > 0 ? Math.round((doneCount / total) * 100) : 0;
   const allDone = total > 0 && doneCount >= total;
   const isCompleted = portal.status === 'COMPLETED';
@@ -216,7 +220,8 @@ export default function TrackPortalPage() {
           <p className="text-xs uppercase text-church-400 font-semibold mb-3 px-1">Your weekly journey</p>
           <div className="space-y-2.5">
             {portal.track.modules.map(m => {
-              const done = portal.progress.some(p => p.moduleId === m.id);
+              const core = isCore(m);
+              const done = core && portal.progress.some(p => p.moduleId === m.id);
               const busy = toggling === m.id;
               const isOpen = expanded === m.id;
               const data = moduleData[m.id];
@@ -226,16 +231,22 @@ export default function TrackPortalPage() {
                   <div
                     className={`flex items-center gap-4 ${m.hasContent ? 'cursor-pointer' : ''}`}
                     onClick={() => { if (m.hasContent) expandWeek(m.id); }}>
-                    <button
-                      onClick={ev => { ev.stopPropagation(); toggleWeek(m.id); }}
-                      disabled={portal.status !== 'ACTIVE' || busy}
-                      aria-label={done ? `Mark week ${m.weekNumber} as not complete` : `Mark week ${m.weekNumber} complete`}
-                      className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 transition-colors ${done ? 'bg-green-500 text-white' : 'bg-church-100 text-church-400'} ${portal.status === 'ACTIVE' ? 'hover:ring-2 hover:ring-green-200' : 'cursor-default'}`}>
-                      {busy ? '…' : done ? '✓' : m.weekNumber}
-                    </button>
+                    {core ? (
+                      <button
+                        onClick={ev => { ev.stopPropagation(); toggleWeek(m.id); }}
+                        disabled={portal.status !== 'ACTIVE' || busy}
+                        aria-label={done ? `Mark week ${m.weekNumber} as not complete` : `Mark week ${m.weekNumber} complete`}
+                        className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 transition-colors ${done ? 'bg-green-500 text-white' : 'bg-church-100 text-church-400'} ${portal.status === 'ACTIVE' ? 'hover:ring-2 hover:ring-green-200' : 'cursor-default'}`}>
+                        {busy ? '…' : done ? '✓' : m.weekNumber}
+                      </button>
+                    ) : (
+                      <div className="w-9 h-9 rounded-full bg-brand-50 border border-brand-200 flex items-center justify-center text-base flex-shrink-0">
+                        {m.kind === 'INTRO' ? '📖' : '📋'}
+                      </div>
+                    )}
                     <div className="flex-1 min-w-0">
                       <p className={`font-semibold text-sm ${done ? 'text-green-800' : 'text-church-900'}`}>
-                        Week {m.weekNumber}: {m.title}
+                        {core ? `Week ${m.weekNumber}: ${m.title}` : m.title}
                       </p>
                       {m.summary && <p className="text-xs text-church-500 mt-0.5">{m.summary}</p>}
                     </div>
