@@ -14,6 +14,7 @@ type Cohort = {
 };
 type Enrollment = {
   id: string; status: string; startedAt: string; completedAt: string | null; notes: string | null;
+  portalToken: string;
   guest: { id: string; firstName: string; lastName: string; email: string | null; phone: string | null; status: string } | null;
   user: { id: string; name: string; email: string; phone: string | null } | null;
   discipler: { id: string; name: string; email: string; phone: string | null } | null;
@@ -445,6 +446,25 @@ export default function TrackDetailPage() {
     fetchTrack();
   };
 
+  const copyPortalLink = async (e: Enrollment) => {
+    const link = `${window.location.origin}/track/${e.portalToken}`;
+    try {
+      await navigator.clipboard.writeText(link);
+      alert(`Portal link copied for ${participantName(e)}:\n${link}`);
+    } catch {
+      prompt('Copy this portal link:', link);
+    }
+  };
+
+  const sendPortalLink = async (e: Enrollment) => {
+    if (!confirm(`Send ${participantName(e)} their personal journey link via email/WhatsApp?`)) return;
+    const res = await fetch(`/api/tracks/${trackId}/enrollments/${e.id}/send-link`, { method: 'POST' });
+    const d = await res.json();
+    if (!res.ok) { alert(d.error || 'Failed to send'); return; }
+    const summary = (d.results || []).map((r: any) => `${r.channel}: ${r.ok ? 'sent ✓' : `failed (${r.error})`}`).join('\n');
+    alert(`Portal link send results:\n${summary}`);
+  };
+
   const deleteModule = async (mod: Module) => {
     if (!confirm(`Delete Week ${mod.weekNumber}: "${mod.title}"? Progress marks for this week will be lost.`)) return;
     await fetch(`/api/tracks/${trackId}/modules/${mod.id}`, { method: 'DELETE' });
@@ -591,6 +611,14 @@ export default function TrackDetailPage() {
                         </td>
                         <td className="px-2 py-3">
                           <div className="flex gap-1">
+                            {canManageProgress && (
+                              <button onClick={() => copyPortalLink(e)} title="Copy portal link"
+                                className="p-1.5 text-church-400 hover:text-brand-500 hover:bg-brand-50 rounded-lg transition-colors text-sm">🔗</button>
+                            )}
+                            {canManageProgress && (
+                              <button onClick={() => sendPortalLink(e)} title="Send portal link via email/WhatsApp"
+                                className="p-1.5 text-church-400 hover:text-brand-500 hover:bg-brand-50 rounded-lg transition-colors text-sm">📤</button>
+                            )}
                             {canManageProgress && (
                               <button onClick={() => setEditingEnrollment(e)}
                                 className="p-1.5 text-church-400 hover:text-brand-500 hover:bg-brand-50 rounded-lg transition-colors text-sm">✏️</button>

@@ -67,6 +67,7 @@ model User {
   name               String
   email              String   @unique
   phone              String?
+  photoUrl           String?  // Run 10 — discipler photo shown on participant portal
   password           String
   role               String   @default("VOLUNTEER")
   active             Boolean  @default(true)

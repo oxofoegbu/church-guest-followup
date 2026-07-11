@@ -1,14 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { requireAuth, handleAuthError } from '@/lib/auth';
+import { getPermissionLevel } from '@/lib/roles';
 
 // POST /api/tracks/[id]/enrollments/[enrollmentId]/progress — toggle module completion
-// Body: { moduleId, completed: boolean } (admins and leaders)
+// Body: { moduleId, completed: boolean }
+// Allowed: admins and leaders for anyone, OR any logged-in user for their OWN enrollment (Run 10)
 export async function POST(request: NextRequest, { params }: { params: { id: string; enrollmentId: string } }) {
   try {
-    const session = await requireAuth(request, ['LEADER']);
+    const session = await requireAuth(request);
     const { moduleId, completed } = await request.json();
     if (!moduleId) return NextResponse.json({ error: 'moduleId is required' }, { status: 400 });
+
+    const enrollment = await (prisma as any).trackEnrollment.findUnique({
+      where: { id: params.enrollmentId },
+      select: { userId: true },
+    });
+    if (!enrollment) return NextResponse.json({ error: 'Enrollment not found' }, { status: 404 });
+
+    const isSelf = enrollment.userId === session.userId;
+    if (!isSelf) {
+      const setting = await prisma.appSetting.findUnique({ where: { key: 'custom_roles' } });
+      const permLevel = getPermissionLevel(session.role, setting?.value ?? null);
+      if (permLevel !== 'ADMIN_ACCESS' && permLevel !== 'LEADER_ACCESS') {
+        return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
+      }
+    }
 
     if (completed) {
       await (prisma as any).moduleProgress.upsert({

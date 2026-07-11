@@ -218,6 +218,7 @@ function UserModal({ user, roles, onClose }: { user: any; roles: RoleConfig[]; o
     name: user?.name || '',
     email: user?.email || '',
     phone: user?.phone || '',
+    photoUrl: user?.photoUrl || '',
     role: user?.role || 'VOLUNTEER',
     password: '',
   });
@@ -275,6 +276,18 @@ function UserModal({ user, roles, onClose }: { user: any; roles: RoleConfig[]; o
             <label className="label">Phone (with country code for WhatsApp)</label>
             <input value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })}
               className="input-field" placeholder="+12025551234" />
+          </div>
+          <div>
+            <label className="label">Photo URL (shown to participants they disciple)</label>
+            <div className="flex items-center gap-3">
+              {form.photoUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={form.photoUrl} alt="" className="w-10 h-10 rounded-full object-cover border border-church-200 flex-shrink-0"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+              ) : null}
+              <input value={form.photoUrl} onChange={e => setForm({ ...form, photoUrl: e.target.value })}
+                className="input-field" placeholder="https://…/photo.jpg" />
+            </div>
           </div>
           <div>
             <label className="label">Role</label>

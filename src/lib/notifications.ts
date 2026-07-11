@@ -61,7 +61,7 @@ function buildEmailHtml(params: NotifyVolunteerParams): string {
 // RESEND EMAIL HELPER
 // ==========================================
 
-async function sendEmailViaResend(to: string, subject: string, html: string): Promise<{ id?: string; error?: string }> {
+export async function sendEmailViaResend(to: string, subject: string, html: string): Promise<{ id?: string; error?: string }> {
   const apiKey = process.env.RESEND_API_KEY;
   const fromEmail = process.env.RESEND_FROM_EMAIL;
   const fromName = process.env.RESEND_FROM_NAME || 'Church Guest Follow-Up';
@@ -101,7 +101,7 @@ async function sendEmailViaResend(to: string, subject: string, html: string): Pr
 // WHATSAPP (via Whapi.cloud)
 // ==========================================
 
-async function sendWhatsAppViaWhapi(to: string, message: string): Promise<{ id?: string; error?: string }> {
+export async function sendWhatsAppViaWhapi(to: string, message: string): Promise<{ id?: string; error?: string }> {
   const apiUrl = process.env.WHAPI_API_URL || 'https://gate.whapi.cloud';
   const token = process.env.WHAPI_TOKEN;
 

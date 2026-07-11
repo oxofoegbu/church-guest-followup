@@ -8,6 +8,7 @@ const createUserSchema = z.object({
   name: z.string().min(1).max(100),
   email: z.string().email(),
   phone: z.string().max(20).optional(),
+  photoUrl: z.string().url().max(500).optional().or(z.literal('')),
   role: z.string().min(1).max(50),
   password: z.string().min(6),
 });
@@ -16,6 +17,7 @@ const updateUserSchema = z.object({
   name: z.string().min(1).max(100).optional(),
   email: z.string().email().optional(),
   phone: z.string().max(20).optional().nullable(),
+  photoUrl: z.string().url().max(500).optional().nullable().or(z.literal('')),
   role: z.string().min(1).max(50).optional(),
   active: z.boolean().optional(),
   password: z.string().min(6).optional(),
@@ -26,7 +28,7 @@ export async function GET(request: NextRequest) {
     const session = await requireAuth(request);
     const users = await prisma.user.findMany({
       select: {
-        id: true, name: true, email: true, phone: true,
+        id: true, name: true, email: true, phone: true, photoUrl: true,
         role: true, active: true, createdAt: true,
         _count: { select: { assignedGuests: true, activities: true } },
       },
@@ -63,7 +65,7 @@ export async function POST(request: NextRequest) {
         role: data.role,
         password: await hashPassword(data.password),
       },
-      select: { id: true, name: true, email: true, phone: true, role: true, active: true },
+      select: { id: true, name: true, email: true, phone: true, photoUrl: true, role: true, active: true },
     });
 
     auditUserCreated(session.userId, session.name, user.id, user.name, data.role).catch(() => {});
@@ -100,11 +102,14 @@ export async function PATCH(request: NextRequest) {
     if (data.email) {
       data.email = data.email.toLowerCase();
     }
+    if (data.photoUrl !== undefined) {
+      data.photoUrl = data.photoUrl ? data.photoUrl.trim() : null;
+    }
 
     const user = await prisma.user.update({
       where: { id },
       data,
-      select: { id: true, name: true, email: true, phone: true, role: true, active: true },
+      select: { id: true, name: true, email: true, phone: true, photoUrl: true, role: true, active: true },
     });
 
     // Audit logging
