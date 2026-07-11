@@ -1,27 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { requireAuth, handleAuthError, hashPassword } from '@/lib/auth';
-import { generateTempPassword } from '@/lib/enroll';
+import { generateTempPassword, WELCOME_TRACK_SLUG, beginAudienceLabel } from '@/lib/enroll';
 import {
   sendEnrollmentApprovedNotification,
   sendEnrollmentRejectedEmail,
+  sendDisciplerAssignedEmail,
 } from '@/lib/enrollment-notifications';
 
 // POST /api/enrollment-requests/[id]/decide — admin-level only.
-// Body: { action: 'approve' | 'reject' }
+// Body: { action: 'approve' | 'reject', disciplerUserId?: string }
 //
-// Approve:
-//   1. Re-match the email against Users at decision time (the person may have
-//      been registered since submitting, or the matched account removed).
-//   2. No user -> create one (role VOLUNTEER, generated temp password;
-//      User.mustChangePassword defaults to true so first sign-in forces a
-//      password change — reusing the app's existing flow).
+// Approve (Become / Leaders — unchanged from Runs 13–14):
+//   1. Re-match the email against Users at decision time.
+//   2. No user -> create one (role VOLUNTEER, temp password, forced change on
+//      first sign-in via mustChangePassword).
 //   3. Create the TrackEnrollment (same duplicate guard as admin enrollment).
-//   4. Mark the request APPROVED and notify the participant (email + WhatsApp
-//      when a phone was given), including credentials for new accounts.
+//   4. Mark APPROVED and notify the participant (credentials for new accounts).
 //
-// The steps are sequential and safe to retry: if a user was created but a
-// later step failed, re-approving matches the existing user and continues.
+// Approve (Welcome Track — Run 19, requests from /begin):
+//   Participants become GUESTS, not Users — no account, no temp password.
+//   1. If the email matches an existing User (a member re-anchoring), enroll
+//      them as that User — still no account creation needed.
+//   2. Otherwise reuse an existing Guest matched by email, or create a new
+//      Guest (source GUEST_FORM, status NEW_GUEST) so they enter the normal
+//      guest follow-up pipeline; their share/prayer note becomes the guest's
+//      prayerRequest.
+//   3. Create the TrackEnrollment and send the warmer guest-variant welcome
+//      email (portal link only — no sign-in language).
+//
+// Run 19 (both paths): an optional discipler can be assigned at approval;
+// when one is, the discipler gets a fire-safe email pointing at My Disciples.
+//
+// The steps are sequential and safe to retry: if a user/guest was created but
+// a later step failed, re-approving matches the existing record and continues.
 
 export async function POST(
   request: NextRequest,
@@ -29,7 +41,7 @@ export async function POST(
 ) {
   try {
     const session = await requireAuth(request, ['ADMIN']);
-    const { action } = await request.json();
+    const { action, disciplerUserId } = await request.json();
     if (action !== 'approve' && action !== 'reject') {
       return NextResponse.json({ error: 'action must be approve or reject' }, { status: 400 });
     }
@@ -37,7 +49,7 @@ export async function POST(
     const req = await (prisma as any).enrollmentRequest.findUnique({
       where: { id: params.id },
       include: {
-        track: { select: { id: true, name: true } },
+        track: { select: { id: true, name: true, slug: true } },
         cohort: { select: { id: true, name: true, meetingDay: true, meetingTime: true, status: true } },
       },
     });
@@ -71,18 +83,61 @@ export async function POST(
     }
 
     // ---- Approve -----------------------------------------------------------
-    // 1. Find or create the user account
+    // Run 19: optional discipler chosen at approval time — validate up front
+    let discipler: { id: string; name: string; email: string } | null = null;
+    if (disciplerUserId) {
+      discipler = await prisma.user.findFirst({
+        where: { id: disciplerUserId, active: true },
+        select: { id: true, name: true, email: true },
+      });
+      if (!discipler) {
+        return NextResponse.json({ error: 'The chosen discipler could not be found (or is deactivated).' }, { status: 400 });
+      }
+    }
+
+    const isWelcome = req.track.slug === WELCOME_TRACK_SLUG;
+    const participantName = `${req.firstName} ${req.lastName}`.trim();
+
+    // 1. Resolve the participant: User (matched by email) for every track;
+    //    for the Welcome Track an unmatched person becomes a GUEST instead of
+    //    getting a Harvest account.
     let user = await prisma.user.findFirst({
       where: { email: { equals: req.email, mode: 'insensitive' } },
       select: { id: true, name: true },
     });
+    let guest: { id: string } | null = null;
     let newAccount: { email: string; tempPassword: string } | null = null;
-    if (!user) {
+
+    if (!user && isWelcome) {
+      // Reuse an existing guest with this email, or create one so they enter
+      // the normal guest follow-up pipeline.
+      guest = await prisma.guest.findFirst({
+        where: { email: { equals: req.email, mode: 'insensitive' }, archivedAt: null },
+        orderBy: { createdAt: 'desc' },
+        select: { id: true },
+      });
+      if (!guest) {
+        guest = await prisma.guest.create({
+          data: {
+            firstName: req.firstName,
+            lastName: req.lastName || '',
+            email: req.email,
+            phone: req.phone || null,
+            howHeardAboutUs: 'Welcome Track sign-up (Begin page)',
+            prayerRequest: req.shareNote || null,
+            source: 'GUEST_FORM',
+            addedByUserId: session.userId,
+          },
+          select: { id: true },
+        });
+      }
+    } else if (!user) {
+      // Become / Leaders — create a Harvest account (unchanged behavior)
       const tempPassword = generateTempPassword();
       try {
         user = await prisma.user.create({
           data: {
-            name: `${req.firstName} ${req.lastName}`.trim(),
+            name: participantName,
             email: req.email,
             phone: req.phone || null,
             role: 'VOLUNTEER',
@@ -103,16 +158,20 @@ export async function POST(
         if (!user) throw err;
       }
     }
-    if (!user) {
-      return NextResponse.json({ error: 'Could not resolve a user account for this request' }, { status: 500 });
+    if (!user && !guest) {
+      return NextResponse.json({ error: 'Could not resolve a participant for this request' }, { status: 500 });
     }
 
-    // 2. Duplicate-enrollment guard (mirrors the admin enrollment endpoint)
+    // 2. Duplicate-enrollment guard (covers both user and guest identities)
     const existing = await (prisma as any).trackEnrollment.findFirst({
       where: {
         trackId: req.track.id,
-        userId: user.id,
         status: { in: ['ACTIVE', 'PAUSED', 'COMPLETED'] },
+        OR: [
+          ...(user ? [{ userId: user.id }] : []),
+          ...(guest ? [{ guestId: guest.id }] : []),
+          { guest: { email: { equals: req.email, mode: 'insensitive' } } },
+        ],
       },
       select: { id: true },
     });
@@ -124,7 +183,7 @@ export async function POST(
           status: 'APPROVED',
           decidedAt: new Date(),
           decidedByUserId: session.userId,
-          matchedUserId: user.id,
+          matchedUserId: user?.id || null,
           enrollmentId: existing.id,
         },
       });
@@ -133,24 +192,32 @@ export async function POST(
 
     // 3. Create the enrollment (only attach the cohort if it is still active)
     const cohortId = req.cohort && req.cohort.status === 'ACTIVE' ? req.cohort.id : null;
+    const audienceLabel = beginAudienceLabel(req.audience);
+    const noteParts = [
+      isWelcome ? 'Welcome Track sign-up (approved request)' : 'Self-enrollment (approved request)',
+      audienceLabel ? `Describes themselves as: ${audienceLabel}` : '',
+      req.shareNote ? `They shared: ${req.shareNote}` : '',
+    ].filter(Boolean);
     const enrollment = await (prisma as any).trackEnrollment.create({
       data: {
         trackId: req.track.id,
-        userId: user.id,
+        userId: user?.id || null,
+        guestId: user ? null : guest?.id || null,
+        disciplerUserId: discipler?.id || null,
         cohortId,
-        notes: 'Self-enrollment (approved request)',
+        notes: noteParts.join('\n'),
       },
       select: { id: true, portalToken: true },
     });
 
-    // 4. Mark approved + notify the participant
+    // 4. Mark approved + notify the participant (+ the discipler, Run 19)
     const updated = await (prisma as any).enrollmentRequest.update({
       where: { id: req.id },
       data: {
         status: 'APPROVED',
         decidedAt: new Date(),
         decidedByUserId: session.userId,
-        matchedUserId: user.id,
+        matchedUserId: user?.id || null,
         enrollmentId: enrollment.id,
       },
     });
@@ -158,9 +225,24 @@ export async function POST(
       ...baseInfo,
       portalToken: enrollment.portalToken,
       newAccount,
+      guestParticipant: isWelcome && !user,
     });
+    if (discipler) {
+      await sendDisciplerAssignedEmail({
+        disciplerName: discipler.name,
+        disciplerEmail: discipler.email,
+        participantName,
+        trackName: req.track.name,
+      });
+    }
 
-    return NextResponse.json({ ok: true, request: updated, createdAccount: !!newAccount });
+    return NextResponse.json({
+      ok: true,
+      request: updated,
+      createdAccount: !!newAccount,
+      createdGuest: isWelcome && !user,
+      disciplerAssigned: !!discipler,
+    });
   } catch (error) {
     return handleAuthError(error);
   }

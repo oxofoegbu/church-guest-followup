@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { requireAuth, handleAuthError } from '@/lib/auth';
 import { logAudit } from '@/lib/audit';
+import { sendDisciplerAssignedEmail } from '@/lib/enrollment-notifications';
 
 const ENROLLMENT_INCLUDE = {
   guest: { select: { id: true, firstName: true, lastName: true, email: true, phone: true, status: true } },
@@ -59,6 +60,17 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       targetId: enrollment.id, targetType: 'TRACK_ENROLLMENT', targetName: participantName,
       metadata: { trackId: track.id, trackName: track.name },
     });
+
+    // Run 19 -- tell the discipler they have a new disciple (fire-safe, email
+    // only). Only fires when a discipler was chosen at enrollment time.
+    if (enrollment.discipler?.email) {
+      await sendDisciplerAssignedEmail({
+        disciplerName: enrollment.discipler.name,
+        disciplerEmail: enrollment.discipler.email,
+        participantName,
+        trackName: track.name,
+      });
+    }
 
     return NextResponse.json({ enrollment }, { status: 201 });
   } catch (error) {

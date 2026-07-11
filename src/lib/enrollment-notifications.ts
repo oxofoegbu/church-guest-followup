@@ -14,6 +14,9 @@ type RequestInfo = {
   trackName: string;
   cohortName?: string | null;
   cohortMeeting?: string | null; // e.g. "Sundays at 18:00"
+  // Run 19 -- Welcome Track "Begin" page extras
+  audienceLabel?: string | null; // "Which best describes you?" answer
+  shareNote?: string | null;     // "anything you'd like us to know -- or pray about"
 };
 
 async function getChurchName(): Promise<string> {
@@ -80,6 +83,8 @@ export async function notifyAdminsOfEnrollmentRequest(info: RequestInfo): Promis
         <h2 style="color:#1f2937;">New enrollment request</h2>
         <p><strong>${esc(fullName)}</strong> (${esc(info.email)}${info.phone ? `, ${esc(info.phone)}` : ''})
         has requested to join <strong>${esc(info.trackName)}</strong>${esc(cohortLine)}.</p>
+        ${info.audienceLabel ? `<p style="margin:4px 0;color:#374151;">They describe themselves as: <em>${esc(info.audienceLabel)}</em></p>` : ''}
+        ${info.shareNote ? `<div style="background:#f9fafb;border-left:3px solid #b45309;padding:10px 14px;margin:12px 0;color:#374151;"><p style="margin:0;font-size:13px;color:#6b7280;">They shared:</p><p style="margin:4px 0 0;">${esc(info.shareNote)}</p></div>` : ''}
         <p><a href="${reviewUrl}" style="background:#b45309;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none;">Review requests</a></p>
         <p style="color:#6b7280;font-size:13px;">${esc(churchName)} \u2014 Harvest</p>
       </div>`;
@@ -98,11 +103,32 @@ export async function notifyAdminsOfEnrollmentRequest(info: RequestInfo): Promis
 export async function sendEnrollmentApprovedNotification(params: RequestInfo & {
   portalToken: string;
   newAccount?: { email: string; tempPassword: string } | null;
+  // Run 19: Welcome Track participants are Guests -- no Harvest account, no
+  // dashboard links, warmer wording, and email only (Whapi stays parked).
+  guestParticipant?: boolean;
 }): Promise<void> {
   try {
     const churchName = await getChurchName();
     const base = appUrl();
     const portalUrl = `${base}/track/${params.portalToken}`;
+
+    if (params.guestParticipant) {
+      const subject = `You're in, ${params.firstName} \u2014 welcome to the ${params.trackName}`;
+      const html = `
+        <div style="font-family: Georgia, serif; max-width: 560px; color:#2A2622;">
+          <h2 style="color:#1F3A5F;font-weight:normal;">We're so glad you're coming, ${esc(params.firstName)}.</h2>
+          <p>Your place in the <strong>${esc(params.trackName)}</strong> at ${esc(churchName)} is saved.</p>
+          ${params.cohortName ? `<p>Your group: <strong>${esc(params.cohortName)}</strong>${params.cohortMeeting ? ` \u2014 ${esc(params.cohortMeeting)}` : ''}</p>` : ''}
+          <p>This link below is your own personal journey page \u2014 the five modules live there,
+          and you can read and respond at your own pace. Keep this email so you can always find it.</p>
+          <p style="margin:20px 0;"><a href="${portalUrl}" style="background:#1F3A5F;color:#FBF7EF;padding:12px 22px;border-radius:8px;text-decoration:none;">Open my journey page</a></p>
+          <p>There's nothing you need to prepare and nothing you need to be. Just come as you are \u2014
+          a real person from our family will walk with you from here.</p>
+          <p style="color:#6b7280;font-size:13px;">${esc(churchName)} \u2014 a people learning to be with Jesus.</p>
+        </div>`;
+      await sendEmailViaResend(params.email, subject, html);
+      return;
+    }
     const cohortHtml = params.cohortName
       ? `<p>Your group: <strong>${esc(params.cohortName)}</strong>${params.cohortMeeting ? ` \u2014 ${esc(params.cohortMeeting)}` : ''}</p>`
       : '';
@@ -156,5 +182,36 @@ export async function sendEnrollmentRejectedEmail(params: RequestInfo): Promise<
     await sendEmailViaResend(params.email, subject, html);
   } catch (err) {
     console.error('sendEnrollmentRejectedEmail failed:', err);
+  }
+}
+
+// --- Run 19: discipler assignment ------------------------------------------
+// Emails a discipler when they are assigned to an enrollment (admin enroll
+// modal, edit modal, or self-enrollment approval). Fire-safe and email only
+// (Whapi is parked). Callers are responsible for only firing on set/changed.
+export async function sendDisciplerAssignedEmail(params: {
+  disciplerName: string;
+  disciplerEmail: string;
+  participantName: string;
+  trackName: string;
+}): Promise<void> {
+  try {
+    const churchName = await getChurchName();
+    const myDisciplesUrl = `${appUrl()}/dashboard/my-disciples`;
+    const subject = `You have a new disciple: ${params.participantName} \u2014 ${params.trackName}`;
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 560px;">
+        <h2 style="color:#1f2937;">\uD83E\uDD1D A new disciple has been entrusted to you</h2>
+        <p>Hi ${esc(params.disciplerName)},</p>
+        <p><strong>${esc(params.participantName)}</strong> has been enrolled in
+        <strong>${esc(params.trackName)}</strong> and you have been assigned as their discipler.</p>
+        <p>You can follow their journey \u2014 their reflections module by module \u2014 and leave
+        an encouraging comment on each module under My Disciples:</p>
+        <p style="margin:18px 0;"><a href="${myDisciplesUrl}" style="background:#15803d;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none;">Open My Disciples</a></p>
+        <p style="color:#6b7280;font-size:13px;">${esc(churchName)} \u2014 Harvest</p>
+      </div>`;
+    await sendEmailViaResend(params.disciplerEmail, subject, html);
+  } catch (err) {
+    console.error('sendDisciplerAssignedEmail failed:', err);
   }
 }

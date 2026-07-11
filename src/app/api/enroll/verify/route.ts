@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
-import { hashOtpCode, OTP_MAX_ATTEMPTS } from '@/lib/enroll';
+import { hashOtpCode, OTP_MAX_ATTEMPTS, beginAudienceLabel } from '@/lib/enroll';
 import { notifyAdminsOfEnrollmentRequest } from '@/lib/enrollment-notifications';
 
 // Run 14 — public endpoint, step 2 of self-enrollment.
@@ -64,6 +64,9 @@ export async function POST(request: NextRequest) {
       phone: req.phone,
       trackName: req.track.name,
       cohortName: req.cohort?.name || null,
+      // Run 19 -- present on Welcome Track "Begin" requests
+      audienceLabel: beginAudienceLabel(req.audience),
+      shareNote: req.shareNote || null,
     });
 
     return NextResponse.json({ ok: true });

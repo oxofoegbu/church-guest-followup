@@ -43,3 +43,35 @@ export function generateOtpCode(): string {
 export function hashOtpCode(requestId: string, code: string): string {
   return createHash('sha256').update(`${requestId}:${code}`).digest('hex');
 }
+
+// --- Run 19: Welcome Track "Begin" page (/begin) ----------------------------
+// The Welcome Track deliberately has its own warmer public flow, separate
+// from /enroll (which stays Become & Leaders only).
+export const WELCOME_TRACK_SLUG = 'welcome-track';
+
+// "Which best describes you?" options -- stored as codes on
+// EnrollmentRequest.audience, rendered with these labels.
+export const BEGIN_AUDIENCES: { code: string; label: string }[] = [
+  { code: 'FIRST_TIME', label: "This is my first time / I'm new here" },
+  { code: 'RETURNING', label: "I'm coming back after a while" },
+  { code: 'MEMBER', label: "I'm a member wanting to re-anchor" },
+  { code: 'EXPLORING', label: "I'm just exploring \u2014 not sure yet" },
+];
+
+export function beginAudienceLabel(code?: string | null): string | null {
+  if (!code) return null;
+  return BEGIN_AUDIENCES.find(a => a.code === code)?.label || null;
+}
+
+// Begin form: warmer and leaner than /enroll -- last name is optional
+// (stored as '' when omitted), plus the optional audience + share/prayer note.
+export const beginRequestSchema = z.object({
+  cohortId: z.string().min(1).nullable().optional(),
+  firstName: z.string().trim().min(1).max(80),
+  lastName: z.string().trim().max(80).optional().or(z.literal('')),
+  email: z.string().trim().email().max(200),
+  phone: z.string().trim().max(40).optional().or(z.literal('')),
+  audience: z.enum(['FIRST_TIME', 'RETURNING', 'MEMBER', 'EXPLORING']).nullable().optional(),
+  shareNote: z.string().trim().max(1000).optional().or(z.literal('')),
+  website: z.string().optional(), // honeypot -- humans never fill this
+});
