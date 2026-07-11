@@ -14,6 +14,8 @@ type Enrollment = {
   discipler: { name: string; email: string; phone: string | null; photoUrl: string | null } | null;
   cohort: { name: string; meetingDay: string | null; meetingTime: string | null } | null;
   progress: { moduleId: string; completedAt: string }[];
+  // Run 20 -- cohort announcements + personal notes, newest first
+  announcements?: { id: string; title: string | null; body: string; createdAt: string; enrollmentId: string | null; author: { name: string } | null }[];
 };
 
 type DisciplerNote = { note: string; updatedAt: string; author: { name: string } | null } | null;
@@ -193,6 +195,29 @@ export default function MyTracksPage() {
                         🧑‍🤝‍🧑 {e.cohort.name}{e.cohort.meetingDay ? ` · ${e.cohort.meetingDay}s` : ''}{e.cohort.meetingTime ? ` at ${e.cohort.meetingTime}` : ''}
                       </div>
                     )}
+                  </div>
+                )}
+
+                {(e.announcements?.length || 0) > 0 && (
+                  <div className="mb-4 border border-church-100 rounded-xl px-4 py-3 bg-warm-50/60">
+                    <p className="text-xs uppercase text-church-400 font-semibold mb-2">📣 Announcements</p>
+                    <div className="space-y-2.5">
+                      {e.announcements!.map(a => (
+                        <div key={a.id}>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            {a.title && <p className="font-semibold text-church-900 text-sm">{a.title}</p>}
+                            {a.enrollmentId && (
+                              <span className="badge bg-brand-50 text-brand-600 border border-brand-200 text-xs">Just for you</span>
+                            )}
+                          </div>
+                          <p className="text-sm text-church-700 whitespace-pre-wrap">{a.body}</p>
+                          <p className="text-xs text-church-400 mt-0.5">
+                            {new Date(a.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                            {a.author ? ` · ${a.author.name}` : ''}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
 

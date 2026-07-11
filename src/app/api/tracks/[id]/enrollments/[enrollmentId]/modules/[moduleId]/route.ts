@@ -3,6 +3,7 @@ import prisma from '@/lib/db';
 import { requireAuth, handleAuthError } from '@/lib/auth';
 import { getPermissionLevel } from '@/lib/roles';
 import { getSavableIds, getComparisonRefIds, MAX_REFLECTION_LENGTH } from '@/lib/workbook';
+import { sendDisciplerCommentEmail } from '@/lib/enrollment-notifications';
 
 // Run 12 — session-authenticated module content + reflections.
 //
@@ -178,6 +179,13 @@ export async function PUT(
 
     const where = { enrollmentId_moduleId: { enrollmentId: enrollment.id, moduleId: module_.id } };
 
+    // Run 20 -- remember the prior note so the participant is only emailed on
+    // a NEW or CHANGED comment (never on an unchanged resave or a deletion).
+    const priorNote = await (prisma as any).disciplerNote.findUnique({
+      where,
+      select: { note: true },
+    });
+
     if (note.trim() === '') {
       await (prisma as any).disciplerNote.deleteMany({
         where: { enrollmentId: enrollment.id, moduleId: module_.id },
@@ -191,6 +199,36 @@ export async function PUT(
       create: { enrollmentId: enrollment.id, moduleId: module_.id, note, authorUserId: session.userId },
       select: { note: true, updatedAt: true, author: { select: { name: true } } },
     });
+
+    // Run 20 -- notify the disciple (fire-safe, email only; skipped when the
+    // participant has no email on file or the note text did not change).
+    if (!priorNote || priorNote.note !== note) {
+      const full = await (prisma as any).trackEnrollment.findUnique({
+        where: { id: enrollment.id },
+        select: {
+          portalToken: true,
+          track: { select: { name: true } },
+          guest: { select: { firstName: true, email: true } },
+          user: { select: { name: true, email: true } },
+        },
+      });
+      const email = full?.guest?.email || full?.user?.email || null;
+      if (full && email) {
+        const firstName = full.guest
+          ? full.guest.firstName
+          : (full.user?.name || '').split(' ')[0] || 'friend';
+        await sendDisciplerCommentEmail({
+          participantFirstName: firstName,
+          email,
+          trackName: full.track.name,
+          moduleTitle: module_.title,
+          disciplerName: saved.author?.name || 'Your discipler',
+          note,
+          portalToken: full.portalToken,
+        });
+      }
+    }
+
     return NextResponse.json({ ok: true, disciplerNote: saved });
   } catch (error) {
     return handleAuthError(error);

@@ -18,6 +18,22 @@ async function findEnrollment(token: string) {
   });
 }
 
+// Run 20 -- announcements visible to this participant: posts to their cohort
+// plus personal notes to this enrollment, newest first.
+async function loadAnnouncements(enrollment: any) {
+  const or: any[] = [{ enrollmentId: enrollment.id }];
+  if (enrollment.cohortId) or.push({ cohortId: enrollment.cohortId });
+  return (prisma as any).trackAnnouncement.findMany({
+    where: { OR: or },
+    orderBy: { createdAt: 'desc' },
+    take: 20,
+    select: {
+      id: true, title: true, body: true, createdAt: true, enrollmentId: true,
+      author: { select: { name: true } },
+    },
+  });
+}
+
 function shape(enrollment: any, churchName: string) {
   const participantFirstName = enrollment.guest
     ? enrollment.guest.firstName
@@ -52,7 +68,9 @@ export async function GET(request: NextRequest, { params }: { params: { token: s
     if (!enrollment) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
     const churchSetting = await prisma.appSetting.findUnique({ where: { key: 'church_name' } });
-    return NextResponse.json({ portal: shape(enrollment, churchSetting?.value || 'Grace Life Center') });
+    const portal = shape(enrollment, churchSetting?.value || 'Grace Life Center');
+    (portal as any).announcements = await loadAnnouncements(enrollment); // Run 20
+    return NextResponse.json({ portal });
   } catch (error) {
     console.error('Portal GET error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

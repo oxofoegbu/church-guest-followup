@@ -84,6 +84,7 @@ model User {
   matchedEnrollRequests EnrollmentRequest[] @relation("MatchedEnrollmentRequests")
   decidedEnrollRequests EnrollmentRequest[] @relation("DecidedEnrollmentRequests")
   disciplerNotes        DisciplerNote[]     @relation("DisciplerNoteAuthor")
+  authoredAnnouncements TrackAnnouncement[] @relation("AnnouncementAuthor")
 
   @@map("users")
   schedulesAsSpeaker     ServiceSchedule[] @relation("ScheduleSpeaker")
@@ -547,6 +548,7 @@ model TrackCohort {
   facilitator User?             @relation("CohortFacilitator", fields: [facilitatorUserId], references: [id], onDelete: SetNull)
   enrollments TrackEnrollment[]
   enrollmentRequests EnrollmentRequest[]
+  announcements TrackAnnouncement[]
 
   @@map("track_cohorts")
 }
@@ -574,6 +576,7 @@ model TrackEnrollment {
   progress    ModuleProgress[]
   reflections ModuleReflection[]
   disciplerNotes DisciplerNote[]
+  announcements TrackAnnouncement[]
 
   @@index([trackId, status])
   @@index([guestId])
@@ -636,6 +639,29 @@ model DisciplerNote {
   @@unique([enrollmentId, moduleId])
   @@index([enrollmentId])
   @@map("discipler_notes")
+}
+
+// Run 20 — announcements: a dated post to a whole cohort OR a personal note
+// to a single enrollee (exactly one target set). Shown in the participant
+// portal and My Tracks; participants are emailed when one is posted.
+model TrackAnnouncement {
+  id           String    @id @default(cuid())
+  cohortId     String?   // announcement for a whole cohort ...
+  enrollmentId String?   // ... OR a personal note to one enrollee
+  title        String?
+  body         String
+  authorUserId String?
+  emailedAt    DateTime? // when the participant email(s) were sent
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  cohort     TrackCohort?     @relation(fields: [cohortId], references: [id], onDelete: Cascade)
+  enrollment TrackEnrollment? @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  author     User?            @relation("AnnouncementAuthor", fields: [authorUserId], references: [id], onDelete: SetNull)
+
+  @@index([cohortId, createdAt])
+  @@index([enrollmentId, createdAt])
+  @@map("track_announcements")
 }
 
 // Run 13 — public self-enrollment requests (Become & Leaders Track)

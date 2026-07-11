@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { getPermissionLevel } from '@/lib/roles';
+import AnnouncementsModal from '@/components/AnnouncementsModal'; // Run 20
 
 type Module = { id: string; weekNumber: number; title: string; summary: string | null; kind?: string };
 type Cohort = {
@@ -399,6 +400,9 @@ export default function TrackDetailPage() {
   const [editingModule, setEditingModule] = useState<Module | null>(null);
   const [showAddCohort, setShowAddCohort] = useState(false);
   const [editingCohort, setEditingCohort] = useState<Cohort | null>(null);
+  // Run 20 -- announcements modal targets (cohort or single enrollee)
+  const [announceCohort, setAnnounceCohort] = useState<Cohort | null>(null);
+  const [announceEnrollment, setAnnounceEnrollment] = useState<Enrollment | null>(null);
 
   const fetchTrack = useCallback(async () => {
     const res = await fetch(`/api/tracks/${trackId}`);
@@ -620,6 +624,10 @@ export default function TrackDetailPage() {
                         <td className="px-2 py-3">
                           <div className="flex gap-1">
                             {canManageProgress && (
+                              <button onClick={() => setAnnounceEnrollment(e)} title="Announcements / personal notes (emailed)"
+                                className="p-1.5 text-church-400 hover:text-brand-500 hover:bg-brand-50 rounded-lg transition-colors text-sm">📣</button>
+                            )}
+                            {canManageProgress && (
                               <button onClick={() => copyPortalLink(e)} title="Copy portal link"
                                 className="p-1.5 text-church-400 hover:text-brand-500 hover:bg-brand-50 rounded-lg transition-colors text-sm">🔗</button>
                             )}
@@ -711,6 +719,10 @@ export default function TrackDetailPage() {
                       <h3 className="font-bold text-church-900">{c.name}</h3>
                       <div className="flex items-center gap-1">
                         <span className={`badge ${c.status === 'ACTIVE' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>{c.status}</span>
+                        {canManageProgress && (
+                          <button onClick={() => setAnnounceCohort(c)} title="Announcements (everyone in this cohort is emailed)"
+                            className="p-1.5 text-church-400 hover:text-brand-500 hover:bg-brand-50 rounded-lg transition-colors text-sm">📣</button>
+                        )}
                         {isAdmin && (
                           <>
                             <button onClick={() => setEditingCohort(c)}
@@ -766,6 +778,22 @@ export default function TrackDetailPage() {
         <CohortModal trackId={trackId} cohort={editingCohort} users={users}
           onClose={() => setEditingCohort(null)}
           onSaved={() => { setEditingCohort(null); fetchTrack(); }} />
+      )}
+      {announceCohort && (
+        <AnnouncementsModal
+          target={{ cohortId: announceCohort.id }}
+          heading={`📣 Announcements — ${announceCohort.name}`}
+          subheading="Shown on every participant's journey page. Everyone in this cohort with an email is emailed when you post."
+          isAdmin={isAdmin}
+          onClose={() => setAnnounceCohort(null)} />
+      )}
+      {announceEnrollment && (
+        <AnnouncementsModal
+          target={{ enrollmentId: announceEnrollment.id }}
+          heading={`📣 Notes for ${participantName(announceEnrollment)}`}
+          subheading="Personal instructions shown on their journey page. They are emailed when you post."
+          isAdmin={isAdmin}
+          onClose={() => setAnnounceEnrollment(null)} />
       )}
     </>
   );

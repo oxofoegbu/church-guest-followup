@@ -215,3 +215,117 @@ export async function sendDisciplerAssignedEmail(params: {
     console.error('sendDisciplerAssignedEmail failed:', err);
   }
 }
+
+// --- Run 20: enrollment welcome (admin enroll modal) ------------------------
+// The self-enrollment approvals already email the participant; this covers
+// direct enrollment by an admin/leader. Warm, account-free wording (works for
+// guests and members alike — the journey page link is universal). Fire-safe,
+// email only; callers skip it when the participant has no email on file.
+export async function sendEnrollmentCreatedEmail(params: {
+  participantFirstName: string;
+  email: string;
+  trackName: string;
+  portalToken: string;
+  cohortName?: string | null;
+  cohortMeeting?: string | null;
+  disciplerName?: string | null;
+}): Promise<void> {
+  try {
+    const churchName = await getChurchName();
+    const portalUrl = `${appUrl()}/track/${params.portalToken}`;
+    const subject = `Your ${params.trackName} journey begins \u2014 ${churchName}`;
+    const html = `
+      <div style="font-family: Georgia, serif; max-width: 560px; color:#2A2622;">
+        <h2 style="color:#1F3A5F;font-weight:normal;">Welcome, ${esc(params.participantFirstName)} \u2014 your place is saved.</h2>
+        <p>You have been enrolled in the <strong>${esc(params.trackName)}</strong> at ${esc(churchName)}.
+        We are so glad to be walking this with you.</p>
+        ${params.cohortName ? `<p>Your group: <strong>${esc(params.cohortName)}</strong>${params.cohortMeeting ? ` \u2014 ${esc(params.cohortMeeting)}` : ''}</p>` : ''}
+        ${params.disciplerName ? `<p>Walking with you: <strong>${esc(params.disciplerName)}</strong> \u2014 reach out to them any time.</p>` : ''}
+        <p>The link below is your own personal journey page \u2014 the modules live there, and you can
+        read and respond at your own pace. Keep this email so you can always find it.</p>
+        <p style="margin:20px 0;"><a href="${portalUrl}" style="background:#1F3A5F;color:#FBF7EF;padding:12px 22px;border-radius:8px;text-decoration:none;">Open my journey page</a></p>
+        <p style="color:#6b7280;font-size:13px;">${esc(churchName)}</p>
+      </div>`;
+    await sendEmailViaResend(params.email, subject, html);
+  } catch (err) {
+    console.error('sendEnrollmentCreatedEmail failed:', err);
+  }
+}
+
+// --- Run 20: discipler comment notification ---------------------------------
+// Emails the participant when their discipler leaves (or meaningfully edits)
+// a module comment. The caller is responsible for only firing on new or
+// CHANGED notes — never on unchanged resaves or deletions. Fire-safe.
+export async function sendDisciplerCommentEmail(params: {
+  participantFirstName: string;
+  email: string;
+  trackName: string;
+  moduleTitle: string;
+  disciplerName: string;
+  note: string;
+  portalToken: string;
+}): Promise<void> {
+  try {
+    const churchName = await getChurchName();
+    const portalUrl = `${appUrl()}/track/${params.portalToken}`;
+    const subject = `\uD83D\uDCAC A note from ${params.disciplerName} \u2014 ${params.moduleTitle}`;
+    const html = `
+      <div style="font-family: Georgia, serif; max-width: 560px; color:#2A2622;">
+        <p>Hi ${esc(params.participantFirstName)},</p>
+        <p><strong>${esc(params.disciplerName)}</strong> left you a note on
+        <strong>${esc(params.moduleTitle)}</strong> (${esc(params.trackName)}):</p>
+        <div style="background:#FBF7EF;border-left:3px solid #B0894F;padding:12px 16px;margin:16px 0;white-space:pre-wrap;">${esc(params.note)}</div>
+        <p style="margin:20px 0;"><a href="${portalUrl}" style="background:#1F3A5F;color:#FBF7EF;padding:11px 20px;border-radius:8px;text-decoration:none;">Open my journey page</a></p>
+        <p style="color:#6b7280;font-size:13px;">${esc(churchName)}</p>
+      </div>`;
+    await sendEmailViaResend(params.email, subject, html);
+  } catch (err) {
+    console.error('sendDisciplerCommentEmail failed:', err);
+  }
+}
+
+// --- Run 20: announcement notification ---------------------------------------
+// One personalized email per recipient when an announcement is posted to a
+// cohort (every ACTIVE/PAUSED participant with an email) or to a single
+// enrollee. Fire-safe; failures are logged per-recipient and never thrown.
+export async function sendAnnouncementEmails(params: {
+  trackName: string;
+  cohortName?: string | null;
+  title?: string | null;
+  body: string;
+  authorName?: string | null;
+  recipients: { firstName: string; email: string; portalToken: string }[];
+}): Promise<number> {
+  let sent = 0;
+  try {
+    const churchName = await getChurchName();
+    const base = appUrl();
+    const heading = params.title?.trim() || (params.cohortName ? `An update for ${params.cohortName}` : 'A note for you');
+    const subject = `\uD83D\uDCE3 ${heading} \u2014 ${params.trackName}`;
+    const tasks = params.recipients.map(r => {
+      const portalUrl = `${base}/track/${r.portalToken}`;
+      const html = `
+        <div style="font-family: Georgia, serif; max-width: 560px; color:#2A2622;">
+          <p>Hi ${esc(r.firstName)},</p>
+          <p>${params.cohortName
+            ? `An announcement for your <strong>${esc(params.cohortName)}</strong> group (${esc(params.trackName)}):`
+            : `A note for you on your <strong>${esc(params.trackName)}</strong> journey:`}</p>
+          <div style="background:#FBF7EF;border-left:3px solid #B0894F;padding:12px 16px;margin:16px 0;">
+            ${params.title ? `<p style="margin:0 0 6px;font-weight:bold;color:#1F3A5F;">${esc(params.title)}</p>` : ''}
+            <p style="margin:0;white-space:pre-wrap;">${esc(params.body)}</p>
+          </div>
+          ${params.authorName ? `<p style="color:#6b7280;font-size:13px;">\u2014 ${esc(params.authorName)}</p>` : ''}
+          <p style="margin:20px 0;"><a href="${portalUrl}" style="background:#1F3A5F;color:#FBF7EF;padding:11px 20px;border-radius:8px;text-decoration:none;">Open my journey page</a></p>
+          <p style="color:#6b7280;font-size:13px;">${esc(churchName)}</p>
+        </div>`;
+      return sendEmailViaResend(r.email, subject, html).then(res => {
+        if (!res.error) sent += 1;
+        else console.error(`Announcement email to ${r.email} failed:`, res.error);
+      });
+    });
+    await Promise.allSettled(tasks);
+  } catch (err) {
+    console.error('sendAnnouncementEmails failed:', err);
+  }
+  return sent;
+}

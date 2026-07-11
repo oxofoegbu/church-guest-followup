@@ -22,8 +22,33 @@ export async function GET(request: NextRequest) {
       orderBy: [{ track: { ordering: 'asc' } }, { startedAt: 'asc' }],
     });
 
+    // Run 20 -- announcements: cohort posts + personal notes, newest first,
+    // fetched in one query and attached per enrollment.
+    const enrollmentIds = enrollments.map((e: any) => e.id);
+    const cohortIds = enrollments.map((e: any) => e.cohortId).filter(Boolean);
+    const announcements = enrollmentIds.length
+      ? await (prisma as any).trackAnnouncement.findMany({
+          where: {
+            OR: [
+              { enrollmentId: { in: enrollmentIds } },
+              ...(cohortIds.length ? [{ cohortId: { in: cohortIds } }] : []),
+            ],
+          },
+          orderBy: { createdAt: 'desc' },
+          take: 100,
+          select: {
+            id: true, title: true, body: true, createdAt: true,
+            cohortId: true, enrollmentId: true,
+            author: { select: { name: true } },
+          },
+        })
+      : [];
+
     const shaped = enrollments.map((e: any) => ({
       ...e,
+      announcements: announcements.filter((a: any) =>
+        a.enrollmentId === e.id || (a.cohortId && a.cohortId === e.cohortId)
+      ),
       track: {
         ...e.track,
         modules: e.track.modules.map((m: any) => ({

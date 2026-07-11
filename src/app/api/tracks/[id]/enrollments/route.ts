@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { requireAuth, handleAuthError } from '@/lib/auth';
 import { logAudit } from '@/lib/audit';
-import { sendDisciplerAssignedEmail } from '@/lib/enrollment-notifications';
+import { sendDisciplerAssignedEmail, sendEnrollmentCreatedEmail } from '@/lib/enrollment-notifications';
 
 const ENROLLMENT_INCLUDE = {
   guest: { select: { id: true, firstName: true, lastName: true, email: true, phone: true, status: true } },
@@ -60,6 +60,23 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       targetId: enrollment.id, targetType: 'TRACK_ENROLLMENT', targetName: participantName,
       metadata: { trackId: track.id, trackName: track.name },
     });
+
+    // Run 20 -- welcome the participant with their journey-page link
+    // (fire-safe, email only; skipped silently when no email is on file).
+    const participantEmail = enrollment.guest?.email || enrollment.user?.email || null;
+    if (participantEmail) {
+      const firstName = enrollment.guest
+        ? enrollment.guest.firstName
+        : (enrollment.user?.name || '').split(' ')[0] || 'friend';
+      await sendEnrollmentCreatedEmail({
+        participantFirstName: firstName,
+        email: participantEmail,
+        trackName: track.name,
+        portalToken: enrollment.portalToken,
+        cohortName: enrollment.cohort?.name || null,
+        disciplerName: enrollment.discipler?.name || null,
+      });
+    }
 
     // Run 19 -- tell the discipler they have a new disciple (fire-safe, email
     // only). Only fires when a discipler was chosen at enrollment time.
