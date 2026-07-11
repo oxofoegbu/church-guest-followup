@@ -1,0 +1,1181 @@
+{
+ "track": "trk_welcome",
+ "trackUpdate": {
+  "description": "Meeting Jesus at the Center — a five-part journey for new friends & guests."
+ },
+ "modules": [
+  {
+   "id": "wel_m0",
+   "weekNumber": 0,
+   "kind": "INTRO",
+   "title": "Welcome to the Welcome Track",
+   "summary": "Why you are here, and the journey ahead — five unhurried conversations about the Person our whole life is organized around.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "heading",
+      "text": "Welcome to the Welcome Track",
+      "subtitle": "A Five-Part Journey Into the Heart of Grace Life Center"
+     },
+     {
+      "type": "quote",
+      "text": "“Come and be with Jesus, so Jesus can form His life in you — and you can carry heaven wherever you go.”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Welcome. We are so glad you are here."
+     },
+     {
+      "type": "paragraph",
+      "text": "If you have walked into Grace Life Center — online or in person — carrying questions, wounds, hope, curiosity, or nothing more than a quiet nudge you can't quite explain, you are exactly the person this little journey was made for. You do not need to believe first in order to belong here. Belonging is the safe space where belief can grow. This is not a membership drive. It is not a test to pass or a set of boxes to check. The Welcome Track is simply five unhurried conversations about the most important thing we know — and the Person our whole life is organized around."
+     },
+     {
+      "type": "paragraph",
+      "text": "Here is what we have come to believe, after years of praying and searching: following Jesus is not a line you cross once and then relax. It is a journey — a direction you keep walking for the rest of your life. And it is not first about trying harder to keep rules or imitate a good man from the outside. It is about learning to be with Jesus so that He can form His own character in us from the inside — until, slowly, we begin to love like He loves, see like He sees, and live like He lived."
+     },
+     {
+      "type": "paragraph",
+      "text": "And the goal was never simply to escape earth and get to heaven someday. The goal is to let Jesus bring heaven into us — and then through us into our homes, our workplaces, our friendships, and our communities. “Thy kingdom come, thy will be done, on earth as it is in heaven” — through us. That is our deep, deep conviction and pursuit."
+     },
+     {
+      "type": "subheading",
+      "text": "What you will experience in these five modules"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Module 1 — Who We Are: the kind of church you've walked into, and the journey we're all on.",
+       "Module 2 — Why Jesus: who Jesus actually is, and why we've staked everything on Him.",
+       "Module 3 — What It Means to Follow Him: what this life actually looks like, day to day.",
+       "Module 4 — How We Can Partner With You: your next steps, our role and yours, and how to become part of the family.",
+       "Module 5 — The Two Covenants: the decision to follow Jesus, and the invitation to walk it out with us."
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "Each module has some teaching, an illustration or two, a few reflection prompts, one simple practice to try, a memory verse, and a closing thought. Come honestly. Bring your questions. There is no pretending here."
+     },
+     {
+      "type": "paragraph",
+      "text": "Welcome to the journey."
+     },
+     {
+      "type": "paragraph",
+      "text": "— Pastor Okezie Ofoegbu, Senior Pastor, Grace Life Center"
+     }
+    ]
+   }
+  },
+  {
+   "id": "wel_m1",
+   "weekNumber": 1,
+   "kind": "CORE",
+   "title": "A Church Gathered Around the Well",
+   "summary": "Who we are — becoming a people who are with Jesus, so that Jesus can form His life in us.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "bigIdea",
+      "text": "Becoming a people who are with Jesus, so that Jesus can form His life in us — and we can carry heaven wherever we go."
+     },
+     {
+      "type": "heading",
+      "text": "Overview"
+     },
+     {
+      "type": "paragraph",
+      "text": "Before we say anything about what we believe, we want you to understand what kind of church you have walked into — because there are, honestly, two very different kinds, and they produce two very different kinds of people. This first module is about the shape of our life together, and the journey we are inviting you into."
+     },
+     {
+      "type": "heading",
+      "text": "The Illustration: The Fence and the Well"
+     },
+     {
+      "type": "paragraph",
+      "text": "On the great cattle ranches of the Australian outback, the land stretches for hundreds of miles. Ranchers there will tell you there are only two ways to keep cattle on a property that big."
+     },
+     {
+      "type": "paragraph",
+      "text": "The first is to build a fence — miles and miles of it. You patrol it, repair it, guard it, and you spend your whole life anxious about who is inside the fence and who slipped out."
+     },
+     {
+      "type": "paragraph",
+      "text": "The second way is older and wiser. You dig a well. In dry country, you don't have to force cattle to stay near water — you couldn't drive them away if you tried. The well becomes the center of their whole world. They wander during the day, some closer, some farther — but every head is turned toward the water. Not because a fence made them. Because life is at the center."
+     },
+     {
+      "type": "lesson",
+      "text": "Here is the question at the heart of who we are: Is our life together a fence — or a well?"
+     },
+     {
+      "type": "heading",
+      "text": "We Are Not a Fence"
+     },
+     {
+      "type": "paragraph",
+      "text": "A lot of churches, without meaning to, become fences. The whole energy goes into the boundary line — who's in, who's out, who qualifies, who doesn't; the rules, the performance, the watching. In a fence church, the goal is to get you over the line — pray a prayer, sign a card — and after that, growth is optional. You're “in.” Relax."
+     },
+     {
+      "type": "paragraph",
+      "text": "We do not want to be that. We are not here to police a boundary. We are here to be a people gathered around the Well — utterly committed to Jesus at the center, drawing near to Him, and drawing others toward Him by the sheer attraction of His life in us."
+     },
+     {
+      "type": "heading",
+      "text": "A Journey, Not a Finish Line"
+     },
+     {
+      "type": "paragraph",
+      "text": "Because Jesus is a Person and not a boundary line, the Christian life is a direction, not a one-time achievement. Some of us are close and drawing nearer; some are far off and just beginning to turn. That is all welcome here. What matters is not where you are standing today but which way you are facing."
+     },
+     {
+      "type": "prompt",
+      "id": "wt1_fill_well",
+      "question": "✎ Fill-in: Our life together is not a fence to guard but a ____ to gather around.",
+      "hint": "Answer: well"
+     },
+     {
+      "type": "heading",
+      "text": "Being With Jesus Before Doing For Jesus"
+     },
+     {
+      "type": "paragraph",
+      "text": "Here is the part that took us years to learn, and it changes everything: we do not become like Jesus by gritting our teeth and trying harder. We become like Jesus by learning to be with Him."
+     },
+     {
+      "type": "paragraph",
+      "text": "Activity flows from intimacy, not the other way around. Before we do anything for Jesus, we learn to abide, listen, and rest with Jesus. Out of that presence, obedience and love flow naturally — the way fruit grows on a branch that stays connected to the vine. “Without Me you can do nothing” (John 15:5). This is why we are not, first, about programs and performance. We are about forming people from the inside out. We measure success not in crowds, but in depth of transformation."
+     },
+     {
+      "type": "prompt",
+      "id": "wt1_fill_withfor",
+      "question": "✎ Fill-in: We prioritize being ____ Jesus before doing ____ Jesus.",
+      "hint": "Answer: with; for"
+     },
+     {
+      "type": "heading",
+      "text": "Heaven Into Us, And Through Us"
+     },
+     {
+      "type": "paragraph",
+      "text": "And what is all this transformation for? Not merely to get us off the earth one day. It is so that Jesus can bring heaven into us — His peace, His love, His healing, His character — and then send us back out as ordinary people who carry His presence into every part of life. Wounded people find healing. Skeptics find truth without pressure. Families are strengthened. Communities are quietly changed — not by loud campaigns, but by people who walk with God."
+     },
+     {
+      "type": "paragraph",
+      "text": "We are learning to pray “Thy kingdom come, thy will be done, on earth as it is in heaven” — and then to add, “and let it be done through us.”"
+     },
+     {
+      "type": "heading",
+      "text": "Fill-In Reflections"
+     },
+     {
+      "type": "prompt",
+      "id": "wt1_fill_facing",
+      "question": "1. A fence church asks “who is in and who is out.” A well church asks “which way is your heart ____.”",
+      "hint": "Answer: facing"
+     },
+     {
+      "type": "prompt",
+      "id": "wt1_fill_bewith",
+      "question": "2. We become like Jesus not by trying harder but by learning to ____ ____ Him.",
+      "hint": "Answer: be with"
+     },
+     {
+      "type": "prompt",
+      "id": "wt1_fill_heaven",
+      "question": "3. The goal is not just to take us to heaven, but to bring ____ into us — and through us into the world.",
+      "hint": "Answer: heaven"
+     },
+     {
+      "type": "heading",
+      "text": "Discussion Questions"
+     },
+     {
+      "type": "prompt",
+      "id": "wt1_dq1",
+      "question": "1. Have you mostly experienced church as a fence or as a well? What was that like?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt1_dq2",
+      "question": "2. What is your honest reaction to the idea that you don't have to “believe first” to belong here?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt1_dq3",
+      "question": "3. “Being with Jesus before doing for Jesus.” Where in your life do you tend to reverse that — trying to do before you've been with Him?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt1_dq4",
+      "question": "4. Where do you most long to see a little bit of “heaven on earth” right now — in your home, work, or community?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt1_dq5",
+      "question": "5. Which way would you say your heart is facing today? (There is no wrong answer here — only honesty.)"
+     },
+     {
+      "type": "heading",
+      "text": "This Week's Practice: The Unhurried Five"
+     },
+     {
+      "type": "paragraph",
+      "text": "Once a day, stop for just five minutes. Don't perform, don't produce, don't fix anything. Simply say quietly, “Jesus, I'm here with You,” and rest. Breathe. Let Him be the well at the center. If your mind wanders, gently turn back — that turning back is the practice."
+     },
+     {
+      "type": "prompt",
+      "id": "wt1_practice_plan",
+      "question": "My time and place to be with Jesus this week:"
+     },
+     {
+      "type": "heading",
+      "text": "Memory Verse for Module 1"
+     },
+     {
+      "type": "verse",
+      "text": "Come to Me, all you who labor and are heavy laden, and I will give you rest. Take My yoke upon you and learn from Me…",
+      "reference": "Matthew 11:28–29 (NKJV)"
+     },
+     {
+      "type": "heading",
+      "text": "End-of-Module Reflection"
+     },
+     {
+      "type": "prompt",
+      "id": "wt1_r1",
+      "question": "1. What is one word for how this module made you feel?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt1_r2",
+      "question": "2. What is one thing you hope is true about God after hearing this?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt1_r3",
+      "question": "3. What is one fear or question you're still carrying?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt1_r4",
+      "question": "4. Where did you sense Jesus drawing near as you read?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt1_r5",
+      "question": "5. What do I want to carry with me into Module 2, where we ask: who is this Jesus at the center?"
+     },
+     {
+      "type": "quote",
+      "text": "Closing thought — Always remember: God is not asking where you are standing. God is asking which way you are facing. You do not have to clean yourself up to come to the Well. You only have to turn toward it. Come and be with Jesus — and let Him do the rest."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wel_m2",
+   "weekNumber": 2,
+   "kind": "CORE",
+   "title": "Why Jesus?",
+   "summary": "Meeting the One at the center — Jesus is God's love made visible, the one worth facing with your whole life.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "bigIdea",
+      "text": "Becoming convinced that Jesus is God's love made visible — the one worth facing with your whole life."
+     },
+     {
+      "type": "heading",
+      "text": "Overview"
+     },
+     {
+      "type": "paragraph",
+      "text": "In Module 1 we said our whole life is gathered around Jesus at the center. That immediately raises the most important question a human being can ask: Why Jesus? Who is He, really? Many people carry a small, distorted, or secondhand picture of Jesus. This module exists to clear that away — and to introduce you to the real One."
+     },
+     {
+      "type": "heading",
+      "text": "When God Wanted to Show Us His Heart, Jesus Showed Up"
+     },
+     {
+      "type": "paragraph",
+      "text": "People have always argued about what God is like. Is He angry? Distant? Keeping score? Here is the astonishing claim at the center of the Christian faith: when God wanted to show the whole world — the good, the bad, and the ugly — exactly who He is, He did not send a rulebook or a lightning bolt. He showed up as a Person. “He who has seen Me has seen the Father” (John 14:9). Jesus is “the image of the invisible God” (Colossians 1:15), “the express image of His person” (Hebrews 1:3)."
+     },
+     {
+      "type": "lesson",
+      "text": "So Jesus is not merely a good teacher pointing at God. Jesus is God's love manifested to the world. If you want to know what God is like, you do not guess. You look at Jesus."
+     },
+     {
+      "type": "heading",
+      "text": "Jesus Is Perfect Theology"
+     },
+     {
+      "type": "paragraph",
+      "text": "This gives us a simple, freeing rule that keeps us from a thousand wrong ideas about God:"
+     },
+     {
+      "type": "bigIdea",
+      "text": "If it is not in Jesus, it is not in God. If it is in Jesus, it is in God."
+     },
+     {
+      "type": "paragraph",
+      "text": "Jesus is the standard — the measuring rod for what God is like and for what a human being was always meant to be. When we wonder whether God is harsh or tender toward the broken, we don't speculate. We watch how Jesus treated the broken. He is, as it were, perfect theology."
+     },
+     {
+      "type": "prompt",
+      "id": "wt2_fill_look",
+      "question": "✎ Fill-in: If you want to know what God is really like, look at ____.",
+      "hint": "Answer: Jesus"
+     },
+     {
+      "type": "heading",
+      "text": "The Master of Life"
+     },
+     {
+      "type": "paragraph",
+      "text": "The teacher Dallas Willard loved to point out that we have been trained to think of Jesus as gentle and loving but not especially smart — as if He were morally wonderful but out of His depth in the “real” world of money, work, and power. That is a tragic mistake. Jesus is the most brilliant, most competent human being who ever lived — the true master of life itself. He knows how existence actually works because He made it."
+     },
+     {
+      "type": "paragraph",
+      "text": "That is why we apprentice ourselves to Him (more on that in Module 3). You give your life to Jesus not because you're supposed to, but because He is the one person in the universe who is completely right about everything — and completely good."
+     },
+     {
+      "type": "heading",
+      "text": "Jesus at the Center: Welcome for Outsiders, Warning for Insiders"
+     },
+     {
+      "type": "paragraph",
+      "text": "Watch how Jesus actually treated people, and a stunning pattern appears. The people the world despised — the outcasts, the outsiders, the “wrong” people — He welcomed with open arms. And the people who were sure they were insiders He lovingly warned."
+     },
+     {
+      "type": "list",
+      "items": [
+       "A criminal dying on a cross beside Him — never baptized, never in a service — simply turned his heart toward Jesus, and heard: “Today you will be with Me in Paradise” (Luke 23:43).",
+       "A Gentile woman the culture called a dog came desperate for her daughter, her heart utterly fixed on Him — and Jesus marveled: “O woman, great is your faith!” (Matthew 15:28).",
+       "Meanwhile, one of the twelve insiders betrayed Him, and the high priest, standing in the temple in sacred robes, orchestrated His death."
+      ]
+     },
+     {
+      "type": "lesson",
+      "text": "Do you see it? The greatest faith Jesus found was often in the outsiders whose hearts were violently turned toward Him — while some insiders stood near Him facing the other way. Proximity is not the same as orientation. You can be far outside every religious fence and be facing Jesus with your whole heart. That is the best news an “outsider” will ever hear."
+     },
+     {
+      "type": "heading",
+      "text": "The One We Are All Becoming"
+     },
+     {
+      "type": "paragraph",
+      "text": "There is one more reason Jesus is at the center. He is not only the perfect picture of God — He is the perfect human being, the one every one of us was designed to grow up into. He is the goal. To be with Him is to slowly become the truest, most fully alive version of yourself. That is why we follow Him: He is the one we are all meant to become."
+     },
+     {
+      "type": "heading",
+      "text": "Fill-In Reflections"
+     },
+     {
+      "type": "prompt",
+      "id": "wt2_fill_person",
+      "question": "1. When God wanted to reveal His heart to the world, He showed up as a ____.",
+      "hint": "Answer: Person / Jesus"
+     },
+     {
+      "type": "prompt",
+      "id": "wt2_fill_god",
+      "question": "2. If it is not in Jesus, it is not in ____.",
+      "hint": "Answer: God"
+     },
+     {
+      "type": "prompt",
+      "id": "wt2_fill_outsider",
+      "question": "3. Jesus welcomed the ____ and warned the smug insider.",
+      "hint": "Answer: outsider"
+     },
+     {
+      "type": "prompt",
+      "id": "wt2_fill_orientation",
+      "question": "4. Proximity is not the same as ____.",
+      "hint": "Answer: orientation"
+     },
+     {
+      "type": "heading",
+      "text": "Discussion Questions"
+     },
+     {
+      "type": "prompt",
+      "id": "wt2_dq1",
+      "question": "1. What picture of Jesus did you grow up with? Where did it come from?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt2_dq2",
+      "question": "2. “If it's not in Jesus, it's not in God.” What wrong idea about God might that free you from?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt2_dq3",
+      "question": "3. Which of the four people at the cross and in the crowd do you most identify with right now — and why?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt2_dq4",
+      "question": "4. Does it change anything for you to hear that Jesus is not just kind, but the wisest, most competent person who ever lived?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt2_dq5",
+      "question": "5. What would it mean for you to face Jesus today, wherever you're standing?"
+     },
+     {
+      "type": "heading",
+      "text": "This Week's Practice: Meet Jesus in the Gospels"
+     },
+     {
+      "type": "paragraph",
+      "text": "This week, read slowly through a few chapters of the Gospel of Luke — not to finish it, but to meet a Person. As you read, keep asking one question: “What is Jesus like here? How does He treat people?” Write down one thing that surprises you."
+     },
+     {
+      "type": "prompt",
+      "id": "wt2_practice_noticed",
+      "question": "One thing I noticed about Jesus this week:"
+     },
+     {
+      "type": "heading",
+      "text": "Memory Verse for Module 2"
+     },
+     {
+      "type": "verse",
+      "text": "He is the image of the invisible God, the firstborn over all creation.",
+      "reference": "Colossians 1:15 (NKJV)"
+     },
+     {
+      "type": "heading",
+      "text": "End-of-Module Reflection"
+     },
+     {
+      "type": "prompt",
+      "id": "wt2_r1",
+      "question": "1. What is one thing about the real Jesus that is different from the Jesus you imagined?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt2_r2",
+      "question": "2. Where do you most need Jesus to be “God's love manifested” in your life right now?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt2_r3",
+      "question": "3. Is your heart more like the insider facing away, or the outsider turning toward Him?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt2_r4",
+      "question": "4. What question about Jesus do you still want to ask out loud?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt2_r5",
+      "question": "5. What do I want to carry into Module 3, where we ask: what does it actually mean to follow Him?"
+     },
+     {
+      "type": "quote",
+      "text": "Closing thought — Always remember: Jesus reads hearts, not résumés. He is not measuring your distance; He is reading your direction. The most “outside” man in Jerusalem went to paradise the day he simply turned and faced the center. If your heart will turn to Him right now — right where you sit — heaven counts you His before anyone in the room knows your name."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wel_m3",
+   "weekNumber": 3,
+   "kind": "CORE",
+   "title": "What It Means to Follow Jesus",
+   "summary": "Becoming His apprentice — letting Him train and re-form us from the inside, one day at a time.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "bigIdea",
+      "text": "Becoming an apprentice of Jesus — letting Him train and re-form us from the inside, one day at a time."
+     },
+     {
+      "type": "heading",
+      "text": "Overview"
+     },
+     {
+      "type": "paragraph",
+      "text": "If Jesus is who we said He is in Module 2 — God's love in person, the master of life, the one we're all becoming — then the natural response is to follow Him. But what does that actually look like on a Tuesday? This module is about the what and the how of following Jesus, and it clears away one of the most exhausting misunderstandings in all of religion."
+     },
+     {
+      "type": "heading",
+      "text": "Following Is Personal, Daily, and Continuous"
+     },
+     {
+      "type": "paragraph",
+      "text": "Following Jesus begins with a decision — a turning of the heart toward Him. But it does not end there. It is personal and intimate (it's a relationship, not a subscription). It is daily (“let him… take up his cross daily, and follow Me,” Luke 9:23). And it is continuous — you will fall many times, and you will get back up, and keep walking. Falling is not the opposite of following. Struggle in the direction of Jesus is discipleship. God is not grading your distance; He is reading your direction."
+     },
+     {
+      "type": "prompt",
+      "id": "wt3_fill_daily",
+      "question": "✎ Fill-in: Following Jesus is a decision, and then it is ____ and ____.",
+      "hint": "Answer: daily; continuous"
+     },
+     {
+      "type": "heading",
+      "text": "Not Willpower. Not Earning. Apprenticeship."
+     },
+     {
+      "type": "paragraph",
+      "text": "Here is the misunderstanding we most want to free you from. Following Jesus is not white-knuckling your way through a list of commands so that God will finally approve of you. That road leads to either pride or despair."
+     },
+     {
+      "type": "paragraph",
+      "text": "Dallas Willard said it perfectly: “Grace is not opposed to effort; it is opposed to earning.” We do put in effort — real effort — but not to earn anything. We already have God's love in Jesus. The effort is the effort of an apprentice learning from a master. As Jesus said, “Everyone who is perfectly trained will be like his teacher” (Luke 6:40). To follow Jesus is to apprentice your whole life to Him."
+     },
+     {
+      "type": "heading",
+      "text": "The Commands Are Training, Not a Test"
+     },
+     {
+      "type": "paragraph",
+      "text": "So why bother obeying Jesus' instructions at all, if we're not earning anything? Think about a gym."
+     },
+     {
+      "type": "heading",
+      "text": "The Illustration: The Trainer's Reps"
+     },
+     {
+      "type": "paragraph",
+      "text": "Imagine you hire a personal trainer. He says: ten reps of curls, twenty of squats, hold this plank. Now — do you earn his love by finishing the reps? Of course not. Does he love you more at rep ten than rep one? No. So why the reps at all? Because that is how he trains you. The reps are not a test you pass; they are the means by which your body is slowly, physically re-made. Strength you didn't have becomes strength you do."
+     },
+     {
+      "type": "paragraph",
+      "text": "The commands and practices of Jesus — forgiving, praying, giving, resting, telling the truth, loving your enemy — work exactly the same way. They are not a test to earn God's approval. They are the spiritual exercises by which Jesus re-wires you from the inside, until His character becomes your character. As the BECOME® workbook puts it: you practice — He transforms — and together, you become like Him."
+     },
+     {
+      "type": "prompt",
+      "id": "wt3_fill_means",
+      "question": "✎ Fill-in: The instructions of Jesus are not a test to pass, but the ____ by which He re-wires us.",
+      "hint": "Answer: means / training"
+     },
+     {
+      "type": "heading",
+      "text": "How Transformation Happens: Vision, Intention, Means"
+     },
+     {
+      "type": "paragraph",
+      "text": "Dallas Willard described the path of real change with three simple words:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Vision — I see the kind of person Jesus is offering to make me (patient, unafraid, full of love). I want it.",
+       "Intention — I actually decide to become that, and give my yes to Jesus.",
+       "Means — I take up the everyday practices — being with Jesus, Scripture, prayer, community, obedience — that let Him do the forming."
+      ]
+     },
+     {
+      "type": "lesson",
+      "text": "The focus is never merely on the behavior. The focus is on who you are becoming — the kind of person you are turning into: more patient, more kind, more peaceful, more free, more courageous for good. Behavior is the fruit. Character is the tree. Jesus is making the tree good."
+     },
+     {
+      "type": "heading",
+      "text": "Fill-In Reflections"
+     },
+     {
+      "type": "prompt",
+      "id": "wt3_fill_earning",
+      "question": "1. Grace is not opposed to effort; it is opposed to ____.",
+      "hint": "Answer: earning"
+     },
+     {
+      "type": "prompt",
+      "id": "wt3_fill_apprentice",
+      "question": "2. To follow Jesus is to become His ____ — a student who will become like his teacher.",
+      "hint": "Answer: apprentice"
+     },
+     {
+      "type": "prompt",
+      "id": "wt3_fill_train",
+      "question": "3. The disciplines are like a trainer's reps: not to earn love, but to ____ us.",
+      "hint": "Answer: train / re-wire"
+     },
+     {
+      "type": "prompt",
+      "id": "wt3_fill_person",
+      "question": "4. The focus is not just behavior, but the kind of ____ we are becoming.",
+      "hint": "Answer: person"
+     },
+     {
+      "type": "heading",
+      "text": "Discussion Questions"
+     },
+     {
+      "type": "prompt",
+      "id": "wt3_dq1",
+      "question": "1. Have you ever experienced faith as earning God's approval? What did that do to you?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt3_dq2",
+      "question": "2. What's your honest reaction to “grace is not opposed to effort, but to earning”?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt3_dq3",
+      "question": "3. The trainer's reps: which “rep” of Jesus (forgiving, praying, resting, truth-telling, loving an enemy) feels most like a stretch for you right now?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt3_dq4",
+      "question": "4. Willard's three words — Vision, Intention, Means. Which one is your weak link: not seeing it, not deciding it, or not practicing it?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt3_dq5",
+      "question": "5. What kind of person do you sense Jesus wants to form you into this year?"
+     },
+     {
+      "type": "heading",
+      "text": "This Week's Practice: One Rep With Jesus"
+     },
+     {
+      "type": "paragraph",
+      "text": "Pick one small “rep” and do it daily this week — with Jesus, not for a grade:"
+     },
+     {
+      "type": "checklist",
+      "id": "wt3_practice_reps",
+      "title": "My reps this week",
+      "options": [
+       "The With-God minute (continue the Module 1 practice)",
+       "One obedience experiment: choose a single instruction of Jesus (e.g., bless someone who irritates you, or tell the truth in one place you'd normally shade it) and practice it once a day."
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "Notice what Jesus begins to form in you."
+     },
+     {
+      "type": "prompt",
+      "id": "wt3_practice_rep",
+      "question": "My one rep this week:"
+     },
+     {
+      "type": "heading",
+      "text": "Memory Verse for Module 3"
+     },
+     {
+      "type": "verse",
+      "text": "Exercise yourself toward godliness. For bodily exercise profits a little, but godliness is profitable for all things…",
+      "reference": "1 Timothy 4:7–8 (NKJV)"
+     },
+     {
+      "type": "heading",
+      "text": "End-of-Module Reflection"
+     },
+     {
+      "type": "prompt",
+      "id": "wt3_r1",
+      "question": "1. Where have you been trying to earn what Jesus wants to freely form in you?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt3_r2",
+      "question": "2. What is one “rep” you want to make a habit?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt3_r3",
+      "question": "3. When you fall this week, what will you remind yourself about direction vs. distance?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt3_r4",
+      "question": "4. What kind of person do you want to be one year from now?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt3_r5",
+      "question": "5. What do I want to carry into Module 4, where we ask: how can GLC help me actually walk this out?"
+     },
+     {
+      "type": "quote",
+      "text": "Closing thought — Always remember: you do not become like Jesus by willpower. You become like Jesus by apprenticeship to Jesus. This is not self-help; it is Christ-in-you formation. This is not behavior management; it is heart renovation. You practice. He transforms. Together, you become like Him."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wel_m4",
+   "weekNumber": 4,
+   "kind": "CORE",
+   "title": "Walking It Out Together",
+   "summary": "How we can partner with you — becoming part of a family that helps you keep facing Jesus.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "bigIdea",
+      "text": "Becoming part of a family that helps you keep facing Jesus — and helps others find Him too."
+     },
+     {
+      "type": "heading",
+      "text": "Overview"
+     },
+     {
+      "type": "paragraph",
+      "text": "We've talked about the well (who we are), the One at the center (who Jesus is), and apprenticeship (what following looks like). This final module is the most practical: you were never meant to do this alone. Here is how Grace Life Center can help you actually walk it out — our role, your role, and the next steps on the path."
+     },
+     {
+      "type": "heading",
+      "text": "You Can't Make the Journey Alone"
+     },
+     {
+      "type": "paragraph",
+      "text": "No one becomes like Jesus in isolation. We are formed in the company of others who are also learning to face the center — people who carry our burdens, celebrate our small steps, and gently pull us back when we drift. “And let us consider one another in order to stir up love and good works, not forsaking the assembling of ourselves together” (Hebrews 10:24–25). Belonging to a church family is not an add-on to following Jesus. It is part of how you follow Jesus."
+     },
+     {
+      "type": "heading",
+      "text": "The Path at Grace Life Center"
+     },
+     {
+      "type": "paragraph",
+      "text": "We've tried to make the journey clear, with an unhurried next step at every stage. You are, right now, at the very first step:"
+     },
+     {
+      "type": "list",
+      "ordered": true,
+      "items": [
+       "Guest → Follower of Jesus. This Welcome Track. Learning to be with Jesus and turn your heart toward Him.",
+       "Follower → Disciple-Maker. The Growth Track / BECOME® — a deeper journey of being formed by Jesus (the Sermon on the Mount, the practices, the healing of the heart).",
+       "Disciple-Maker → Leader. The Leaders Track — for those Jesus is calling to help lead and shepherd others."
+      ]
+     },
+     {
+      "type": "lesson",
+      "text": "You never have to take the whole staircase at once. You just take the next step."
+     },
+     {
+      "type": "prompt",
+      "id": "wt4_fill_next",
+      "question": "✎ Fill-in: I don't have to take the whole staircase at once — only the ____ step.",
+      "hint": "Answer: next"
+     },
+     {
+      "type": "heading",
+      "text": "Our Role and Your Role"
+     },
+     {
+      "type": "subheading",
+      "text": "Our role — what you can expect from us"
+     },
+     {
+      "type": "list",
+      "items": [
+       "To keep Jesus at the center and point you to Him, not to ourselves.",
+       "To be a safe, gentle, non-judgmental space — protecting your dignity, your questions, and your story.",
+       "To teach the Scriptures slowly and prayerfully, and to walk with you — praying, not fixing.",
+       "To provide the path (Growth Track, small groups, mentors) so you always have a next step."
+      ]
+     },
+     {
+      "type": "subheading",
+      "text": "Your role — what we'll gently ask of you"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Keep facing Jesus — keep turning toward the center, even when you fall.",
+       "Show up. Formation happens in rhythm and relationship, not in isolation.",
+       "Be honest. No pretending, no performing. Bring the real you.",
+       "Take your next step, and in time, help someone else take theirs."
+      ]
+     },
+     {
+      "type": "heading",
+      "text": "A Covenant to Face Jesus — Together"
+     },
+     {
+      "type": "paragraph",
+      "text": "Historically we've described partnership with three simple movements, and they still hold. With Jesus at the center, we covenant together to:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "BE with Jesus — to abide, worship, pray, and learn to live from His presence.",
+       "BECOME like Jesus — to be formed by Him from the inside, through the practices, in community.",
+       "BRING heaven — to carry His love, healing, and presence into our homes, work, and world, and to help others find Him."
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "(You'll find the full covenants in Module 5. You don't sign anything today — just begin to consider them.)"
+     },
+     {
+      "type": "heading",
+      "text": "Fill-In Reflections"
+     },
+     {
+      "type": "prompt",
+      "id": "wt4_fill_isolation",
+      "question": "1. No one becomes like Jesus in ____.",
+      "hint": "Answer: isolation"
+     },
+     {
+      "type": "prompt",
+      "id": "wt4_fill_movements",
+      "question": "2. The three movements of partnership: BE with Jesus, ____ like Jesus, and ____ heaven.",
+      "hint": "Answer: BECOME; BRING"
+     },
+     {
+      "type": "prompt",
+      "id": "wt4_fill_point",
+      "question": "3. Our role is to point you to ____, not to ourselves.",
+      "hint": "Answer: Jesus"
+     },
+     {
+      "type": "heading",
+      "text": "Discussion Questions"
+     },
+     {
+      "type": "prompt",
+      "id": "wt4_dq1",
+      "question": "1. What has your experience of “church family” been — life-giving, painful, absent? What do you long for?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt4_dq2",
+      "question": "2. Which part of our role do you most need right now (a safe space? someone to walk with? a clear next step?)"
+     },
+     {
+      "type": "prompt",
+      "id": "wt4_dq3",
+      "question": "3. Which part of your role feels hardest — facing Jesus, showing up, being honest, or taking the next step?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt4_dq4",
+      "question": "4. Of the three movements — BE, BECOME, BRING — which one is Jesus highlighting for you?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt4_dq5",
+      "question": "5. What is one concrete next step you're willing to consider?"
+     },
+     {
+      "type": "heading",
+      "text": "This Week's Practice: Take One Step"
+     },
+     {
+      "type": "paragraph",
+      "text": "Choose one real next step and do it this week:"
+     },
+     {
+      "type": "checklist",
+      "id": "wt4_next_step",
+      "title": "My next step",
+      "options": [
+       "Join the next Growth Track / BECOME® cohort",
+       "Come to a Gathering or a small group",
+       "Ask for a conversation or a prayer partner / mentor",
+       "Simply tell someone at GLC, “I'd like to keep coming.”"
+      ]
+     },
+     {
+      "type": "prompt",
+      "id": "wt4_next_step_note",
+      "question": "My next step:"
+     },
+     {
+      "type": "heading",
+      "text": "Memory Verse for Module 4"
+     },
+     {
+      "type": "verse",
+      "text": "…He who has begun a good work in you will complete it until the day of Jesus Christ.",
+      "reference": "Philippians 1:6 (NKJV)"
+     },
+     {
+      "type": "heading",
+      "text": "End-of-Module Reflection"
+     },
+     {
+      "type": "prompt",
+      "id": "wt4_r1",
+      "question": "1. What has shifted in you across these four modules?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt4_r2",
+      "question": "2. Which way is your heart facing now, compared to when you started?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt4_r3",
+      "question": "3. What is the next step you sense Jesus inviting you to take?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt4_r4",
+      "question": "4. Who is one person you'd love to see find what you're finding?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt4_r5",
+      "question": "5. What do you want to say to Jesus as you finish this track?"
+     },
+     {
+      "type": "quote",
+      "text": "Closing thought — Always remember: this is not graduation — it's activation. You came in as a guest; you leave as a fellow traveler on the road with Jesus, and with us. We are not building a crowd. We are tending a fire, gathered around the Well, learning to be with Jesus so He can form us and send us out carrying heaven. Turn. Face Him. And never stop moving toward Him — we'll walk with you the whole way."
+     }
+    ]
+   }
+  },
+  {
+   "id": "wel_m5",
+   "weekNumber": 5,
+   "kind": "CORE",
+   "title": "The Two Covenants",
+   "summary": "Following Jesus, and partnering with us — where invitation becomes decision.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "bigIdea",
+      "text": "Becoming, by your own free decision, one of the people Jesus came to save — and a partner with this family in following Him."
+     },
+     {
+      "type": "heading",
+      "text": "Overview"
+     },
+     {
+      "type": "paragraph",
+      "text": "Everything so far has been an invitation. This module is where invitation becomes decision. There are two covenants here, and they are not the same thing. The first is the one that matters most in all the world: a covenant to follow Jesus. The second is a joyful “yes” to walk that road together with us at Grace Life Center. Take them in order, and take them freely — a covenant is never coerced; it is always chosen."
+     },
+     {
+      "type": "heading",
+      "text": "Part One — The Membership Covenant: Joining the Church of Jesus"
+     },
+     {
+      "type": "subheading",
+      "text": "This Is Not About Joining Grace Life Center"
+     },
+     {
+      "type": "paragraph",
+      "text": "Let's be very clear, because this is so often misunderstood. The membership that truly matters is not membership in Grace Life Center. It is not putting your name on our roll or becoming part of our organization. A person can be on a dozen church rolls and still not belong to the one Church that counts."
+     },
+     {
+      "type": "paragraph",
+      "text": "The membership we mean is membership in THE Church — the one Jesus Himself is building — made up of every person, everywhere, across every denomination and none, who has decided to let Jesus save and transform them. This is a family you join by a turning of the heart, not by a signature on a form."
+     },
+     {
+      "type": "subheading",
+      "text": "“His People” — the Ones Jesus Came to Save"
+     },
+     {
+      "type": "paragraph",
+      "text": "Before Jesus was even born, an angel told Joseph what to name Him, and why: “You shall call His name Jesus, for He will save His people from their sins” (Matthew 1:21)."
+     },
+     {
+      "type": "paragraph",
+      "text": "Notice — Jesus came for a people. Not a building, not a club, not an institution. He came to gather and rescue “His people”: those who would turn to Him and let Him deal with their sin and remake them from the inside. Scripture says He “gave Himself for us… that He might… purify for Himself His own special people, zealous for good works” (Titus 2:14). And to all who were once far off it says they “once were not a people but are now the people of God” (1 Peter 2:10)."
+     },
+     {
+      "type": "lesson",
+      "text": "To become one of “His people” is what real membership means. It is not joining us. It is joining Him — and, in Him, joining every other person on earth who has said yes to Him."
+     },
+     {
+      "type": "prompt",
+      "id": "wt5_fill_people",
+      "question": "✎ Fill-in: Jesus came to save “His ____” — those who turn to Him and let Him transform them.",
+      "hint": "Answer: people"
+     },
+     {
+      "type": "subheading",
+      "text": "The Illustration: The Roll That Really Matters"
+     },
+     {
+      "type": "paragraph",
+      "text": "There is a church roster, and there is another list. Heaven does not read our membership rolls; it reads hearts. Jesus said there is rejoicing in heaven — and names written in “the Lamb's book of life” — not when someone joins an organization, but when a single heart turns toward home. The Membership Covenant below is not you signing our list. It is you putting into your own words a decision heaven has been waiting for: the decision to belong to Jesus."
+     },
+     {
+      "type": "prayer",
+      "title": "The Membership Covenant — A Covenant Spoken to Jesus",
+      "text": "Spoken to Jesus, by my own free choice:\n\nJesus, I turn to You. I believe You are God's love made visible, the One who came to save His people from their sins. Today I turn my heart toward You and give my life to You. (Which way is my heart facing? Toward You, Jesus.)\n\nJesus, I give You permission to transform me — to BE and BECOME. I will not merely try to be good in my own strength. Teach me to be with You; and as I learn to be with You, help me become like You — form Your own character in me from the inside, as Your apprentice, through Your Word, Your Spirit, and Your people. When I fall, I will get up and keep facing You.\n\nJesus, send me — to BRING heaven. As You form me, I will carry Your love, Your healing, and Your presence into my home, my work, and my world — helping others find their way to You.\n\nJesus, I understand that this covenant is not me joining a church organization, but me joining You — and, in You, Your people everywhere."
+     },
+     {
+      "type": "prompt",
+      "id": "wt5_membership_signature",
+      "question": "Sign your Membership Covenant — type your full name and today's date as a symbol of your decision:"
+     },
+     {
+      "type": "heading",
+      "text": "Part Two — The Partnership Covenant: Joining GLC in Following Jesus"
+     },
+     {
+      "type": "subheading",
+      "text": "A Second, Different Decision"
+     },
+     {
+      "type": "paragraph",
+      "text": "The first covenant made you part of Jesus' Church. This second one is a distinct and additional decision: to walk out that life with us — to make Grace Life Center your family and partner with us in following Jesus and helping others do the same. You can follow Jesus without partnering with GLC. But you cannot make this journey alone — everyone needs a family — and we would be honored if this were yours."
+     },
+     {
+      "type": "paragraph",
+      "text": "To partner with us is simply to say: “I want to follow Jesus alongside you — count me in.” Practically, that partnership includes three joyful commitments."
+     },
+     {
+      "type": "subheading",
+      "text": "1. To Be Formed — Enroll in BECOME®"
+     },
+     {
+      "type": "paragraph",
+      "text": "We provide the path; you commit to walk it. The next step of formation is our BECOME® / Growth Track — a deeper journey into being formed by Jesus (the Sermon on the Mount, the practices, the healing of the heart). Partners commit to enroll in the next available cohort. (In time, for those Jesus calls to help lead others, there is also the Leaders Track — but BECOME® is the next step for everyone.)"
+     },
+     {
+      "type": "subheading",
+      "text": "2. To Be Filled — Baptism in Water and in the Holy Spirit"
+     },
+     {
+      "type": "paragraph",
+      "text": "Jesus invites every follower into two baptisms that mark and empower this life: baptism in water — a public declaration that you have died and risen with Christ — and baptism in the Holy Spirit — being filled with the power of God for your life and witness: “you shall receive power when the Holy Spirit has come upon you” (Acts 1:8). Partnering with us includes expressing your interest in these, so we can prayerfully walk you into them."
+     },
+     {
+      "type": "subheading",
+      "text": "3. To Share the Life — Worship, Community, and Mission"
+     },
+     {
+      "type": "paragraph",
+      "text": "Partners commit to the ordinary, life-giving rhythms of the family: gathering in worship, belonging to a small group or Gathering where you are truly known, and joining the mission of helping others find the Well."
+     },
+     {
+      "type": "prompt",
+      "id": "wt5_fill_partnership",
+      "question": "✎ Fill-in: Partnership with GLC includes being ____ (BECOME®), being ____ (water & Spirit baptism), and sharing the life.",
+      "hint": "Answer: formed; filled"
+     },
+     {
+      "type": "prayer",
+      "title": "The Partnership Covenant — A Covenant to Follow Jesus, Together With Grace Life Center",
+      "text": "Having given my life to Jesus, I choose to partner with Grace Life Center to follow Him together. I commit to: be formed — enrolling in the next BECOME® journey; be filled — pursuing baptism in water and in the Holy Spirit; share the life — worshiping, belonging to a group, and helping others find Jesus; and keep facing Jesus, together — showing up, being honest, taking my next step, and helping someone else take theirs."
+     },
+     {
+      "type": "checklist",
+      "id": "wt5_partnership_commitments",
+      "title": "My Partnership Covenant — check all that are your “yes” today",
+      "options": [
+       "Be formed — I will enroll in the next BECOME® journey. Yes, sign me up",
+       "Be filled — I am interested in baptism in water",
+       "Be filled — I am interested in baptism in the Holy Spirit",
+       "Share the life — connect me to a group / The Gathering",
+       "Keep facing Jesus, together — I will show up, be honest, take my next step, and help someone else take theirs"
+      ]
+     },
+     {
+      "type": "prompt",
+      "id": "wt5_partnership_signature",
+      "question": "Sign your Partnership Covenant — type your full name and today's date:"
+     },
+     {
+      "type": "prompt",
+      "id": "wt5_contact",
+      "question": "Best way to reach me:"
+     },
+     {
+      "type": "heading",
+      "text": "Discussion Questions"
+     },
+     {
+      "type": "prompt",
+      "id": "wt5_dq1",
+      "question": "1. Before today, what did you think “church membership” meant? How is “joining Jesus / His people” different?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt5_dq2",
+      "question": "2. Read Matthew 1:21 again. What does it stir in you to know Jesus came specifically for “His people” — and that you're invited to be one of them?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt5_dq3",
+      "question": "3. The Membership Covenant is a decision of the heart. Is there anything holding you back from making it today?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt5_dq4",
+      "question": "4. Partnership is a second, free choice. What draws you toward walking this road with GLC — and what questions do you still have?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt5_dq5",
+      "question": "5. Of the two baptisms — water and the Holy Spirit — is there one you'd like to talk and pray about with a pastor?"
+     },
+     {
+      "type": "heading",
+      "text": "This Week's Practice: Make It Yours"
+     },
+     {
+      "type": "paragraph",
+      "text": "Don't rush, and don't let fear decide. This week, prayerfully:"
+     },
+     {
+      "type": "checklist",
+      "id": "wt5_practice_steps",
+      "title": "This week I will…",
+      "options": [
+       "Re-read the Membership Covenant slowly. If your heart is ready, sign and date it — and tell someone.",
+       "If you're ready to partner with us, complete the Partnership Covenant and hand it to a pastor or leader.",
+       "If you're not ready yet, that's okay — write down the one question you most need answered first, and bring it to us."
+      ]
+     },
+     {
+      "type": "prompt",
+      "id": "wt5_where_today",
+      "question": "Where I am today:"
+     },
+     {
+      "type": "heading",
+      "text": "Memory Verse for Module 5"
+     },
+     {
+      "type": "verse",
+      "text": "And she will bring forth a Son, and you shall call His name JESUS, for He will save His people from their sins.",
+      "reference": "Matthew 1:21 (NKJV)"
+     },
+     {
+      "type": "heading",
+      "text": "End-of-Module Reflection"
+     },
+     {
+      "type": "prompt",
+      "id": "wt5_r1",
+      "question": "1. Did I make the Membership Covenant today? If not, what's my honest reason?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt5_r2",
+      "question": "2. What does it mean to me that I now belong to Jesus — and to His people everywhere?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt5_r3",
+      "question": "3. Did I choose to partner with GLC? What am I most looking forward to?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt5_r4",
+      "question": "4. What is my very next step (BECOME®, baptism, a group, a conversation)?"
+     },
+     {
+      "type": "prompt",
+      "id": "wt5_r5",
+      "question": "5. What do I want to say to Jesus right now?"
+     },
+     {
+      "type": "quote",
+      "text": "Closing thought — Always remember: you did not join an organization today — you joined Jesus, and in Him, His people. That is a name written where it can never be erased. And if you have chosen to walk with us, know this: we are not building a crowd; we are a family gathered around the Well, and we will help you keep facing Jesus the whole way home. Welcome — not to a membership. Welcome to the family of the transformed."
+     }
+    ]
+   }
+  }
+ ]
+}

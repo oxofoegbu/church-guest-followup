@@ -19,6 +19,7 @@ const NAV_BY_PERMISSION = {
     { href: '/dashboard/clusters',  label: 'Clusters',         icon: '👥' },
     { href: '/dashboard/tracks',    label: 'Tracks',           icon: '🌱' },
     { href: '/dashboard/my-tracks', label: 'My Tracks',        icon: '📖' },
+    { href: '/dashboard/my-disciples', label: 'My Disciples',  icon: '🤝' },
     { href: '/dashboard/users',     label: 'Users',            icon: '⚙️' },
     { href: '/dashboard/reports',   label: 'Reports',          icon: '📈' },
     { href: '/dashboard/audit',     label: 'Audit Trail',      icon: '📜' },
@@ -35,6 +36,7 @@ const NAV_BY_PERMISSION = {
     { href: '/dashboard/clusters',  label: 'Clusters',         icon: '👥' },
     { href: '/dashboard/tracks',    label: 'Tracks',           icon: '🌱' },
     { href: '/dashboard/my-tracks', label: 'My Tracks',        icon: '📖' },
+    { href: '/dashboard/my-disciples', label: 'My Disciples',  icon: '🤝' },
     { href: '/dashboard/reports',   label: 'Reports',          icon: '📈' },
   ],
   VOLUNTEER_ACCESS: [
@@ -45,6 +47,7 @@ const NAV_BY_PERMISSION = {
     { href: '/dashboard/schedule',  label: 'Sunday Schedule',  icon: '⛪' },
     { href: '/dashboard/clusters',  label: 'Clusters',         icon: '👥' },
     { href: '/dashboard/my-tracks', label: 'My Tracks',        icon: '📖' },
+    { href: '/dashboard/my-disciples', label: 'My Disciples',  icon: '🤝' },
   ],
 };
 
