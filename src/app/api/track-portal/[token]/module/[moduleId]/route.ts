@@ -51,7 +51,14 @@ export async function GET(
         reflections.push(...extra);
       }
     }
-    return NextResponse.json({ module, reflections });
+    // Run 18 — the discipler's one general comment for this module (shared
+    // with the participant by design).
+    const disciplerNote = await (prisma as any).disciplerNote.findUnique({
+      where: { enrollmentId_moduleId: { enrollmentId: enrollment.id, moduleId: module.id } },
+      select: { note: true, updatedAt: true, author: { select: { name: true } } },
+    });
+
+    return NextResponse.json({ module, reflections, disciplerNote });
   } catch (error) {
     console.error('Portal module GET error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

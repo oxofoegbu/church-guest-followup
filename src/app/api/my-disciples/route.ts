@@ -22,7 +22,9 @@ export async function GET(request: NextRequest) {
         cohort: { select: { name: true, meetingDay: true, meetingTime: true } },
         progress: { select: { moduleId: true, completedAt: true } },
       },
-      orderBy: { startedAt: 'asc' },
+      // Run 18 — stack by the formation pathway (Track.ordering: Welcome 1,
+      // Become 2, Leaders 3), then by enrollment date within the same track.
+      orderBy: [{ track: { ordering: 'asc' } }, { startedAt: 'asc' }],
     });
 
     const shaped = enrollments.map((e: any) => ({

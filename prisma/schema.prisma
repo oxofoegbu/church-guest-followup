@@ -83,6 +83,7 @@ model User {
   actionItems          ActionItem[]       @relation("UserActions")
   matchedEnrollRequests EnrollmentRequest[] @relation("MatchedEnrollmentRequests")
   decidedEnrollRequests EnrollmentRequest[] @relation("DecidedEnrollmentRequests")
+  disciplerNotes        DisciplerNote[]     @relation("DisciplerNoteAuthor")
 
   @@map("users")
   schedulesAsSpeaker     ServiceSchedule[] @relation("ScheduleSpeaker")
@@ -524,6 +525,7 @@ model TrackModule {
   track       Track              @relation(fields: [trackId], references: [id], onDelete: Cascade)
   progress    ModuleProgress[]
   reflections ModuleReflection[]
+  disciplerNotes DisciplerNote[]
 
   @@unique([trackId, weekNumber])
   @@map("track_modules")
@@ -571,6 +573,7 @@ model TrackEnrollment {
   cohort      TrackCohort?       @relation(fields: [cohortId], references: [id], onDelete: SetNull)
   progress    ModuleProgress[]
   reflections ModuleReflection[]
+  disciplerNotes DisciplerNote[]
 
   @@index([trackId, status])
   @@index([guestId])
@@ -611,6 +614,28 @@ model ModuleReflection {
   @@unique([enrollmentId, moduleId, promptId])
   @@index([enrollmentId, moduleId])
   @@map("module_reflections")
+}
+
+// Run 18 — the discipler's ONE general comment per module about what they
+// reviewed of their disciple's work. Written by the enrollment's discipler
+// (or ADMIN); readable by the participant (portal + My Tracks), the
+// discipler, and ADMIN. One row per enrollment+module, edited in place.
+model DisciplerNote {
+  id           String   @id @default(cuid())
+  enrollmentId String
+  moduleId     String
+  note         String
+  authorUserId String?  // who wrote/last edited it (discipler or admin)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  enrollment TrackEnrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  module     TrackModule     @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  author     User?           @relation("DisciplerNoteAuthor", fields: [authorUserId], references: [id], onDelete: SetNull)
+
+  @@unique([enrollmentId, moduleId])
+  @@index([enrollmentId])
+  @@map("discipler_notes")
 }
 
 // Run 13 — public self-enrollment requests (Become & Leaders Track)

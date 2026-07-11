@@ -16,7 +16,9 @@ type Enrollment = {
   progress: { moduleId: string; completedAt: string }[];
 };
 
-type ModuleData = { blocks: WorkbookBlock[]; reflections: ReflectionEntry[] };
+type DisciplerNote = { note: string; updatedAt: string; author: { name: string } | null } | null;
+
+type ModuleData = { blocks: WorkbookBlock[]; reflections: ReflectionEntry[]; disciplerNote: DisciplerNote };
 
 const STATUS_STYLES: Record<string, string> = {
   ACTIVE: 'bg-green-100 text-green-700',
@@ -89,7 +91,11 @@ export default function MyTracksPage() {
         const d = await res.json();
         setModuleData(prev => ({
           ...prev,
-          [key]: { blocks: d.module?.content?.blocks || [], reflections: d.reflections || [] },
+          [key]: {
+            blocks: d.module?.content?.blocks || [],
+            reflections: d.reflections || [],
+            disciplerNote: d.disciplerNote || null,
+          },
         }));
       }
       setModuleLoading(null);
@@ -231,12 +237,15 @@ export default function MyTracksPage() {
                             {moduleLoading === key || !data ? (
                               <p className="text-sm text-church-400 text-center py-6">Loading this week…</p>
                             ) : (
-                              <ModuleWorkbook
-                                blocks={data.blocks}
-                                reflections={data.reflections}
-                                readOnly={e.status !== 'ACTIVE'}
-                                onSave={(promptId, response) => saveReflection(e, m.id, promptId, response)}
-                              />
+                              <>
+                                <ModuleWorkbook
+                                  blocks={data.blocks}
+                                  reflections={data.reflections}
+                                  readOnly={e.status !== 'ACTIVE'}
+                                  onSave={(promptId, response) => saveReflection(e, m.id, promptId, response)}
+                                />
+                                {data.disciplerNote && <DisciplerNoteCard note={data.disciplerNote} />}
+                              </>
                             )}
                           </div>
                         )}
@@ -261,6 +270,20 @@ export default function MyTracksPage() {
           })}
         </div>
       )}
+    </div>
+  );
+}
+
+// Run 18 — read-only display of the discipler's one general comment for a
+// module (written from 🤝 My Disciples).
+function DisciplerNoteCard({ note }: { note: { note: string; updatedAt: string; author: { name: string } | null } }) {
+  return (
+    <div className="mt-4 rounded-xl border border-brand-200 bg-brand-50/60 px-3 py-2.5">
+      <p className="text-xs font-semibold text-brand-700 mb-1">
+        💬 A note from your discipler{note.author?.name ? ` — ${note.author.name}` : ''}
+      </p>
+      <p className="text-sm text-church-800 whitespace-pre-wrap">{note.note}</p>
+      <p className="text-xs text-church-400 mt-1">{new Date(note.updatedAt).toLocaleDateString()}</p>
     </div>
   );
 }

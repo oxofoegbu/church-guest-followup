@@ -6,6 +6,10 @@
 // READ-ONLY: a discipler can read their disciples' reflections (the session
 // module API has enforced this privacy model since Run 12: read =
 // participant / discipler / ADMIN) but never write or mark progress.
+//
+// Run 18 — the ONE thing a discipler can write here: a single general
+// comment at the end of each module about what they reviewed. Saved via PUT
+// on the session module route; shared with the disciple (portal + My Tracks).
 
 import { useState, useEffect, useCallback } from 'react';
 import ModuleWorkbook from '@/components/ModuleWorkbook';
@@ -23,7 +27,9 @@ type Enrollment = {
   };
 };
 
-type ModuleData = { blocks: WorkbookBlock[]; reflections: ReflectionEntry[] };
+type DisciplerNote = { note: string; updatedAt: string; author: { name: string } | null } | null;
+
+type ModuleData = { blocks: WorkbookBlock[]; reflections: ReflectionEntry[]; disciplerNote: DisciplerNote; canComment: boolean };
 
 const STATUS_STYLES: Record<string, string> = {
   ACTIVE: 'bg-green-100 text-green-700',
@@ -79,11 +85,28 @@ export default function MyDisciplesPage() {
         const d = await res.json();
         setModuleData(prev => ({
           ...prev,
-          [key]: { blocks: d.module?.content?.blocks || [], reflections: d.reflections || [] },
+          [key]: {
+            blocks: d.module?.content?.blocks || [],
+            reflections: d.reflections || [],
+            disciplerNote: d.disciplerNote || null,
+            canComment: !!d.canComment,
+          },
         }));
       }
       setModuleLoading(null);
     }
+  };
+
+  const saveComment = async (e: Enrollment, moduleId: string, note: string): Promise<DisciplerNote | false> => {
+    const res = await fetch(`/api/tracks/${e.trackId}/enrollments/${e.id}/modules/${moduleId}`, {
+      method: 'PUT', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ note }),
+    });
+    if (!res.ok) return false;
+    const d = await res.json();
+    const key = `${e.id}:${moduleId}`;
+    setModuleData(prev => prev[key] ? { ...prev, [key]: { ...prev[key], disciplerNote: d.disciplerNote || null } } : prev);
+    return d.disciplerNote || null;
   };
 
   return (
@@ -210,12 +233,22 @@ export default function MyDisciplesPage() {
                             {moduleLoading === key || !data ? (
                               <p className="text-sm text-church-400 text-center py-6">Loading this week…</p>
                             ) : (
-                              <ModuleWorkbook
-                                blocks={data.blocks}
-                                reflections={data.reflections}
-                                readOnly={true}
-                                onSave={async () => false}
-                              />
+                              <>
+                                <ModuleWorkbook
+                                  blocks={data.blocks}
+                                  reflections={data.reflections}
+                                  readOnly={true}
+                                  onSave={async () => false}
+                                />
+                                {data.canComment && (
+                                  <DisciplerCommentBox
+                                    key={key}
+                                    initialNote={data.disciplerNote?.note || ''}
+                                    savedAt={data.disciplerNote?.updatedAt || null}
+                                    onSave={note => saveComment(e, m.id, note)}
+                                  />
+                                )}
+                              </>
                             )}
                           </div>
                         )}
@@ -233,6 +266,60 @@ export default function MyDisciplesPage() {
           })}
         </div>
       )}
+    </div>
+  );
+}
+
+// Run 18 — the discipler's ONE general comment for a module. Edited in
+// place; saving an empty comment removes it. The disciple can read this in
+// their portal and in My Tracks.
+function DisciplerCommentBox({ initialNote, savedAt, onSave }: {
+  initialNote: string;
+  savedAt: string | null;
+  onSave: (note: string) => Promise<{ note: string; updatedAt: string; author: { name: string } | null } | null | false>;
+}) {
+  const [note, setNote] = useState(initialNote);
+  const [state, setState] = useState<'idle' | 'dirty' | 'saving' | 'saved' | 'error'>('idle');
+  const [lastSaved, setLastSaved] = useState<string | null>(savedAt);
+
+  const save = async () => {
+    setState('saving');
+    const result = await onSave(note);
+    if (result === false) { setState('error'); return; }
+    setLastSaved(result ? result.updatedAt : null);
+    setState('saved');
+  };
+
+  return (
+    <div className="mt-4 pt-4 border-t border-brand-100">
+      <p className="text-sm font-semibold text-church-800 mb-1">💬 My comment on this module</p>
+      <p className="text-xs text-church-400 mb-2">
+        One general comment about what you reviewed — your disciple will see this in their portal and My Tracks.
+      </p>
+      <textarea
+        value={note}
+        onChange={ev => { setNote(ev.target.value); setState('dirty'); }}
+        rows={3}
+        placeholder="Encourage them, reflect back what you noticed, point to a next step…"
+        className="textarea-field w-full text-sm"
+      />
+      <div className="flex items-center justify-between mt-1.5">
+        <span className="text-xs text-church-400">
+          {lastSaved ? `Last saved ${new Date(lastSaved).toLocaleDateString()}` : note.trim() === '' ? 'No comment yet' : ''}
+        </span>
+        <span>
+          {state === 'saved' && <span className="text-xs font-medium text-green-600">Saved ✓</span>}
+          {state === 'saving' && <span className="text-xs text-church-400">Saving…</span>}
+          {state === 'error' && (
+            <button onClick={save} className="text-xs font-medium text-red-600 hover:underline">
+              Could not save — tap to retry
+            </button>
+          )}
+          {state === 'dirty' && (
+            <button onClick={save} className="btn-primary btn-sm text-xs px-3 py-1">Save comment</button>
+          )}
+        </span>
+      </div>
     </div>
   );
 }

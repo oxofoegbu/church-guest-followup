@@ -11,6 +11,12 @@ import { getSavableIds, getComparisonRefIds, MAX_REFLECTION_LENGTH } from '@/lib
 //          or ADMIN_ACCESS (Senior Pastor / head of discipleship).
 //          Plain LEADER_ACCESS is NOT sufficient — reflections are personal.
 //   WRITE: the participant themselves only, while the enrollment is ACTIVE.
+//
+// Run 18 — DisciplerNote: the discipler's ONE general comment per module.
+//   READ:  same as reflections (participant / discipler / ADMIN) — the GET
+//          below returns it alongside the reflections.
+//   WRITE: the enrollment's discipler or ADMIN, via PUT (edited in place;
+//          an empty note deletes the row).
 
 async function loadEnrollment(trackId: string, enrollmentId: string) {
   return (prisma as any).trackEnrollment.findFirst({
@@ -29,6 +35,13 @@ async function loadModule(trackId: string, moduleId: string) {
 async function canRead(session: { userId: string; role: string }, enrollment: any) {
   if (enrollment.userId === session.userId) return true;
   if (enrollment.disciplerUserId === session.userId) return true;
+  const setting = await prisma.appSetting.findUnique({ where: { key: 'custom_roles' } });
+  return getPermissionLevel(session.role, setting?.value ?? null) === 'ADMIN_ACCESS';
+}
+
+// Run 18 — who may write the discipler's module comment.
+async function canComment(session: { userId: string; role: string }, enrollment: any) {
+  if (enrollment.disciplerUserId && enrollment.disciplerUserId === session.userId) return true;
   const setting = await prisma.appSetting.findUnique({ where: { key: 'custom_roles' } });
   return getPermissionLevel(session.role, setting?.value ?? null) === 'ADMIN_ACCESS';
 }
@@ -71,7 +84,18 @@ export async function GET(
         reflections.push(...extra);
       }
     }
-    return NextResponse.json({ module: module_, reflections });
+    // Run 18 — the discipler's one general comment for this module.
+    const disciplerNote = await (prisma as any).disciplerNote.findUnique({
+      where: { enrollmentId_moduleId: { enrollmentId: enrollment.id, moduleId: module_.id } },
+      select: { note: true, updatedAt: true, author: { select: { name: true } } },
+    });
+
+    return NextResponse.json({
+      module: module_,
+      reflections,
+      disciplerNote,
+      canComment: await canComment(session, enrollment),
+    });
   } catch (error) {
     return handleAuthError(error);
   }
@@ -121,6 +145,53 @@ export async function POST(
       select: { promptId: true, updatedAt: true },
     });
     return NextResponse.json({ ok: true, saved });
+  } catch (error) {
+    return handleAuthError(error);
+  }
+}
+
+// Run 18 — PUT: the discipler (or ADMIN) saves their ONE general comment for
+// this module. Body: { note }. Edited in place; an empty note deletes it.
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: { id: string; enrollmentId: string; moduleId: string } }
+) {
+  try {
+    const session = await requireAuth(request);
+    const enrollment = await loadEnrollment(params.id, params.enrollmentId);
+    if (!enrollment) return NextResponse.json({ error: 'Enrollment not found' }, { status: 404 });
+
+    if (!(await canComment(session, enrollment))) {
+      return NextResponse.json({ error: 'Only the discipler can comment on this module' }, { status: 403 });
+    }
+
+    const module_ = await loadModule(enrollment.trackId, params.moduleId);
+    if (!module_) return NextResponse.json({ error: 'Module not found' }, { status: 404 });
+
+    const { note } = await request.json();
+    if (typeof note !== 'string') {
+      return NextResponse.json({ error: 'note is required' }, { status: 400 });
+    }
+    if (note.length > MAX_REFLECTION_LENGTH) {
+      return NextResponse.json({ error: 'Comment is too long' }, { status: 400 });
+    }
+
+    const where = { enrollmentId_moduleId: { enrollmentId: enrollment.id, moduleId: module_.id } };
+
+    if (note.trim() === '') {
+      await (prisma as any).disciplerNote.deleteMany({
+        where: { enrollmentId: enrollment.id, moduleId: module_.id },
+      });
+      return NextResponse.json({ ok: true, disciplerNote: null });
+    }
+
+    const saved = await (prisma as any).disciplerNote.upsert({
+      where,
+      update: { note, authorUserId: session.userId },
+      create: { enrollmentId: enrollment.id, moduleId: module_.id, note, authorUserId: session.userId },
+      select: { note: true, updatedAt: true, author: { select: { name: true } } },
+    });
+    return NextResponse.json({ ok: true, disciplerNote: saved });
   } catch (error) {
     return handleAuthError(error);
   }
