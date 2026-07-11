@@ -517,8 +517,9 @@ model TrackModule {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  track    Track            @relation(fields: [trackId], references: [id], onDelete: Cascade)
-  progress ModuleProgress[]
+  track       Track              @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  progress    ModuleProgress[]
+  reflections ModuleReflection[]
 
   @@unique([trackId, weekNumber])
   @@map("track_modules")
@@ -562,8 +563,9 @@ model TrackEnrollment {
   guest     Guest?           @relation("GuestEnrollments", fields: [guestId], references: [id], onDelete: Cascade)
   user      User?            @relation("UserEnrollments", fields: [userId], references: [id], onDelete: Cascade)
   discipler User?            @relation("DisciplerEnrollments", fields: [disciplerUserId], references: [id], onDelete: SetNull)
-  cohort    TrackCohort?     @relation(fields: [cohortId], references: [id], onDelete: SetNull)
-  progress  ModuleProgress[]
+  cohort      TrackCohort?       @relation(fields: [cohortId], references: [id], onDelete: SetNull)
+  progress    ModuleProgress[]
+  reflections ModuleReflection[]
 
   @@index([trackId, status])
   @@index([guestId])
@@ -584,4 +586,24 @@ model ModuleProgress {
 
   @@unique([enrollmentId, moduleId])
   @@map("module_progress")
+}
+
+// Run 12 — participant reflections (in-app workbook answers)
+// Privacy model: readable by the participant, their discipler, and ADMIN
+// (Senior Pastor / head of discipleship). Written ONLY by the participant.
+model ModuleReflection {
+  id           String   @id @default(cuid())
+  enrollmentId String
+  moduleId     String
+  promptId     String   // savable block id inside TrackModule.content (e.g. "w1_call_moment")
+  response     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  enrollment TrackEnrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  module     TrackModule     @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@unique([enrollmentId, moduleId, promptId])
+  @@index([enrollmentId, moduleId])
+  @@map("module_reflections")
 }

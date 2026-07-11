@@ -1,18 +1,22 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import ModuleWorkbook from '@/components/ModuleWorkbook';
+import type { WorkbookBlock, ReflectionEntry } from '@/lib/workbook';
 
 type Enrollment = {
   id: string; trackId: string; status: string;
   track: {
     id: string; name: string; description: string | null;
     milestoneLabel: string | null; workbookUrl: string | null;
-    modules: { id: string; weekNumber: number; title: string; summary: string | null }[];
+    modules: { id: string; weekNumber: number; title: string; summary: string | null; hasContent: boolean }[];
   };
   discipler: { name: string; email: string; phone: string | null; photoUrl: string | null } | null;
   cohort: { name: string; meetingDay: string | null; meetingTime: string | null } | null;
   progress: { moduleId: string; completedAt: string }[];
 };
+
+type ModuleData = { blocks: WorkbookBlock[]; reflections: ReflectionEntry[] };
 
 const STATUS_STYLES: Record<string, string> = {
   ACTIVE: 'bg-green-100 text-green-700',
@@ -29,6 +33,9 @@ export default function MyTracksPage() {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [loading, setLoading] = useState(true);
   const [toggling, setToggling] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState<string | null>(null);
+  const [moduleData, setModuleData] = useState<Record<string, ModuleData>>({});
+  const [moduleLoading, setModuleLoading] = useState<string | null>(null);
 
   const fetchMine = useCallback(async () => {
     const res = await fetch('/api/my-tracks');
@@ -51,6 +58,34 @@ export default function MyTracksPage() {
       setEnrollments(prev => prev.map(x => x.id === e.id ? { ...x, progress: d.progress } : x));
     }
     setToggling(null);
+  };
+
+  // moduleData/expanded are keyed by `${enrollmentId}:${moduleId}` so the same
+  // module in two enrollments (edge case) cannot collide.
+  const expandWeek = async (e: Enrollment, moduleId: string) => {
+    const key = `${e.id}:${moduleId}`;
+    if (expanded === key) { setExpanded(null); return; }
+    setExpanded(key);
+    if (!moduleData[key]) {
+      setModuleLoading(key);
+      const res = await fetch(`/api/tracks/${e.trackId}/enrollments/${e.id}/modules/${moduleId}`);
+      if (res.ok) {
+        const d = await res.json();
+        setModuleData(prev => ({
+          ...prev,
+          [key]: { blocks: d.module?.content?.blocks || [], reflections: d.reflections || [] },
+        }));
+      }
+      setModuleLoading(null);
+    }
+  };
+
+  const saveReflection = async (e: Enrollment, moduleId: string, promptId: string, response: string) => {
+    const res = await fetch(`/api/tracks/${e.trackId}/enrollments/${e.id}/modules/${moduleId}`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ promptId, response }),
+    });
+    return res.ok;
   };
 
   return (
@@ -76,6 +111,7 @@ export default function MyTracksPage() {
             const total = e.track.modules.length;
             const doneCount = e.progress.length;
             const pct = total > 0 ? Math.round((doneCount / total) * 100) : 0;
+            const anyContent = e.track.modules.some(m => m.hasContent);
             return (
               <div key={e.id} className="card">
                 <div className="flex items-start justify-between gap-3 mb-2">
@@ -130,22 +166,55 @@ export default function MyTracksPage() {
                   {e.track.modules.map(m => {
                     const done = e.progress.some(p => p.moduleId === m.id);
                     const busy = toggling === m.id;
+                    const key = `${e.id}:${m.id}`;
+                    const isOpen = expanded === key;
+                    const data = moduleData[key];
                     return (
-                      <button key={m.id} onClick={() => toggleWeek(e, m.id)}
-                        disabled={e.status !== 'ACTIVE' || busy}
-                        className={`w-full text-left flex items-center gap-3 rounded-xl border px-3 py-2.5 transition-all ${done ? 'border-green-200 bg-green-50/60' : 'border-church-100 bg-white'} ${e.status === 'ACTIVE' ? 'hover:shadow-sm active:scale-[0.99]' : 'cursor-default'}`}>
-                        <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${done ? 'bg-green-500 text-white' : 'bg-church-100 text-church-400'}`}>
-                          {busy ? '…' : done ? '✓' : m.weekNumber}
+                      <div key={m.id}
+                        className={`rounded-xl border px-3 py-2.5 transition-all ${done ? 'border-green-200 bg-green-50/60' : 'border-church-100 bg-white'}`}>
+                        <div
+                          className={`flex items-center gap-3 ${m.hasContent ? 'cursor-pointer' : ''}`}
+                          onClick={() => { if (m.hasContent) expandWeek(e, m.id); }}>
+                          <button
+                            onClick={ev => { ev.stopPropagation(); toggleWeek(e, m.id); }}
+                            disabled={e.status !== 'ACTIVE' || busy}
+                            aria-label={done ? `Mark week ${m.weekNumber} as not complete` : `Mark week ${m.weekNumber} complete`}
+                            className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 transition-colors ${done ? 'bg-green-500 text-white' : 'bg-church-100 text-church-400'} ${e.status === 'ACTIVE' ? 'hover:ring-2 hover:ring-green-200' : 'cursor-default'}`}>
+                            {busy ? '…' : done ? '✓' : m.weekNumber}
+                          </button>
+                          <div className="min-w-0 flex-1">
+                            <p className={`text-sm font-medium ${done ? 'text-green-800' : 'text-church-800'}`}>
+                              Week {m.weekNumber}: {m.title}
+                            </p>
+                          </div>
+                          {m.hasContent && (
+                            <span className={`text-church-400 text-xs flex-shrink-0 transition-transform ${isOpen ? 'rotate-90' : ''}`}>▶</span>
+                          )}
                         </div>
-                        <div className="min-w-0">
-                          <p className={`text-sm font-medium ${done ? 'text-green-800' : 'text-church-800'}`}>
-                            Week {m.weekNumber}: {m.title}
-                          </p>
-                        </div>
-                      </button>
+                        {isOpen && (
+                          <div className="mt-3 pt-3 border-t border-church-100">
+                            {moduleLoading === key || !data ? (
+                              <p className="text-sm text-church-400 text-center py-6">Loading this week…</p>
+                            ) : (
+                              <ModuleWorkbook
+                                blocks={data.blocks}
+                                reflections={data.reflections}
+                                readOnly={e.status !== 'ACTIVE'}
+                                onSave={(promptId, response) => saveReflection(e, m.id, promptId, response)}
+                              />
+                            )}
+                          </div>
+                        )}
+                      </div>
                     );
                   })}
                 </div>
+
+                {anyContent && e.status === 'ACTIVE' && (
+                  <p className="text-xs text-church-400 mt-3">
+                    Tap a week to open its content and write your reflections. Tap the circle to mark it complete.
+                  </p>
+                )}
 
                 {e.track.workbookUrl && (
                   <a href={e.track.workbookUrl} target="_blank" rel="noopener noreferrer"

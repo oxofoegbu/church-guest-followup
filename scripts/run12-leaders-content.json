@@ -1,0 +1,3056 @@
+{
+ "track": "trk_leaders",
+ "modules": [
+  {
+   "id": "lea_m1",
+   "weekNumber": 1,
+   "title": "The Call to Lead",
+   "summary": "Discover your identity, calling, and the heart behind biblical leadership.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "heading",
+      "text": "Welcome to Leaders Track",
+      "subtitle": "“Come. Follow. Be Made. Be Sent.” — A Leadership Formation Journey for Charismatic Renewal Ministries."
+     },
+     {
+      "type": "paragraph",
+      "text": "You are holding a transformational journey — a roadmap to becoming the kind of leader Jesus can trust, Heaven can deploy, and people can follow. This is more than a class. This is a process of becoming. Jesus never invited anyone to a course. He extended a call:"
+     },
+     {
+      "type": "verse",
+      "text": "“Come, follow Me, and I will make you…”",
+      "reference": "Matthew 4:19"
+     },
+     {
+      "type": "paragraph",
+      "text": "Leaders Track is the “I will make you” part. Over the coming weeks, you will be shaped, sharpened, stretched, and strengthened — not just by what you learn, but by who you become."
+     },
+     {
+      "type": "subheading",
+      "text": "Why This Training?"
+     },
+     {
+      "type": "paragraph",
+      "text": "Charismatic Renewal Ministries is a revival ministry with a leadership culture. We believe spiritual maturity is not measured by how long you’ve been in church, but how faithfully and fruitfully you follow Jesus and help others do the same. Every move of God rises or falls on leadership. Our ministry cannot grow beyond the quality of its leaders."
+     },
+     {
+      "type": "paragraph",
+      "text": "This is why Leaders Track exists: to raise leaders who carry fire, character, humility, unity, and skill — leaders who can support what God is building among us."
+     },
+     {
+      "type": "subheading",
+      "text": "What You Can Expect"
+     },
+     {
+      "type": "paragraph",
+      "text": "If you commit fully to this journey, you can expect:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Personal Transformation — God will work deeply in your heart, mindset, habits, and spirit.",
+       "Stronger Leadership Skills — You will grow in communication, teamwork, self-awareness, and influence.",
+       "Spiritual Maturity — Your prayer life, knowledge of Scripture, and intimacy with God will deepen.",
+       "Clear Vision & Direction — You’ll understand where you fit in the mission of CRM and the Kingdom.",
+       "A Leadership Identity — You will finish this track knowing: “I am a leader. I am called. I am sent.”"
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "But here’s the truth… You will only get out of this training what you are willing to put into it. You will be shaped to the degree that you show up hungry, humble, teachable, and engaged. This is not passive learning. This is active formation."
+     },
+     {
+      "type": "subheading",
+      "text": "How to Get the Most Out of Leaders Track"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Show Up With Hunger — Come ready to learn, listen, and grow every single week.",
+       "Do the Work — Engage with the workbook. Fill in answers honestly. Reflect deeply.",
+       "Be Teachable — Leadership begins where defensiveness ends. Come as a learner — not an expert.",
+       "Be Honest With Yourself — Growth requires truth. Let God confront what He needs to confront.",
+       "Practice What You Learn — Spiritual formation is behavioral, not informational.",
+       "Participate Actively — Ask questions. Share insights. Lean into community.",
+       "Embrace Accountability — Let others speak into your life — especially your mentor.",
+       "Fight for Unity — Honor others. Speak life. Protect the atmosphere.",
+       "Pray Daily — Only the Spirit can transform the heart. Stay plugged into Him.",
+       "Don’t Quit — It’s not about perfection… it’s about consistency."
+      ],
+      "ordered": true
+     },
+     {
+      "type": "subheading",
+      "text": "The Mentorship Requirement"
+     },
+     {
+      "type": "paragraph",
+      "text": "One of the most important elements of Leaders Track is your Leadership Mentor. You will be assigned a mentor who will walk with you through the material, help you apply the lessons, pray with and for you, challenge you where needed, and confirm your readiness for leadership."
+     },
+     {
+      "type": "paragraph",
+      "text": "Your responsibility: you must meet with your mentor at least once every week — no exceptions. This meeting can be in person or virtual, but it must happen weekly. You are the leader — it is your job to schedule and ensure the meeting holds."
+     },
+     {
+      "type": "paragraph",
+      "text": "If you fail to meet with your mentor, you fail the course. Your mentor’s report at the end of the journey will help determine whether you graduate and whether you are commissioned as a leader in CRM. Accountability is not punishment. It is the secret ingredient of transformation."
+     },
+     {
+      "type": "quote",
+      "text": "This is your moment. This is your invitation. This is your turning point. You were born for more than Sunday attendance. You were born to lead, to shape lives, to carry revival, to change the world. Welcome to Leaders Track."
+     },
+     {
+      "type": "heading",
+      "text": "Week 1 — The Call to Lead"
+     },
+     {
+      "type": "verse",
+      "text": "“Follow Me, and I will make you…”",
+      "reference": "Matthew 4:19"
+     },
+     {
+      "type": "bigIdea",
+      "text": "Leadership begins with a call — not a position. God calls ordinary people to lead extraordinary lives through simple obedience."
+     },
+     {
+      "type": "heading",
+      "text": "Opening Devotional — “When God Calls Your Name”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Every story of divine leadership begins with a moment when Heaven breaks into an ordinary life."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Moses was tending sheep when God called from the bush.",
+       "Mary was a young girl in a small town when an angel appeared.",
+       "Peter was casting nets when Jesus said, “Follow Me.”"
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "God’s call rarely begins on a stage — it begins in the ordinary. But when we say “Yes, Lord,” our ordinary moments become holy ground."
+     },
+     {
+      "type": "verse",
+      "text": "“For you did not choose Me, but I chose you and appointed you to go and bear fruit — fruit that will last.”",
+      "reference": "John 15:16"
+     },
+     {
+      "type": "paragraph",
+      "text": "Leadership in the Kingdom is not self-promotion, it’s God-invitation. It’s not about getting people to follow us but helping people follow Jesus better."
+     },
+     {
+      "type": "heading",
+      "text": "Reflection — “My Call Moment”",
+      "subtitle": "Take a few minutes to reflect on when God first stirred your heart to serve, influence, or lead. Write it out below. Be honest. It doesn’t have to sound “spiritual” — just real."
+     },
+     {
+      "type": "prompt",
+      "id": "w1_call_moment",
+      "question": "When did I first sense God’s call to leadership or influence?"
+     },
+     {
+      "type": "prompt",
+      "id": "w1_fears",
+      "question": "What fears or doubts did I feel when I first sensed this call?"
+     },
+     {
+      "type": "prompt",
+      "id": "w1_confirmation",
+      "question": "How did God confirm or remind me of His call recently?"
+     },
+     {
+      "type": "heading",
+      "text": "Bible Study — “The God Who Calls Ordinary People”"
+     },
+     {
+      "type": "subheading",
+      "text": "1. Moses: Called from the Desert (Exodus 3)"
+     },
+     {
+      "type": "list",
+      "items": [
+       "God uses your wilderness to prepare your voice.",
+       "Moses said, “Who am I?” — and God answered, “I will be with you.”"
+      ]
+     },
+     {
+      "type": "lesson",
+      "text": "God’s call is not about who you are but who is with you."
+     },
+     {
+      "type": "subheading",
+      "text": "2. Mary: Called in Obscurity (Luke 1:26–38)"
+     },
+     {
+      "type": "list",
+      "items": [
+       "A young girl from a forgotten town becomes the vessel of divine purpose.",
+       "Her response: “Be it unto me according to Your word.”"
+      ]
+     },
+     {
+      "type": "lesson",
+      "text": "Divine leadership begins with surrender, not status."
+     },
+     {
+      "type": "subheading",
+      "text": "3. Peter: Called from His Nets (Matthew 4:18–20)"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Jesus doesn’t just call us to believe — He calls us to become.",
+       "Peter’s “Yes” changed history."
+      ]
+     },
+     {
+      "type": "lesson",
+      "text": "The call is not to comfort but to transformation."
+     },
+     {
+      "type": "heading",
+      "text": "Discussion"
+     },
+     {
+      "type": "prompt",
+      "id": "w1_d1",
+      "question": "Which of these three calls feels most like your own journey right now? Why?"
+     },
+     {
+      "type": "prompt",
+      "id": "w1_d2",
+      "question": "What might God be asking you to leave behind in order to say “yes” fully?"
+     },
+     {
+      "type": "prompt",
+      "id": "w1_d3",
+      "question": "How can you cultivate a “be it unto me” attitude in daily life?"
+     },
+     {
+      "type": "heading",
+      "text": "Activation — “My Leadership Testimony”"
+     },
+     {
+      "type": "paragraph",
+      "text": "This week, take time to write or record your Leadership Testimony — the story of how you began to sense God’s call to serve and influence others. Use the outline below as a guide."
+     },
+     {
+      "type": "prompt",
+      "id": "w1_testimony",
+      "question": "Write your Leadership Testimony:",
+      "hint": "1. My background or life before the call • 2. The moment I felt stirred or called • 3. How I responded (or resisted) • 4. What I’ve learned since saying “yes” • 5. Where I sense God leading me next"
+     },
+     {
+      "type": "paragraph",
+      "text": "Challenge: Share your testimony with one other person this week. (It could be in your group or a trusted friend.) Your story will ignite courage in others."
+     },
+     {
+      "type": "heading",
+      "text": "Personal Reflection — “What’s in My Hand?”"
+     },
+     {
+      "type": "verse",
+      "text": "“Then the Lord said to him, ‘What is that in your hand?’”",
+      "reference": "Exodus 4:2"
+     },
+     {
+      "type": "paragraph",
+      "text": "God never calls us empty-handed. There’s something already in your life He wants to use — a skill, a story, a relationship, a passion."
+     },
+     {
+      "type": "prompt",
+      "id": "w1_in_my_hand",
+      "question": "List three “ordinary” things in your hand right now that God might want to use:",
+      "hint": "Then pray: “Lord, I give You what’s in my hand. Use it to fulfill what’s in Your heart.”"
+     },
+     {
+      "type": "heading",
+      "text": "Memory Verse"
+     },
+     {
+      "type": "verse",
+      "text": "“Come, follow Me,” Jesus said, “and I will make you fishers of men.”",
+      "reference": "Matthew 4:19"
+     },
+     {
+      "type": "prompt",
+      "id": "w1_memory",
+      "question": "Write it out below three times this week to commit it to memory:"
+     },
+     {
+      "type": "prayer",
+      "title": "Closing Prayer — “Here Am I, Lord”",
+      "text": "Father, thank You for calling me out of the ordinary and into Your purpose. I may not feel qualified, but You qualify those You call. Teach me to follow before I try to lead. Shape my heart to reflect Yours, and use my life to serve Your people. Here am I, Lord. Send me. Amen."
+     },
+     {
+      "type": "prompt",
+      "id": "w1_notes",
+      "question": "Leadership Notes",
+      "hint": "Use this space during the teaching session for personal notes or insights."
+     },
+     {
+      "type": "heading",
+      "text": "Week 1 Commitment",
+      "subtitle": "Before you begin Week 2, check your heart and write your response below."
+     },
+     {
+      "type": "prompt",
+      "id": "w1_commitment",
+      "question": "My Week 1 Commitment:",
+      "hint": "• This week, I will say YES to God’s call by… (e.g., praying daily, reaching out to someone, starting a new discipline) • I believe God has called me to influence others through…"
+     }
+    ]
+   }
+  },
+  {
+   "id": "lea_m2",
+   "weekNumber": 2,
+   "title": "The Heart of a Leader",
+   "summary": "Character, humility, integrity — the interior life that shapes everything else.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "heading",
+      "text": "Week 2 — The Heart of a Leader"
+     },
+     {
+      "type": "verse",
+      "text": "“He shepherded them with integrity of heart; with skillful hands he led them.”",
+      "reference": "Psalm 78:72"
+     },
+     {
+      "type": "bigIdea",
+      "text": "Before God trusts you with a platform, He shapes you in the pasture. The strength of your leadership tomorrow depends on the integrity of your heart today."
+     },
+     {
+      "type": "heading",
+      "text": "Opening Devotional — “The Hidden Furnace of Formation”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Every great leader is first formed in hidden places. Moses spent forty years in Midian. David was faithful in fields long before he faced Goliath. Jesus Himself lived thirty quiet years before His public ministry began."
+     },
+     {
+      "type": "paragraph",
+      "text": "The hidden season is God’s furnace of formation. It burns away pride, self-ambition, and fear. It forges humility, patience, and dependence on God."
+     },
+     {
+      "type": "verse",
+      "text": "“For the eyes of the Lord range throughout the earth to strengthen those whose hearts are fully committed to Him.”",
+      "reference": "2 Chronicles 16:9"
+     },
+     {
+      "type": "paragraph",
+      "text": "When the spotlight finds you, it reveals what the secret place has already built. Leadership that lasts is leadership that has been purified in secret."
+     },
+     {
+      "type": "heading",
+      "text": "Reflection — “God, What Are You Shaping in Me?”"
+     },
+     {
+      "type": "prompt",
+      "id": "w2_season",
+      "question": "What season am I in right now — hidden, stretching, or releasing?"
+     },
+     {
+      "type": "prompt",
+      "id": "w2_qualities",
+      "question": "What qualities is God developing in me through this season?"
+     },
+     {
+      "type": "prompt",
+      "id": "w2_surrender",
+      "question": "What attitudes or habits is God asking me to surrender?"
+     },
+     {
+      "type": "heading",
+      "text": "Bible Study — “David and Saul: Two Hearts, Two Stories”"
+     },
+     {
+      "type": "subheading",
+      "text": "1. Saul — The Crown Without Character (1 Samuel 15)"
+     },
+     {
+      "type": "paragraph",
+      "text": "Saul looked the part, but he cared more about people’s applause than God’s approval. He obeyed halfway, excused his disobedience, and lost the anointing."
+     },
+     {
+      "type": "lesson",
+      "text": "Partial obedience is still disobedience. God values heart alignment over performance."
+     },
+     {
+      "type": "subheading",
+      "text": "2. David — The Shepherd With a Song (1 Samuel 16–17)"
+     },
+     {
+      "type": "paragraph",
+      "text": "David worshiped when no one watched. He learned courage by fighting lions before facing giants. When promoted, he stayed humble; when persecuted, he stayed faithful."
+     },
+     {
+      "type": "lesson",
+      "text": "Integrity is who you are when nobody’s watching."
+     },
+     {
+      "type": "heading",
+      "text": "Discussion Questions"
+     },
+     {
+      "type": "prompt",
+      "id": "w2_d1",
+      "question": "What stands out to you most in the contrast between Saul and David?"
+     },
+     {
+      "type": "prompt",
+      "id": "w2_d2",
+      "question": "Why is humility so essential to spiritual authority?"
+     },
+     {
+      "type": "prompt",
+      "id": "w2_d3",
+      "question": "In what hidden “field” might God be training you right now?"
+     },
+     {
+      "type": "heading",
+      "text": "Character Inventory Worksheet"
+     },
+     {
+      "type": "rating",
+      "id": "w2_inventory",
+      "title": "Rate yourself 1–5 (1 = needs growth, 5 = strong) on each trait:",
+      "items": [
+       "Humility — I can admit when I’m wrong.",
+       "Integrity — I keep my word even when it’s hard.",
+       "Teachability — I receive correction without defensiveness.",
+       "Compassion — I genuinely care about people’s needs.",
+       "Discipline — I follow through on what I commit to."
+      ],
+      "scaleMax": 5
+     },
+     {
+      "type": "prompt",
+      "id": "w2_growth_areas",
+      "question": "Which two areas do I sense the Holy Spirit highlighting for growth this month?"
+     },
+     {
+      "type": "heading",
+      "text": "Activation — “Heart Check Challenge”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Take one hour this week for a personal retreat with God. Bring only your Bible, journal, and honesty."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Ask the Holy Spirit: “Search me, O God, and know my heart.” (Psalm 139:23)",
+       "Write whatever He shows you — no filters.",
+       "End with gratitude and surrender: “Create in me a clean heart, O God.” (Psalm 51:10)"
+      ],
+      "ordered": true
+     },
+     {
+      "type": "paragraph",
+      "text": "Challenge: Share one insight from your retreat with your small group next session."
+     },
+     {
+      "type": "heading",
+      "text": "Personal Reflection — “Leadership Motives Check”"
+     },
+     {
+      "type": "verse",
+      "text": "“Do nothing out of selfish ambition or vain conceit, but in humility consider others better than yourselves.”",
+      "reference": "Philippians 2:3"
+     },
+     {
+      "type": "checklist",
+      "id": "w2_motives",
+      "title": "Select any motives that sometimes show up in your heart:",
+      "options": [
+       "Wanting recognition",
+       "Fear of failure",
+       "Control",
+       "Approval of people",
+       "Comfort",
+       "Love for God and people",
+       "Obedience",
+       "Desire to serve",
+       "Passion for souls"
+      ]
+     },
+     {
+      "type": "prompt",
+      "id": "w2_motive_growth",
+      "question": "Which motive do I want to grow in this week?"
+     },
+     {
+      "type": "heading",
+      "text": "Memory Verse"
+     },
+     {
+      "type": "verse",
+      "text": "“Above all else, guard your heart, for everything you do flows from it.”",
+      "reference": "Proverbs 4:23"
+     },
+     {
+      "type": "prompt",
+      "id": "w2_memory",
+      "question": "Write it three times this week to seal it in your heart:"
+     },
+     {
+      "type": "prayer",
+      "title": "Closing Prayer — “A Heart Like Yours”",
+      "text": "Father, You see beyond my actions into my heart. Forgive me for the times I’ve led for my own glory. Purify my motives. Shape my character. Give me a heart that loves what You love and hates what You hate. Teach me to lead like David — with integrity and skill. Create in me a clean heart, O God, and renew a right spirit within me. Amen."
+     },
+     {
+      "type": "prompt",
+      "id": "w2_notes",
+      "question": "Notes & Insights"
+     },
+     {
+      "type": "heading",
+      "text": "Week 2 Commitment"
+     },
+     {
+      "type": "prompt",
+      "id": "w2_commitment",
+      "question": "My Week 2 Commitment:",
+      "hint": "• This week, I will guard my heart by… • I will practice humility by… • I will ask God to develop in me the quality of…"
+     }
+    ]
+   }
+  },
+  {
+   "id": "lea_m3",
+   "weekNumber": 3,
+   "title": "Servant Leadership & Spiritual Authority",
+   "summary": "Learning to lead like Jesus: with confidence, courage, and surrender.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "heading",
+      "text": "Week 3 — Servant Leadership & Spiritual Authority"
+     },
+     {
+      "type": "verse",
+      "text": "“The greatest among you must be your servant.”",
+      "reference": "Matthew 23:11"
+     },
+     {
+      "type": "bigIdea",
+      "text": "True leadership in the Kingdom is not measured by how many people serve you, but by how many people you serve. Authority flows from love. Power flows from humility."
+     },
+     {
+      "type": "heading",
+      "text": "Opening Devotional — “Jesus Took a Towel”"
+     },
+     {
+      "type": "paragraph",
+      "text": "The night before the cross, the Son of God did something no one expected: He removed His robe, wrapped a towel around His waist, and knelt to wash His disciples’ feet."
+     },
+     {
+      "type": "paragraph",
+      "text": "The hands that shaped galaxies washed dirt from human toes. The King of kings served those who would soon abandon Him."
+     },
+     {
+      "type": "verse",
+      "text": "“Jesus knew that the Father had put all things under His power… so He got up from the meal, took off His outer clothing, and wrapped a towel around His waist.”",
+      "reference": "John 13:3–4"
+     },
+     {
+      "type": "paragraph",
+      "text": "He knew who He was, where He came from, and where He was going — and that’s why He could serve without insecurity."
+     },
+     {
+      "type": "paragraph",
+      "text": "Servant leadership is not weakness; it is power under control."
+     },
+     {
+      "type": "quote",
+      "text": "In the Kingdom, the way up is down."
+     },
+     {
+      "type": "paragraph",
+      "text": "When you learn to lead with a towel, you will never lose your crown."
+     },
+     {
+      "type": "heading",
+      "text": "Reflection — “My Towel Moments”"
+     },
+     {
+      "type": "prompt",
+      "id": "w3_model",
+      "question": "Who has modeled servant leadership in my life? What did I learn from them?"
+     },
+     {
+      "type": "prompt",
+      "id": "w3_served",
+      "question": "When was the last time I served someone quietly, without recognition? How did it make me feel?"
+     },
+     {
+      "type": "prompt",
+      "id": "w3_practice",
+      "question": "What’s one way I can practice servant leadership this week?"
+     },
+     {
+      "type": "heading",
+      "text": "Bible Study — “Authority That Kneels”"
+     },
+     {
+      "type": "subheading",
+      "text": "1. Jesus’ Example (John 13:1–17)"
+     },
+     {
+      "type": "paragraph",
+      "text": "He had all authority, yet He stooped low. He washed Judas’ feet — the one who would betray Him."
+     },
+     {
+      "type": "lesson",
+      "text": "If you can serve those who hurt you, God can trust you with influence."
+     },
+     {
+      "type": "subheading",
+      "text": "2. The Kingdom Model (Mark 10:42–45)"
+     },
+     {
+      "type": "paragraph",
+      "text": "“Whoever wants to become great among you must be your servant.” In the world, leadership is about control. In the Kingdom, leadership is about care."
+     },
+     {
+      "type": "lesson",
+      "text": "In God’s order, the lowest place is the highest path."
+     },
+     {
+      "type": "subheading",
+      "text": "3. The Centurion’s Faith (Matthew 8:5–10)"
+     },
+     {
+      "type": "paragraph",
+      "text": "This Roman officer understood spiritual authority. He said, “I am a man under authority, with soldiers under me.” Jesus marveled at his faith."
+     },
+     {
+      "type": "lesson",
+      "text": "You can only lead with authority if you live under authority."
+     },
+     {
+      "type": "heading",
+      "text": "Discussion Questions"
+     },
+     {
+      "type": "prompt",
+      "id": "w3_d1",
+      "question": "What surprises you most about Jesus’ example in John 13?"
+     },
+     {
+      "type": "prompt",
+      "id": "w3_d2",
+      "question": "How does being “under authority” prepare someone to carry more authority?"
+     },
+     {
+      "type": "prompt",
+      "id": "w3_d3",
+      "question": "What’s the difference between serving for love and serving for approval?"
+     },
+     {
+      "type": "heading",
+      "text": "Activation — “The Towel Challenge”"
+     },
+     {
+      "type": "paragraph",
+      "text": "This week, do one act of humble service without anyone knowing — no announcement, no credit, no social media. Examples:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Clean a space no one else wants to clean.",
+       "Bless someone anonymously.",
+       "Volunteer quietly behind the scenes."
+      ]
+     },
+     {
+      "type": "prompt",
+      "id": "w3_towel_reflect",
+      "question": "Afterward, reflect: What did I feel as I served unseen? What did I learn about my heart?",
+      "hint": "Optional Group Share: At your next meeting, share what God taught you during your Towel Challenge."
+     },
+     {
+      "type": "heading",
+      "text": "Personal Exercise — “The Towel or the Throne?”"
+     },
+     {
+      "type": "checklist",
+      "id": "w3_towel_throne",
+      "title": "Check any statements that honestly describe where your heart leans right now:",
+      "options": [
+       "I’m drawn to recognition more than responsibility.",
+       "I find joy in helping others succeed.",
+       "I sometimes feel unseen when I serve.",
+       "I’m learning to lead from the background.",
+       "I struggle to take correction from those above me.",
+       "I feel fulfilled when I lift others up."
+      ]
+     },
+     {
+      "type": "prompt",
+      "id": "w3_highlight",
+      "question": "What is the Holy Spirit highlighting to me from this list?"
+     },
+     {
+      "type": "heading",
+      "text": "Truth to Remember"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Servanthood is the seedbed of spiritual power.",
+       "You can wash feet today and change destinies tomorrow.",
+       "God trusts those who serve more than those who seek status."
+      ]
+     },
+     {
+      "type": "quote",
+      "text": "The towel in your hand is more powerful than the title on your card."
+     },
+     {
+      "type": "heading",
+      "text": "Memory Verse"
+     },
+     {
+      "type": "verse",
+      "text": "“For even the Son of Man did not come to be served, but to serve, and to give His life as a ransom for many.”",
+      "reference": "Mark 10:45"
+     },
+     {
+      "type": "prompt",
+      "id": "w3_memory",
+      "question": "Write it three times this week to meditate on it:"
+     },
+     {
+      "type": "prayer",
+      "title": "Closing Prayer — “Teach Me to Lead with a Towel”",
+      "text": "Lord Jesus, thank You for showing me that true greatness is found in service. Teach me to lead with a towel, not a throne. Break my pride, heal my insecurities, and fill my heart with compassion. Help me to see leadership not as status, but as stewardship. May I never forget that You washed my feet so I could wash others’. I choose today to serve like You served. Amen."
+     },
+     {
+      "type": "prompt",
+      "id": "w3_notes",
+      "question": "Notes & Insights"
+     },
+     {
+      "type": "heading",
+      "text": "Week 3 Commitment"
+     },
+     {
+      "type": "prompt",
+      "id": "w3_commitment",
+      "question": "My Week 3 Commitment:",
+      "hint": "• This week, I will serve someone without seeking recognition by… • I will honor authority in my life by… • I will remember that spiritual power flows from…"
+     }
+    ]
+   }
+  },
+  {
+   "id": "lea_m4",
+   "weekNumber": 4,
+   "title": "Gifts, Calling & Anointing",
+   "summary": "Unwrapping the gifts, passions, and callings God has placed inside you — not for your fame, but for His glory.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "heading",
+      "text": "Week 4 — Gifts, Calling & Anointing"
+     },
+     {
+      "type": "verse",
+      "text": "“We have different gifts, according to the grace given to each of us.”",
+      "reference": "Romans 12:6"
+     },
+     {
+      "type": "bigIdea",
+      "text": "You are graced for a purpose. God has placed a unique combination of gifts, passions, and callings inside you — not for your fame, but for His glory. The anointing empowers your gifts to serve and transform lives."
+     },
+     {
+      "type": "heading",
+      "text": "Opening Devotional — “Grace Zones: Leading Where You’re Anointed”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Every leader has a grace zone — that space where what you love to do and what God has empowered you to do come together to bless others."
+     },
+     {
+      "type": "paragraph",
+      "text": "Some try to lead outside their grace zone — comparing, competing, imitating — and they end up exhausted. But grace is divine enablement. It’s the oil that makes your assignment flow with joy instead of struggle."
+     },
+     {
+      "type": "verse",
+      "text": "“Each of you should use whatever gift you have received to serve others, as faithful stewards of God’s grace in its various forms.”",
+      "reference": "1 Peter 4:10"
+     },
+     {
+      "type": "paragraph",
+      "text": "The anointing is Heaven’s empowerment on Earth’s vessel. It turns natural ability into supernatural impact. It is God saying, “I have chosen you for this.”"
+     },
+     {
+      "type": "paragraph",
+      "text": "When you move in your calling, you stop striving. When you serve in your grace, you stop comparing. You begin to walk in the confidence that you are God’s idea — sent for this generation."
+     },
+     {
+      "type": "heading",
+      "text": "Reflection — “My Grace Zone”"
+     },
+     {
+      "type": "prompt",
+      "id": "w4_alive",
+      "question": "What activities make me feel most alive and fulfilled?"
+     },
+     {
+      "type": "prompt",
+      "id": "w4_affirmed",
+      "question": "What do people consistently thank or affirm me for?"
+     },
+     {
+      "type": "prompt",
+      "id": "w4_drains",
+      "question": "What drains me that might be outside my grace zone?"
+     },
+     {
+      "type": "heading",
+      "text": "Bible Study — “Gifts, Calling, and Anointing: Three Layers of Grace”"
+     },
+     {
+      "type": "subheading",
+      "text": "1. Gifts — What You’re Empowered to Do (Romans 12:4–8; 1 Corinthians 12)"
+     },
+     {
+      "type": "paragraph",
+      "text": "Spiritual gifts are divine enablements for Kingdom service — teaching, mercy, wisdom, leadership, faith, prophecy, helps, etc."
+     },
+     {
+      "type": "lesson",
+      "text": "Gifts reveal how God designed you to function in His body. You are not meant to do everything; you are meant to do your thing faithfully."
+     },
+     {
+      "type": "subheading",
+      "text": "2. Calling — Who You’re Becoming and Why You Exist (Ephesians 4:1; 2 Timothy 1:9)"
+     },
+     {
+      "type": "paragraph",
+      "text": "Your calling is the divine assignment on your life — the why behind your gifts. It’s the holy invitation to reflect Christ in a specific way or sphere."
+     },
+     {
+      "type": "lesson",
+      "text": "Your calling is not a job title — it’s a divine purpose. You might be called to lead in business, family, art, ministry, or community, but every calling is sacred when surrendered to God."
+     },
+     {
+      "type": "subheading",
+      "text": "3. Anointing — God’s Power That Makes It All Work (Luke 4:18; Acts 10:38)"
+     },
+     {
+      "type": "paragraph",
+      "text": "“God anointed Jesus of Nazareth with the Holy Spirit and power, and He went about doing good…” The anointing breaks yokes, heals hearts, and turns ordinary words into life-giving fire. It’s what makes your service bear eternal fruit."
+     },
+     {
+      "type": "lesson",
+      "text": "You can have gifts without anointing, but you can’t have anointing without intimacy."
+     },
+     {
+      "type": "heading",
+      "text": "Discussion Questions"
+     },
+     {
+      "type": "prompt",
+      "id": "w4_d1",
+      "question": "What’s the difference between natural talent, spiritual gifts, and anointing?"
+     },
+     {
+      "type": "prompt",
+      "id": "w4_d2",
+      "question": "How can someone grow in their anointing?"
+     },
+     {
+      "type": "prompt",
+      "id": "w4_d3",
+      "question": "Why do you think God chooses to distribute gifts so differently among people?"
+     },
+     {
+      "type": "heading",
+      "text": "Gifts Inventory Worksheet"
+     },
+     {
+      "type": "checklist",
+      "id": "w4_gifts",
+      "title": "Below are some spiritual gifts found in Scripture. Check the ones that describe you or that others have recognized in you:",
+      "options": [
+       "Encouragement",
+       "Leadership",
+       "Mercy",
+       "Giving",
+       "Teaching",
+       "Faith",
+       "Healing",
+       "Prophecy",
+       "Helps",
+       "Administration",
+       "Wisdom",
+       "Discernment",
+       "Hospitality",
+       "Evangelism",
+       "Intercession"
+      ]
+     },
+     {
+      "type": "prompt",
+      "id": "w4_top_two",
+      "question": "My top two gifts right now:"
+     },
+     {
+      "type": "prompt",
+      "id": "w4_build_up",
+      "question": "How can I use these gifts to build others up this month?"
+     },
+     {
+      "type": "heading",
+      "text": "Activation — “My Grace Map”",
+      "subtitle": "Create your Grace Map — your personal blueprint of calling, gifts, and anointing. For each area, describe it and how you’ll use it for God’s glory."
+     },
+     {
+      "type": "prompt",
+      "id": "w4_map_calling",
+      "question": "My Core Calling — description, and how I’ll use it for God’s glory:"
+     },
+     {
+      "type": "prompt",
+      "id": "w4_map_gifts",
+      "question": "My Primary Gifts — description, and how I’ll use them for God’s glory:"
+     },
+     {
+      "type": "prompt",
+      "id": "w4_map_passion",
+      "question": "My Passion or Burden — description, and how I’ll use it for God’s glory:"
+     },
+     {
+      "type": "prompt",
+      "id": "w4_map_opportunities",
+      "question": "My Current Opportunities — description, and how I’ll use them for God’s glory:"
+     },
+     {
+      "type": "prompt",
+      "id": "w4_map_anointing",
+      "question": "How I Sense God Anointing me — description, and how I’ll use it for God’s glory:"
+     },
+     {
+      "type": "paragraph",
+      "text": "Challenge: Share your Grace Map with your mentor or small group. Ask them to affirm what they see and pray over you."
+     },
+     {
+      "type": "heading",
+      "text": "Truth to Remember"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Gifts are given freely.",
+       "Callings unfold progressively.",
+       "Anointing grows with intimacy."
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "You cannot force your anointing — you cultivate it through prayer, obedience, and worship. The oil flows where surrender is deepest."
+     },
+     {
+      "type": "quote",
+      "text": "If you protect the secret place, God will protect the spotlight."
+     },
+     {
+      "type": "heading",
+      "text": "Memory Verse"
+     },
+     {
+      "type": "verse",
+      "text": "“Each of you should use whatever gift you have received to serve others, as faithful stewards of God’s grace in its various forms.”",
+      "reference": "1 Peter 4:10"
+     },
+     {
+      "type": "prompt",
+      "id": "w4_memory",
+      "question": "Write it three times this week to meditate on it:"
+     },
+     {
+      "type": "prayer",
+      "title": "Closing Prayer — “Anoint Me Afresh”",
+      "text": "Father, thank You for designing me with purpose and grace. Thank You for the gifts You’ve placed in my life — I choose to use them to serve others. Show me my true calling, and keep me from comparison or pride. Holy Spirit, anoint me afresh. Let Your power rest upon me. Use my hands, my voice, and my heart for Your glory. May I live and lead in my grace zone — fully yielded, fully alive, fully Yours. In Jesus’ name, Amen."
+     },
+     {
+      "type": "prompt",
+      "id": "w4_notes",
+      "question": "Notes & Insights"
+     },
+     {
+      "type": "heading",
+      "text": "Week 4 Commitment"
+     },
+     {
+      "type": "prompt",
+      "id": "w4_commitment",
+      "question": "My Week 4 Commitment:",
+      "hint": "• This week, I will intentionally serve someone using my gift of… • I will take one step toward developing my calling by… • I will spend extra time in prayer for a fresh anointing on…"
+     }
+    ]
+   }
+  },
+  {
+   "id": "lea_m5",
+   "weekNumber": 5,
+   "title": "Understanding Yourself and Others",
+   "summary": "Knowing yourself, knowing others, and working together in unity.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "heading",
+      "text": "Week 5 — Understanding Yourself and Others"
+     },
+     {
+      "type": "verse",
+      "text": "“We are many parts of one body, and we all belong to each other.”",
+      "reference": "Romans 12:5 (NLT)"
+     },
+     {
+      "type": "bigIdea",
+      "text": "You are different by divine design. God made you with a unique temperament and set of strengths, not to compete with others but to complete the Body of Christ. When we understand ourselves and honor others’ differences, the Church becomes strong, unified, and beautiful."
+     },
+     {
+      "type": "heading",
+      "text": "Opening Devotional — “The Body That Fits Together Perfectly”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Imagine a symphony where every instrument tried to sound the same — chaos would follow. But when each instrument plays its part, under the direction of one conductor, music happens."
+     },
+     {
+      "type": "paragraph",
+      "text": "That’s God’s vision for His people. He made us all different — on purpose. The Apostle Paul said,"
+     },
+     {
+      "type": "verse",
+      "text": "“Just as a body, though one, has many parts, but all its many parts form one body, so it is with Christ.”",
+      "reference": "1 Corinthians 12:12"
+     },
+     {
+      "type": "paragraph",
+      "text": "You might be bold like Peter, analytical like Thomas, loyal like John, or strategic like Paul. Each temperament reveals a glimpse of God’s image."
+     },
+     {
+      "type": "paragraph",
+      "text": "When you understand how God wired you, you can serve without frustration and love others without judgment. When you honor the differences in others, you begin to lead teams that look and sound like Heaven."
+     },
+     {
+      "type": "heading",
+      "text": "Reflection — “How Has God Wired Me?”"
+     },
+     {
+      "type": "prompt",
+      "id": "w5_words",
+      "question": "What are three words that describe my personality or temperament?"
+     },
+     {
+      "type": "prompt",
+      "id": "w5_energize",
+      "question": "What kind of situations energize me? What kind drain me?"
+     },
+     {
+      "type": "prompt",
+      "id": "w5_conflict",
+      "question": "How do I typically respond to conflict or stress?"
+     },
+     {
+      "type": "heading",
+      "text": "Bible Study — “Biblical Temperaments and the Christian DISC®”"
+     },
+     {
+      "type": "paragraph",
+      "text": "The Christian DISC® model helps us understand behavioral styles — not to label ourselves, but to love better. Below are the four broad styles and how they often show up in Scripture."
+     },
+     {
+      "type": "subheading",
+      "text": "1. D – Dominant / Driver: “The Visionary Leader”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Biblical Example: Nehemiah or Paul"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Strengths: bold, decisive, goal-oriented, action-driven",
+       "Potential Weakness: impatience, harshness, overlooking people"
+      ]
+     },
+     {
+      "type": "verse",
+      "text": "“The righteous are bold as a lion.”",
+      "reference": "Proverbs 28:1"
+     },
+     {
+      "type": "lesson",
+      "text": "Leads with direction, needs to remember compassion."
+     },
+     {
+      "type": "subheading",
+      "text": "2. I – Influential / Inspirer: “The Encourager”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Biblical Example: Peter or Barnabas"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Strengths: enthusiastic, relational, persuasive, expressive",
+       "Potential Weakness: talkative, impulsive, easily distracted"
+      ]
+     },
+     {
+      "type": "verse",
+      "text": "“Barnabas… was a good man, full of the Holy Spirit and faith.”",
+      "reference": "Acts 11:24"
+     },
+     {
+      "type": "lesson",
+      "text": "Leads with passion, needs to remember follow-through."
+     },
+     {
+      "type": "subheading",
+      "text": "3. S – Steady / Supporter: “The Faithful Friend”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Biblical Example: John, Barnabas or Ruth"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Strengths: loyal, patient, dependable, peacemaker",
+       "Potential Weakness: resistance to change, avoidance of confrontation"
+      ]
+     },
+     {
+      "type": "verse",
+      "text": "“A friend loves at all times.”",
+      "reference": "Proverbs 17:17"
+     },
+     {
+      "type": "lesson",
+      "text": "Leads with consistency, needs to remember courage."
+     },
+     {
+      "type": "subheading",
+      "text": "4. C – Conscientious / Controller: “The Careful Planner”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Biblical Example: Daniel or Luke"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Strengths: disciplined, analytical, detail-oriented, principled",
+       "Potential Weakness: overcritical, perfectionist, slow to act"
+      ]
+     },
+     {
+      "type": "verse",
+      "text": "“Daniel resolved not to defile himself.”",
+      "reference": "Daniel 1:8"
+     },
+     {
+      "type": "lesson",
+      "text": "Leads with precision, needs to remember flexibility."
+     },
+     {
+      "type": "heading",
+      "text": "Discussion Questions"
+     },
+     {
+      "type": "prompt",
+      "id": "w5_d1",
+      "question": "Which style (D, I, S, or C) describes you most closely? What evidence do you see in your life or ministry?"
+     },
+     {
+      "type": "prompt",
+      "id": "w5_d2",
+      "question": "What do you appreciate most about people who are different from you?"
+     },
+     {
+      "type": "prompt",
+      "id": "w5_d3",
+      "question": "How can understanding these styles make your team or family stronger?"
+     },
+     {
+      "type": "heading",
+      "text": "Self-Assessment — “My DISC Snapshot”"
+     },
+     {
+      "type": "prompt",
+      "id": "w5_disc_scores",
+      "question": "If you’ve taken the Christian DISC® assessment, note your scores and what each means for you:",
+      "hint": "D (Dominant) • I (Influential) • S (Steady) • C (Conscientious)"
+     },
+     {
+      "type": "prompt",
+      "id": "w5_disc_insight",
+      "question": "What’s one insight from my results that surprised me or encouraged me?"
+     },
+     {
+      "type": "heading",
+      "text": "Activation — “Team Covenant Challenge”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Gather with your group or ministry team and create a short Team Covenant — a written agreement about how you’ll treat each other as you serve God together. Include statements like:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "We will communicate with grace and honesty.",
+       "We will honor different personalities and strengths.",
+       "We will resolve conflict biblically (Matthew 18:15–17).",
+       "We will pray for one another regularly."
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "Challenge: Each member signs the covenant and prays a blessing over the others’ strengths."
+     },
+     {
+      "type": "prompt",
+      "id": "w5_covenant_line",
+      "question": "Write one line from your Team Covenant that means the most to you:"
+     },
+     {
+      "type": "heading",
+      "text": "Practical Skills — “Communication that Builds, Not Breaks”"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Listen to understand, not just to respond.",
+       "Use “I” statements, not “you always” accusations.",
+       "Assume good intentions.",
+       "Slow down when you feel triggered.",
+       "Ask: “What might God be teaching me through this person’s difference?”"
+      ]
+     },
+     {
+      "type": "verse",
+      "text": "“Be completely humble and gentle; be patient, bearing with one another in love.”",
+      "reference": "Ephesians 4:2"
+     },
+     {
+      "type": "prompt",
+      "id": "w5_patience",
+      "question": "Where do I need to practice more patience or humility in teamwork?"
+     },
+     {
+      "type": "heading",
+      "text": "Truth to Remember"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Your personality is a tool, not an excuse.",
+       "God delights in diversity — He uses difference to display His wisdom.",
+       "Unity is not uniformity; it’s harmony."
+      ]
+     },
+     {
+      "type": "quote",
+      "text": "The Church isn’t strong because we’re the same — it’s strong because we’re surrendered."
+     },
+     {
+      "type": "heading",
+      "text": "Memory Verse"
+     },
+     {
+      "type": "verse",
+      "text": "“Do nothing out of selfish ambition or vain conceit. Rather, in humility value others above yourselves.”",
+      "reference": "Philippians 2:3"
+     },
+     {
+      "type": "prompt",
+      "id": "w5_memory",
+      "question": "Write it three times this week to store it in your heart:"
+     },
+     {
+      "type": "prayer",
+      "title": "Closing Prayer — “Lord, Teach Me to Understand Before I’m Understood”",
+      "text": "Father, thank You for creating me wonderfully and uniquely. Help me see myself the way You see me — loved, gifted, and growing. Teach me to celebrate others’ strengths instead of resenting their differences. Holy Spirit, build unity among us. Let our teams reflect the beauty of Heaven — diverse, yet one in purpose. Give me the grace to understand before I seek to be understood. Amen."
+     },
+     {
+      "type": "prompt",
+      "id": "w5_notes",
+      "question": "Notes & Insights"
+     },
+     {
+      "type": "heading",
+      "text": "Week 5 Commitment"
+     },
+     {
+      "type": "prompt",
+      "id": "w5_commitment",
+      "question": "My Week 5 Commitment:",
+      "hint": "• This week, I will intentionally affirm and encourage someone who is different from me by… • I will apply my DISC insights to communicate better in… • I will pray for unity and understanding in my…"
+     }
+    ]
+   }
+  },
+  {
+   "id": "lea_m6",
+   "weekNumber": 6,
+   "title": "Vision, Strategy & Systems",
+   "summary": "How to steward revelation with structure, passion with process, and inspiration with implementation.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "heading",
+      "text": "Week 6 — Vision, Strategy & Systems"
+     },
+     {
+      "type": "verse",
+      "text": "“Write the vision and make it plain on tablets, that he may run who reads it.”",
+      "reference": "Habakkuk 2:2"
+     },
+     {
+      "type": "bigIdea",
+      "text": "Vision sees what God sees. Strategy organizes what God shows. Systems sustain what God starts. Every Kingdom leader must learn to steward revelation with structure, passion with process, and inspiration with implementation."
+     },
+     {
+      "type": "heading",
+      "text": "Opening Devotional — “Nehemiah’s Blueprint”"
+     },
+     {
+      "type": "paragraph",
+      "text": "When Nehemiah heard that Jerusalem’s walls lay in ruins, his heart broke. He wept. He fasted. He prayed. Then — he planned."
+     },
+     {
+      "type": "paragraph",
+      "text": "Nehemiah didn’t just have a burden; he built a blueprint. He prayed for favor, secured resources, organized teams, assigned roles, and finished in 52 days what others hadn’t done in decades."
+     },
+     {
+      "type": "verse",
+      "text": "“The God of Heaven will give us success. We His servants will start rebuilding.”",
+      "reference": "Nehemiah 2:20"
+     },
+     {
+      "type": "paragraph",
+      "text": "Vision without strategy is frustration. Strategy without systems is exhaustion. But when vision, strategy, and systems align with the Spirit, revival becomes reality."
+     },
+     {
+      "type": "paragraph",
+      "text": "God wants to anoint your imagination and your organization. He gives vision in prayer, but He fulfills it through planning."
+     },
+     {
+      "type": "heading",
+      "text": "Reflection — “What Breaks My Heart?”",
+      "subtitle": "Nehemiah’s vision began with heartbreak — not ambition. Often, your calling is hidden inside what grieves you the most about this world."
+     },
+     {
+      "type": "prompt",
+      "id": "w6_moves",
+      "question": "What issue or need deeply moves me when I pray or serve?"
+     },
+     {
+      "type": "prompt",
+      "id": "w6_gap",
+      "question": "What do I see that others may overlook — a gap I feel called to fill?"
+     },
+     {
+      "type": "prompt",
+      "id": "w6_build",
+      "question": "If resources and fear were no obstacle, what would I build for God?"
+     },
+     {
+      "type": "heading",
+      "text": "Bible Study — “From Vision to Action”"
+     },
+     {
+      "type": "subheading",
+      "text": "1. Receive the Vision — God Speaks to the Heart (Habakkuk 2:1–3)"
+     },
+     {
+      "type": "paragraph",
+      "text": "“I will stand my watch… and see what He will say to me.” Habakkuk positioned himself to hear. Vision starts in stillness, not busyness."
+     },
+     {
+      "type": "lesson",
+      "text": "Before you plan for God, pause to hear from God."
+     },
+     {
+      "type": "subheading",
+      "text": "2. Record the Vision — Clarity Precedes Action"
+     },
+     {
+      "type": "paragraph",
+      "text": "“Write the vision and make it plain…” When you write it down, you give your dream shape and language."
+     },
+     {
+      "type": "lesson",
+      "text": "If it’s not written, it can’t be run with."
+     },
+     {
+      "type": "subheading",
+      "text": "3. Run with the Vision — Build with Prayer and Structure (Nehemiah 2–6)"
+     },
+     {
+      "type": "paragraph",
+      "text": "Nehemiah prayed and planned. He built teams, set watchmen, and managed opposition."
+     },
+     {
+      "type": "lesson",
+      "text": "Spiritual leaders must be both spiritually sensitive and strategically smart."
+     },
+     {
+      "type": "heading",
+      "text": "Discussion Questions"
+     },
+     {
+      "type": "prompt",
+      "id": "w6_d1",
+      "question": "What’s the difference between a God-given vision and a good idea?"
+     },
+     {
+      "type": "prompt",
+      "id": "w6_d2",
+      "question": "Why do you think God values clarity and structure so much in leadership?"
+     },
+     {
+      "type": "prompt",
+      "id": "w6_d3",
+      "question": "What systems in your ministry or team could you improve or simplify?"
+     },
+     {
+      "type": "heading",
+      "text": "Exercise — “My Vision Map”",
+      "subtitle": "Write out your current or emerging vision — whether it’s for ministry, business, or community service. For each area, note your vision, key steps, who can help, and when."
+     },
+     {
+      "type": "prompt",
+      "id": "w6_map_ministry",
+      "question": "Spiritual / Ministry — my vision, key steps, who can help, and when:"
+     },
+     {
+      "type": "prompt",
+      "id": "w6_map_growth",
+      "question": "Personal Growth — my vision, key steps, who can help, and when:"
+     },
+     {
+      "type": "prompt",
+      "id": "w6_map_family",
+      "question": "Family / Relationships — my vision, key steps, who can help, and when:"
+     },
+     {
+      "type": "prompt",
+      "id": "w6_map_career",
+      "question": "Career / Calling — my vision, key steps, who can help, and when:"
+     },
+     {
+      "type": "paragraph",
+      "text": "Challenge: Share your Vision Map with your mentor or small group. Ask for feedback and prayer for clarity and timing."
+     },
+     {
+      "type": "heading",
+      "text": "Activation — “Building Simple Systems”"
+     },
+     {
+      "type": "paragraph",
+      "text": "A system is a repeatable process that helps you stay faithful over time. Systems protect what passion starts. Examples:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "A daily prayer schedule (system for intimacy).",
+       "Weekly team meetings (system for communication).",
+       "Volunteer rotation (system for consistency).",
+       "Budget tracking (system for stewardship)."
+      ]
+     },
+     {
+      "type": "prompt",
+      "id": "w6_systems",
+      "question": "What three simple systems could help me lead or serve better?"
+     },
+     {
+      "type": "prompt",
+      "id": "w6_systems_help",
+      "question": "Who can help me design or implement these systems?"
+     },
+     {
+      "type": "heading",
+      "text": "Practical Insight — “Spirit-Led Structure”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Spirit-led doesn’t mean unstructured. Order is divine. The Holy Spirit descended when the disciples were “all together in one place” (Acts 2:1) — unity and order attracted power."
+     },
+     {
+      "type": "verse",
+      "text": "“Let all things be done decently and in order.”",
+      "reference": "1 Corinthians 14:40"
+     },
+     {
+      "type": "paragraph",
+      "text": "Structure doesn’t quench the Spirit; it creates channels for His flow."
+     },
+     {
+      "type": "quote",
+      "text": "The oil only flows where there’s alignment."
+     },
+     {
+      "type": "heading",
+      "text": "Truth to Remember"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Vision is seeing what God sees.",
+       "Strategy is planning how to walk it out.",
+       "Systems are the habits that keep it alive.",
+       "Passion may ignite a fire, but structure keeps it burning."
+      ]
+     },
+     {
+      "type": "quote",
+      "text": "Faith gives birth to vision; wisdom raises it into maturity."
+     },
+     {
+      "type": "heading",
+      "text": "Memory Verse"
+     },
+     {
+      "type": "verse",
+      "text": "“Commit to the Lord whatever you do, and He will establish your plans.”",
+      "reference": "Proverbs 16:3"
+     },
+     {
+      "type": "prompt",
+      "id": "w6_memory",
+      "question": "Write it three times this week to memorize it:"
+     },
+     {
+      "type": "prayer",
+      "title": "Closing Prayer — “Lord, Teach Me to Build What You Show Me”",
+      "text": "Father, thank You for giving me vision — eyes to see what You see. Forgive me for dreams I’ve ignored or delayed out of fear or distraction. Teach me to write clearly, plan wisely, and build faithfully. Holy Spirit, breathe on my plans. Help me align every goal with Your purpose and grace. Show me how to turn revelation into reality — not by might, not by power, but by Your Spirit. Amen."
+     },
+     {
+      "type": "prompt",
+      "id": "w6_notes",
+      "question": "Notes & Insights"
+     },
+     {
+      "type": "heading",
+      "text": "Week 6 Commitment"
+     },
+     {
+      "type": "prompt",
+      "id": "w6_commitment",
+      "question": "My Week 6 Commitment:",
+      "hint": "• This week, I will write down one clear God-given vision in my journal. • I will begin developing one simple system to sustain consistency in… • I will share my Vision Map with… for feedback and prayer."
+     }
+    ]
+   }
+  },
+  {
+   "id": "lea_m7",
+   "weekNumber": 7,
+   "title": "Multiplying Leaders & Making Disciples",
+   "summary": "Success as a leader is not measured by how much you do, but by how many you raise.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "heading",
+      "text": "Week 7 — Multiplying Leaders & Making Disciples"
+     },
+     {
+      "type": "verse",
+      "text": "“Go and make disciples of all nations…”",
+      "reference": "Matthew 28:19"
+     },
+     {
+      "type": "bigIdea",
+      "text": "Leadership that doesn’t reproduce dies with you. Jesus didn’t build fans — He built followers who could build others. Kingdom leaders measure success not by how much they do, but by how many they raise."
+     },
+     {
+      "type": "heading",
+      "text": "Opening Devotional — “The Jesus Model of Multiplication”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Jesus could have done everything Himself — but He didn’t. He chose twelve ordinary men, invested in them deeply, and then released them to change the world."
+     },
+     {
+      "type": "paragraph",
+      "text": "He prayed for them, walked with them, corrected them, empowered them, and finally sent them out two by two. That’s the rhythm of divine multiplication: invest → impart → release."
+     },
+     {
+      "type": "verse",
+      "text": "“The things you have heard me say in the presence of many witnesses, entrust to reliable people who will also be qualified to teach others.”",
+      "reference": "2 Timothy 2:2"
+     },
+     {
+      "type": "paragraph",
+      "text": "There are four generations of leadership in that verse: Paul → Timothy → Reliable People → Others. That’s multiplication — not addition. The Kingdom expands when leaders stop trying to be heroes and start raising heirs."
+     },
+     {
+      "type": "quote",
+      "text": "Your greatest legacy will not be what you do for God, but who you disciple to continue it."
+     },
+     {
+      "type": "heading",
+      "text": "Reflection — “Who Is Watching My Life?”"
+     },
+     {
+      "type": "prompt",
+      "id": "w7_invested_in_me",
+      "question": "Who has intentionally invested in me and helped shape my faith?"
+     },
+     {
+      "type": "prompt",
+      "id": "w7_investing_in",
+      "question": "Who am I currently investing in, mentoring, or encouraging to grow?"
+     },
+     {
+      "type": "prompt",
+      "id": "w7_model_more",
+      "question": "What’s one area I could begin to model and teach more intentionally?"
+     },
+     {
+      "type": "heading",
+      "text": "Bible Study — “From Followers to Disciple-Makers”"
+     },
+     {
+      "type": "subheading",
+      "text": "1. Jesus’ Pattern (Mark 3:13–15)"
+     },
+     {
+      "type": "paragraph",
+      "text": "“He appointed twelve that they might be with Him and that He might send them out…” Notice the order: Be with Him → Be sent by Him."
+     },
+     {
+      "type": "lesson",
+      "text": "Discipleship begins with relationship before responsibility."
+     },
+     {
+      "type": "subheading",
+      "text": "2. Paul’s Pattern (2 Timothy 2:2)"
+     },
+     {
+      "type": "paragraph",
+      "text": "Paul didn’t just preach — he poured his life into Timothy, who poured into others."
+     },
+     {
+      "type": "lesson",
+      "text": "Multiplication happens through intentional mentoring, not random contact."
+     },
+     {
+      "type": "subheading",
+      "text": "3. Moses and Joshua (Deuteronomy 31:7–8)"
+     },
+     {
+      "type": "paragraph",
+      "text": "Moses publicly affirmed Joshua and transferred authority. He didn’t just prepare tasks; he prepared a person."
+     },
+     {
+      "type": "lesson",
+      "text": "You secure your future by raising your successor."
+     },
+     {
+      "type": "heading",
+      "text": "Discussion Questions"
+     },
+     {
+      "type": "prompt",
+      "id": "w7_d1",
+      "question": "What makes multiplication harder than just “doing it yourself”?"
+     },
+     {
+      "type": "prompt",
+      "id": "w7_d2",
+      "question": "Why is discipleship essential to sustainable revival?"
+     },
+     {
+      "type": "prompt",
+      "id": "w7_d3",
+      "question": "Who might God be highlighting for you to begin mentoring intentionally?"
+     },
+     {
+      "type": "heading",
+      "text": "Exercise — “My Multiplication Map”",
+      "subtitle": "Identify the key people in your life at each level."
+     },
+     {
+      "type": "prompt",
+      "id": "w7_map_discipled_me",
+      "question": "Who discipled me — my role: receive. Next step: stay connected / honor them.",
+      "hint": "Write their name(s) and one way you will honor or stay connected to them."
+     },
+     {
+      "type": "prompt",
+      "id": "w7_map_discipling",
+      "question": "Who I’m discipling now — my role: invest. Next step: set consistent time to meet.",
+      "hint": "Write their name(s) and when you will meet."
+     },
+     {
+      "type": "prompt",
+      "id": "w7_map_next_gen",
+      "question": "Who they can disciple — my role: encourage. Next step: equip them to multiply.",
+      "hint": "Write the name(s) of the next generation you will encourage them to reach."
+     },
+     {
+      "type": "paragraph",
+      "text": "Challenge: Schedule one intentional conversation this week with someone you’re discipling — listen, pray, and help them take one next step in faith."
+     },
+     {
+      "type": "heading",
+      "text": "Activation — “The 3-3-3 Rule of Multiplication”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Three Hours. Three Weeks. Three Months."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Spend 3 focused hours a month mentoring or encouraging someone’s spiritual growth.",
+       "Meet every 3 weeks to pray, talk, and plan next steps.",
+       "After 3 months, encourage them to do the same for someone else."
+      ]
+     },
+     {
+      "type": "prompt",
+      "id": "w7_333_who",
+      "question": "Who will I commit to walk with for the next 3 months?"
+     },
+     {
+      "type": "prompt",
+      "id": "w7_333_when",
+      "question": "When will our next intentional meeting take place?"
+     },
+     {
+      "type": "heading",
+      "text": "Practical Keys to Reproducing Leaders"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Model it. Let them see you do it.",
+       "Mentor it. Walk beside them as they practice.",
+       "Multiply it. Step back and let them lead."
+      ],
+      "ordered": true
+     },
+     {
+      "type": "quote",
+      "text": "Tell me and I forget, show me and I remember, involve me and I become."
+     },
+     {
+      "type": "heading",
+      "text": "Truth to Remember"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Discipleship is not a class — it’s a relationship.",
+       "Multiplication happens one person at a time.",
+       "Legacy is not built in crowds but in conversations.",
+       "Your ceiling should become someone else’s floor."
+      ]
+     },
+     {
+      "type": "quote",
+      "text": "The mark of a true leader is not followers, but fruit that keeps reproducing."
+     },
+     {
+      "type": "heading",
+      "text": "Memory Verse"
+     },
+     {
+      "type": "verse",
+      "text": "“And the things you have heard me say… entrust to reliable people who will also be qualified to teach others.”",
+      "reference": "2 Timothy 2:2"
+     },
+     {
+      "type": "prompt",
+      "id": "w7_memory",
+      "question": "Write it three times this week to internalize it:"
+     },
+     {
+      "type": "prayer",
+      "title": "Closing Prayer — “Make Me a Multiplier”",
+      "text": "Father, thank You for those who poured into me when I was weak, confused, or growing. Help me carry the same heart to others. Open my eyes to the people You’ve placed around me to disciple. Teach me to invest faithfully, to release freely, and to rejoice when others surpass me. Make me a multiplier, not a maintainer. Let generations of disciples rise from my obedience. In Jesus’ name, Amen."
+     },
+     {
+      "type": "prompt",
+      "id": "w7_notes",
+      "question": "Notes & Insights"
+     },
+     {
+      "type": "heading",
+      "text": "Week 7 Commitment"
+     },
+     {
+      "type": "prompt",
+      "id": "w7_commitment",
+      "question": "My Week 7 Commitment:",
+      "hint": "• This week, I will intentionally connect with… to encourage and disciple them. • I will begin a regular rhythm of mentoring using the 3-3-3 rule. • I will pray daily for those God has called me to multiply into."
+     }
+    ]
+   }
+  },
+  {
+   "id": "lea_m8",
+   "weekNumber": 8,
+   "title": "Spiritual Power & Perseverance",
+   "summary": "God doesn’t just call you to start strong — He anoints you to finish well.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "heading",
+      "text": "Week 8 — Spiritual Power & Perseverance"
+     },
+     {
+      "type": "verse",
+      "text": "“But you will receive power when the Holy Spirit comes upon you…”",
+      "reference": "Acts 1:8"
+     },
+     {
+      "type": "bigIdea",
+      "text": "Leadership without the Holy Spirit burns out. Leadership with the Holy Spirit burns bright. The fire that starts you must also sustain you. God doesn’t just call you to start strong — He anoints you to finish well."
+     },
+     {
+      "type": "heading",
+      "text": "Opening Devotional — “Fire That Doesn’t Burn Out”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Moses saw it first — a bush that burned with fire but was not consumed. That’s what every Spirit-filled leader should look like: on fire, but not finished. Consuming passion without divine presence destroys; but divine presence turns passion into perpetual flame."
+     },
+     {
+      "type": "verse",
+      "text": "“The fire on the altar must be kept burning; it must not go out.”",
+      "reference": "Leviticus 6:13"
+     },
+     {
+      "type": "paragraph",
+      "text": "When Jesus promised the Holy Spirit, He wasn’t giving His disciples an emotional experience — He was giving them divine endurance. He was saying, “You will not just survive persecution — you will transform nations.”"
+     },
+     {
+      "type": "paragraph",
+      "text": "We don’t lead in our strength; we lead in His supply. We don’t push through pressure by willpower; we rise through the power of the Spirit."
+     },
+     {
+      "type": "verse",
+      "text": "“It is not by might, nor by power, but by My Spirit,” says the Lord of Hosts.",
+      "reference": "Zechariah 4:6"
+     },
+     {
+      "type": "paragraph",
+      "text": "If you want to last in leadership, don’t just pray for passion — pray for power."
+     },
+     {
+      "type": "heading",
+      "text": "Reflection — “What Fuels My Fire?”"
+     },
+     {
+      "type": "prompt",
+      "id": "w8_alive",
+      "question": "What activities, habits, or moments make me feel most spiritually alive?"
+     },
+     {
+      "type": "prompt",
+      "id": "w8_drains",
+      "question": "What drains my fire or distracts me from God’s presence?"
+     },
+     {
+      "type": "prompt",
+      "id": "w8_rhythms",
+      "question": "What rhythms do I need to build to keep my spiritual flame alive?"
+     },
+     {
+      "type": "heading",
+      "text": "Bible Study — “Power That Sustains”"
+     },
+     {
+      "type": "subheading",
+      "text": "1. Acts 1:8 — Power to Witness"
+     },
+     {
+      "type": "paragraph",
+      "text": "Jesus didn’t say, “You’ll receive comfort,” but “You’ll receive power.” Power for mission. Power for miracles. Power to endure. The Holy Spirit is Heaven’s generator for every weary soul."
+     },
+     {
+      "type": "lesson",
+      "text": "When God fills you, He doesn’t just make you feel — He makes you fruitful."
+     },
+     {
+      "type": "subheading",
+      "text": "2. 2 Corinthians 4:7–10 — Treasure in Earthen Vessels"
+     },
+     {
+      "type": "paragraph",
+      "text": "We are jars of clay carrying fire from Heaven. We may be hard-pressed, but not crushed; perplexed, but not in despair."
+     },
+     {
+      "type": "lesson",
+      "text": "God allows pressure to reveal His power. Your weakness is the stage for His strength."
+     },
+     {
+      "type": "subheading",
+      "text": "3. Galatians 6:9 — Don’t Give Up"
+     },
+     {
+      "type": "paragraph",
+      "text": "“Let us not become weary in doing good, for at the proper time we will reap a harvest if we do not give up.” Faithfulness is greater than fame. Consistency is the real charisma."
+     },
+     {
+      "type": "lesson",
+      "text": "Revival fire is not a moment; it’s a lifestyle."
+     },
+     {
+      "type": "heading",
+      "text": "Discussion Questions"
+     },
+     {
+      "type": "prompt",
+      "id": "w8_d1",
+      "question": "What does “power” mean to you in your leadership context?"
+     },
+     {
+      "type": "prompt",
+      "id": "w8_d2",
+      "question": "How can we stay spiritually fresh even when we’re tired or unappreciated?"
+     },
+     {
+      "type": "prompt",
+      "id": "w8_d3",
+      "question": "Why do you think perseverance is so critical for every leader?"
+     },
+     {
+      "type": "heading",
+      "text": "Exercise — “My Recharge Plan”",
+      "subtitle": "To lead long-term, you need rhythms that refill your spirit. For each area, note your current practice, how you’ll strengthen it, and how often."
+     },
+     {
+      "type": "prompt",
+      "id": "w8_plan_prayer",
+      "question": "Prayer & Worship — current practice, how I’ll strengthen it, and frequency:"
+     },
+     {
+      "type": "prompt",
+      "id": "w8_plan_word",
+      "question": "Word & Study — current practice, how I’ll strengthen it, and frequency:"
+     },
+     {
+      "type": "prompt",
+      "id": "w8_plan_rest",
+      "question": "Rest & Sabbath — current practice, how I’ll strengthen it, and frequency:"
+     },
+     {
+      "type": "prompt",
+      "id": "w8_plan_community",
+      "question": "Mentoring & Community — current practice, how I’ll strengthen it, and frequency:"
+     },
+     {
+      "type": "prompt",
+      "id": "w8_plan_health",
+      "question": "Physical Health — current practice, how I’ll strengthen it, and frequency:"
+     },
+     {
+      "type": "paragraph",
+      "text": "Challenge: Commit to at least two new spiritual disciplines this week that will strengthen your endurance."
+     },
+     {
+      "type": "heading",
+      "text": "Activation — “Filled Again”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Gather your group, or take time alone with God. Invite the Holy Spirit to fill you afresh. Here are a few steps to take in that direction:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Begin with thanksgiving — thank Him for every victory, even the hard seasons.",
+       "Ask the Holy Spirit to reveal areas where you’ve been running on empty.",
+       "Lift your hands and pray: “Lord, I receive fresh fire. Fill me again. Restore my joy, renew my strength, reignite my calling.”"
+      ],
+      "ordered": true
+     },
+     {
+      "type": "prompt",
+      "id": "w8_impression",
+      "question": "Describe what you sense the Holy Spirit impressing on your heart:"
+     },
+     {
+      "type": "heading",
+      "text": "Practical Insight — “Don’t Lose the Oil”"
+     },
+     {
+      "type": "paragraph",
+      "text": "In Matthew 25, ten virgins waited for the Bridegroom — all had lamps, but only five had oil. The lamp is your ministry. The oil is your intimacy. When the fire goes out, people see your lamp but not your light."
+     },
+     {
+      "type": "quote",
+      "text": "Keep your lamp burning by staying in the secret place."
+     },
+     {
+      "type": "heading",
+      "text": "Truth to Remember"
+     },
+     {
+      "type": "list",
+      "items": [
+       "The Holy Spirit doesn’t make you weird — He makes you effective.",
+       "Fire is not just emotion; it’s empowerment.",
+       "Perseverance is the proof of true anointing.",
+       "What you start in fire, you must not maintain in flesh."
+      ]
+     },
+     {
+      "type": "quote",
+      "text": "Don’t just burn at the altar — burn in the world."
+     },
+     {
+      "type": "quote",
+      "text": "When the Spirit fills you, fatigue can’t finish you."
+     },
+     {
+      "type": "heading",
+      "text": "Memory Verse"
+     },
+     {
+      "type": "verse",
+      "text": "“But you will receive power when the Holy Spirit comes upon you, and you will be My witnesses…”",
+      "reference": "Acts 1:8"
+     },
+     {
+      "type": "prompt",
+      "id": "w8_memory",
+      "question": "Write it three times this week to keep it alive in your spirit:"
+     },
+     {
+      "type": "prayer",
+      "title": "Closing Prayer — “Lord, Set My Heart on Fire Again”",
+      "text": "Holy Spirit, I need You. Not yesterday’s fire, but fresh flame today. Fill me again — ignite my heart, renew my mind, strengthen my hands. I refuse to lead dry. I refuse to quit weary. I choose to be a vessel of fire and endurance. Let every place of burnout become a place of breakthrough. Let Your power be perfected in my weakness. Set my heart ablaze — that I may burn and not burn out. In Jesus’ mighty name, Amen."
+     },
+     {
+      "type": "prompt",
+      "id": "w8_notes",
+      "question": "Notes & Insights"
+     },
+     {
+      "type": "heading",
+      "text": "Week 8 Commitment"
+     },
+     {
+      "type": "prompt",
+      "id": "w8_commitment",
+      "question": "My Week 8 Commitment:",
+      "hint": "• This week, I will spend intentional time in prayer for fresh filling of the Holy Spirit. • I will establish one new rhythm of rest, prayer, or study to guard my flame. • I will pray daily, “Lord, fill me again with Your power.”"
+     }
+    ]
+   }
+  },
+  {
+   "id": "lea_m9",
+   "weekNumber": 9,
+   "title": "The Core Group: Jesus-in-Charge Leadership Model of CRM",
+   "summary": "The CRM leadership structure, why we use it, and how to succeed within it.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "heading",
+      "text": "Week 9 — The Core Group: Jesus-in-Charge Leadership Model of CRM"
+     },
+     {
+      "type": "verse",
+      "text": "“This is what the Lord says: as the new wine is found in a cluster, and one says, ‘Do not destroy it,’ so will I do for my servants’ sake…”",
+      "reference": "Isaiah 65:8"
+     },
+     {
+      "type": "verse",
+      "text": "“You are all brothers… for One is your Teacher.”",
+      "reference": "Matthew 23:8"
+     },
+     {
+      "type": "bigIdea",
+      "text": "CRM’s Core Group leadership model is not about hierarchy or titles. It is about a team or cluster of Spirit-filled disciples who together yield to the Lordship of Jesus in serving His people."
+     },
+     {
+      "type": "paragraph",
+      "text": "This session will help you understand:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Why CRM uses the Core-Group leadership structure.",
+       "The biblical foundation for shared, servant leadership.",
+       "How this structure keeps Jesus — not any person — in charge.",
+       "What qualities define a Core-Group leader.",
+       "How to respond to common questions or doubts about this model.",
+       "How you can grow toward this kind of leadership."
+      ],
+      "ordered": true
+     },
+     {
+      "type": "heading",
+      "text": "Devotional — “Jesus Is in Charge”"
+     },
+     {
+      "type": "verse",
+      "text": "“Christ is the head of the church, His body.”",
+      "reference": "Colossians 1:18"
+     },
+     {
+      "type": "paragraph",
+      "text": "When Jesus founded His Church, He did not appoint a CEO. He gathered brothers. He did not build a pyramid. He formed a circle. He did not delegate His authority away to one person. He shared His life and authority with all His disciples."
+     },
+     {
+      "type": "paragraph",
+      "text": "In CRM, we believe Jesus remains the true Leader and Senior Pastor. Every leader — no matter how gifted — is a servant under His authority. Jesus-in-charge leadership begins when self steps aside. When we lead this way, we model heaven’s government on earth."
+     },
+     {
+      "type": "paragraph",
+      "text": "And the Lord promises in Isaiah 65:8 that when we work in teams and clusters, we will find the “new wine” of the Lord. And while working in teams will challenge us, we must not destroy it or walk away from it — for in practicing it, we become the kinds of leaders God can use all the time."
+     },
+     {
+      "type": "quote",
+      "text": "The only hands safe to hold power are the hands that have been pierced — the hands of Jesus."
+     },
+     {
+      "type": "heading",
+      "text": "Understanding the Core Group Model"
+     },
+     {
+      "type": "prompt",
+      "id": "w9_fill_core",
+      "question": "Fill in: The Core-Group system at CRM is built around ________.",
+      "hint": "Answer: shared, servant, and Spirit-led leadership."
+     },
+     {
+      "type": "subheading",
+      "text": "1. It’s about Jesus-in-Charge."
+     },
+     {
+      "type": "paragraph",
+      "text": "Unlike the pastor-in-charge or people-in-charge models, our leadership recognizes that the only Head of the Church is Jesus Christ. Our job is to discern and obey Him together."
+     },
+     {
+      "type": "subheading",
+      "text": "2. It’s Shared Leadership."
+     },
+     {
+      "type": "paragraph",
+      "text": "No one person owns the vision. The Spirit distributes gifts so that wisdom, love, and accountability are shared. Each leader brings a portion of Christ’s grace."
+     },
+     {
+      "type": "subheading",
+      "text": "3. It’s Servant Leadership."
+     },
+     {
+      "type": "paragraph",
+      "text": "Every Core-Group member leads by serving. Jesus said, “The greatest among you shall be your servant.” (Matthew 23:11)"
+     },
+     {
+      "type": "subheading",
+      "text": "4. It’s Qualified by Character, Not by Competition."
+     },
+     {
+      "type": "paragraph",
+      "text": "Positions are not awarded through hierarchy or ambition but recognized through faithfulness, service, and spiritual maturity."
+     },
+     {
+      "type": "subheading",
+      "text": "5. It’s Relational, Not Positional."
+     },
+     {
+      "type": "paragraph",
+      "text": "We are brothers and sisters first. Authority flows from relationship, not rank."
+     },
+     {
+      "type": "heading",
+      "text": "Bible Study — “Biblical Foundation”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Key texts:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Acts 20:17–28 — Elders shepherding the flock together.",
+       "1 Peter 5:1–4 — Servant leadership, not lording it over.",
+       "Titus 1:5–9 — Qualified leadership from among the people.",
+       "Matthew 23:8–11 — “You are all brothers.”"
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "Biblical parallels:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "The Twelve Apostles — Jesus chose a team, not one “chief apostle.”",
+       "The Church in Antioch (Acts 13) — Prophets and teachers together heard the Spirit.",
+       "Paul & Barnabas — “First among equals” — different gifts, shared calling.",
+       "The Elders at Ephesus — Pastored together under the Holy Spirit’s direction."
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "Illustration: The early church was like a wheel — Christ at the center, each spoke representing an elder connecting the body to the hub. When Christ is the center, the wheel rolls smoothly. When any spoke tries to become the hub, the wheel collapses."
+     },
+     {
+      "type": "heading",
+      "text": "The Spirit of Core-Group Leadership: Five Defining Traits"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Pastoral Care — Protect, feed, and guide the flock. (Acts 20:28)",
+       "Shared Authority — Decisions made through prayerful unity. (Acts 15:6)",
+       "Servant Heart — Leading from beneath, not above. (John 13:14–15)",
+       "Spiritual Qualification — Recognized by gifts and faith, not title. (1 Timothy 3:1–7)",
+       "Spirit Motivation — Desire to serve birthed by the Holy Spirit. (1 Peter 5:2)"
+      ]
+     },
+     {
+      "type": "quote",
+      "text": "In the Kingdom, authority follows humility. Leadership is not about climbing ladders but washing feet. Positions don’t make leaders — service does."
+     },
+     {
+      "type": "heading",
+      "text": "Common Questions & Honest Answers"
+     },
+     {
+      "type": "subheading",
+      "text": "Q1: “Doesn’t this structure make leadership confusing?”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Shared leadership requires more prayer and patience, but it produces greater humility and accountability. It’s slower, but it’s safer and more Spirit-led."
+     },
+     {
+      "type": "subheading",
+      "text": "Q2: “So, who’s really in charge?”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Jesus is. The Core-Group functions as under-shepherds. A coordinator may serve as first among equals, but not as a “boss.”"
+     },
+     {
+      "type": "subheading",
+      "text": "Q3: “What if the Core-Group disagrees and a consensus is hard to reach?”"
+     },
+     {
+      "type": "paragraph",
+      "text": "This is where maturity kicks in, and why the core-group system helps build our maturity. In the core-group, at any point in time, we will have those who agree and those who do not agree. The goal of the core-group, under the direction of its coordinator, is to achieve consensus with the Lord. The best practice is to wait on the Lord and make decisions that promote love and unity, not necessarily because it is simply the will of the majority. This process itself matures our love, humility, and dependence on God. Ultimately, a decision is made — but whatever decision is made, loyalty and commitment to that decision is expected of all members of the core group, even if that decision was not their preference."
+     },
+     {
+      "type": "subheading",
+      "text": "Q4: “Can this model really work?”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Yes, but only if we truly believe Jesus is alive and leading His church by His Spirit. It demands faith, humility, and grace — but it models heaven on earth."
+     },
+     {
+      "type": "heading",
+      "text": "Culture of the Core-Group — Discussion Questions"
+     },
+     {
+      "type": "prompt",
+      "id": "w9_d1",
+      "question": "Why do you think Jesus designed His Church to function as a body instead of a hierarchy?"
+     },
+     {
+      "type": "prompt",
+      "id": "w9_d2",
+      "question": "How does this model reflect God’s own triune nature?"
+     },
+     {
+      "type": "prompt",
+      "id": "w9_d3",
+      "question": "What does it mean for me to let Jesus be “in charge”?"
+     },
+     {
+      "type": "prompt",
+      "id": "w9_d4",
+      "question": "What difference would it make if all leaders of a core group truly viewed themselves as servants?"
+     },
+     {
+      "type": "heading",
+      "text": "Truth to Remember — The Core Group Exists To:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Keep Jesus enthroned as Lord in every decision.",
+       "Shepherd the family of God with love and wisdom.",
+       "Model unity, humility, and prayer-dependence.",
+       "Equip others to celebrate, connect, and contribute.",
+       "Protect the church from pride, politics, and personality cults."
+      ],
+      "ordered": true
+     },
+     {
+      "type": "quote",
+      "text": "Your job, as a member of a CRM Core Group, is to keep Jesus in charge!"
+     },
+     {
+      "type": "heading",
+      "text": "Activation — Feet Washing"
+     },
+     {
+      "type": "paragraph",
+      "text": "Form small prayer groups of two or three. Each group will:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Find time to meet and pray for one another that Jesus will take full charge of their hearts and ministries.",
+       "Confess areas where they’ve sought control or struggled with giving up control.",
+       "Bless one another to walk in servant leadership."
+      ],
+      "ordered": true
+     },
+     {
+      "type": "paragraph",
+      "text": "Then, as a symbolic act, get a bowl of water and a towel and wash each other’s feet with water, declaring aloud: “I am not the master. Jesus is the Lord of this house. And in His name, I bless you, my brother / sister.”"
+     },
+     {
+      "type": "heading",
+      "text": "Memory Verse"
+     },
+     {
+      "type": "verse",
+      "text": "“Be shepherds of God’s flock that is under your care… not lording it over those entrusted to you, but being examples to the flock.”",
+      "reference": "1 Peter 5:2–3"
+     },
+     {
+      "type": "prompt",
+      "id": "w9_memory",
+      "question": "Write it three times this week to keep it alive in your spirit:"
+     },
+     {
+      "type": "prayer",
+      "title": "Closing Prayer",
+      "text": "Lord Jesus, You are the Head of this Church. Teach us to lead as You led — by loving, serving, and laying down our lives. Fill our Core-Group with humility, unity, and Your Spirit’s wisdom. May every decision, every act of leadership, and every heart in this house proclaim: Jesus is in charge. Amen."
+     },
+     {
+      "type": "prompt",
+      "id": "w9_notes",
+      "question": "Notes & Insights"
+     },
+     {
+      "type": "heading",
+      "text": "Week 9 Commitment"
+     },
+     {
+      "type": "prompt",
+      "id": "w9_commitment",
+      "question": "My Week 9 Commitment:",
+      "hint": "• This week, I will read and review the supplemental material on the Core Group leadership model. • I will make the time to wash the feet of one of my core group members or small groups. • I will make a list of my weaknesses and the strengths of my core-group members — to know where I need help (my weaknesses) and where to give up control (the strengths of others)."
+     }
+    ]
+   }
+  },
+  {
+   "id": "lea_m10",
+   "weekNumber": 10,
+   "title": "The Movement You Are Joining",
+   "summary": "Aligning with the vision and mission of Charismatic Renewal Ministries.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "heading",
+      "text": "Week 10 — The Movement You Are Joining",
+      "subtitle": "“Preparing People for a Great Harvest”"
+     },
+     {
+      "type": "verse",
+      "text": "“I was not disobedient to the heavenly vision.”",
+      "reference": "Acts 26:19"
+     },
+     {
+      "type": "bigIdea",
+      "text": "You are not just joining a local church ministry. You are stepping into a global move of God with a specific prophetic assignment: “Start preparing men (people) for the Great Harvest…” To serve as a leader in CRM, you must understand the story, vision, values, and beliefs of Charismatic Renewal Ministries (CRM) — the spiritual family God has planted us in."
+     },
+     {
+      "type": "paragraph",
+      "text": "Take 2–3 minutes and write:"
+     },
+     {
+      "type": "prompt",
+      "id": "w10_drew",
+      "question": "What drew you to Charismatic Renewal Ministries?"
+     },
+     {
+      "type": "prompt",
+      "id": "w10_knew",
+      "question": "Before today, what did you know (if anything) about CRM?"
+     },
+     {
+      "type": "prompt",
+      "id": "w10_fill_joining",
+      "question": "Fill in: I am not just joining a local church; I am joining a _____________ and a ____________.",
+      "hint": "Answer: a movement and a mission."
+     },
+     {
+      "type": "heading",
+      "text": "Our Story — How CRM Began",
+      "subtitle": "From Azusa Street to Ile-Ife, Nigeria to the World"
+     },
+     {
+      "type": "paragraph",
+      "text": "The story of CRM is really part of a bigger story: the outpouring of the Holy Spirit in the 20th century."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Early 1900s: God used an African-American preacher, William J. Seymour, at Azusa Street, Los Angeles, to spark a global Pentecostal revival, with tongues, prophecy, healing, and miracles.",
+       "1960s–70s: The Charismatic Movement spread the gifts of the Spirit into Catholic, Episcopal, Methodist, Presbyterian and other mainline churches.",
+       "1967: At Duquesne University, 15 Catholic students experienced a “new Pentecost” as they were filled with the Holy Spirit and began to speak in tongues."
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "Into that global wave, God wrote our specific story."
+     },
+     {
+      "type": "subheading",
+      "text": "The “God Is Love” Prayer Group — University of Ife"
+     },
+     {
+      "type": "paragraph",
+      "text": "In 1972, a Dominican Catholic priest, Rev. Fr. Richard Farmer, serving as chaplain at the University of Ife, Ile-Ife, Nigeria, attended a Charismatic conference in the U.S. and received the baptism of the Holy Spirit. When he returned to Ife, he started a prayer group called “The God Is Love Community.”"
+     },
+     {
+      "type": "list",
+      "items": [
+       "It began as a small, hungry group of students meeting to pray.",
+       "It grew to include both Catholics and non-Catholics, united by hunger for God."
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "On February 18, 1980, while they were praying, God spoke a prophetic word that changed everything."
+     },
+     {
+      "type": "heading",
+      "text": "The Prophecy That Birthed CRM"
+     },
+     {
+      "type": "quote",
+      "text": "“Start preparing men (people) for the Great Harvest which I have in the (Catholic) Church; men (people) of beaten gold and of quality; and teach them what it means to love and to have authority…”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Another rendering of the prophecy reads:"
+     },
+     {
+      "type": "quote",
+      "text": "“Start preparing the people for the Great Harvest… I don’t want men who are prepared and not FAITHFUL. I want those with faithful and OBEDIENT hearts… Feed my flock… You have to make them understand what it means to have AUTHORITY… You have to LOVE each other… learn to wait on Me… learn to receive from Me.”"
+     },
+     {
+      "type": "paragraph",
+      "text": "From this prophecy, the early brethren understood:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "There is a Great Harvest coming — a massive revival in our lifetime.",
+       "The harvest is ready, but laborers are few (John 4:35; Luke 10:2).",
+       "Their assignment was to prepare people for this harvest — not just evangelize, but train & release workers.",
+       "They were to start from their “Jerusalem” — the circles and systems where they already were (then, the Catholic Church; today, any place where religion has replaced obedience)."
+      ]
+     },
+     {
+      "type": "prompt",
+      "id": "w10_fill_assignment",
+      "question": "Fill in: The prophetic assignment of CRM is to prepare _____________ for God’s Great ____________.",
+      "hint": "Answer: people, harvest."
+     },
+     {
+      "type": "paragraph",
+      "text": "From that prayer group and prophetic word, the ministry now known as Charismatic Renewal Ministries was born."
+     },
+     {
+      "type": "heading",
+      "text": "Who Are We Preparing? — The F.L.O.P.A. Person"
+     },
+     {
+      "type": "paragraph",
+      "text": "Over time, the Holy Spirit made clear the specific kind of people CRM is called to prepare. They can be summarized in five qualities:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "F – Faithfulness",
+       "L – Love",
+       "O – Obedience",
+       "P – Prayerfulness",
+       "A – Authority"
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "These are not cute words. They are the core values of CRM and the required character of every CRM leader."
+     },
+     {
+      "type": "subheading",
+      "text": "A. Faithfulness — “People Who Do Not Give Up”"
+     },
+     {
+      "type": "verse",
+      "text": "“Moreover it is required in stewards that one be found faithful.”",
+      "reference": "1 Corinthians 4:2"
+     },
+     {
+      "type": "paragraph",
+      "text": "God told us: “I don’t want men who are prepared and not FAITHFUL.” What it means: to be committed to God and His call; to not give up or change along the way; to be steady, consistent, reliable, dependable."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Individual: You keep showing up to serve even when nobody applauds. You keep your word about arriving on time and following through. You stay in the process of growth even when it is uncomfortable.",
+       "Group: A worship team that can be trusted to prepare, rehearse, and minister without drama. A department that hits deadlines without endless chasing and reminders. A Core Group that is always present, prayerful, and prepared."
+      ]
+     },
+     {
+      "type": "prompt",
+      "id": "w10_fill_faithfulness",
+      "question": "Fill in: Faithfulness is long obedience in the same ____________.",
+      "hint": "Answer: direction."
+     },
+     {
+      "type": "prompt",
+      "id": "w10_quit",
+      "question": "Reflection: Where do you tend to quit too easily?"
+     },
+     {
+      "type": "subheading",
+      "text": "B. Love — “People Who Live for One Another”"
+     },
+     {
+      "type": "quote",
+      "text": "“You have to LOVE each other… because love covereth a multitude of sins.”"
+     },
+     {
+      "type": "paragraph",
+      "text": "What it means: genuine love for God and for one another; love that produces the unity required to fulfill the vision."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Individual: Refusing to gossip even when others do. Choosing to forgive quickly when hurt. Giving generously to support others’ needs.",
+       "Group: A team that refuses cliques and “inner circles.” Leaders who defend each other’s reputation. A culture where people feel safe to be honest and vulnerable."
+      ]
+     },
+     {
+      "type": "prompt",
+      "id": "w10_fill_love",
+      "question": "Fill in: Love is not just a feeling; it is a commitment to seek another’s ____________.",
+      "hint": "Answer: good."
+     },
+     {
+      "type": "prompt",
+      "id": "w10_forgive",
+      "question": "Reflection: Is there anyone you need to forgive or reconcile with in order to walk in CRM love?"
+     },
+     {
+      "type": "subheading",
+      "text": "C. Obedience — “People Who Do Whatever Jesus Says”"
+     },
+     {
+      "type": "quote",
+      "text": "“They must be people who would go to any extent to obey God’s word.”"
+     },
+     {
+      "type": "paragraph",
+      "text": "What it means: radical obedience to Jesus, even when it costs; putting God’s voice over tradition, comfort, or culture."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Individual: Ending a relationship God has clearly said “no” to. Saying “yes” to serving, giving, or leading when you feel afraid. Speaking truth in love when you’d rather stay silent.",
+       "Group: A leadership team willing to stop doing something God is no longer breathing on. A church that rearranges entire plans because the Holy Spirit gave new direction."
+      ]
+     },
+     {
+      "type": "prompt",
+      "id": "w10_fill_obedience",
+      "question": "Fill in: Obedience means I value God’s ____________ more than my ____________.",
+      "hint": "Answer: voice, comfort."
+     },
+     {
+      "type": "prompt",
+      "id": "w10_yes",
+      "question": "Reflection: Where is God calling you to a deeper “yes” right now?"
+     },
+     {
+      "type": "subheading",
+      "text": "D. Prayerfulness — “People Who Wait to Hear God”"
+     },
+     {
+      "type": "quote",
+      "text": "“I want you all to learn to receive from Me… learn to wait on Me… not just going on a fast, BUT WAITING TO HEAR ME SPEAK TO YOU.”"
+     },
+     {
+      "type": "paragraph",
+      "text": "What it means: prayer as a lifestyle of listening and responding to God; not just talking to God, but hearing Him, journaling His impressions, and obeying."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Individual: Setting aside daily time to worship, pray in tongues, and listen. Bringing major decisions before God, not just making them logically.",
+       "Group: Teams that pray before they plan, not as an afterthought. Fasting and prayer seasons across CRM centers to refocus on the vision."
+      ]
+     },
+     {
+      "type": "prompt",
+      "id": "w10_fill_prayer",
+      "question": "Fill in: Prayerfulness is not about saying many words; it is about staying long enough to ____________.",
+      "hint": "Answer: hear God speak."
+     },
+     {
+      "type": "prompt",
+      "id": "w10_wait",
+      "question": "Reflection: What would change if your ministry team really waited to hear God before acting?"
+     },
+     {
+      "type": "subheading",
+      "text": "E. Authority — “People Who Carry Spiritual Weight”"
+     },
+     {
+      "type": "quote",
+      "text": "“Teach them what it means to have AUTHORITY.”"
+     },
+     {
+      "type": "paragraph",
+      "text": "What it means: empowered by the Holy Spirit, each person identifies and uses their gifts; walking in boldness, not timidity — praying for the sick, confronting darkness, preaching the gospel."
+     },
+     {
+      "type": "list",
+      "items": [
+       "Individual: You pray for a sick person instead of just saying “sorry.” You command fear, oppression, or demonic influence to leave in Jesus’ Name. You lead a prayer, small group, or altar call with confidence.",
+       "Group: A church where gifts like prophecy, healing, tongues, discernment are welcomed and stewarded. Teams that shift atmospheres when they walk into a room or a neighborhood."
+      ]
+     },
+     {
+      "type": "prompt",
+      "id": "w10_fill_authority",
+      "question": "Fill in: Authority is not about shouting; it is about knowing & living from who I am in ____________.",
+      "hint": "Answer: Christ."
+     },
+     {
+      "type": "prompt",
+      "id": "w10_shrinking",
+      "question": "Reflection: Where are you shrinking back from using the authority God has given you?"
+     },
+     {
+      "type": "heading",
+      "text": "CRM’s Core Beliefs — What We Stand On"
+     },
+     {
+      "type": "paragraph",
+      "text": "The CRM Constitution sets out our Statement of Faith (Article 4). Here’s a narrative summary in workbook form (not exhaustive, but essential). In CRM we believe:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "The Bible: The inspired, infallible Word of God — our final authority.",
+       "The Trinity: One God in three Persons: Father, Son, Holy Spirit.",
+       "Jesus Christ: Fully God, fully man, born of a virgin, lived sinless, died for our sins, rose bodily, ascended, and will return.",
+       "Humanity & Sin: All have sinned and need salvation.",
+       "Salvation: By grace through faith in Christ alone, not by works.",
+       "Sanctification & Holiness: A life set apart to God in conduct, character, and love.",
+       "The Baptism of the Holy Spirit: A distinct experience with the evidence of spiritual gifts, including speaking in tongues.",
+       "Divine Healing: Healing is available today through Jesus’ finished work.",
+       "The Church & Mission: The Church is God’s instrument to preach the gospel and disciple the nations.",
+       "The Second Coming, Resurrection, Heaven & Hell: Jesus will return; there will be resurrection and judgment; Heaven and Hell are real and eternal."
+      ],
+      "ordered": true
+     },
+     {
+      "type": "paragraph",
+      "text": "As a CRM leader, I must know what I believe, live what I believe, and be ready to explain what I believe."
+     },
+     {
+      "type": "heading",
+      "text": "CRM’s Vision & Mission — What We Exist to Do"
+     },
+     {
+      "type": "paragraph",
+      "text": "From the Constitution and our teaching documents, CRM exists to:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Propagate the gospel of Jesus Christ.",
+       "Establish local churches and centers around the world.",
+       "Disciple and nurture believers into maturity.",
+       "Train, license, and ordain ministers and missionaries.",
+       "Plant / launch ministries (Bible schools, youth centers, mission homes, universities, family missions etc.) for kingdom advance."
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "In CRM, this translates practically into our mission:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "Introduce people to God’s grace (Jesus)",
+       "Raise them as followers of Jesus",
+       "Release them to serve Jesus in the power of the Holy Spirit"
+      ]
+     },
+     {
+      "type": "paragraph",
+      "text": "A CRM church therefore must have a specific focus on: raising revivalists; seeing revival in our lifetime; demonstrating the kingdom of God (healing, deliverance, transformation)."
+     },
+     {
+      "type": "prompt",
+      "id": "w10_fill_mission",
+      "question": "Fill in: CRM’s mission is to Invite, Raise, and __________ people for Jesus.",
+      "hint": "Answer: release."
+     },
+     {
+      "type": "heading",
+      "text": "How This Shapes You as a Leader"
+     },
+     {
+      "type": "paragraph",
+      "text": "Being a leader in CRM means:"
+     },
+     {
+      "type": "list",
+      "items": [
+       "You are saying “YES” to the heavenly vision that birthed this ministry.",
+       "You are committing to become a F.L.O.P.A. person.",
+       "You are stepping into a global prophetic assignment to prepare people for God’s Great Harvest."
+      ]
+     },
+     {
+      "type": "quote",
+      "text": "In CRM, you are not just attending a church; you are answering a call."
+     },
+     {
+      "type": "heading",
+      "text": "Personal Response — Workbook Exercise"
+     },
+     {
+      "type": "rating",
+      "id": "w10_flopa",
+      "title": "A. Self-Assessment on F.L.O.P.A. — Rate yourself 1–5 in each area (1 = needs a lot of growth; 5 = doing very well):",
+      "items": [
+       "Faithfulness",
+       "Love",
+       "Obedience",
+       "Prayerfulness",
+       "Authority"
+      ],
+      "scaleMax": 5
+     },
+     {
+      "type": "prompt",
+      "id": "w10_growth",
+      "question": "Where do you most need growth? Why?"
+     },
+     {
+      "type": "subheading",
+      "text": "B. My Next-Step Commitments"
+     },
+     {
+      "type": "prompt",
+      "id": "w10_grow_faithfulness",
+      "question": "In order to grow in faithfulness, I will:"
+     },
+     {
+      "type": "prompt",
+      "id": "w10_grow_love",
+      "question": "In order to grow in love, I will:"
+     },
+     {
+      "type": "prompt",
+      "id": "w10_grow_obedience",
+      "question": "In order to grow in obedience, I will:"
+     },
+     {
+      "type": "prompt",
+      "id": "w10_grow_prayerfulness",
+      "question": "In order to grow in prayerfulness, I will:"
+     },
+     {
+      "type": "prompt",
+      "id": "w10_grow_authority",
+      "question": "In order to walk in authority, I will:"
+     },
+     {
+      "type": "prayer",
+      "title": "Closing Prayer",
+      "text": "Father, thank You for making me part of Your vision and for the grace to prepare for Your Great Harvest. I offer myself to You — make me faithful, loving, obedient, prayerful, and a person of spiritual authority. I say YES to Your call. Use me in CRM to help prepare others. In Jesus’ Name, Amen."
+     },
+     {
+      "type": "prompt",
+      "id": "w10_notes",
+      "question": "Notes & Insights"
+     },
+     {
+      "type": "heading",
+      "text": "Week 10 Commitment"
+     },
+     {
+      "type": "prompt",
+      "id": "w10_commitment",
+      "question": "My Week 10 Commitment:",
+      "hint": "• This week, I will memorize the CRM Pledge (below) and make it part of my prayers and lifestyle. • I will write a 3–4 sentence summary of the CRM story in my own words that I can use to communicate the CRM vision and mission. • I will identify someone whom I can help understand the CRM vision and core values."
+     },
+     {
+      "type": "heading",
+      "text": "The CRM Pledge"
+     },
+     {
+      "type": "quote",
+      "text": "I pledge: To be obedient to God in all areas of my life. To be faithful in the stewardship of my talents, spiritual gifts, opportunities and calling; to honor God and add value to creation. To receive authority and use it in the best ways to glorify God and empower the weak. To love God with all my heart and demonstrate same in loving others. And to pray, waiting on God to get direction on how to serve Him better."
+     }
+    ]
+   }
+  },
+  {
+   "id": "lea_m11",
+   "weekNumber": 11,
+   "title": "Commissioning & Anointing Service",
+   "summary": "Your launch into leadership — anointing, appointment, and sending.",
+   "content": {
+    "version": 1,
+    "blocks": [
+     {
+      "type": "heading",
+      "text": "Week 11 — Commissioning & Anointing Service"
+     },
+     {
+      "type": "verse",
+      "text": "“As the Father has sent Me, I am sending you.”",
+      "reference": "John 20:21"
+     },
+     {
+      "type": "bigIdea",
+      "text": "This is not the end — it’s the beginning. Every teaching, every prayer, every surrender moment has been preparing you for this: to be sent into the world as a Kingdom carrier. The same Spirit that empowered Jesus now empowers you."
+     },
+     {
+      "type": "heading",
+      "text": "Opening Devotional — “Sent Ones”"
+     },
+     {
+      "type": "paragraph",
+      "text": "When Jesus appeared to His disciples after the resurrection, He said five short words that changed history:"
+     },
+     {
+      "type": "verse",
+      "text": "“As the Father has sent Me, I am sending you.”",
+      "reference": "John 20:21"
+     },
+     {
+      "type": "paragraph",
+      "text": "Then He breathed on them and said, “Receive the Holy Spirit.” That’s the moment when fearful followers became fearless witnesses. He was saying: “The mission continues — now through you.”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Leadership in the Kingdom always ends with sending. God calls you out, builds you up, fills you in — then sends you forth."
+     },
+     {
+      "type": "paragraph",
+      "text": "You are being commissioned — not just to hold a title or run a program, but to carry Heaven into every place you go — your family, your workplace, your church, your city."
+     },
+     {
+      "type": "quote",
+      "text": "The world may never walk into a church, but the church is about to walk into the world — through you."
+     },
+     {
+      "type": "heading",
+      "text": "Reflection — “Here Am I, Send Me”"
+     },
+     {
+      "type": "prompt",
+      "id": "w11_done_in_me",
+      "question": "What has God done in me through this Leaders Track journey?"
+     },
+     {
+      "type": "prompt",
+      "id": "w11_transformed",
+      "question": "What areas of my life or character have been transformed?"
+     },
+     {
+      "type": "prompt",
+      "id": "w11_sent_next",
+      "question": "Where do I sense God sending me next? (ministry, family, community, business)"
+     },
+     {
+      "type": "heading",
+      "text": "Bible Study — “Commissioned by Heaven”"
+     },
+     {
+      "type": "subheading",
+      "text": "1. Jesus Sends the Twelve (Matthew 10:1–8)"
+     },
+     {
+      "type": "paragraph",
+      "text": "“He called His twelve disciples to Him and gave them authority…” Jesus not only called them — He empowered them."
+     },
+     {
+      "type": "lesson",
+      "text": "You are not sent empty-handed; you are sent with authority and anointing."
+     },
+     {
+      "type": "subheading",
+      "text": "2. Isaiah’s Call (Isaiah 6:1–8)"
+     },
+     {
+      "type": "paragraph",
+      "text": "In the throne room, Isaiah was undone — convicted, cleansed, then commissioned. “Here am I, Lord. Send me.”"
+     },
+     {
+      "type": "lesson",
+      "text": "The holiest response to God’s presence is surrender."
+     },
+     {
+      "type": "subheading",
+      "text": "3. The Great Commission (Matthew 28:18–20)"
+     },
+     {
+      "type": "paragraph",
+      "text": "“All authority in heaven and on earth has been given to Me. Therefore go…” He didn’t say “sit” — He said “go.” You are part of Heaven’s global expansion plan."
+     },
+     {
+      "type": "lesson",
+      "text": "Every believer is a missionary; every leader is a sender."
+     },
+     {
+      "type": "heading",
+      "text": "Discussion Questions"
+     },
+     {
+      "type": "prompt",
+      "id": "w11_d1",
+      "question": "What part of your heart is burning as you sense God’s “Go” in this season?"
+     },
+     {
+      "type": "prompt",
+      "id": "w11_d2",
+      "question": "Why do you think Jesus always commissions in community, not isolation?"
+     },
+     {
+      "type": "prompt",
+      "id": "w11_d3",
+      "question": "What fears or excuses might you need to lay down before saying “Yes, Lord”?"
+     },
+     {
+      "type": "heading",
+      "text": "Activation — “The Leadership Covenant”"
+     },
+     {
+      "type": "paragraph",
+      "text": "Before being sent, leaders in the Kingdom make covenant — not of law, but of love and accountability. Review your Leadership Covenant together as a group. Then sign and date it below as a symbol of commitment."
+     },
+     {
+      "type": "subheading",
+      "text": "My Leadership Covenant (short-form)"
+     },
+     {
+      "type": "list",
+      "items": [
+       "I accept God’s call to serve and lead as a representative of His Kingdom.",
+       "I commit to walk daily with the Holy Spirit and to steward my gifts faithfully.",
+       "I commit to lead as Jesus led — with humility, integrity, love, and power.",
+       "I will serve others faithfully, guard my heart diligently, and depend on the Holy Spirit continually.",
+       "I will make disciples, raise leaders, and bring revival wherever I go.",
+       "I will multiply leaders, build unity, and live to bring glory to God.",
+       "By God’s grace, I will finish my race with joy. So help me God."
+      ]
+     },
+     {
+      "type": "prompt",
+      "id": "w11_covenant_signature",
+      "question": "Sign your covenant — type your full name and today’s date as a symbol of commitment:"
+     },
+     {
+      "type": "heading",
+      "text": "Declaration of Sending"
+     },
+     {
+      "type": "quote",
+      "text": "We are leaders who carry Heaven. We are sent to bring light into darkness, hope into despair, and love into division. We will serve with humility, lead with courage, and walk in power. The same Spirit that raised Jesus from the dead lives in us — therefore, we go!"
+     },
+     {
+      "type": "quote",
+      "text": "Revival begins where disobedience ends."
+     },
+     {
+      "type": "heading",
+      "text": "Memory Verse"
+     },
+     {
+      "type": "verse",
+      "text": "“Go therefore and make disciples of all nations… teaching them to observe all that I have commanded you.”",
+      "reference": "Matthew 28:19"
+     },
+     {
+      "type": "prompt",
+      "id": "w11_memory",
+      "question": "Write it three times this week to seal your commission:"
+     },
+     {
+      "type": "prayer",
+      "title": "Closing Prayer — “Lord, Send Me”",
+      "text": "Father, thank You for choosing me, training me, and anointing me. Thank You for every lesson, every tear, every triumph, and every test. Today, I step forward to say — Here am I, Lord. Send me. Use my voice to speak truth, my hands to heal, my heart to love, and my life to reflect Jesus. Fill me again with Your Spirit. Let signs follow my obedience, fruit confirm my faithfulness, and love define my leadership. I go in Your name, for Your glory, and by Your power. Send me to my world — until the whole world knows You. Amen."
+     },
+     {
+      "type": "prompt",
+      "id": "w11_notes",
+      "question": "Notes & Insights"
+     },
+     {
+      "type": "heading",
+      "text": "Congratulations, Leader!"
+     },
+     {
+      "type": "paragraph",
+      "text": "You’ve completed the Leaders Track! Remember — this is not graduation. It’s activation. You are now part of Heaven’s deployment plan."
+     },
+     {
+      "type": "quote",
+      "text": "You were born for such a time as this."
+     },
+     {
+      "type": "paragraph",
+      "text": "Go lead. Go love. Go multiply. Go carry Heaven."
+     }
+    ]
+   }
+  }
+ ]
+}

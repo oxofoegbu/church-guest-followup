@@ -35,6 +35,7 @@ function shape(enrollment: any, churchName: string) {
       workbookUrl: enrollment.track.workbookUrl,
       modules: enrollment.track.modules.map((m: any) => ({
         id: m.id, weekNumber: m.weekNumber, title: m.title, summary: m.summary,
+        hasContent: !!m.content, // Run 12 — content itself is fetched per-module
       })),
     },
     discipler: enrollment.discipler,

@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
+import ModuleWorkbook from '@/components/ModuleWorkbook';
+import type { WorkbookBlock, ReflectionEntry } from '@/lib/workbook';
 
 type Portal = {
   churchName: string;
@@ -10,12 +12,14 @@ type Portal = {
   track: {
     name: string; description: string | null;
     milestoneLabel: string | null; workbookUrl: string | null;
-    modules: { id: string; weekNumber: number; title: string; summary: string | null }[];
+    modules: { id: string; weekNumber: number; title: string; summary: string | null; hasContent: boolean }[];
   };
   discipler: { name: string; email: string; phone: string | null; photoUrl: string | null } | null;
   cohort: { name: string; meetingDay: string | null; meetingTime: string | null } | null;
   progress: { moduleId: string; completedAt: string }[];
 };
+
+type ModuleData = { blocks: WorkbookBlock[]; reflections: ReflectionEntry[] };
 
 function waLink(phone: string) {
   return `https://wa.me/${phone.replace(/[^0-9]/g, '')}`;
@@ -29,6 +33,9 @@ export default function TrackPortalPage() {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [toggling, setToggling] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState<string | null>(null);
+  const [moduleData, setModuleData] = useState<Record<string, ModuleData>>({});
+  const [moduleLoading, setModuleLoading] = useState<string | null>(null);
 
   const fetchPortal = useCallback(async () => {
     const res = await fetch(`/api/track-portal/${token}`);
@@ -52,6 +59,31 @@ export default function TrackPortalPage() {
       setPortal(prev => prev ? { ...prev, progress: d.progress } : prev);
     }
     setToggling(null);
+  };
+
+  const expandWeek = async (moduleId: string) => {
+    if (expanded === moduleId) { setExpanded(null); return; }
+    setExpanded(moduleId);
+    if (!moduleData[moduleId]) {
+      setModuleLoading(moduleId);
+      const res = await fetch(`/api/track-portal/${token}/module/${moduleId}`);
+      if (res.ok) {
+        const d = await res.json();
+        setModuleData(prev => ({
+          ...prev,
+          [moduleId]: { blocks: d.module?.content?.blocks || [], reflections: d.reflections || [] },
+        }));
+      }
+      setModuleLoading(null);
+    }
+  };
+
+  const saveReflection = async (moduleId: string, promptId: string, response: string) => {
+    const res = await fetch(`/api/track-portal/${token}/module/${moduleId}`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ promptId, response }),
+    });
+    return res.ok;
   };
 
   if (loading) {
@@ -79,6 +111,7 @@ export default function TrackPortalPage() {
   const pct = total > 0 ? Math.round((doneCount / total) * 100) : 0;
   const allDone = total > 0 && doneCount >= total;
   const isCompleted = portal.status === 'COMPLETED';
+  const anyContent = portal.track.modules.some(m => m.hasContent);
 
   return (
     <div className="min-h-screen bg-warm-50">
@@ -185,26 +218,54 @@ export default function TrackPortalPage() {
             {portal.track.modules.map(m => {
               const done = portal.progress.some(p => p.moduleId === m.id);
               const busy = toggling === m.id;
+              const isOpen = expanded === m.id;
+              const data = moduleData[m.id];
               return (
-                <button key={m.id} onClick={() => toggleWeek(m.id)}
-                  disabled={portal.status !== 'ACTIVE' || busy}
-                  className={`card w-full text-left flex items-center gap-4 transition-all ${done ? 'border-green-200 bg-green-50/50' : ''} ${portal.status === 'ACTIVE' ? 'hover:shadow-md active:scale-[0.99]' : 'cursor-default'}`}>
-                  <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 transition-colors ${done ? 'bg-green-500 text-white' : 'bg-church-100 text-church-400'}`}>
-                    {busy ? '…' : done ? '✓' : m.weekNumber}
+                <div key={m.id}
+                  className={`card transition-all ${done ? 'border-green-200 bg-green-50/50' : ''}`}>
+                  <div
+                    className={`flex items-center gap-4 ${m.hasContent ? 'cursor-pointer' : ''}`}
+                    onClick={() => { if (m.hasContent) expandWeek(m.id); }}>
+                    <button
+                      onClick={ev => { ev.stopPropagation(); toggleWeek(m.id); }}
+                      disabled={portal.status !== 'ACTIVE' || busy}
+                      aria-label={done ? `Mark week ${m.weekNumber} as not complete` : `Mark week ${m.weekNumber} complete`}
+                      className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 transition-colors ${done ? 'bg-green-500 text-white' : 'bg-church-100 text-church-400'} ${portal.status === 'ACTIVE' ? 'hover:ring-2 hover:ring-green-200' : 'cursor-default'}`}>
+                      {busy ? '…' : done ? '✓' : m.weekNumber}
+                    </button>
+                    <div className="flex-1 min-w-0">
+                      <p className={`font-semibold text-sm ${done ? 'text-green-800' : 'text-church-900'}`}>
+                        Week {m.weekNumber}: {m.title}
+                      </p>
+                      {m.summary && <p className="text-xs text-church-500 mt-0.5">{m.summary}</p>}
+                    </div>
+                    {m.hasContent && (
+                      <span className={`text-church-400 text-sm flex-shrink-0 transition-transform ${isOpen ? 'rotate-90' : ''}`}>▶</span>
+                    )}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className={`font-semibold text-sm ${done ? 'text-green-800' : 'text-church-900'}`}>
-                      Week {m.weekNumber}: {m.title}
-                    </p>
-                    {m.summary && <p className="text-xs text-church-500 mt-0.5">{m.summary}</p>}
-                  </div>
-                </button>
+                  {isOpen && (
+                    <div className="mt-4 pt-4 border-t border-church-100">
+                      {moduleLoading === m.id || !data ? (
+                        <p className="text-sm text-church-400 text-center py-6">Loading this week…</p>
+                      ) : (
+                        <ModuleWorkbook
+                          blocks={data.blocks}
+                          reflections={data.reflections}
+                          readOnly={portal.status !== 'ACTIVE'}
+                          onSave={(promptId, response) => saveReflection(m.id, promptId, response)}
+                        />
+                      )}
+                    </div>
+                  )}
+                </div>
               );
             })}
           </div>
           {portal.status === 'ACTIVE' && (
             <p className="text-xs text-church-400 text-center mt-4">
-              Tap a week to mark it complete when you finish it. Your discipler can see your progress and cheer you on.
+              {anyContent
+                ? 'Tap a week to open its content and write your reflections. Tap the circle to mark it complete. Your discipler can see your progress and cheer you on.'
+                : 'Tap a week to mark it complete when you finish it. Your discipler can see your progress and cheer you on.'}
             </p>
           )}
         </div>
