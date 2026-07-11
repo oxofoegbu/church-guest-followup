@@ -81,6 +81,8 @@ model User {
   serviceReturns       GuestServiceReturn[] @relation("RecordedBy")
   notificationsReceived NotificationLog[] @relation("NotifiedUser")
   actionItems          ActionItem[]       @relation("UserActions")
+  matchedEnrollRequests EnrollmentRequest[] @relation("MatchedEnrollmentRequests")
+  decidedEnrollRequests EnrollmentRequest[] @relation("DecidedEnrollmentRequests")
 
   @@map("users")
   schedulesAsSpeaker     ServiceSchedule[] @relation("ScheduleSpeaker")
@@ -503,6 +505,7 @@ model Track {
   modules     TrackModule[]
   cohorts     TrackCohort[]
   enrollments TrackEnrollment[]
+  enrollmentRequests EnrollmentRequest[]
 
   @@map("tracks")
 }
@@ -540,6 +543,7 @@ model TrackCohort {
   track       Track             @relation(fields: [trackId], references: [id], onDelete: Cascade)
   facilitator User?             @relation("CohortFacilitator", fields: [facilitatorUserId], references: [id], onDelete: SetNull)
   enrollments TrackEnrollment[]
+  enrollmentRequests EnrollmentRequest[]
 
   @@map("track_cohorts")
 }
@@ -606,4 +610,33 @@ model ModuleReflection {
   @@unique([enrollmentId, moduleId, promptId])
   @@index([enrollmentId, moduleId])
   @@map("module_reflections")
+}
+
+// Run 13 — public self-enrollment requests (Become & Leaders Track)
+// Submitted from /enroll. PENDING until an admin approves or rejects.
+// Approval creates the TrackEnrollment (and a User account when the
+// requester is not yet registered).
+model EnrollmentRequest {
+  id              String    @id @default(cuid())
+  trackId         String
+  cohortId        String?
+  firstName       String
+  lastName        String
+  email           String
+  phone           String?
+  matchedUserId   String?   // existing User matched by email at submission time
+  status          String    @default("PENDING") // PENDING | APPROVED | REJECTED
+  decidedAt       DateTime?
+  decidedByUserId String?
+  enrollmentId    String?   // TrackEnrollment created on approval
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  track       Track        @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  cohort      TrackCohort? @relation(fields: [cohortId], references: [id], onDelete: SetNull)
+  matchedUser User?        @relation("MatchedEnrollmentRequests", fields: [matchedUserId], references: [id], onDelete: SetNull)
+  decidedBy   User?        @relation("DecidedEnrollmentRequests", fields: [decidedByUserId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+  @@map("enrollment_requests")
 }

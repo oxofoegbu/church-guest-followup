@@ -167,6 +167,7 @@ export default function TracksPage() {
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [editingTrack, setEditingTrack] = useState<Track | null>(null);
+  const [pendingRequests, setPendingRequests] = useState(0);
 
   const fetchTracks = useCallback(async () => {
     const res = await fetch('/api/tracks');
@@ -180,6 +181,11 @@ export default function TracksPage() {
     fetch('/api/roles').then(r => r.ok ? r.json() : {}).then((d: any) => {
       if (d.customRolesJson) setCustomRolesJson(d.customRolesJson);
     }).catch(() => {});
+    // Run 13 — pending self-enrollment requests badge (admin-only endpoint;
+    // non-admins simply get a 403 which we ignore)
+    fetch('/api/enrollment-requests?status=PENDING').then(r => r.ok ? r.json() : { requests: [] })
+      .then((d: any) => setPendingRequests((d.requests || []).length))
+      .catch(() => {});
   }, [fetchTracks]);
 
   const permLevel = currentUser ? getPermissionLevel(currentUser.role, customRolesJson) : null;
@@ -208,7 +214,17 @@ export default function TracksPage() {
             </p>
           </div>
           {isAdmin && (
-            <button onClick={() => setShowCreate(true)} className="btn-primary">+ New Track</button>
+            <div className="flex items-center gap-2">
+              <Link href="/dashboard/tracks/requests" className="btn-secondary relative">
+                📥 Requests
+                {pendingRequests > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                    {pendingRequests > 9 ? '9+' : pendingRequests}
+                  </span>
+                )}
+              </Link>
+              <button onClick={() => setShowCreate(true)} className="btn-primary">+ New Track</button>
+            </div>
           )}
         </div>
 
