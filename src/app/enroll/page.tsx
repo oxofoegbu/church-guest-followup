@@ -1,8 +1,8 @@
 'use client';
 
-// Run 13 — public self-enrollment page for Become & Leaders Track.
-// Shareable link: /enroll (no sign-in required). Every submission creates a
-// PENDING request that an admin approves from Dashboard \u2192 Tracks \u2192 Requests.
+// Run 13/14 — public self-enrollment page for Become & Leaders Track.
+// Shareable link: /enroll (no sign-in required). Flow: details -> 6-digit
+// email verification code -> request becomes PENDING for admin review.
 
 import { useState, useEffect } from 'react';
 
@@ -30,6 +30,11 @@ export default function EnrollPage() {
   const [tracks, setTracks] = useState<Track[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [step, setStep] = useState<'form' | 'verify' | 'done'>('form');
+  const [requestId, setRequestId] = useState<string | null>(null);
+  const [code, setCode] = useState('');
+  const [resendIn, setResendIn] = useState(0);
+
   const [trackId, setTrackId] = useState<string | null>(null);
   const [cohortId, setCohortId] = useState<string | null>(null);
   const [firstName, setFirstName] = useState('');
@@ -39,7 +44,6 @@ export default function EnrollPage() {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
-  const [done, setDone] = useState(false);
 
   useEffect(() => {
     fetch('/api/enroll/options')
@@ -48,6 +52,13 @@ export default function EnrollPage() {
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
+
+  // Resend cooldown ticker
+  useEffect(() => {
+    if (resendIn <= 0) return;
+    const t = setInterval(() => setResendIn(s => (s > 0 ? s - 1 : 0)), 1000);
+    return () => clearInterval(t);
+  }, [resendIn]);
 
   const selectedTrack = tracks.find(t => t.id === trackId) || null;
 
@@ -77,14 +88,72 @@ export default function EnrollPage() {
         phone: phone.trim(),
       }),
     });
-    if (res.ok) {
-      setDone(true);
+    const d = await res.json().catch(() => ({}));
+    if (res.ok && d.requiresVerification) {
+      setRequestId(d.requestId);
+      setCode('');
+      setStep('verify');
+      setResendIn(60);
     } else {
-      const d = await res.json().catch(() => ({}));
       setError(d.error || 'Something went wrong — please try again.');
     }
     setSubmitting(false);
   };
+
+  const handleVerify = async () => {
+    if (!requestId) return;
+    setError('');
+    if (!/^[0-9]{6}$/.test(code.trim())) {
+      setError('Please enter the 6-digit code from your email.');
+      return;
+    }
+    setSubmitting(true);
+    const res = await fetch('/api/enroll/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ requestId, code: code.trim() }),
+    });
+    const d = await res.json().catch(() => ({}));
+    if (res.ok) {
+      setStep('done');
+    } else {
+      setError(d.error || 'Verification failed — please try again.');
+    }
+    setSubmitting(false);
+  };
+
+  const handleResend = async () => {
+    if (!requestId || resendIn > 0 || submitting) return;
+    setError('');
+    setSubmitting(true);
+    const res = await fetch('/api/enroll/resend', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ requestId }),
+    });
+    const d = await res.json().catch(() => ({}));
+    if (res.ok) {
+      setResendIn(60);
+      setCode('');
+    } else {
+      setError(d.error || 'Could not resend the code — please try again.');
+    }
+    setSubmitting(false);
+  };
+
+  const header = (
+    <div className="bg-church-900 text-white px-6 py-8">
+      <div className="max-w-xl mx-auto">
+        <p className="text-church-300 text-sm mb-1">✝️ {churchName}</p>
+        <h1 className="text-2xl font-bold font-serif">Join a Track</h1>
+        {step === 'form' && (
+          <p className="text-church-200 text-sm mt-2">
+            Formation journeys — building a certain kind of person through consistent following of Jesus.
+          </p>
+        )}
+      </div>
+    </div>
+  );
 
   if (loading) {
     return (
@@ -94,22 +163,69 @@ export default function EnrollPage() {
     );
   }
 
-  if (done) {
+  if (step === 'done') {
     return (
       <div className="min-h-screen bg-warm-50">
-        <div className="bg-church-900 text-white px-6 py-8">
-          <div className="max-w-xl mx-auto">
-            <p className="text-church-300 text-sm mb-1">✝️ {churchName}</p>
-            <h1 className="text-2xl font-bold font-serif">Join a Track</h1>
-          </div>
-        </div>
+        {header}
         <div className="max-w-xl mx-auto px-4 sm:px-6 py-10">
           <div className="card text-center py-10">
             <div className="text-4xl mb-3">🎉</div>
             <h2 className="text-lg font-bold text-church-900 mb-2">Your request has been received!</h2>
             <p className="text-sm text-church-600 max-w-sm mx-auto">
-              A leader will review it shortly. Once you are approved, we will send an email to{' '}
+              Your email is verified and a leader will review your request shortly. Once you are
+              approved, we will send an email to{' '}
               <span className="font-semibold">{email.trim()}</span> with everything you need to begin.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (step === 'verify') {
+    return (
+      <div className="min-h-screen bg-warm-50">
+        {header}
+        <div className="max-w-xl mx-auto px-4 sm:px-6 py-10">
+          <div className="card py-8 px-6 text-center">
+            <div className="text-4xl mb-3">📬</div>
+            <h2 className="text-lg font-bold text-church-900 mb-2">Check your email</h2>
+            <p className="text-sm text-church-600 max-w-sm mx-auto mb-5">
+              We sent a 6-digit code to <span className="font-semibold">{email.trim()}</span>.
+              Enter it below to confirm your email address.
+            </p>
+            <input
+              className="input-field w-48 mx-auto text-center text-2xl tracking-[0.4em] font-bold"
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              maxLength={6}
+              placeholder="······"
+              value={code}
+              onChange={ev => setCode(ev.target.value.replace(/[^0-9]/g, ''))}
+              onKeyDown={ev => { if (ev.key === 'Enter') handleVerify(); }}
+            />
+            {error && (
+              <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-4 py-3 mt-4 text-left">
+                {error}
+              </div>
+            )}
+            <button onClick={handleVerify} disabled={submitting || code.length !== 6}
+              className="btn-primary w-full mt-5">
+              {submitting ? 'Checking…' : 'Verify & Submit Request'}
+            </button>
+            <div className="flex items-center justify-center gap-4 mt-4 text-sm">
+              <button onClick={handleResend} disabled={resendIn > 0 || submitting}
+                className={resendIn > 0 ? 'text-church-300' : 'text-brand-600 hover:underline'}>
+                {resendIn > 0 ? `Resend code in ${resendIn}s` : 'Resend code'}
+              </button>
+              <span className="text-church-200">|</span>
+              <button onClick={() => { setStep('form'); setError(''); }}
+                className="text-brand-600 hover:underline">
+                Edit my details
+              </button>
+            </div>
+            <p className="text-xs text-church-400 mt-4">
+              The code expires in 10 minutes. Check your spam folder if you cannot find it.
             </p>
           </div>
         </div>
@@ -119,16 +235,7 @@ export default function EnrollPage() {
 
   return (
     <div className="min-h-screen bg-warm-50">
-      {/* Header */}
-      <div className="bg-church-900 text-white px-6 py-8">
-        <div className="max-w-xl mx-auto">
-          <p className="text-church-300 text-sm mb-1">✝️ {churchName}</p>
-          <h1 className="text-2xl font-bold font-serif">Join a Track</h1>
-          <p className="text-church-200 text-sm mt-2">
-            Formation journeys — building a certain kind of person through consistent following of Jesus.
-          </p>
-        </div>
-      </div>
+      {header}
 
       <div className="max-w-xl mx-auto px-4 sm:px-6 py-6 space-y-5">
         {/* 1. Track */}
@@ -211,7 +318,7 @@ export default function EnrollPage() {
                 {submitting ? 'Sending…' : 'Request Enrollment'}
               </button>
               <p className="text-xs text-church-400 text-center">
-                Your request will be reviewed by a leader — you will get an email once you are approved.
+                We will email you a 6-digit code to confirm your address — then a leader reviews your request.
               </p>
             </div>
           </div>

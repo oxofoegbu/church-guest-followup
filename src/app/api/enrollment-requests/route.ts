@@ -8,7 +8,11 @@ export async function GET(request: NextRequest) {
   try {
     await requireAuth(request, ['ADMIN']);
     const status = new URL(request.url).searchParams.get('status');
-    const where = status && status !== 'ALL' ? { status } : {};
+    // UNVERIFIED requests (Run 14: email not yet confirmed) never appear in
+    // the admin queue — 'ALL' means all decided-or-decidable requests.
+    const where = status && status !== 'ALL'
+      ? { status }
+      : { status: { in: ['PENDING', 'APPROVED', 'REJECTED'] } };
 
     const requests = await (prisma as any).enrollmentRequest.findMany({
       where,

@@ -625,7 +625,14 @@ model EnrollmentRequest {
   email           String
   phone           String?
   matchedUserId   String?   // existing User matched by email at submission time
-  status          String    @default("PENDING") // PENDING | APPROVED | REJECTED
+  status          String    @default("PENDING") // UNVERIFIED | PENDING | APPROVED | REJECTED
+  // Run 14 — email OTP verification (requests start UNVERIFIED; the admin
+  // queue only ever sees requests that verified their email)
+  verifyCodeHash  String?
+  verifyExpiresAt DateTime?
+  verifySentAt    DateTime?
+  verifyAttempts  Int       @default(0)
+  verifiedAt      DateTime?
   decidedAt       DateTime?
   decidedByUserId String?
   enrollmentId    String?   // TrackEnrollment created on approval

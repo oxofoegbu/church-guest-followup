@@ -29,6 +29,38 @@ function esc(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+// --- Run 14: email OTP -------------------------------------------------------
+// Unlike the other senders in this file, this one is flow-critical (without
+// the code the person cannot verify), so it reports success/failure.
+export async function sendEnrollmentVerificationEmail(params: {
+  firstName: string;
+  email: string;
+  trackName: string;
+  code: string;
+}): Promise<boolean> {
+  try {
+    const churchName = await getChurchName();
+    const subject = `${params.code} is your verification code \u2014 ${churchName}`;
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 560px;">
+        <p>Hi ${esc(params.firstName)},</p>
+        <p>Use this code to confirm your email and complete your <strong>${esc(params.trackName)}</strong> enrollment request:</p>
+        <p style="font-size:32px;letter-spacing:8px;font-weight:bold;color:#1f2937;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px 24px;text-align:center;">${esc(params.code)}</p>
+        <p style="color:#6b7280;font-size:13px;">The code expires in 10 minutes. If you did not request this, you can safely ignore this email.</p>
+        <p style="color:#6b7280;font-size:13px;">${esc(churchName)}</p>
+      </div>`;
+    const result = await sendEmailViaResend(params.email, subject, html);
+    if (result.error) {
+      console.error('sendEnrollmentVerificationEmail failed:', result.error);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error('sendEnrollmentVerificationEmail failed:', err);
+    return false;
+  }
+}
+
 // --- New request: alert the configured admin recipients -------------------
 export async function notifyAdminsOfEnrollmentRequest(info: RequestInfo): Promise<void> {
   try {

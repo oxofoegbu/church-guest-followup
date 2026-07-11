@@ -1,5 +1,5 @@
 // Run 13 — shared helpers for public self-enrollment (Become & Leaders Track)
-import { randomInt } from 'crypto';
+import { randomInt, createHash } from 'crypto';
 import { z } from 'zod';
 
 // Only these tracks are open for public self-enrollment. Welcome Track has
@@ -25,4 +25,21 @@ export function generateTempPassword(): string {
     suffix += ALPHABET[randomInt(ALPHABET.length)];
   }
   return `Harvest-${suffix}`;
+}
+
+// --- Run 14: email OTP verification ----------------------------------------
+export const OTP_TTL_MS = 10 * 60 * 1000;          // codes live 10 minutes
+export const OTP_RESEND_COOLDOWN_MS = 60 * 1000;   // one send per minute
+export const OTP_MAX_ATTEMPTS = 5;                 // wrong tries per code
+export const UNVERIFIED_MAX_AGE_MS = 24 * 60 * 60 * 1000; // sweep after 24h
+
+export function generateOtpCode(): string {
+  return String(randomInt(100000, 1000000)); // 6 digits, never leading-zero
+}
+
+// Codes are short-lived so a salted SHA-256 is appropriate here (bcrypt is
+// for long-lived secrets). Salting with the request id makes each hash
+// unique even for identical codes.
+export function hashOtpCode(requestId: string, code: string): string {
+  return createHash('sha256').update(`${requestId}:${code}`).digest('hex');
 }
