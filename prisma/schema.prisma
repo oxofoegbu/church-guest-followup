@@ -541,6 +541,9 @@ model TrackCohort {
   meetingTime       String?   // e.g. "19:00"
   facilitatorUserId String?
   status            String    @default("ACTIVE") // ACTIVE | COMPLETED | ARCHIVED
+  // Run 21 — id of the parent ActionItem when this cohort's weekly meetings
+  // have been placed on the Calendar (null = not on the calendar).
+  calendarEventId   String?
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
 
@@ -565,6 +568,14 @@ model TrackEnrollment {
   startedAt       DateTime              @default(now())
   completedAt     DateTime?
   notes           String?
+  // Run 21 — milestone event (baptism / commissioning / …) recorded for this
+  // enrollment. The label comes from Track.milestoneLabel. milestoneNote is
+  // admin-facing (venue, officiant, …) and is NOT exposed on the public portal.
+  milestoneAt     DateTime?
+  milestoneNote   String?
+  // Run 21 — when the discipler was last emailed a "check on this disciple"
+  // nudge for THIS enrollment (cooldown stamp for the daily nudge cron).
+  lastNudgeAt     DateTime?
   createdAt       DateTime              @default(now())
   updatedAt       DateTime              @updatedAt
 

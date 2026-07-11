@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ACTIVITY_LABELS, STATUS_LABELS, STATUS_COLORS, formatDate } from '@/lib/utils';
 
-type Tab = 'funnel' | 'volunteers' | 'operational' | 'drip' | 'exports';
+type Tab = 'funnel' | 'formation' | 'volunteers' | 'operational' | 'drip' | 'exports';
 
 export default function ReportsPage() {
   const [tab, setTab] = useState<Tab>('funnel');
@@ -14,6 +14,7 @@ export default function ReportsPage() {
   const [volPerf, setVolPerf] = useState<any>(null);
   const [ops, setOps] = useState<any>(null);
   const [drip, setDrip] = useState<any>(null);
+  const [formation, setFormation] = useState<any>(null); // Run 21
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -23,12 +24,14 @@ export default function ReportsPage() {
       fetch('/api/reports?type=volunteer-performance').then(r => r.ok ? r.json() : null),
       fetch('/api/reports?type=operational').then(r => r.ok ? r.json() : null),
       fetch('/api/reports/drip').then(r => r.ok ? r.json() : null),
-    ]).then(([ov, fn, vp, op, dr]) => {
+      fetch('/api/reports/formation').then(r => r.ok ? r.json() : null), // Run 21
+    ]).then(([ov, fn, vp, op, dr, fo]) => {
       setOverview(ov);
       setFunnel(fn);
       setVolPerf(vp);
       setOps(op);
       setDrip(dr);
+      setFormation(fo);
       setLoading(false);
     }).catch(() => setLoading(false));
   }, []);
@@ -39,6 +42,7 @@ export default function ReportsPage() {
 
   const tabs: { key: Tab; label: string; icon: string }[] = [
     { key: 'funnel', label: 'Funnel & Outcomes', icon: '📊' },
+    { key: 'formation', label: 'Formation', icon: '🌱' },
     { key: 'volunteers', label: 'Assignee Performance', icon: '👥' },
     { key: 'operational', label: 'Operational', icon: '⚙️' },
     { key: 'drip', label: 'Drip', icon: '💧' },
@@ -63,6 +67,11 @@ export default function ReportsPage() {
       {/* Tab Content */}
       {tab === 'funnel' && overview && funnel && (
         <FunnelReport overview={overview} funnel={funnel} />
+      )}
+      {tab === 'formation' && (
+        formation ? <FormationReport data={formation} /> : (
+          <div className="card text-church-400 text-sm">Formation report data unavailable.</div>
+        )
       )}
       {tab === 'volunteers' && volPerf && (
         <VolunteerReport data={volPerf} />
@@ -615,6 +624,126 @@ function MetricCard({ label, value, target }: { label: string; value: string; ta
       <div className="text-xs text-church-500 mb-1">{label}</div>
       <div className="text-2xl font-bold text-church-900">{value}</div>
       {target && <div className="text-[11px] text-church-400 mt-1">{target}</div>}
+    </div>
+  );
+}
+
+// ── Run 21: Formation report (Discipleship Tracks) ──────────────────────────
+function FormationReport({ data }: { data: any }) {
+  const tracks: any[] = data.tracks || [];
+  const pathway: any[] = data.pathway || [];
+  const recentCompletions: any[] = data.recentCompletions || [];
+  const recentMilestones: any[] = data.recentMilestones || [];
+
+  const totalActive = tracks.reduce((s, t) => s + (t.byStatus?.ACTIVE || 0), 0);
+  const totalCompleted = tracks.reduce((s, t) => s + (t.byStatus?.COMPLETED || 0), 0);
+  const totalMilestones = tracks.reduce((s, t) => s + (t.milestones || 0), 0);
+  const totalStarted30d = tracks.reduce((s, t) => s + (t.started30d || 0), 0);
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <MetricCard label="On a track now" value={String(totalActive)} />
+        <MetricCard label="Tracks completed" value={String(totalCompleted)} />
+        <MetricCard label="Milestones reached" value={String(totalMilestones)} target="Baptisms, commissionings…" />
+        <MetricCard label="Started (30 days)" value={String(totalStarted30d)} />
+      </div>
+
+      {/* Formation pathway */}
+      <div className="card">
+        <h2 className="section-header mb-1">🌱 Formation Pathway</h2>
+        <p className="text-xs text-church-400 mb-4">How people move through the journey. &ldquo;Continued&rdquo; counts those who completed the previous track and enrolled in this one.</p>
+        <div className="flex flex-col sm:flex-row gap-3">
+          {pathway.map((p, i) => (
+            <div key={p.id} className="flex-1 flex items-stretch gap-3">
+              {i > 0 && <div className="hidden sm:flex items-center text-church-300 text-xl">→</div>}
+              <div className="flex-1 border border-church-100 rounded-xl p-4 bg-warm-50/50">
+                <p className="font-bold text-church-900 text-sm mb-2">{p.name}</p>
+                <p className="text-2xl font-bold text-brand-600">{p.enrolled}</p>
+                <p className="text-[11px] text-church-400 mb-1">people enrolled</p>
+                <p className="text-sm text-church-600">✅ {p.completed} completed</p>
+                {p.continuedFromPrev !== null && (
+                  <p className="text-[11px] text-church-400 mt-1">↪ {p.continuedFromPrev} continued from the previous track</p>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Per-track detail */}
+      {tracks.map(t => {
+        const inFlight = (t.byStatus?.ACTIVE || 0) + (t.byStatus?.PAUSED || 0);
+        return (
+          <div key={t.id} className="card">
+            <div className="flex items-center justify-between flex-wrap gap-2 mb-1">
+              <h2 className="section-header">{t.name}</h2>
+              <div className="flex gap-2 text-xs">
+                <span className="badge bg-green-100 text-green-700">{t.byStatus?.ACTIVE || 0} active</span>
+                <span className="badge bg-yellow-100 text-yellow-700">{t.byStatus?.PAUSED || 0} paused</span>
+                <span className="badge bg-brand-100 text-brand-700">{t.byStatus?.COMPLETED || 0} completed</span>
+                <span className="badge bg-gray-100 text-gray-500">{t.byStatus?.WITHDRAWN || 0} withdrawn</span>
+              </div>
+            </div>
+            <p className="text-xs text-church-400 mb-4">
+              {inFlight > 0 ? `Average progress of the ${inFlight} in flight: ${t.avgProgressPct}% of ${t.totalCoreWeeks} weeks.` : 'No one currently in flight.'}
+              {t.milestoneLabel ? ` 🏆 ${t.milestones} reached “${t.milestoneLabel}”.` : ''}
+              {` ${t.completions30d} completion(s) and ${t.started30d} new enrollment(s) in the last 30 days.`}
+            </p>
+            {t.weekFunnel?.length > 0 && (
+              <div className="space-y-1.5">
+                {t.weekFunnel.map((w: any) => {
+                  const pct = w.denominator > 0 ? Math.round((w.completedCount / w.denominator) * 100) : 0;
+                  return (
+                    <div key={w.weekNumber} className="flex items-center gap-3 text-xs">
+                      <span className="w-8 text-church-400 flex-shrink-0">W{w.weekNumber}</span>
+                      <span className="w-44 truncate text-church-600 flex-shrink-0" title={w.title}>{w.title}</span>
+                      <div className="flex-1 h-2.5 bg-church-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-brand-500 rounded-full" style={{ width: `${pct}%` }} />
+                      </div>
+                      <span className="w-14 text-right text-church-500 flex-shrink-0">{w.completedCount}/{w.denominator}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      })}
+
+      {/* Recent wins */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="card">
+          <h2 className="section-header mb-3">🎉 Recent Completions</h2>
+          {recentCompletions.length === 0 ? (
+            <p className="text-sm text-church-400">No track completions yet.</p>
+          ) : (
+            <ul className="space-y-2 text-sm">
+              {recentCompletions.map((r: any, i: number) => (
+                <li key={i} className="flex items-center justify-between gap-2">
+                  <span className="text-church-800 font-medium truncate">{r.name}</span>
+                  <span className="text-church-400 text-xs flex-shrink-0">{r.trackName} · {formatDate(r.at)}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        <div className="card">
+          <h2 className="section-header mb-3">🏆 Recent Milestones</h2>
+          {recentMilestones.length === 0 ? (
+            <p className="text-sm text-church-400">No milestones recorded yet. Record one from a track&rsquo;s Participants tab (✏️ edit).</p>
+          ) : (
+            <ul className="space-y-2 text-sm">
+              {recentMilestones.map((r: any, i: number) => (
+                <li key={i} className="flex items-center justify-between gap-2">
+                  <span className="text-church-800 font-medium truncate">{r.name}</span>
+                  <span className="text-church-400 text-xs flex-shrink-0">{r.label || r.trackName} · {formatDate(r.at)}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

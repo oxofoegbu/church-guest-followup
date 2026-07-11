@@ -36,6 +36,25 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     }
     if (body.cohortId !== undefined) data.cohortId = body.cohortId || null;
     if (body.notes !== undefined) data.notes = body.notes?.trim() || null;
+    // Run 21 -- milestone recording (baptism / commissioning / ...). Same
+    // fetch-before-write change-guard pattern as the discipler email: the
+    // audit entry + Guest baptism sync fire only when the date is actually
+    // set or changed, never on an unchanged resave.
+    let previousMilestoneAt: Date | null = null;
+    if (body.milestoneAt !== undefined) {
+      const beforeMs = await (prisma as any).trackEnrollment.findUnique({
+        where: { id: params.enrollmentId },
+        select: { milestoneAt: true },
+      });
+      if (!beforeMs) return NextResponse.json({ error: 'Enrollment not found' }, { status: 404 });
+      previousMilestoneAt = beforeMs.milestoneAt;
+      const parsedMs = body.milestoneAt ? new Date(body.milestoneAt) : null;
+      if (parsedMs && isNaN(parsedMs.getTime())) {
+        return NextResponse.json({ error: 'Invalid milestone date' }, { status: 400 });
+      }
+      data.milestoneAt = parsedMs;
+    }
+    if (body.milestoneNote !== undefined) data.milestoneNote = body.milestoneNote?.trim() || null;
     if (body.status !== undefined) {
       if (!VALID_STATUSES.includes(body.status)) {
         return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
@@ -47,7 +66,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     const enrollment = await (prisma as any).trackEnrollment.update({
       where: { id: params.enrollmentId },
       data,
-      include: { ...ENROLLMENT_INCLUDE, track: { select: { id: true, name: true } } },
+      include: { ...ENROLLMENT_INCLUDE, track: { select: { id: true, name: true, slug: true, milestoneLabel: true } } },
     });
 
     if (body.status === 'COMPLETED') {
@@ -61,6 +80,43 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
         targetId: enrollment.id, targetType: 'TRACK_ENROLLMENT', targetName: participantName,
         metadata: { trackId: enrollment.track.id, trackName: enrollment.track.name },
       });
+    }
+
+    // Run 21 -- milestone set or changed (never on unchanged resave)
+    const newMilestoneAt: Date | null | undefined =
+      body.milestoneAt !== undefined ? (data.milestoneAt as Date | null) : undefined;
+    const milestoneChanged =
+      newMilestoneAt !== undefined &&
+      (newMilestoneAt?.getTime() ?? null) !== (previousMilestoneAt ? new Date(previousMilestoneAt).getTime() : null);
+    if (milestoneChanged) {
+      const participantName = enrollment.guest
+        ? `${enrollment.guest.firstName} ${enrollment.guest.lastName}`.trim()
+        : enrollment.user?.name || 'Unknown';
+      const label = enrollment.track.milestoneLabel || 'Milestone';
+      await logAudit({
+        action: newMilestoneAt ? 'TRACK_MILESTONE_RECORDED' : 'TRACK_MILESTONE_CLEARED',
+        category: 'TRACK',
+        description: newMilestoneAt
+          ? `${participantName}: "${label}" recorded (${newMilestoneAt.toISOString().slice(0, 10)}) — ${enrollment.track.name}`
+          : `${participantName}: "${label}" cleared — ${enrollment.track.name}`,
+        userId: session.userId, userName: session.name,
+        targetId: enrollment.id, targetType: 'TRACK_ENROLLMENT', targetName: participantName,
+        metadata: { trackId: enrollment.track.id, trackName: enrollment.track.name, milestoneAt: newMilestoneAt?.toISOString() ?? null },
+      });
+
+      // Become milestone = Water & Holy Spirit Baptism. When the participant
+      // is a Guest, keep their Target Goals in step (best-effort — never
+      // block the milestone save on it).
+      if (newMilestoneAt && enrollment.track.slug === 'become' && enrollment.guest?.id) {
+        try {
+          await prisma.guest.update({
+            where: { id: enrollment.guest.id },
+            data: { waterBaptism: true, waterBaptismDate: newMilestoneAt },
+          });
+        } catch (e: any) {
+          console.error('Milestone → Guest waterBaptism sync failed:', e?.message || e);
+        }
+      }
     }
 
     // Run 19 -- discipler assignment notification (set or changed only)

@@ -32,6 +32,9 @@ export default function SettingsPage() {
     custom_roles: '[]',
     target_config: '[]',
     schedule_coordinators: '[]',
+    // Run 21 — discipler nudge cron
+    track_nudge_enabled: 'true',
+    track_nudge_days: '7',
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -165,6 +168,9 @@ export default function SettingsPage() {
           custom_roles:           settings.custom_roles,
           target_config:          settings.target_config,
           schedule_coordinators:  settings.schedule_coordinators,
+          // Run 21 — discipler nudge cron (clamped 1–90; blank falls back to 7)
+          track_nudge_enabled:    settings.track_nudge_enabled === 'false' ? 'false' : 'true',
+          track_nudge_days:       String(Math.min(90, Math.max(1, parseInt(settings.track_nudge_days, 10) || 7))),
         }),
       });
       if (!res.ok) throw new Error('Save failed');
@@ -438,6 +444,31 @@ export default function SettingsPage() {
                 onChange={e => setSettings(s => ({ ...s, summary_whatsapp: e.target.value }))}
                 placeholder="+12025551234, +12025555678" className="input-field" />
               <p className="text-xs text-church-400 mt-1">Include country code. Separate with commas.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Discipleship Tracks — discipler nudges (Run 21) ── */}
+        <div className="card">
+          <h2 className="section-header mb-1">🌱 Discipleship Tracks</h2>
+          <p className="text-sm text-church-500 mb-4">
+            A daily check emails each discipler one digest of their disciples who have gone
+            quiet — no week completed and no reflection saved for the number of days below.
+            Each disciple is mentioned at most once per window, so nobody gets nagged.
+          </p>
+          <div className="space-y-4">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input type="checkbox" checked={settings.track_nudge_enabled !== 'false'}
+                onChange={e => setSettings(s => ({ ...s, track_nudge_enabled: e.target.checked ? 'true' : 'false' }))}
+                className="w-4 h-4" />
+              <span className="text-sm text-church-700">Email disciplers about quiet disciples</span>
+            </label>
+            <div>
+              <label className="label">Days of quiet before a nudge</label>
+              <input type="number" min={1} max={90} value={settings.track_nudge_days}
+                onChange={e => setSettings(s => ({ ...s, track_nudge_days: e.target.value }))}
+                className="input-field w-32" />
+              <p className="text-xs text-church-400 mt-1">1–90 days. Also the minimum gap between nudges about the same disciple.</p>
             </div>
           </div>
         </div>

@@ -10,11 +10,13 @@ type Module = { id: string; weekNumber: number; title: string; summary: string |
 type Cohort = {
   id: string; name: string; startDate: string | null;
   meetingDay: string | null; meetingTime: string | null; status: string;
+  calendarEventId: string | null; // Run 21 — set when meetings are on the Calendar
   facilitator: { id: string; name: string } | null;
   _count: { enrollments: number };
 };
 type Enrollment = {
   id: string; status: string; startedAt: string; completedAt: string | null; notes: string | null;
+  milestoneAt: string | null; milestoneNote: string | null; // Run 21
   portalToken: string;
   guest: { id: string; firstName: string; lastName: string; email: string | null; phone: string | null; status: string } | null;
   user: { id: string; name: string; email: string; phone: string | null } | null;
@@ -214,8 +216,9 @@ function CohortModal({ trackId, cohort, users, onClose, onSaved }: {
 }
 
 // ─── Enroll / edit enrollment modal ──────────────────────────────
-function EnrollmentModal({ trackId, enrollment, users, cohorts, onClose, onSaved }: {
+function EnrollmentModal({ trackId, enrollment, users, cohorts, milestoneLabel, onClose, onSaved }: {
   trackId: string; enrollment?: Enrollment; users: any[]; cohorts: Cohort[];
+  milestoneLabel?: string | null;
   onClose: () => void; onSaved: () => void;
 }) {
   const isEdit = !!enrollment;
@@ -228,6 +231,9 @@ function EnrollmentModal({ trackId, enrollment, users, cohorts, onClose, onSaved
   const [cohortId, setCohortId] = useState(enrollment?.cohort?.id || '');
   const [status, setStatus] = useState(enrollment?.status || 'ACTIVE');
   const [notes, setNotes] = useState(enrollment?.notes || '');
+  // Run 21 — milestone recording (baptism / commissioning / …)
+  const [milestoneAt, setMilestoneAt] = useState(enrollment?.milestoneAt ? enrollment.milestoneAt.slice(0, 10) : '');
+  const [milestoneNote, setMilestoneNote] = useState(enrollment?.milestoneNote || '');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
@@ -247,7 +253,7 @@ function EnrollmentModal({ trackId, enrollment, users, cohorts, onClose, onSaved
       if (isEdit) {
         const res = await fetch(`/api/tracks/${trackId}/enrollments/${enrollment!.id}`, {
           method: 'PATCH', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ disciplerUserId, cohortId, status, notes }),
+          body: JSON.stringify({ disciplerUserId, cohortId, status, notes, milestoneAt: milestoneAt || null, milestoneNote }),
         });
         if (!res.ok) throw new Error((await res.json()).error);
       } else {
@@ -360,6 +366,26 @@ function EnrollmentModal({ trackId, enrollment, users, cohorts, onClose, onSaved
                 <option value="COMPLETED">Completed</option>
                 <option value="WITHDRAWN">Withdrawn</option>
               </select>
+            </div>
+          )}
+
+          {isEdit && (
+            <div className="border border-amber-200 bg-amber-50/60 rounded-lg p-3 space-y-3">
+              <p className="text-xs uppercase text-amber-700 font-semibold">🏆 {milestoneLabel || 'Milestone'}</p>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="label">Date reached</label>
+                  <input type="date" value={milestoneAt} onChange={e => setMilestoneAt(e.target.value)} className="input-field" />
+                </div>
+                <div>
+                  <label className="label">Note (optional)</label>
+                  <input type="text" value={milestoneNote} onChange={e => setMilestoneNote(e.target.value)}
+                    className="input-field" placeholder="e.g. officiant, venue" />
+                </div>
+              </div>
+              <p className="text-xs text-amber-700/80">
+                Recording a date celebrates it on their journey page. Clear the date to un-record it.
+              </p>
             </div>
           )}
 
@@ -487,6 +513,24 @@ export default function TrackDetailPage() {
     fetchTrack();
   };
 
+  // Run 21 — cohort meetings on the Calendar
+  const addCohortToCalendar = async (cohort: Cohort) => {
+    if (!confirm(`Add "${cohort.name}" weekly meetings to the Calendar?\n\nOne meeting per core week, starting from the cohort start date, on the calendars of the facilitator and every enrolled member.`)) return;
+    const res = await fetch(`/api/tracks/${trackId}/cohorts/${cohort.id}/calendar`, { method: 'POST' });
+    const d = await res.json();
+    if (!res.ok) { alert(d.error || 'Failed to add meetings'); return; }
+    alert(`📅 Added ${d.occurrences} weekly meeting(s) to the Calendar${d.attendees ? ` (with copies for ${d.attendees} member${d.attendees !== 1 ? 's' : ''})` : ''}.`);
+    fetchTrack();
+  };
+
+  const removeCohortFromCalendar = async (cohort: Cohort) => {
+    if (!confirm(`Remove the "${cohort.name}" meeting series from the Calendar? This removes it for everyone.`)) return;
+    const res = await fetch(`/api/tracks/${trackId}/cohorts/${cohort.id}/calendar`, { method: 'DELETE' });
+    const d = await res.json();
+    if (!res.ok) { alert(d.error || 'Failed to remove meetings'); return; }
+    fetchTrack();
+  };
+
   if (loading) return <div className="fade-in text-center py-12 text-church-400">Loading track…</div>;
   if (!track) return (
     <div className="fade-in text-center py-12">
@@ -593,6 +637,9 @@ export default function TrackDetailPage() {
                         <td className="px-2 py-3 text-church-600">{e.cohort?.name || <span className="text-church-300">—</span>}</td>
                         <td className="px-2 py-3">
                           <span className={`badge ${STATUS_STYLES[e.status] || 'bg-gray-100 text-gray-500'}`}>{e.status}</span>
+                          {e.milestoneAt && (
+                            <span className="ml-1 cursor-default" title={`${track.milestoneLabel || 'Milestone'}: ${new Date(e.milestoneAt).toLocaleDateString(undefined, { timeZone: 'UTC' })}${e.milestoneNote ? ` — ${e.milestoneNote}` : ''}`}>🏆</span>
+                          )}
                         </td>
                         {track.modules.filter(isCoreModule).map(m => {
                           const done = e.progress.some(p => p.moduleId === m.id);
@@ -723,6 +770,15 @@ export default function TrackDetailPage() {
                           <button onClick={() => setAnnounceCohort(c)} title="Announcements (everyone in this cohort is emailed)"
                             className="p-1.5 text-church-400 hover:text-brand-500 hover:bg-brand-50 rounded-lg transition-colors text-sm">📣</button>
                         )}
+                        {canManageProgress && (
+                          c.calendarEventId ? (
+                            <button onClick={() => removeCohortFromCalendar(c)} title="Meetings are on the Calendar — click to remove the series"
+                              className="p-1.5 text-brand-500 bg-brand-50 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors text-sm">📅</button>
+                          ) : (
+                            <button onClick={() => addCohortToCalendar(c)} title="Add weekly meetings to the Calendar"
+                              className="p-1.5 text-church-400 hover:text-brand-500 hover:bg-brand-50 rounded-lg transition-colors text-sm">📅</button>
+                          )
+                        )}
                         {isAdmin && (
                           <>
                             <button onClick={() => setEditingCohort(c)}
@@ -755,6 +811,7 @@ export default function TrackDetailPage() {
       )}
       {editingEnrollment && (
         <EnrollmentModal trackId={trackId} enrollment={editingEnrollment} users={users} cohorts={track.cohorts}
+          milestoneLabel={track.milestoneLabel}
           onClose={() => setEditingEnrollment(null)}
           onSaved={() => { setEditingEnrollment(null); fetchTrack(); }} />
       )}

@@ -11,6 +11,10 @@
     {
       "path": "/api/cron/drip-executor",
       "schedule": "0 14 * * *"
+    },
+    {
+      "path": "/api/cron/track-nudges",
+      "schedule": "0 12 * * *"
     }
   ]
 }

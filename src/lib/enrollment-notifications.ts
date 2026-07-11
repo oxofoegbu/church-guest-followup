@@ -329,3 +329,65 @@ export async function sendAnnouncementEmails(params: {
   }
   return sent;
 }
+
+// --- Run 21: discipler nudge digest ------------------------------------------
+// One email per discipler listing their disciples who have gone quiet (no
+// module completed, no reflection saved for `nudgeDays` days). Sent by the
+// daily /api/cron/track-nudges job. Fire-safe; returns success so the caller
+// can decide whether to stamp lastNudgeAt.
+export type NudgeDisciple = {
+  name: string;
+  trackName: string;
+  progressLabel: string; // e.g. "3/12 weeks"
+  daysQuiet: number;
+};
+
+export async function sendDisciplerNudgeEmail(params: {
+  disciplerName: string;
+  disciplerEmail: string;
+  nudgeDays: number;
+  disciples: NudgeDisciple[];
+}): Promise<boolean> {
+  try {
+    const churchName = await getChurchName();
+    const myDisciplesUrl = `${appUrl()}/dashboard/my-disciples`;
+    const count = params.disciples.length;
+    const subject = count === 1
+      ? `🤝 ${params.disciples[0].name} may need a check-in — ${churchName}`
+      : `🤝 ${count} of your disciples may need a check-in — ${churchName}`;
+    const rows = params.disciples.map(d => `
+        <tr>
+          <td style="padding:8px 12px;border-bottom:1px solid #EDE6D8;"><strong>${esc(d.name)}</strong></td>
+          <td style="padding:8px 12px;border-bottom:1px solid #EDE6D8;">${esc(d.trackName)}</td>
+          <td style="padding:8px 12px;border-bottom:1px solid #EDE6D8;">${esc(d.progressLabel)}</td>
+          <td style="padding:8px 12px;border-bottom:1px solid #EDE6D8;">${d.daysQuiet} day${d.daysQuiet !== 1 ? 's' : ''} quiet</td>
+        </tr>`).join('');
+    const html = `
+      <div style="font-family: Georgia, serif; max-width: 560px; color:#2A2622;">
+        <p>Hi ${esc(params.disciplerName)},</p>
+        <p>${count === 1 ? 'One of the people you are walking with hasn’t' : 'Some of the people you are walking with haven’t'}
+        moved forward in their track for ${params.nudgeDays}+ days. A short call or message from you could be
+        exactly the encouragement they need this week:</p>
+        <table style="border-collapse:collapse;width:100%;font-size:14px;margin:16px 0;">
+          <tr>
+            <th style="text-align:left;padding:8px 12px;border-bottom:2px solid #B0894F;">Disciple</th>
+            <th style="text-align:left;padding:8px 12px;border-bottom:2px solid #B0894F;">Track</th>
+            <th style="text-align:left;padding:8px 12px;border-bottom:2px solid #B0894F;">Progress</th>
+            <th style="text-align:left;padding:8px 12px;border-bottom:2px solid #B0894F;">Last activity</th>
+          </tr>${rows}
+        </table>
+        <p style="margin:20px 0;"><a href="${myDisciplesUrl}" style="background:#1F3A5F;color:#FBF7EF;padding:11px 20px;border-radius:8px;text-decoration:none;">Open 🤝 My Disciples</a></p>
+        <p style="color:#6b7280;font-size:13px;">You are receiving this because you are their discipler. This reminder repeats at most once every ${params.nudgeDays} days per disciple; an admin can adjust or turn it off in Settings.</p>
+        <p style="color:#6b7280;font-size:13px;">${esc(churchName)}</p>
+      </div>`;
+    const result = await sendEmailViaResend(params.disciplerEmail, subject, html);
+    if (result.error) {
+      console.error(`sendDisciplerNudgeEmail to ${params.disciplerEmail} failed:`, result.error);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error('sendDisciplerNudgeEmail failed:', err);
+    return false;
+  }
+}

@@ -44,6 +44,7 @@ function shape(enrollment: any, churchName: string) {
     status: enrollment.status,
     startedAt: enrollment.startedAt,
     completedAt: enrollment.completedAt,
+    milestoneAt: enrollment.milestoneAt, // Run 21 — milestoneNote stays admin-side
     track: {
       name: enrollment.track.name,
       description: enrollment.track.description,

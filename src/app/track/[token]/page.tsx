@@ -9,6 +9,7 @@ type Portal = {
   churchName: string;
   participantFirstName: string;
   status: string;
+  milestoneAt?: string | null; // Run 21 — recorded milestone (baptism / commissioning / …)
   track: {
     name: string; description: string | null;
     milestoneLabel: string | null; workbookUrl: string | null;
@@ -155,9 +156,16 @@ export default function TrackPortalPage() {
             </div>
             <span className="text-sm font-semibold text-church-700">{doneCount}/{total} weeks</span>
           </div>
-          {allDone && !isCompleted && portal.track.milestoneLabel && (
+          {allDone && !isCompleted && portal.track.milestoneLabel && !portal.milestoneAt && (
             <div className="mt-4 text-sm text-brand-700 bg-brand-50 border border-brand-200 rounded-lg px-4 py-3">
               🏁 You finished every week! Next step: <span className="font-semibold">{portal.track.milestoneLabel}</span> — your discipler will share the details.
+            </div>
+          )}
+          {/* Run 21 — recorded milestone celebration */}
+          {portal.milestoneAt && (
+            <div className="mt-4 text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
+              🏆 <span className="font-semibold">{portal.track.milestoneLabel || 'Milestone'}</span>
+              {' '}— {new Date(portal.milestoneAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}. We celebrate this step with you! 🎉
             </div>
           )}
         </div>

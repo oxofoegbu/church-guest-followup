@@ -9,7 +9,8 @@ import { auditSettingsChanged } from '@/lib/audit';
 const PUBLIC_KEYS = ['target_config', 'custom_roles', 'schedule_coordinators', 'church_name'];
 
 // Keys only admins can read
-const ADMIN_KEYS  = ['notify_emails', 'notify_whatsapp', 'notify_on_new_guest', 'notify_on_assignment', 'summary_emails', 'summary_whatsapp'];
+// Run 21: track_nudge_enabled / track_nudge_days — discipler nudge cron config
+const ADMIN_KEYS  = ['notify_emails', 'notify_whatsapp', 'notify_on_new_guest', 'notify_on_assignment', 'summary_emails', 'summary_whatsapp', 'track_nudge_enabled', 'track_nudge_days'];
 
 // All writable keys (admin only)
 const WRITABLE_KEYS = [...PUBLIC_KEYS, ...ADMIN_KEYS];
