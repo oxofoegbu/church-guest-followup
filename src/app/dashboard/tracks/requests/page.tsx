@@ -33,6 +33,11 @@ const AUDIENCE_LABELS: Record<string, string> = {
   RETURNING: "I'm coming back after a while",
   MEMBER: "I'm a member wanting to re-anchor",
   EXPLORING: "I'm just exploring \u2014 not sure yet",
+  // Run 24 -- /become page audiences
+  WELCOME_GRAD: "I've completed the Welcome Track",
+  GLC_MEMBER: "I'm a Grace Life Center member / regular",
+  OTHER_CHURCH: "I'm part of another church family",
+  NEW_TO_FAITH: "I'm fairly new to all of this",
 };
 
 const WELCOME_SLUG = 'welcome-track';

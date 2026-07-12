@@ -23,10 +23,16 @@ export async function POST(request: NextRequest) {
     if (!parsed.success) {
       return NextResponse.json({ error: 'Please fill in your first name, last name, and a valid email.' }, { status: 400 });
     }
+    // Honeypot (Run 24): bots fill it, humans never see it -- fake success
+    if (parsed.data.website && parsed.data.website.trim() !== '') {
+      return NextResponse.json({ requiresVerification: true, requestId: 'ok' });
+    }
     const { trackId, firstName, lastName } = parsed.data;
     const email = parsed.data.email.toLowerCase();
     const phone = parsed.data.phone?.trim() || null;
     const cohortId = parsed.data.cohortId || null;
+    const audience = parsed.data.audience || null;
+    const shareNote = parsed.data.shareNote?.trim() || null;
 
     // Opportunistic sweep of stale unverified rows (no cron needed)
     await (prisma as any).enrollmentRequest.deleteMany({
@@ -109,7 +115,7 @@ export async function POST(request: NextRequest) {
         // Update details but keep the current code — it was just emailed
         await (prisma as any).enrollmentRequest.update({
           where: { id: unverified.id },
-          data: { firstName, lastName, phone, cohortId: cohort?.id || null, matchedUserId: matchedUser?.id || null },
+          data: { firstName, lastName, phone, cohortId: cohort?.id || null, matchedUserId: matchedUser?.id || null, audience, shareNote },
         });
         return NextResponse.json({ requiresVerification: true, requestId: unverified.id, resent: false });
       }
@@ -121,6 +127,7 @@ export async function POST(request: NextRequest) {
           firstName, lastName, phone,
           cohortId: cohort?.id || null,
           matchedUserId: matchedUser?.id || null,
+          audience, shareNote,
           verifyCodeHash: hashOtpCode(unverified.id, code),
           verifyExpiresAt: new Date(now + OTP_TTL_MS),
           verifySentAt: new Date(now),
@@ -142,6 +149,7 @@ export async function POST(request: NextRequest) {
         cohortId: cohort?.id || null,
         firstName, lastName, email, phone,
         matchedUserId: matchedUser?.id || null,
+        audience, shareNote,
         status: 'UNVERIFIED',
       },
       select: { id: true },

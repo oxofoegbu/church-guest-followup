@@ -13,6 +13,11 @@ export const enrollRequestSchema = z.object({
   lastName: z.string().trim().min(1).max(80),
   email: z.string().trim().email().max(200),
   phone: z.string().trim().max(40).optional().or(z.literal('')),
+  // Run 24 -- optional extras sent by the /become landing page (the DB
+  // columns have existed since Run 19; /enroll's own form simply omits them)
+  audience: z.enum(['WELCOME_GRAD', 'GLC_MEMBER', 'OTHER_CHURCH', 'NEW_TO_FAITH']).nullable().optional(),
+  shareNote: z.string().trim().max(1000).optional().or(z.literal('')),
+  website: z.string().optional(), // honeypot -- humans never fill this
 });
 
 // Readable temporary password, e.g. "Harvest-K7RM4XPT".
@@ -48,6 +53,7 @@ export function hashOtpCode(requestId: string, code: string): string {
 // The Welcome Track deliberately has its own warmer public flow, separate
 // from /enroll (which stays Become & Leaders only).
 export const WELCOME_TRACK_SLUG = 'welcome-track';
+export const BECOME_TRACK_SLUG = 'become';
 
 // "Which best describes you?" options -- stored as codes on
 // EnrollmentRequest.audience, rendered with these labels.
@@ -58,9 +64,22 @@ export const BEGIN_AUDIENCES: { code: string; label: string }[] = [
   { code: 'EXPLORING', label: "I'm just exploring \u2014 not sure yet" },
 ];
 
+// Run 24 -- "Where are you on the path?" options for the /become page.
+// Same EnrollmentRequest.audience column; disjoint code set.
+export const BECOME_AUDIENCES: { code: string; label: string }[] = [
+  { code: 'WELCOME_GRAD', label: "I've completed the Welcome Track" },
+  { code: 'GLC_MEMBER', label: "I'm a Grace Life Center member / regular" },
+  { code: 'OTHER_CHURCH', label: "I'm part of another church family" },
+  { code: 'NEW_TO_FAITH', label: "I'm fairly new to all of this" },
+];
+
 export function beginAudienceLabel(code?: string | null): string | null {
   if (!code) return null;
-  return BEGIN_AUDIENCES.find(a => a.code === code)?.label || null;
+  return (
+    BEGIN_AUDIENCES.find(a => a.code === code)?.label ||
+    BECOME_AUDIENCES.find(a => a.code === code)?.label ||
+    null
+  );
 }
 
 // Begin form: warmer and leaner than /enroll -- last name is optional
