@@ -5,9 +5,15 @@ import { WELCOME_TRACK_SLUG } from '@/lib/enroll';
 // Run 19 — public, read-only. Serves the /begin page: the Welcome Track's
 // active cohorts (for the gentle "When would you like to begin?" question)
 // and the church name. Exposes the minimum needed to render the page.
+// Run 22 — always the NEXT 3 cohorts: ACTIVE cohorts that start today or
+// later (undated cohorts allowed, listed last), soonest first, capped at 3 —
+// so the picker never floods when a whole year of cohorts is planned ahead.
 
 export async function GET() {
   try {
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+
     const [churchSetting, track] = await Promise.all([
       prisma.appSetting.findUnique({ where: { key: 'church_name' } }),
       (prisma as any).track.findFirst({
@@ -16,8 +22,12 @@ export async function GET() {
           id: true,
           name: true,
           cohorts: {
-            where: { status: 'ACTIVE' },
-            orderBy: [{ startDate: 'asc' }, { name: 'asc' }],
+            where: {
+              status: 'ACTIVE',
+              OR: [{ startDate: { gte: today } }, { startDate: null }],
+            },
+            orderBy: [{ startDate: { sort: 'asc', nulls: 'last' } }, { name: 'asc' }],
+            take: 3,
             select: { id: true, name: true, meetingDay: true, meetingTime: true, startDate: true },
           },
         },

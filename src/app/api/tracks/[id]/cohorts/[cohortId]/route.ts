@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { requireAuth, handleAuthError } from '@/lib/auth';
+import { normalizeSessionPlan, planStartDate } from '@/lib/cohort-sessions';
 
 // PATCH /api/tracks/[id]/cohorts/[cohortId] — edit a cohort (admin only)
+// Run 22: sessionPlan is editable. Sending a non-empty array sets a custom
+// plan (and derives startDate from its first session); sending [] or null
+// clears it back to weekly mode (stored as [] — every consumer treats [] and
+// null identically). Omitting the key leaves it untouched.
 export async function PATCH(request: NextRequest, { params }: { params: { id: string; cohortId: string } }) {
   try {
     await requireAuth(request, ['ADMIN']);
@@ -17,6 +22,16 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     if (body.meetingTime !== undefined) data.meetingTime = body.meetingTime?.trim() || null;
     if (body.facilitatorUserId !== undefined) data.facilitatorUserId = body.facilitatorUserId || null;
     if (body.status !== undefined) data.status = body.status;
+    if (body.sessionPlan !== undefined) {
+      const normalized = normalizeSessionPlan(body.sessionPlan);
+      if (normalized.error) return NextResponse.json({ error: normalized.error }, { status: 400 });
+      if (normalized.plan) {
+        data.sessionPlan = normalized.plan;
+        data.startDate = planStartDate(normalized.plan); // keep pickers truthful
+      } else {
+        data.sessionPlan = []; // back to weekly mode ([] ≡ no plan everywhere)
+      }
+    }
 
     const cohort = await (prisma as any).trackCohort.update({
       where: { id: params.cohortId },

@@ -544,6 +544,13 @@ model TrackCohort {
   // Run 21 — id of the parent ActionItem when this cohort's weekly meetings
   // have been placed on the Calendar (null = not on the calendar).
   calendarEventId   String?
+  // Run 22 — optional custom session plan. When set (non-empty array), the
+  // cohort meets on these explicit dates instead of a weekly rhythm, and a
+  // single session may cover more than one module week (double sessions).
+  // Shape: [{ date: "YYYY-MM-DD", time: "HH:MM"|null, weeks: number[], label: string|null }]
+  // null and [] both mean "weekly mode" — consumers only test length > 0.
+  // Validation/normalization lives in src/lib/cohort-sessions.ts.
+  sessionPlan       Json?
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
 

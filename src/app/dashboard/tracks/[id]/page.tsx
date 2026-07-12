@@ -7,10 +7,12 @@ import { getPermissionLevel } from '@/lib/roles';
 import AnnouncementsModal from '@/components/AnnouncementsModal'; // Run 20
 
 type Module = { id: string; weekNumber: number; title: string; summary: string | null; kind?: string };
+type CohortPlanSession = { date: string; time: string | null; weeks: number[]; label: string | null }; // Run 22
 type Cohort = {
   id: string; name: string; startDate: string | null;
   meetingDay: string | null; meetingTime: string | null; status: string;
   calendarEventId: string | null; // Run 21 — set when meetings are on the Calendar
+  sessionPlan: CohortPlanSession[] | null; // Run 22 — custom session plan (null/empty = weekly)
   facilitator: { id: string; name: string } | null;
   _count: { enrollments: number };
 };
@@ -47,6 +49,16 @@ function participantName(e: Enrollment) {
 // appear as progress columns and count toward completion.
 function isCoreModule(m: Module) {
   return !m.kind || m.kind === 'CORE';
+}
+
+// Run 22 — the next upcoming session date of a custom-schedule cohort.
+function nextSessionLabel(c: Cohort): string {
+  if (!c.sessionPlan || c.sessionPlan.length === 0) return '';
+  const today = new Date().toISOString().slice(0, 10);
+  const next = c.sessionPlan.filter(s => s.date >= today)[0];
+  if (!next) return '';
+  const d = new Date(`${next.date}T00:00:00Z`);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
 }
 
 // ─── Module modal ────────────────────────────────────────────────
@@ -119,24 +131,83 @@ function ModuleModal({ trackId, module: mod, nextWeek, onClose, onSaved }: {
 }
 
 // ─── Cohort modal ────────────────────────────────────────────────
-function CohortModal({ trackId, cohort, users, onClose, onSaved }: {
-  trackId: string; cohort?: Cohort; users: any[]; onClose: () => void; onSaved: () => void;
+// Run 22 — a cohort can meet on a WEEKLY rhythm (start date + day + time,
+// one module a week — the original behavior) or on a CUSTOM session plan:
+// explicit dates, each session covering one or more module weeks (a long
+// Saturday can cover Weeks 3 & 4 at once).
+type SessionRow = { date: string; time: string; weeks: number[]; label: string };
+
+function CohortModal({ trackId, cohort, users, modules, onClose, onSaved }: {
+  trackId: string; cohort?: Cohort; users: any[]; modules: Module[]; onClose: () => void; onSaved: () => void;
 }) {
   const isEdit = !!cohort;
+  const coreWeeks = modules.filter(isCoreModule).map(m => m.weekNumber).sort((a, b) => a - b);
+  const existingPlan = cohort?.sessionPlan && cohort.sessionPlan.length > 0 ? cohort.sessionPlan : null;
   const [name, setName] = useState(cohort?.name || '');
   const [startDate, setStartDate] = useState(cohort?.startDate ? cohort.startDate.slice(0, 10) : '');
   const [meetingDay, setMeetingDay] = useState(cohort?.meetingDay || '');
   const [meetingTime, setMeetingTime] = useState(cohort?.meetingTime || '');
   const [facilitatorUserId, setFacilitatorUserId] = useState(cohort?.facilitator?.id || '');
   const [status, setStatus] = useState(cohort?.status || 'ACTIVE');
+  const [mode, setMode] = useState<'WEEKLY' | 'CUSTOM'>(existingPlan ? 'CUSTOM' : 'WEEKLY');
+  const [sessions, setSessions] = useState<SessionRow[]>(
+    existingPlan
+      ? existingPlan.map(s => ({ date: s.date, time: s.time || '', weeks: s.weeks || [], label: s.label || '' }))
+      : [],
+  );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
+  const coveredSet = new Set<number>();
+  sessions.forEach(s => s.weeks.forEach(w => coveredSet.add(w)));
+  const uncovered = coreWeeks.filter(w => !coveredSet.has(w));
+
+  const addSession = () => {
+    setSessions(prev => {
+      const last = prev.length > 0 ? prev[prev.length - 1] : null;
+      let date = '';
+      if (last && last.date) {
+        const d = new Date(`${last.date}T00:00:00Z`);
+        if (!isNaN(d.getTime())) {
+          d.setUTCDate(d.getUTCDate() + 7);
+          date = d.toISOString().slice(0, 10);
+        }
+      }
+      const already = new Set<number>();
+      prev.forEach(s => s.weeks.forEach(w => already.add(w)));
+      const remaining = coreWeeks.filter(w => !already.has(w));
+      const nextWeeks = remaining.length > 0 ? [remaining[0]] : ([] as number[]);
+      return [...prev, { date, time: last ? last.time : meetingTime || '', weeks: nextWeeks, label: '' }];
+    });
+  };
+  const updateSession = (i: number, patch: Partial<SessionRow>) => {
+    setSessions(prev => prev.map((s, idx) => (idx === i ? { ...s, ...patch } : s)));
+  };
+  const removeSession = (i: number) => setSessions(prev => prev.filter((_, idx) => idx !== i));
+  const toggleWeek = (i: number, w: number) => {
+    setSessions(prev => prev.map((s, idx) => {
+      if (idx !== i) return s;
+      const weeks = s.weeks.indexOf(w) !== -1
+        ? s.weeks.filter(x => x !== w)
+        : [...s.weeks, w].sort((a, b) => a - b);
+      return { ...s, weeks };
+    }));
+  };
+
   const handleSave = async () => {
     if (!name.trim()) { setError('Cohort name is required'); return; }
+    if (mode === 'CUSTOM') {
+      if (sessions.length === 0) { setError('Add at least one session, or switch back to a weekly rhythm'); return; }
+      for (let i = 0; i < sessions.length; i++) {
+        if (!sessions[i].date) { setError(`Session ${i + 1} needs a date`); return; }
+      }
+    }
     setSaving(true); setError('');
     try {
-      const payload = { name, startDate: startDate || null, meetingDay, meetingTime, facilitatorUserId, status };
+      const sessionPlan = mode === 'CUSTOM'
+        ? sessions.map(s => ({ date: s.date, time: s.time || null, weeks: s.weeks, label: s.label.trim() || null }))
+        : []; // [] clears any previous plan → back to weekly mode
+      const payload = { name, startDate: startDate || null, meetingDay, meetingTime, facilitatorUserId, status, sessionPlan };
       const res = isEdit
         ? await fetch(`/api/tracks/${trackId}/cohorts/${cohort!.id}`, {
             method: 'PATCH', headers: { 'Content-Type': 'application/json' },
@@ -155,7 +226,7 @@ function CohortModal({ trackId, cohort, users, onClose, onSaved }: {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-2xl">
           <h2 className="text-lg font-bold text-church-900">{isEdit ? '✏️ Edit Cohort' : '🧑‍🤝‍🧑 New Cohort'}</h2>
           <button onClick={onClose} className="text-church-400 hover:text-church-600 p-1">✕</button>
@@ -166,32 +237,103 @@ function CohortModal({ trackId, cohort, users, onClose, onSaved }: {
             <input type="text" value={name} onChange={e => setName(e.target.value)}
               className="input-field" placeholder="e.g. Fall 2026 Evening Group" />
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="label">Start Date</label>
-              <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} className="input-field" />
-            </div>
-            <div>
-              <label className="label">Meeting Day</label>
-              <select value={meetingDay} onChange={e => setMeetingDay(e.target.value)} className="select-field">
-                <option value="">— None —</option>
-                {WEEKDAYS.map(d => <option key={d} value={d}>{d}</option>)}
-              </select>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="label">Meeting Time</label>
-              <input type="time" value={meetingTime} onChange={e => setMeetingTime(e.target.value)} className="input-field" />
-            </div>
-            <div>
-              <label className="label">Facilitator</label>
-              <select value={facilitatorUserId} onChange={e => setFacilitatorUserId(e.target.value)} className="select-field">
-                <option value="">— None —</option>
-                {users.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
-              </select>
+
+          <div>
+            <label className="label">Schedule</label>
+            <div className="grid grid-cols-2 gap-2">
+              <button type="button" onClick={() => setMode('WEEKLY')}
+                className={`px-3 py-2 rounded-xl border text-left text-sm font-medium transition-colors ${mode === 'WEEKLY' ? 'border-brand-500 bg-brand-50 text-brand-700' : 'border-gray-200 text-church-500 hover:border-gray-300'}`}>
+                🔁 Weekly rhythm
+                <span className="block text-xs font-normal opacity-70">Same day &amp; time, one module a week</span>
+              </button>
+              <button type="button" onClick={() => { setMode('CUSTOM'); if (sessions.length === 0) addSession(); }}
+                className={`px-3 py-2 rounded-xl border text-left text-sm font-medium transition-colors ${mode === 'CUSTOM' ? 'border-brand-500 bg-brand-50 text-brand-700' : 'border-gray-200 text-church-500 hover:border-gray-300'}`}>
+                🗓️ Custom sessions
+                <span className="block text-xs font-normal opacity-70">Exact dates — one session can cover two modules</span>
+              </button>
             </div>
           </div>
+
+          {mode === 'WEEKLY' && (
+            <>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="label">Start Date</label>
+                  <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} className="input-field" />
+                </div>
+                <div>
+                  <label className="label">Meeting Day</label>
+                  <select value={meetingDay} onChange={e => setMeetingDay(e.target.value)} className="select-field">
+                    <option value="">— None —</option>
+                    {WEEKDAYS.map(d => <option key={d} value={d}>{d}</option>)}
+                  </select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="label">Meeting Time</label>
+                  <input type="time" value={meetingTime} onChange={e => setMeetingTime(e.target.value)} className="input-field" />
+                </div>
+                <div>
+                  <label className="label">Facilitator</label>
+                  <select value={facilitatorUserId} onChange={e => setFacilitatorUserId(e.target.value)} className="select-field">
+                    <option value="">— None —</option>
+                    {users.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+                  </select>
+                </div>
+              </div>
+            </>
+          )}
+
+          {mode === 'CUSTOM' && (
+            <>
+              <div className="space-y-3">
+                {sessions.map((s, i) => (
+                  <div key={i} className="border border-gray-200 rounded-xl p-3 space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-semibold text-church-400 w-6 shrink-0">#{i + 1}</span>
+                      <input type="date" value={s.date} onChange={e => updateSession(i, { date: e.target.value })} className="input-field flex-1" />
+                      <input type="time" value={s.time} onChange={e => updateSession(i, { time: e.target.value })} className="input-field w-28" />
+                      <button onClick={() => removeSession(i)} title="Remove this session"
+                        className="p-1.5 text-church-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors text-sm shrink-0">🗑️</button>
+                    </div>
+                    {coreWeeks.length > 0 && (
+                      <div className="flex flex-wrap items-center gap-1">
+                        <span className="text-xs text-church-400 mr-1">Covers:</span>
+                        {coreWeeks.map(w => (
+                          <button key={w} type="button" onClick={() => toggleWeek(i, w)}
+                            className={`px-2 py-0.5 rounded-full text-xs font-medium border transition-colors ${s.weeks.indexOf(w) !== -1 ? 'bg-brand-500 border-brand-500 text-white' : 'bg-white border-gray-300 text-church-500 hover:border-brand-400'}`}>
+                            W{w}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    <input type="text" value={s.label} onChange={e => updateSession(i, { label: e.target.value })}
+                      className="input-field text-sm" placeholder="Optional label — e.g. Double session, Retreat day" maxLength={120} />
+                  </div>
+                ))}
+                <button type="button" onClick={addSession} className="btn-secondary btn-sm w-full">+ Add session</button>
+                {sessions.length > 0 && uncovered.length > 0 && (
+                  <p className="text-xs text-amber-600">⚠️ Not covered by any session yet: {uncovered.map(w => `W${w}`).join(', ')}</p>
+                )}
+                <p className="text-xs text-church-400">The cohort start date comes from your first session. A session with two weeks selected is a double session.</p>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="label">Default Time <span className="font-normal text-church-400">(fallback)</span></label>
+                  <input type="time" value={meetingTime} onChange={e => setMeetingTime(e.target.value)} className="input-field" />
+                </div>
+                <div>
+                  <label className="label">Facilitator</label>
+                  <select value={facilitatorUserId} onChange={e => setFacilitatorUserId(e.target.value)} className="select-field">
+                    <option value="">— None —</option>
+                    {users.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+                  </select>
+                </div>
+              </div>
+            </>
+          )}
+
           {isEdit && (
             <div>
               <label className="label">Status</label>
@@ -515,7 +657,10 @@ export default function TrackDetailPage() {
 
   // Run 21 — cohort meetings on the Calendar
   const addCohortToCalendar = async (cohort: Cohort) => {
-    if (!confirm(`Add "${cohort.name}" weekly meetings to the Calendar?\n\nOne meeting per core week, starting from the cohort start date, on the calendars of the facilitator and every enrolled member.`)) return;
+    const isCustomPlan = !!(cohort.sessionPlan && cohort.sessionPlan.length > 0);
+    if (!confirm(isCustomPlan
+      ? `Add "${cohort.name}" planned sessions to the Calendar?\n\nOne meeting per planned session, on its exact date, on the calendars of the facilitator and every enrolled member.`
+      : `Add "${cohort.name}" weekly meetings to the Calendar?\n\nOne meeting per core week, starting from the cohort start date, on the calendars of the facilitator and every enrolled member.`)) return;
     const res = await fetch(`/api/tracks/${trackId}/cohorts/${cohort.id}/calendar`, { method: 'POST' });
     const d = await res.json();
     if (!res.ok) { alert(d.error || 'Failed to add meetings'); return; }
@@ -790,7 +935,11 @@ export default function TrackDetailPage() {
                       </div>
                     </div>
                     <div className="text-sm text-church-500 space-y-1">
-                      {c.meetingDay && <p>📅 {c.meetingDay}{c.meetingTime ? ` at ${c.meetingTime}` : ''}</p>}
+                      {c.sessionPlan && c.sessionPlan.length > 0 ? (
+                        <p>🗓️ {c.sessionPlan.length} planned session{c.sessionPlan.length !== 1 ? 's' : ''} · custom schedule{nextSessionLabel(c) ? ` · next: ${nextSessionLabel(c)}` : ''}</p>
+                      ) : (
+                        c.meetingDay && <p>📅 {c.meetingDay}{c.meetingTime ? ` at ${c.meetingTime}` : ''}</p>
+                      )}
                       {c.startDate && <p>🚀 Started {new Date(c.startDate).toLocaleDateString()}</p>}
                       {c.facilitator && <p>🧭 Facilitator: {c.facilitator.name}</p>}
                       <p>👥 {c._count.enrollments} participant{c._count.enrollments !== 1 ? 's' : ''}</p>
@@ -827,12 +976,12 @@ export default function TrackDetailPage() {
           onSaved={() => { setEditingModule(null); fetchTrack(); }} />
       )}
       {showAddCohort && (
-        <CohortModal trackId={trackId} users={users}
+        <CohortModal trackId={trackId} users={users} modules={track.modules}
           onClose={() => setShowAddCohort(false)}
           onSaved={() => { setShowAddCohort(false); fetchTrack(); }} />
       )}
       {editingCohort && (
-        <CohortModal trackId={trackId} cohort={editingCohort} users={users}
+        <CohortModal trackId={trackId} cohort={editingCohort} users={users} modules={track.modules}
           onClose={() => setEditingCohort(null)}
           onSaved={() => { setEditingCohort(null); fetchTrack(); }} />
       )}
