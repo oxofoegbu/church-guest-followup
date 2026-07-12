@@ -69,7 +69,7 @@ function cohortLabel(c: Cohort): string {
   if (c.meetingTime) meet.push(`at ${c.meetingTime}`);
   if (c.startDate) {
     const d = new Date(c.startDate);
-    meet.push(`· starts ${d.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}`);
+    meet.push(`· starts ${d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' })}`);
   }
   if (meet.length) parts.push(`— ${meet.join(' ')}`);
   return parts.join(' ');

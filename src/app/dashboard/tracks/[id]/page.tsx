@@ -940,7 +940,7 @@ export default function TrackDetailPage() {
                       ) : (
                         c.meetingDay && <p>📅 {c.meetingDay}{c.meetingTime ? ` at ${c.meetingTime}` : ''}</p>
                       )}
-                      {c.startDate && <p>🚀 Started {new Date(c.startDate).toLocaleDateString()}</p>}
+                      {c.startDate && <p>🚀 Started {new Date(c.startDate).toLocaleDateString(undefined, { timeZone: 'UTC' })}</p>}
                       {c.facilitator && <p>🧭 Facilitator: {c.facilitator.name}</p>}
                       <p>👥 {c._count.enrollments} participant{c._count.enrollments !== 1 ? 's' : ''}</p>
                     </div>
