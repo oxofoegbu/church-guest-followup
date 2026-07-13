@@ -60,11 +60,40 @@ module.exports = {
           900: '#754621',
           950: '#3f230f',
         },
+        // Run 30 — Grace Life Center public website ("the well") design tokens.
+        // Namespaced under `site` so the marketing pages share one palette
+        // without touching the app's brand/church/sage/warm scales.
+        site: {
+          cream:    '#FBF7EF',
+          cream2:   '#F5EEE0',
+          paper:    '#FFFDF8',
+          ink:      '#2A2622',
+          soft:     '#6A6157',
+          brass:    '#B0894F',
+          brassdk:  '#7C5C2E', // small-label gold; darkened from #8C6A38 to clear WCAG AA (≥4.5:1) on cream
+
+          umber:    '#33201A',
+          ember:    '#A63D1F',
+          emberdk:  '#8F3418', // primary-button hover
+          evergreen:'#3E5A34',
+          forest:   '#1F2A1D',
+          navy:     '#16233B',
+          navy2:    '#1F3A5F',
+          well:     '#17343D',
+          welllt:   '#1E4650',
+          clay:     '#EBDCCB',
+          claydk:   '#DCC9B0',
+          gold:     '#E7CF9E', // eyebrow / kicker on dark
+          footer:   '#241611', // footer umber
+        },
       },
       fontFamily: {
         display: ['Georgia', 'Cambria', 'serif'],
         body: ['system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
         mono: ['ui-monospace', 'SFMono-Regular', 'monospace'],
+        // Run 30 — website faces (loaded via next/font in the (site) layout).
+        fraunces: ['var(--font-fraunces)', 'Fraunces', 'Georgia', 'serif'],
+        inter:    ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
       },
     },
   },
