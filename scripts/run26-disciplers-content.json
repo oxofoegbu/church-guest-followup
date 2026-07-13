@@ -1,0 +1,2245 @@
+{
+  "track": "trk_disciplers",
+  "trackCreate": {
+    "name": "Disciplers Track",
+    "slug": "disciplers",
+    "ordering": 4,
+    "milestoneLabel": "Commissioned as Discipler",
+    "description": "Friendship with a vision — a ten-week training and commissioning journey for those called to walk one-on-one with others through Welcome, Become®, and Leaders."
+  },
+  "modules": [
+    {
+      "id": "dis_m0",
+      "weekNumber": 0,
+      "kind": "INTRO",
+      "title": "Orientation: The Invitation, the Covenant & Where I Am Today",
+      "summary": "Becoming honest about the call, the cost, and my starting point — before I take one step.",
+      "content": {
+        "version": 1,
+        "blocks": [
+          {
+            "type": "heading",
+            "text": "Welcome to the Disciplers Track",
+            "subtitle": "A Ten-Week Journey Into Walking With Others"
+          },
+          {
+            "type": "quote",
+            "text": "“Someone walked with you. Now walk with someone — and carry heaven with you as you go.”"
+          },
+          {
+            "type": "paragraph",
+            "text": "Welcome — and thank you for saying yes to the conversation that brought you here."
+          },
+          {
+            "type": "paragraph",
+            "text": "You are holding this workbook because somebody saw something: Jesus, forming in you. Maybe it was your discipler, maybe a pastor, maybe a cohort leader — but someone watched you walk the path and believed you were ready to walk it with another person. That is what a discipler is. Not a counselor. Not a professor. Not a super-Christian. A friend with a vision — someone who keeps company with one person while Jesus does what only Jesus can do."
+          },
+          {
+            "type": "paragraph",
+            "text": "Let us say the most important thing first: you will not feel qualified. Nobody ever does. The first disciples were “uneducated and untrained men,” and the only credential anyone could find on them was this: “they had been with Jesus” (Acts 4:13). That is still the whole qualification. If you can pray, read a verse, and tell the truth about your own journey, Jesus can use you to walk with someone."
+          },
+          {
+            "type": "paragraph",
+            "text": "Over the next ten weeks (plus this orientation) we will settle the gospel we carry, the grace we carry it with, and the friendship that carries it — and we will train, practically, in the craft of walking with one person: how to meet, how to listen, how to ask, how to pray, how to handle hard weeks, and how to hand the whole thing on. At the end you will be commissioned as a Discipler of Grace Life Center, and entrusted with one person. You will never carry them alone."
+          },
+          {
+            "type": "paragraph",
+            "text": "Come honestly. Bring your fears — they are welcome here, and most of them are shared by everyone in the room."
+          },
+          {
+            "type": "paragraph",
+            "text": "— Pastor Okezie Ofoegbu, Senior Pastor, Grace Life Center"
+          },
+          {
+            "type": "heading",
+            "text": "Orientation: The Invitation, the Covenant & Where I Am Today"
+          },
+          {
+            "type": "bigIdea",
+            "text": "Becoming honest about the call, the cost, and my starting point — before I take one step."
+          },
+          {
+            "type": "subheading",
+            "text": "Overview"
+          },
+          {
+            "type": "paragraph",
+            "text": "This short module does three things: it tells you plainly what you are saying yes to, it invites you to put that yes in writing (a covenant), and it asks you to take an honest “before” picture of yourself as a discipler. At the end of the track you will take the same picture again — and you will be able to see what Jesus has done."
+          },
+          {
+            "type": "heading",
+            "text": "What You Are Saying Yes To"
+          },
+          {
+            "type": "paragraph",
+            "text": "The shape of the next ten weeks is simple: one module each week (like this one — read it at your own pace in the app), one gathering each week with your fellow trainees, and one growing conviction — that walking with one person is worth giving your life to."
+          },
+          {
+            "type": "paragraph",
+            "text": "The expectations are the same ones we will one day ask you to model for your disciple: come prepared (work the module before the gathering); show up (formation happens in rhythm); hold confidence (what is shared in the room stays in the room, without exception); listen actively (especially when you disagree); and stay honest — no pretending, no performing."
+          },
+          {
+            "type": "heading",
+            "text": "The Illustration: The Borrowed Coat"
+          },
+          {
+            "type": "paragraph",
+            "text": "A young man once told his grandfather he could not be a discipler because he “didn’t have enough to give.” The old man took off his own coat, hung it on the young man’s shoulders, and said: “I have never once kept you warm with my own heat. I just kept handing you what was handed to me.”"
+          },
+          {
+            "type": "paragraph",
+            "text": "That is this whole track in one picture. Nothing you will give your disciple originates with you — not the gospel, not the grace, not the wisdom. You hand on a coat that was hung on your shoulders by someone who got it from Someone else. “Freely you have received, freely give” (Matthew 10:8)."
+          },
+          {
+            "type": "heading",
+            "text": "A Covenant, Not a Course Registration"
+          },
+          {
+            "type": "paragraph",
+            "text": "We will ask you to sign the Discipler Covenant below — not because we expect perfection, but because we understand how to walk in the grace of God while taking a commitment seriously. A covenant is never coerced; it is always chosen. Read it slowly. If you are not ready, talk to your cohort leader first — that conversation is welcome, not awkward."
+          },
+          {
+            "type": "prayer",
+            "title": "The Discipler Covenant",
+            "text": "Spoken to Jesus, in the presence of my fellow trainees, by my own free choice:\n\n▪ Jesus, I accept the invitation. Someone walked with me; I will learn to walk with another — not in my own strength, but in Yours.\n\n▪ I will prepare. I will complete each module before we gather, honestly and prayerfully.\n\n▪ I will show up. I will make every effort to be present for all our gatherings, and for my disciple after commissioning.\n\n▪ I will keep confidence. What is shared with me stays with me — without exception — and what is beyond me I will carry to my pastors, never alone.\n\n▪ I will walk in grace, not performance — with my disciple, and with myself. When I fall, I will confess, get up, and keep going.\n\n▪ I will hand it on. I understand that this journey is complete only when the one I walk with begins to walk with another."
+          },
+          {
+            "type": "prompt",
+            "id": "dt0_covenant_signature",
+            "question": "Sign your Discipler Covenant — type your full name and today’s date as a symbol of your choice:"
+          },
+          {
+            "type": "heading",
+            "text": "Discipler Readiness Assessment — Before"
+          },
+          {
+            "type": "paragraph",
+            "text": "Rate yourself honestly from 1 (“not yet true of me”) to 5 (“consistently true of me”). This is private — between you, Jesus, and your own growth. There are no good or bad scores; there is only a true starting point. You will take this again in Module 10."
+          },
+          {
+            "type": "rating",
+            "id": "dt0_readiness_before",
+            "title": "Category — “consistently true of me?”",
+            "items": [
+              "1. The Gospel of the Kingdom (what I believe and teach): I can explain the good news as more than sin management — God’s power and presence available now, through Jesus.",
+              "2. The Call & My Motivation: I am clear on why Jesus calls every disciple to make disciples — and why He is calling me.",
+              "3. Grace-Based Posture (gospel, not performance): I nurture growth without policing behavior; I know how to handle failure — mine and others’ — with grace.",
+              "4. Friendship & Shared Life: I share life, not just content; people experience me as a safe, generous friend.",
+              "5. Dependence on the Holy Spirit & Prayer: I pray for people by name, expect God to act, and rely on the Spirit rather than my own persuasion.",
+              "6. Listening & Asking Good Questions: I listen more than I talk, and my questions help people discover truth for themselves.",
+              "7. Modeling & Personal Integrity: My private walk with Jesus could bear being imitated; I am honest about my weaknesses.",
+              "8. Safety, Confidentiality & Care: I hold what people share like treasure, and I know when and how to involve pastors.",
+              "9. Knowledge of the GLC Tracks: I know what my disciple will experience in Welcome, Become®, and Leaders — and the tools in the Harvest app.",
+              "10. Multiplication Mindset: I am aiming from day one at a disciple who will one day disciple someone else."
+            ],
+            "scaleMax": 5
+          },
+          {
+            "type": "heading",
+            "text": "Fill-In Reflections"
+          },
+          {
+            "type": "prompt",
+            "id": "dt0_fill_vision",
+            "question": "1. A discipler is a friend with a ____.",
+            "hint": "Answer: vision"
+          },
+          {
+            "type": "prompt",
+            "id": "dt0_fill_withjesus",
+            "question": "2. The first disciples’ only credential: they had been ____ ____. (Acts 4:13)",
+            "hint": "Answer: with Jesus"
+          },
+          {
+            "type": "prompt",
+            "id": "dt0_fill_grace",
+            "question": "3. We make this covenant not because we expect perfection, but because we walk in ____.",
+            "hint": "Answer: grace"
+          },
+          {
+            "type": "heading",
+            "text": "Discussion Questions"
+          },
+          {
+            "type": "prompt",
+            "id": "dt0_dq1",
+            "question": "1. Who walked with you — formally or informally — on your way to Jesus? What did they actually do?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt0_dq2",
+            "question": "2. What did you feel when you were invited into this track: honor, fear, both? Say it out loud."
+          },
+          {
+            "type": "prompt",
+            "id": "dt0_dq3",
+            "question": "3. Which line of the Discipler Covenant costs you the most? Why?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt0_dq4",
+            "question": "4. Looking at your Before assessment — which category surprised you, high or low?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt0_dq5",
+            "question": "5. What is the one question you most want answered in the next ten weeks?"
+          },
+          {
+            "type": "heading",
+            "text": "This Week’s Practice: Remember and Thank"
+          },
+          {
+            "type": "paragraph",
+            "text": "Write down the name of one person who discipled you — officially or not. This week, contact them (call, text, or visit) and thank them specifically: “Here is what you did for me.” You are about to become that sentence in someone else’s story."
+          },
+          {
+            "type": "prompt",
+            "id": "dt0_practice_thank",
+            "question": "The person I will thank this week:"
+          },
+          {
+            "type": "heading",
+            "text": "Memory Verse for Module 0"
+          },
+          {
+            "type": "verse",
+            "text": "Now when they saw the boldness of Peter and John, and perceived that they were uneducated and untrained men, they marveled. And they realized that they had been with Jesus.",
+            "reference": "Acts 4:13 (NKJV)"
+          },
+          {
+            "type": "heading",
+            "text": "End-of-Module Reflection"
+          },
+          {
+            "type": "prompt",
+            "id": "dt0_r1",
+            "question": "1. What is one word for how this module made me feel?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt0_r2",
+            "question": "2. What am I most afraid of as I begin — and have I told Jesus about it yet?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt0_r3",
+            "question": "3. What did signing (or not yet signing) the covenant stir in me?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt0_r4",
+            "question": "4. Where was my Before assessment most honest — and where was I tempted to inflate?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt0_r5",
+            "question": "5. What do I want to carry into Module 1, where we ask: what exactly is the good news I will be carrying?"
+          },
+          {
+            "type": "quote",
+            "text": "Closing thought — Always remember: you were not drafted; you were invited. And you were not invited because you are finished; you were invited because you are facing the right way. The coat on your shoulders was hung there by another. For ten weeks, let Jesus show you how to hang it on someone else."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dis_m1",
+      "weekNumber": 1,
+      "kind": "CORE",
+      "title": "The Gospel We Teach: God’s Power and Presence for All",
+      "summary": "Becoming clear — and captured — by the good news that is bigger than sin management.",
+      "content": {
+        "version": 1,
+        "blocks": [
+          {
+            "type": "bigIdea",
+            "text": "Becoming clear — and captured — by the good news that is bigger than sin management."
+          },
+          {
+            "type": "heading",
+            "text": "Overview"
+          },
+          {
+            "type": "paragraph",
+            "text": "Before we learn how to disciple anyone, we must be dead clear about what we are inviting them into. This module is the anchor of the whole track. If we get the gospel small, everything downstream shrinks with it. If we get it right — the gospel of the Kingdom — discipleship stops being extra credit and becomes the most urgent, most worthwhile thing a human being can give a life to."
+          },
+          {
+            "type": "heading",
+            "text": "What Gospel Do People Actually Hear?"
+          },
+          {
+            "type": "paragraph",
+            "text": "Listen carefully in today’s world and you will mostly hear three versions of the “good news”: (1) your sins are forgiven and you will go to heaven when you die; (2) Jesus stands with the oppressed — stand with Him; (3) be faithful to your church and it will see you through. Each contains truth. But notice what they have in common: you can believe any of them and remain exactly the same person. Dallas Willard called them gospels of sin management — they manage the sin problem, but they leave Tuesday untouched."
+          },
+          {
+            "type": "paragraph",
+            "text": "Here is the sobering aphorism every discipler should memorize: “Your system is perfectly designed to produce the result you are getting.” A gospel that asks for no transformation will reliably produce Christians without transformation — converts who are never disciples. That split — “Christian” over here, “disciple” over there — is one Jesus never made."
+          },
+          {
+            "type": "heading",
+            "text": "The Gospel Jesus Preached"
+          },
+          {
+            "type": "paragraph",
+            "text": "Jesus’ own announcement was different: “Repent, for the kingdom of heaven is at hand” (Matthew 4:17). In plain English: the Kingdom of God is wherever what God wants done gets done — and in Jesus, that Kingdom has come within reach of ordinary people. This was God’s plan from the first page: image-bearers living God-like lives on God’s earth (Genesis 1:26–28), bringing heaven — the glory, presence, and power of God — into the world. “Your kingdom come. Your will be done, on earth as it is in heaven.”"
+          },
+          {
+            "type": "paragraph",
+            "text": "Does God deal with the sin problem? Gloriously, yes — the cross stands at the center of everything. But the cross is the doorway, not the house. The good news is not only that your record is cleared; it is that God’s own power and presence are now available to ALL people, through the person of Jesus."
+          },
+          {
+            "type": "heading",
+            "text": "The Illustration: The Ticket and the Train"
+          },
+          {
+            "type": "paragraph",
+            "text": "Imagine two travelers at a station. Both hold tickets. One keeps his ticket safely in his pocket and stands on the platform for forty years, guarding it, checking it, telling others where the train will one day take him. The other boards the train — and the journey itself begins: new country every day, new company, new strength."
+          },
+          {
+            "type": "paragraph",
+            "text": "The sin-management gospels sell tickets for later. The gospel of the Kingdom puts you on the train now. Both travelers may arrive; only one of them ever traveled. Salvation, as Peter preached it, is not a minimum requirement met before death — “there is no other name under heaven given among men by which we must be saved” (Acts 4:12) — and what that Name saves us into is a life: becoming like Jesus while we live, by being with Jesus, so we are transformed by Jesus. “Being saved is not a matter of where you are going, but of who you are now.”"
+          },
+          {
+            "type": "heading",
+            "text": "So What Is a Disciple — and Why Disciplers?"
+          },
+          {
+            "type": "paragraph",
+            "text": "A disciple is simply someone who is with Jesus, learning to be like Him — learning from Jesus how to live my life as He would live it if He were me. The pattern you already know from our church’s rhythm: BE with Jesus → BECOME like Jesus → BRING heaven. And why apprentice to Him rather than anyone else? Because — say it with a smile — Jesus is the smartest One ever, because He is from there."
+          },
+          {
+            "type": "paragraph",
+            "text": "Now the punchline of this whole module. If salvation IS transformation now, then discipleship is not a hobby for the keen — it is the thing itself. And nobody learns to live this way alone. That is why there are disciplers. You are joining God’s great cosmic agenda — the restoration of all creation, until “the earth is filled with the knowledge of the glory of the LORD, as the waters cover the sea” (Habakkuk 2:14). Heaven arrives one accompanied life at a time — and you are about to become one of its couriers."
+          },
+          {
+            "type": "heading",
+            "text": "Fill-In Reflections"
+          },
+          {
+            "type": "prompt",
+            "id": "dt1_fill_management",
+            "question": "1. Gospels of sin ____ manage the sin problem but leave daily life untouched.",
+            "hint": "Answer: management"
+          },
+          {
+            "type": "prompt",
+            "id": "dt1_fill_done",
+            "question": "2. The Kingdom of God is wherever what God wants done gets ____.",
+            "hint": "Answer: done"
+          },
+          {
+            "type": "prompt",
+            "id": "dt1_fill_now",
+            "question": "3. Being saved is not a matter of where you are going, but of who you are ____.",
+            "hint": "Answer: now"
+          },
+          {
+            "type": "prompt",
+            "id": "dt1_fill_withlike",
+            "question": "4. A disciple is someone who is ____ Jesus, learning to be ____ Him.",
+            "hint": "Answer: with; like"
+          },
+          {
+            "type": "prompt",
+            "id": "dt1_fill_accompanied",
+            "question": "5. Heaven arrives one ____ life at a time.",
+            "hint": "Answer: accompanied"
+          },
+          {
+            "type": "heading",
+            "text": "Discussion Questions"
+          },
+          {
+            "type": "prompt",
+            "id": "dt1_dq1",
+            "question": "1. Which of the three “sin management” gospels did you grow up hearing? What kind of Christian did it produce around you?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt1_dq2",
+            "question": "2. “You can believe it and remain exactly the same person.” Where has that been true in your own story?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt1_dq3",
+            "question": "3. The ticket and the train: which traveler have you been in different seasons — and what moved you onto the train?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt1_dq4",
+            "question": "4. In your own words — three sentences, plain English — what is the gospel of the Kingdom?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt1_dq5",
+            "question": "5. If salvation is becoming like Jesus while we live, what changes about how you would introduce Jesus to a friend?"
+          },
+          {
+            "type": "heading",
+            "text": "This Week’s Practice: Write Your Gospel, Pray the Kingdom"
+          },
+          {
+            "type": "paragraph",
+            "text": "Two parts. (1) Write the gospel as you would actually share it — three sentences, no jargon. Test it: does it go beyond sin management? Bring it to the gathering. (2) Pray the Lord’s Prayer slowly once a day, pausing at “on earth as it is in heaven” to name one specific place — your home, your shift, your street — where you are asking heaven to arrive."
+          },
+          {
+            "type": "prompt",
+            "id": "dt1_practice_gospel",
+            "question": "My three-sentence gospel (first draft):"
+          },
+          {
+            "type": "heading",
+            "text": "Memory Verse for Module 1"
+          },
+          {
+            "type": "verse",
+            "text": "...for the kingdom of God is not eating and drinking, but righteousness and peace and joy in the Holy Spirit.",
+            "reference": "Romans 14:17 (NKJV)"
+          },
+          {
+            "type": "heading",
+            "text": "End-of-Module Reflection"
+          },
+          {
+            "type": "prompt",
+            "id": "dt1_r1",
+            "question": "1. Where did this module correct or enlarge the gospel I have been carrying?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt1_r2",
+            "question": "2. What is one place I have treated faith as a ticket in my pocket rather than a train I am riding?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt1_r3",
+            "question": "3. “Who I am now” — what is Jesus making of me these days, honestly?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt1_r4",
+            "question": "4. Where did I see heaven break into earth this week, even in a small way?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt1_r5",
+            "question": "5. What do I want to carry into Module 2, where we ask: why does this gospel make disciple-making urgent?"
+          },
+          {
+            "type": "quote",
+            "text": "Closing thought — Always remember: the gospel you carry sets the size of the life your disciple will attempt. Carry the whole thing. Not merely a rescue from earth, but the arrival of heaven; not merely sins managed, but a person transformed; not someday, but now — with Jesus, like Jesus, for the world."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dis_m2",
+      "weekNumber": 2,
+      "kind": "CORE",
+      "title": "The Call to Make Disciples: People, Not Programs",
+      "summary": "Becoming convinced that walking with one person is the way Jesus chose to reach the world.",
+      "content": {
+        "version": 1,
+        "blocks": [
+          {
+            "type": "bigIdea",
+            "text": "Becoming convinced that walking with one person is the way Jesus chose to reach the world."
+          },
+          {
+            "type": "heading",
+            "text": "Overview"
+          },
+          {
+            "type": "paragraph",
+            "text": "If Module 1 is true — if the Kingdom really is arriving one accompanied life at a time — then the Great Commission stops sounding like a slogan and starts sounding like a strategy. This module is about Jesus’ method: not crowds, not campaigns, but a few people, deeply formed, who each form a few more. It is the slowest fast way the world has ever seen."
+          },
+          {
+            "type": "heading",
+            "text": "A Command, Not a Suggestion"
+          },
+          {
+            "type": "paragraph",
+            "text": "“Go therefore and make disciples of all the nations... teaching them to observe all things that I have commanded you” (Matthew 28:19–20). Notice what Jesus did not say: make converts, gather audiences, fill buildings. He said make disciples — people who are with Him, becoming like Him. Every disciple is a convert, but not every convert is a disciple — and the commission is about the second thing."
+          },
+          {
+            "type": "paragraph",
+            "text": "Notice also who it was given to: all of us. Disciple-making is not a spiritual gift possessed by a few; it is the family business every child of the house is raised into."
+          },
+          {
+            "type": "heading",
+            "text": "Jesus’ Method: A Few, Deeply"
+          },
+          {
+            "type": "paragraph",
+            "text": "Watch how Jesus went about reaching the world. He preached to thousands — but He staked everything on twelve, and within the twelve, three. He chose them after a night of prayer, kept them with Him, showed them everything, sent them out, debriefed them when they returned, and expected them to reproduce. As Robert Coleman put it: His concern was not programs to reach the multitudes, but people whom the multitudes would follow."
+          },
+          {
+            "type": "paragraph",
+            "text": "Here is the discipler’s counterintuitive arithmetic: spending more time with fewer people — the right people — produces greater results. It looks slow. It is the fastest thing on earth."
+          },
+          {
+            "type": "heading",
+            "text": "The Illustration: The Chessboard and the Grains of Wheat"
+          },
+          {
+            "type": "paragraph",
+            "text": "An old story: a king offered a servant any reward. The servant asked for one grain of wheat on the first square of a chessboard, two on the second, four on the third — doubling each square. The king laughed at the modest request — until his treasurers discovered that the sixty-fourth square required more wheat than existed in the kingdom."
+          },
+          {
+            "type": "paragraph",
+            "text": "That is multiplication versus addition. A gifted evangelist who wins a thousand people a year, for forty years, reaches forty thousand. One discipler who walks with one person a year — each of whom then walks with one more — passes the evangelist within a generation and, in a lifetime, touches the world. The church grows by addition; the Kingdom grows by multiplication. Paul drew the same picture in four generations: “the things that you have heard from me... commit these to faithful men who will be able to teach others also” (2 Timothy 2:2). Me → you → faithful people → others also."
+          },
+          {
+            "type": "heading",
+            "text": "One Ordinary Name"
+          },
+          {
+            "type": "paragraph",
+            "text": "In 1855 a Sunday-school teacher named Edward Kimball nervously visited a Boston shoe store and spoke to a teenage stock boy about Jesus. The boy was D. L. Moody, who became the great evangelist of his century. Moody’s ministry touched a man who touched a man who touched Billy Graham — and millions. Kimball never saw most of it. He just walked with one teenager."
+          },
+          {
+            "type": "paragraph",
+            "text": "“If you want to change the world, start by changing one life.” Everything you will do as a discipler runs on that conviction. Only about one believer in a hundred ever helps another believer grow to the point of reproducing. Grace Life Center intends, by God’s grace, to be different — and you are how."
+          },
+          {
+            "type": "heading",
+            "text": "Fill-In Reflections"
+          },
+          {
+            "type": "prompt",
+            "id": "dt2_fill_disciples",
+            "question": "1. Jesus commanded us to make ____, not merely converts.",
+            "hint": "Answer: disciples"
+          },
+          {
+            "type": "prompt",
+            "id": "dt2_fill_people",
+            "question": "2. His concern was not programs to reach the multitudes, but ____ whom the multitudes would follow.",
+            "hint": "Answer: people"
+          },
+          {
+            "type": "prompt",
+            "id": "dt2_fill_multiplication",
+            "question": "3. The church grows by addition; the Kingdom grows by ____.",
+            "hint": "Answer: multiplication"
+          },
+          {
+            "type": "prompt",
+            "id": "dt2_fill_othersalso",
+            "question": "4. Paul’s four generations: me → you → faithful people → ____ ____. (2 Tim 2:2)",
+            "hint": "Answer: others also"
+          },
+          {
+            "type": "heading",
+            "text": "Discussion Questions"
+          },
+          {
+            "type": "prompt",
+            "id": "dt2_dq1",
+            "question": "1. “Every disciple is a convert, but not every convert is a disciple.” Where have you seen that gap — perhaps in yourself?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt2_dq2",
+            "question": "2. Does it comfort or challenge you that Jesus’ method was a few people, deeply — rather than crowds, quickly?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt2_dq3",
+            "question": "3. The chessboard: what makes multiplication feel too slow to us — and why do you think Jesus trusted it anyway?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt2_dq4",
+            "question": "4. Who was your “Edward Kimball”? Who might God be preparing to be your “Moody”?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt2_dq5",
+            "question": "5. What would have to change in your week for “walking with one person” to fit — realistically?"
+          },
+          {
+            "type": "heading",
+            "text": "This Week’s Practice: Pray for Your One"
+          },
+          {
+            "type": "paragraph",
+            "text": "Jesus prayed all night before choosing the twelve (Luke 6:12–13). Begin the same way. Every day this week, ask: “Lord, who is the one You are preparing for me to walk with?” Write down every name that comes to mind — do not filter yet. By the gathering, circle the one or two names that kept returning."
+          },
+          {
+            "type": "prompt",
+            "id": "dt2_practice_names",
+            "question": "Names that came to mind this week:"
+          },
+          {
+            "type": "heading",
+            "text": "Memory Verse for Module 2"
+          },
+          {
+            "type": "verse",
+            "text": "And the things that you have heard from me among many witnesses, commit these to faithful men who will be able to teach others also.",
+            "reference": "2 Timothy 2:2 (NKJV)"
+          },
+          {
+            "type": "heading",
+            "text": "End-of-Module Reflection"
+          },
+          {
+            "type": "prompt",
+            "id": "dt2_r1",
+            "question": "1. What shifted in me about the Great Commission this week?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt2_r2",
+            "question": "2. Am I more drawn to crowds or to the slow work of a few? What does that reveal?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt2_r3",
+            "question": "3. Whose name kept returning as I prayed — and what do I feel about that?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt2_r4",
+            "question": "4. Where am I tempted to believe my walking with one person will not matter?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt2_r5",
+            "question": "5. What do I want to carry into Module 3, where we ask: what keeps disciple-making from becoming pressure and performance?"
+          },
+          {
+            "type": "quote",
+            "text": "Closing thought — Always remember: Jesus could have chosen stadiums; He chose a table with twelve chairs. The world was not won by the loudest voice but by the longest walk — one person, beside one person, handing on what was handed to them. Do not despise the smallness of one name. Heaven never has."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dis_m3",
+      "weekNumber": 3,
+      "kind": "CORE",
+      "title": "Grace-Based Discipling: The Gospel Engine",
+      "summary": "Becoming the kind of companion whose presence feels like grace, not inspection.",
+      "content": {
+        "version": 1,
+        "blocks": [
+          {
+            "type": "bigIdea",
+            "text": "Becoming the kind of companion whose presence feels like grace, not inspection."
+          },
+          {
+            "type": "heading",
+            "text": "Overview"
+          },
+          {
+            "type": "paragraph",
+            "text": "The fastest way to ruin discipleship is to run it on the wrong fuel. Guilt works — for about six weeks. Pride works — until the first real failure. Only grace can carry a person all the way to Christlikeness. This module trains the discipler’s posture: how to aim at hearts rather than behavior, how to wait like a farmer, and how to handle failure — your disciple’s and your own — the way God handles yours."
+          },
+          {
+            "type": "heading",
+            "text": "Heart Attitude, Not Behavior Management"
+          },
+          {
+            "type": "paragraph",
+            "text": "Here is the emphasis that must sit under everything you do: the mentoring process is about your disciple’s personal relationship with the Lord — their heart attitude — not behavior manipulation. Behavior matters, but it is the fruit, not the tree. If you police fruit, you get plastic fruit: compliance on Sunday, collapse on Tuesday. If you tend the tree — the heart that is learning to be with Jesus — good fruit grows on its own schedule."
+          },
+          {
+            "type": "paragraph",
+            "text": "Watch for the telltale sign of performance-driven discipling: box-checking. A disciple racing through material to finish it is usually “checking the box (behavior) rather than allowing God to transform them.” The formula worth memorizing: information + inspiration + formation = transformation. Information alone informs; only life-on-life formation transforms."
+          },
+          {
+            "type": "heading",
+            "text": "The Illustration: Nobody Yells at Seeds"
+          },
+          {
+            "type": "paragraph",
+            "text": "No farmer stands in his field shouting at the ground: “Grow faster! You call that a stalk?” He plants, waters, pulls weeds, and then does the most spiritual thing a farmer does — he goes to bed. “I planted, Apollos watered, but God gave the increase” (1 Corinthians 3:6). The growth of a soul is God’s work, on God’s schedule."
+          },
+          {
+            "type": "paragraph",
+            "text": "This truth guards you on both sides. When your disciple blooms, you will not grow proud — you did not give the increase. When your disciple stalls, you will not despair — you could not give the increase. You are a farmer, not a factory. Patience is love waiting."
+          },
+          {
+            "type": "heading",
+            "text": "Grace Is for Life, Not Just for Guilt"
+          },
+          {
+            "type": "paragraph",
+            "text": "Say the two Willard lines until they are reflexes: “Grace is not opposed to effort — it is opposed to earning.” And: “Grace is not just for guilt; grace is for life.” Your disciple will put in real effort — practices, honesty, obedience experiments. None of it earns anything. It positions them for the transformation only Jesus can do. You practice; He transforms."
+          },
+          {
+            "type": "paragraph",
+            "text": "And when they fall — they will fall — teach them the gravity of grace: we confess, we get up, we keep going. Falling is not the opposite of following. Model this with your own life. Let your disciple watch you fail, confess, and get up. A discipler who admits weakness gives everyone else permission to be human; “God resists the proud, but gives grace to the humble” (James 4:6)."
+          },
+          {
+            "type": "heading",
+            "text": "Accountability That Feels Like Friendship, Not Surveillance"
+          },
+          {
+            "type": "paragraph",
+            "text": "Grace-based discipling still asks real questions — but by invitation, not ambush. Early on, ask your disciple: “What do you want me to ask you about?” Let accountability match the commitment they have actually voiced, not the one you wish they had. Correction, when it must come, comes after prayer, with gentleness, from earned trust — and always in the spirit of restoration. A wise rule from an old discipler: confrontation should be only an occasional island in a sea of encouragement."
+          },
+          {
+            "type": "paragraph",
+            "text": "One more grace habit: never demand maturity from an infant. New believers are spiritual newborns — you feed newborns; you do not rebuke them for not walking. Meeting people at their stage is not lowering the bar; it is how parents love."
+          },
+          {
+            "type": "heading",
+            "text": "Fill-In Reflections"
+          },
+          {
+            "type": "prompt",
+            "id": "dt3_fill_manipulation",
+            "question": "1. We aim at heart attitude, not behavior ____.",
+            "hint": "Answer: manipulation (management)"
+          },
+          {
+            "type": "prompt",
+            "id": "dt3_fill_increase",
+            "question": "2. “I planted, Apollos watered, but God gave the ____.” (1 Cor 3:6)",
+            "hint": "Answer: increase"
+          },
+          {
+            "type": "prompt",
+            "id": "dt3_fill_earning",
+            "question": "3. Grace is not opposed to effort — it is opposed to ____.",
+            "hint": "Answer: earning"
+          },
+          {
+            "type": "prompt",
+            "id": "dt3_fill_encouragement",
+            "question": "4. Confrontation should be an occasional island in a sea of ____.",
+            "hint": "Answer: encouragement"
+          },
+          {
+            "type": "prompt",
+            "id": "dt3_fill_keepgoing",
+            "question": "5. The gravity of grace: we confess, we get up, we ____ ____.",
+            "hint": "Answer: keep going"
+          },
+          {
+            "type": "heading",
+            "text": "Discussion Questions"
+          },
+          {
+            "type": "prompt",
+            "id": "dt3_dq1",
+            "question": "1. Who discipled you with grace? Who (perhaps with good intentions) discipled you with pressure? What did each produce in you?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt3_dq2",
+            "question": "2. Where in your life are you still trying to earn what God wants to freely form in you?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt3_dq3",
+            "question": "3. “Nobody yells at seeds.” Which is harder for you — patience with others’ growth, or patience with your own?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt3_dq4",
+            "question": "4. What is the difference, practically, between asking a heart question and running a behavior inspection?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt3_dq5",
+            "question": "5. How would you handle the week your disciple confesses something serious — say a relapse — in a way that is full of both grace and truth?"
+          },
+          {
+            "type": "heading",
+            "text": "This Week’s Practice: The Grace Audit"
+          },
+          {
+            "type": "paragraph",
+            "text": "Each evening, review the day with two questions: (1) Where did I try to earn today — with God or with people? (2) Where did I extend to someone else the same patience God extends to me — and where did I withhold it? End each audit by receiving, out loud, one sentence: “His grace is sufficient for me.”"
+          },
+          {
+            "type": "prompt",
+            "id": "dt3_practice_audit",
+            "question": "What my grace audit surprised me with:"
+          },
+          {
+            "type": "heading",
+            "text": "Memory Verse for Module 3"
+          },
+          {
+            "type": "verse",
+            "text": "I planted, Apollos watered, but God gave the increase. So then neither he who plants is anything, nor he who waters, but God who gives the increase.",
+            "reference": "1 Corinthians 3:6–7 (NKJV)"
+          },
+          {
+            "type": "heading",
+            "text": "End-of-Module Reflection"
+          },
+          {
+            "type": "prompt",
+            "id": "dt3_r1",
+            "question": "1. Is my instinct with strugglers inspection or encouragement? Where did that instinct come from?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt3_r2",
+            "question": "2. What would change if I truly believed God gives the increase?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt3_r3",
+            "question": "3. Where do I need to apply the gravity of grace to myself this week?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt3_r4",
+            "question": "4. What is one way I can make accountability feel like friendship for my future disciple?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt3_r5",
+            "question": "5. What do I want to carry into Module 4, where we discover the medium discipleship travels through: friendship?"
+          },
+          {
+            "type": "quote",
+            "text": "Closing thought — Always remember: your disciple will forget most of what you teach them, but they will never forget how it felt to be in the room with you. Make the room feel like grace. Tend the tree, trust the Farmer, and let God set the harvest date."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dis_m4",
+      "weekNumber": 4,
+      "kind": "CORE",
+      "title": "Friendship with a Vision: Sharing Life, Not Just Lessons",
+      "summary": "Becoming a companion who shares not only the gospel of God, but my own life as well.",
+      "content": {
+        "version": 1,
+        "blocks": [
+          {
+            "type": "bigIdea",
+            "text": "Becoming a companion who shares not only the gospel of God, but my own life as well."
+          },
+          {
+            "type": "heading",
+            "text": "Overview"
+          },
+          {
+            "type": "paragraph",
+            "text": "Here is the open secret of every discipler who ever mattered: the curriculum was the friendship. Content is taught; character is caught — and it is caught in kitchens, on walks, over coffee, in the ordinary in-between spaces where life is actually lived. This module trains you to build the kind of friendship discipleship can travel through — and to keep it aimed at Jesus."
+          },
+          {
+            "type": "heading",
+            "text": "The Charter Verse"
+          },
+          {
+            "type": "paragraph",
+            "text": "Paul, remembering how he discipled the Thessalonians, reached past every method to this: “So, affectionately longing for you, we were well pleased to impart to you not only the gospel of God, but also our own lives, because you had become dear to us” (1 Thessalonians 2:8). Not only the gospel — our own lives. In the same passage he sounds like a nursing mother (gentle, nourishing) and like a father with each child (individual attention, encouragement). Discipleship is spiritual parenting, and parenting is mostly presence."
+          },
+          {
+            "type": "paragraph",
+            "text": "An old disciple-maker compressed it into six words worth engraving: “Disciple-making is basically friendship with a vision.” Friendship — real, warm, mutual. With a vision — always facing Jesus, never aimless."
+          },
+          {
+            "type": "heading",
+            "text": "Content and Context"
+          },
+          {
+            "type": "paragraph",
+            "text": "Every discipling relationship carries two things. Content: the Word, the workbook, the truths. Context: the shared life around the content — the meal before the study, the text on Tuesday, the errand run together. Here is the principle: content is taught; context is caught — and context is the priority. The lesson your disciple remembers in ten years will probably not be from the workbook. It will be how you treated the waiter, how you handled your bad week, how you prayed when the answer was no."
+          },
+          {
+            "type": "paragraph",
+            "text": "This is why the informal beats the formal: “as you are going” discipleship — the ballgame, the school run, serving together — forms hearts more deeply than any classroom. Plan for it on purpose."
+          },
+          {
+            "type": "heading",
+            "text": "The Illustration: The Second Cup"
+          },
+          {
+            "type": "paragraph",
+            "text": "Two people meet weekly to “do discipleship.” In the first house, the disciple sits across a desk; the workbook opens at 7:00 and closes at 8:00; the visit ends at the door. In the second house, there is a second cup already on the table when the disciple arrives. The workbook still opens — but so does the kitchen, the family, the laughter, the fridge. Ten years later, ask each disciple what formed them. The first says, “We covered the material.” The second says, “I became part of a life.”"
+          },
+          {
+            "type": "paragraph",
+            "text": "Be the second house. Hospitality is not a garnish on discipleship; in dry seasons it is the whole meal."
+          },
+          {
+            "type": "heading",
+            "text": "A Partnership, Not a Hierarchy — With One Guardrail"
+          },
+          {
+            "type": "paragraph",
+            "text": "You are not the guru and your disciple is not your project. Mentoring is a partnership of fellow pilgrims: expect to be ministered to as well; share your own prayer requests so your disciple prays for you; be honest when you learn something from them — you will, constantly. “The disciple won’t care how much you know, until they know how much you care.”"
+          },
+          {
+            "type": "paragraph",
+            "text": "One guardrail keeps the friendship from going soft: keep the vision. A discipling friendship that loses its aim dissolves into hangouts — pleasant, and powerless. You are wonderful friends on the way somewhere. Keep the workbook open, keep the questions honest, keep facing Jesus together. Friendship is the vehicle; Christlikeness is the destination."
+          },
+          {
+            "type": "heading",
+            "text": "Fill-In Reflections"
+          },
+          {
+            "type": "prompt",
+            "id": "dt4_fill_lives",
+            "question": "1. “...not only the gospel of God, but also our own ____.” (1 Thess 2:8)",
+            "hint": "Answer: lives"
+          },
+          {
+            "type": "prompt",
+            "id": "dt4_fill_friendshipvision",
+            "question": "2. Disciple-making is basically ____ with a ____.",
+            "hint": "Answer: friendship; vision"
+          },
+          {
+            "type": "prompt",
+            "id": "dt4_fill_caught",
+            "question": "3. Content is taught; context is ____.",
+            "hint": "Answer: caught"
+          },
+          {
+            "type": "prompt",
+            "id": "dt4_fill_care",
+            "question": "4. The disciple won’t care how much you know until they know how much you ____.",
+            "hint": "Answer: care"
+          },
+          {
+            "type": "heading",
+            "text": "Discussion Questions"
+          },
+          {
+            "type": "prompt",
+            "id": "dt4_dq1",
+            "question": "1. Who has shared not just truth but their own life with you? What did their kitchen (or car, or lunch break) teach you?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt4_dq2",
+            "question": "2. “Content is taught; context is caught.” What have you caught from someone that was never formally taught?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt4_dq3",
+            "question": "3. Which comes more naturally to you — the workbook side or the second-cup side? What would stretching toward the other look like?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt4_dq4",
+            "question": "4. How do you keep a discipling friendship warm without letting it lose its vision?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt4_dq5",
+            "question": "5. What part of your ordinary week (commute, market, hobby, family table) could become an “as you are going” discipleship space?"
+          },
+          {
+            "type": "heading",
+            "text": "This Week’s Practice: One Shared Hour"
+          },
+          {
+            "type": "paragraph",
+            "text": "Spend one non-meeting hour with someone you may disciple (or a fellow trainee): a meal, a walk, an errand, a game — no workbook, no agenda except presence. Afterward, journal: what did I learn about them that no meeting would have surfaced? Send them one encouraging text midweek — a verse or a sentence — for no reason except that you thought of them."
+          },
+          {
+            "type": "prompt",
+            "id": "dt4_practice_hour",
+            "question": "My shared hour and what it surfaced:"
+          },
+          {
+            "type": "heading",
+            "text": "Memory Verse for Module 4"
+          },
+          {
+            "type": "verse",
+            "text": "So, affectionately longing for you, we were well pleased to impart to you not only the gospel of God, but also our own lives, because you had become dear to us.",
+            "reference": "1 Thessalonians 2:8 (NKJV)"
+          },
+          {
+            "type": "heading",
+            "text": "End-of-Module Reflection"
+          },
+          {
+            "type": "prompt",
+            "id": "dt4_r1",
+            "question": "1. Am I more at risk of all-content (a class) or all-context (a hangout)? What is my correction?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt4_r2",
+            "question": "2. What in my actual life — home, habits, schedule — is ready to be shared? What am I hiding?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt4_r3",
+            "question": "3. Who ministered to me this week while I thought I was ministering to them?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt4_r4",
+            "question": "4. What would it cost me to keep a second cup on the table — literally?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt4_r5",
+            "question": "5. What do I want to carry into Module 5, where we meet the real Discipler: the Holy Spirit?"
+          },
+          {
+            "type": "quote",
+            "text": "Closing thought — Always remember: Jesus’ classroom had no walls — it had a road, a boat, a table, and a fire on the beach. The Twelve were not enrolled; they were befriended, with a vision. Keep the second cup ready. Keep the vision burning. And let your life be part of the lesson."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dis_m5",
+      "weekNumber": 5,
+      "kind": "CORE",
+      "title": "The Holy Spirit & Prayer: Who Really Does the Work",
+      "summary": "Becoming a discipler who cooperates with the Spirit instead of substituting for Him.",
+      "content": {
+        "version": 1,
+        "blocks": [
+          {
+            "type": "bigIdea",
+            "text": "Becoming a discipler who cooperates with the Spirit instead of substituting for Him."
+          },
+          {
+            "type": "heading",
+            "text": "Overview"
+          },
+          {
+            "type": "paragraph",
+            "text": "Here is the module that takes the weight off your shoulders. You cannot change a heart. You never could. There is a Discipler senior to you on every case — the Holy Spirit — and your whole craft is learning to cooperate with what He is already doing. The tools of that cooperation are prayer and attentiveness. This module trains both."
+          },
+          {
+            "type": "heading",
+            "text": "Three Roles, One Work"
+          },
+          {
+            "type": "paragraph",
+            "text": "Get the division of labor right and discipleship becomes light. The Holy Spirit’s role: He orchestrates the encounters, creates the hunger, guides the process, convicts, transforms, and gives you wisdom on demand (James 1:5). Your role: pray with expectation, abide in Jesus, stay available, and cooperate — you are a partner in His work, never the engine. The Word’s role: it is the food; you point your disciple to the Lord through Scripture and let the Book do its own deep work (2 Timothy 3:16–17)."
+          },
+          {
+            "type": "paragraph",
+            "text": "Jesus put it without loopholes: “Without Me you can do nothing” (John 15:5). And the honest corollary: if we attempt it without Him — programs, charisma, willpower — we will produce activity, not transformation. Say it plainly: you cannot change a heart; the Holy Spirit can."
+          },
+          {
+            "type": "heading",
+            "text": "The Illustration: The Sailboat and the Rowboat"
+          },
+          {
+            "type": "paragraph",
+            "text": "Two boats set out across the same lake. The rowboat moves by the strength of the rower — impressive for an hour, exhausted by evening, and in a storm, hopeless. The sailboat cannot move itself at all. Its skill is different: trim the sail, read the wind, position the boat where the wind can drive it."
+          },
+          {
+            "type": "paragraph",
+            "text": "Discipling in your own strength is rowing: you will wear out, and so will your disciple. Discipling in the Spirit is sailing: prayer is how you hoist the sail; attentiveness is how you read the wind; obedience is how you trim. The wind does the moving. “‘Not by might nor by power, but by My Spirit,’ says the LORD of hosts” (Zechariah 4:6)."
+          },
+          {
+            "type": "heading",
+            "text": "Prayer Is the Work"
+          },
+          {
+            "type": "paragraph",
+            "text": "George Müller, who cared for thousands of orphans on prayer alone, said the thing every discipler must learn: prayer is not preparation for the work — prayer IS the work. What happens in your disciple between your meetings will be decided mostly by what happens in your prayer closet between your meetings."
+          },
+          {
+            "type": "paragraph",
+            "text": "So build the discipler’s prayer list — four lines per disciple: their relationship with God, their current struggle, their next step of growth, their influence on the people around them. Pray it daily. Old rule of thumb: pray for them, pray more for them, pray even more for them. And before you ever give advice, ask the question that reroutes the whole conversation to the senior Discipler: “Have you prayed about it?”"
+          },
+          {
+            "type": "heading",
+            "text": "Every Discipler Needs Three Friends"
+          },
+          {
+            "type": "paragraph",
+            "text": "Do not sail alone. Every discipler needs a Paul — someone farther along who speaks into your life; a Timothy — the one you are pouring into; and a Barnabas — a peer who encourages you at eye level. This track is deliberately building all three around you: your pastors and coordinator (Paul), your future disciple (Timothy), and this cohort (Barnabas). A threefold cord is not quickly broken."
+          },
+          {
+            "type": "paragraph",
+            "text": "One more habit of mutual prayer: share your own requests with your disciple and let them pray for you. It teaches them to pray, keeps you humble, and quietly announces the best news in the room: we are both under the same grace, being discipled by the same Spirit."
+          },
+          {
+            "type": "heading",
+            "text": "Fill-In Reflections"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_fill_holyspirit",
+            "question": "1. You cannot change a heart; the ____ ____ can.",
+            "hint": "Answer: Holy Spirit"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_fill_sail",
+            "question": "2. Discipling in the Spirit is sailing: prayer hoists the ____; the wind does the moving.",
+            "hint": "Answer: sail"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_fill_is",
+            "question": "3. Prayer is not preparation for the work — prayer ____ the work.",
+            "hint": "Answer: IS"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_fill_prayed",
+            "question": "4. Before giving advice, ask: “Have you ____ about it?”",
+            "hint": "Answer: prayed"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_fill_barnabas",
+            "question": "5. Every discipler needs a Paul, a Timothy, and a ____.",
+            "hint": "Answer: Barnabas"
+          },
+          {
+            "type": "heading",
+            "text": "Discussion Questions"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_dq1",
+            "question": "1. Rowing or sailing — which describes your serving life so far? What has rowing cost you?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_dq2",
+            "question": "2. Where have you watched the Holy Spirit do in a moment what you had failed to do in months?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_dq3",
+            "question": "3. What would praying the four-line list daily actually require of your schedule — and what might it change?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_dq4",
+            "question": "4. Who currently plays Paul, Timothy, and Barnabas in your life? Which chair is empty?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_dq5",
+            "question": "5. Why do you think we reach for advice before we reach for prayer? What does “Have you prayed about it?” do to a conversation?"
+          },
+          {
+            "type": "heading",
+            "text": "This Week’s Practice: The Four-Line List"
+          },
+          {
+            "type": "paragraph",
+            "text": "Choose one person (your likely disciple, or someone God has placed near you) and write their four-line prayer list: relationship with God · current struggle · next growth step · their influence. Pray it every day this week. Keep a small log of anything that changes — in them, or in how you see them. Expect the second change first."
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_practice_fourlines",
+            "question": "My four lines for the person I am praying for:"
+          },
+          {
+            "type": "heading",
+            "text": "Memory Verse for Module 5"
+          },
+          {
+            "type": "verse",
+            "text": "I am the vine, you are the branches. He who abides in Me, and I in him, bears much fruit; for without Me you can do nothing.",
+            "reference": "John 15:5 (NKJV)"
+          },
+          {
+            "type": "heading",
+            "text": "End-of-Module Reflection"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_r1",
+            "question": "1. Where am I still rowing?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_r2",
+            "question": "2. What did praying for one person daily do to my heart toward them?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_r3",
+            "question": "3. When the Spirit nudged me this week, did I notice? Did I obey?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_r4",
+            "question": "4. What do I want my disciple to catch about prayer just from watching me?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_r5",
+            "question": "5. What do I want to carry into Module 6, where we learn to truly know the person we walk with?"
+          },
+          {
+            "type": "quote",
+            "text": "Closing thought — Always remember: the Holy Spirit was discipling your disciple long before you arrived and will continue long after your season ends. You are not the wind; you are a sail. Stay hoisted. Stay trimmed. And never be surprised when the Lord uses your disciple’s journey to disciple you."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dis_m6",
+      "weekNumber": 6,
+      "kind": "CORE",
+      "title": "Knowing Your Disciple: Meeting People Where They Are",
+      "summary": "Becoming the kind of companion who listens for a soul’s true address before offering directions.",
+      "content": {
+        "version": 1,
+        "blocks": [
+          {
+            "type": "bigIdea",
+            "text": "Becoming the kind of companion who listens for a soul’s true address before offering directions."
+          },
+          {
+            "type": "heading",
+            "text": "Overview"
+          },
+          {
+            "type": "paragraph",
+            "text": "You cannot walk with someone you have not located. Sunday behavior tells you almost nothing; a person can attend church for thirty years with foundational gaps no one ever discovered — because no one ever asked. This module gives you the discipler’s diagnostic tools: how to discern where a person truly is, how to hear their stage of growth, and how to choose whom to walk with in the first place."
+          },
+          {
+            "type": "heading",
+            "text": "The Illustration: The Doctor Who Listens First"
+          },
+          {
+            "type": "paragraph",
+            "text": "Imagine a doctor who writes the prescription before the examination — same pills for every patient, no questions asked. You would leave. Yet much discipleship works exactly that way: same content, same pace, same assumptions, no diagnosis. The wise physician asks, listens, and only then treats. “Counsel in the heart of man is like deep water, but a man of understanding will draw it out” (Proverbs 20:5)."
+          },
+          {
+            "type": "paragraph",
+            "text": "The gaps only surface in intentional, unhurried conversation. Two cautions as you begin: never assume maturity from externals (church years are not the same as growth years), and never turn a diagnostic conversation into a sermon. This is NOT an occasion to preach at them. Ask; listen; thank them for their honesty."
+          },
+          {
+            "type": "heading",
+            "text": "Tool One: The Five Concepts"
+          },
+          {
+            "type": "paragraph",
+            "text": "The first tool is a gentle walk through five truths every believer needs to know, reading the Scriptures together and asking open questions: (1) Jesus as Savior — all my sins forgiven, eternal life assured (John 5:24); (2) Jesus as Lord — I was bought with a price; I am not my own (1 Corinthians 6:19–20); (3) God has a unique design and plan for my whole life (Jeremiah 29:11); (4) only the Holy Spirit can guide me into it (John 16:13); (5) the Spirit will train me to recognize, follow, and obey His leading (John 10:27)."
+          },
+          {
+            "type": "paragraph",
+            "text": "As your disciple talks, you are listening for which of the five they know in their head, which they trust in their bones, and which they have never heard. What you learn sets your pace and your prayers."
+          },
+          {
+            "type": "heading",
+            "text": "Tool Two: “Where Am I as a Christian?”"
+          },
+          {
+            "type": "paragraph",
+            "text": "The second tool is a simple self-placement conversation around four honest positions: (1) I am new to following Jesus; (2) I believed long ago, but I am in a desert — defeated, worried, stuck; (3) I have surrendered to His Lordship, but my growth has stalled — I do not know how to stay connected day to day; (4) I am hungry to abide deeply and to help someone else grow. Ask, “Where would you place yourself — and why?” Then, whatever they answer, your reply ends the same warm way: “...and that is exactly why we are meeting.”"
+          },
+          {
+            "type": "paragraph",
+            "text": "Behind both tools, hold the stages of growth like a parent does: spiritually dead, infant, child, young adult, parent. Each stage has its own language and its own needs — and no stage is shameful. You feed infants; you do not scold them for not walking. The whole aim is to meet people where they are and love them toward where Jesus is taking them."
+          },
+          {
+            "type": "heading",
+            "text": "Choosing Whom to Walk With"
+          },
+          {
+            "type": "paragraph",
+            "text": "When the choice is yours, choose the way Jesus did — after prayer (He spent all night before naming the Twelve) — and look for F.A.T. people: Faithful, Available, Teachable. Spiritual hunger outranks polish every time. And hear the kind warning of experienced disciplers: trying to disciple a disinterested person will usually lead to frustration. You are not rejecting anyone — you are stewarding a season. Pray for the disinterested; walk with the hungry."
+          },
+          {
+            "type": "paragraph",
+            "text": "Finally, tailor everything. No assembly lines, no cloning: design the pace, the content emphasis, and the accountability to fit this one person, because that is precisely how God disciples you."
+          },
+          {
+            "type": "heading",
+            "text": "Fill-In Reflections"
+          },
+          {
+            "type": "prompt",
+            "id": "dt6_fill_drawout",
+            "question": "1. “Counsel in the heart of man is like deep water, but a man of understanding will ____ it ____.”",
+            "hint": "Answer: draw; out"
+          },
+          {
+            "type": "prompt",
+            "id": "dt6_fill_externals",
+            "question": "2. Never assume maturity from ____.",
+            "hint": "Answer: externals (behavior)"
+          },
+          {
+            "type": "prompt",
+            "id": "dt6_fill_meeting",
+            "question": "3. Whatever they answer: “...and that is exactly why we are ____.”",
+            "hint": "Answer: meeting"
+          },
+          {
+            "type": "prompt",
+            "id": "dt6_fill_available",
+            "question": "4. Look for F.A.T. people: Faithful, ____, Teachable.",
+            "hint": "Answer: Available"
+          },
+          {
+            "type": "prompt",
+            "id": "dt6_fill_scold",
+            "question": "5. You feed infants; you do not ____ them for not walking.",
+            "hint": "Answer: scold (rebuke)"
+          },
+          {
+            "type": "heading",
+            "text": "Discussion Questions"
+          },
+          {
+            "type": "prompt",
+            "id": "dt6_dq1",
+            "question": "1. Has anyone ever truly “drawn out the deep water” in you? What did they do that made it safe?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt6_dq2",
+            "question": "2. Which of the Five Concepts was a late discovery in your own walk — head knowledge long before heart knowledge?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt6_dq3",
+            "question": "3. Where would you place yourself today among the four positions — and why?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt6_dq4",
+            "question": "4. Why is “preaching at them” so tempting in a diagnostic conversation, and what does it cost?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt6_dq5",
+            "question": "5. Faithful, Available, Teachable: which was weakest in you when someone chose to walk with you — and what does that teach you about choosing?"
+          },
+          {
+            "type": "heading",
+            "text": "This Week’s Practice: One Deep-Water Conversation"
+          },
+          {
+            "type": "paragraph",
+            "text": "With a fellow trainee (practice pairs), run the “Where am I as a Christian?” conversation both directions. Rules: open questions only, no advice, no preaching; your last line must be “...and that’s why we’re meeting.” Afterward, tell each other honestly: when did you feel listened to, and when did you feel processed?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt6_practice_listening",
+            "question": "What I learned about listening:"
+          },
+          {
+            "type": "heading",
+            "text": "Memory Verse for Module 6"
+          },
+          {
+            "type": "verse",
+            "text": "Counsel in the heart of man is like deep water, but a man of understanding will draw it out.",
+            "reference": "Proverbs 20:5 (NKJV)"
+          },
+          {
+            "type": "heading",
+            "text": "End-of-Module Reflection"
+          },
+          {
+            "type": "prompt",
+            "id": "dt6_r1",
+            "question": "1. Am I a better talker or listener? What would my closest friends say?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt6_r2",
+            "question": "2. Which growth stage am I in right now — honestly?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt6_r3",
+            "question": "3. What externals have fooled me before — in others, or in how I present myself?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt6_r4",
+            "question": "4. Who around me shows hunger, faithfulness, availability, teachability?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt6_r5",
+            "question": "5. What do I want to carry into Module 7, where we learn the craft of the weekly one-on-one?"
+          },
+          {
+            "type": "quote",
+            "text": "Closing thought — Always remember: every soul has an address, and love learns it before giving directions. Jesus asked more questions than He answered — the Master of the universe drew people out. Do the same, and your disciple will one day say the rarest sentence in the modern world: “I was truly known.”"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dis_m7",
+      "weekNumber": 7,
+      "kind": "CORE",
+      "title": "The Art of the One-on-One: The Weekly Meeting",
+      "summary": "Becoming skilled in the simple, repeatable craft of a meeting where Jesus gets room to work.",
+      "content": {
+        "version": 1,
+        "blocks": [
+          {
+            "type": "bigIdea",
+            "text": "Becoming skilled in the simple, repeatable craft of a meeting where Jesus gets room to work."
+          },
+          {
+            "type": "heading",
+            "text": "Overview"
+          },
+          {
+            "type": "paragraph",
+            "text": "Now we get intensely practical. The discipling relationship runs on a weekly meeting — roughly ninety minutes, week after week, for a season. Done poorly, it becomes a lecture, a counseling session, or a chat. Done well, it becomes the most transforming hour of your disciple’s week. The craft is learnable. This module teaches it."
+          },
+          {
+            "type": "heading",
+            "text": "The Shape of the Meeting"
+          },
+          {
+            "type": "paragraph",
+            "text": "The logistics first, because wisdom lives in them: pair men with men, women with women (or couple with couple). Meet weekly, sixty to ninety minutes, in a quiet, comfortable place — a home, a coffee shop, a corner of the church, a park. Begin every pairing with a no-pressure thirty-minute meet-and-greet where you simply agree on expectations. Plan for a season of three to nine months minimum, and be understanding and gracious when life interrupts the schedule — it will."
+          },
+          {
+            "type": "paragraph",
+            "text": "The meeting itself has a simple liturgy: open with brief prayer → check in on life first, not just “spiritually” → work the week’s material aloud together, taking turns reading → discuss with open questions → you model with your own story → close with prayer both ways — you pray for them, and they pray for you. Let your disciple track where you stopped; go at their pace, not the calendar’s."
+          },
+          {
+            "type": "heading",
+            "text": "The Craft of Questions"
+          },
+          {
+            "type": "paragraph",
+            "text": "The discipler’s master skill is facilitation: “the art of asking questions so THEY come to the conclusion, instead of you announcing it.” Truth a person discovers goes ten times deeper than truth they are handed. Use the OARS pattern: Open-ended questions (“What stood out to you?”), Affirm (“That’s an honest answer — thank you”), Reflect back (“So you’re saying...”), Summarize toward Scripture (“Let’s look at what Jesus says about exactly that”)."
+          },
+          {
+            "type": "paragraph",
+            "text": "And remember: the heart-level answer almost never comes on the first question. It comes on the second and third follow-up. “How was your week?” — “Fine.” — “What was the best hour of it?” — now you are getting somewhere. Gentle persistence, never interrogation."
+          },
+          {
+            "type": "heading",
+            "text": "The Illustration: Teaching Someone to Drive"
+          },
+          {
+            "type": "paragraph",
+            "text": "Nobody learns to drive by watching lectures about driving. At some point the instructor slides over, hands you the keys, and sits in the passenger seat — calm, alert, hand near the brake. First he drives and you watch. Then you drive and he coaches. Then you drive and he rides along quietly. Then, one day, the car pulls out of the driveway without him — and that was the goal all along."
+          },
+          {
+            "type": "paragraph",
+            "text": "Every skill you pass on — a daily quiet time, studying a passage, praying aloud, sharing a testimony — moves through those same seats: model it → let them try → encourage and redirect → repeat → release. If you are always driving, no one is learning."
+          },
+          {
+            "type": "heading",
+            "text": "Studying the Word Together — and Two Guardrails"
+          },
+          {
+            "type": "paragraph",
+            "text": "Teach one simple method your disciple can use forever. Three questions of any passage: Observation — what does it say? Interpretation — what does it mean? Application — what will I do about it? (For daily habit, its cousin SOAP: Scripture, Observation, Application, Prayer.) Practice it live in your meetings on short passages — John 15 is a wonderful place to begin."
+          },
+          {
+            "type": "paragraph",
+            "text": "Two guardrails hold the whole craft together. First: give insights, not verdicts — a helping relationship is a liberating relationship; avoid advice-giving, rescuing, and nagging (and never entangle the relationship with money). Second: keep the aim in view — the goal is your disciple’s dependence on the Holy Spirit and independence from you. You are succeeding when they need you less."
+          },
+          {
+            "type": "heading",
+            "text": "Fill-In Reflections"
+          },
+          {
+            "type": "prompt",
+            "id": "dt7_fill_they",
+            "question": "1. Facilitation is asking questions so ____ come to the conclusion.",
+            "hint": "Answer: they"
+          },
+          {
+            "type": "prompt",
+            "id": "dt7_fill_reflect",
+            "question": "2. OARS: Open-ended, Affirm, ____, Summarize.",
+            "hint": "Answer: Reflect"
+          },
+          {
+            "type": "prompt",
+            "id": "dt7_fill_followup",
+            "question": "3. The heart-level answer comes on the ____ and ____ follow-up.",
+            "hint": "Answer: second; third"
+          },
+          {
+            "type": "prompt",
+            "id": "dt7_fill_release",
+            "question": "4. Model it → let them try → encourage → repeat → ____.",
+            "hint": "Answer: release"
+          },
+          {
+            "type": "prompt",
+            "id": "dt7_fill_you",
+            "question": "5. The goal: dependence on the Holy Spirit, independence from ____.",
+            "hint": "Answer: you (the discipler)"
+          },
+          {
+            "type": "heading",
+            "text": "Discussion Questions"
+          },
+          {
+            "type": "prompt",
+            "id": "dt7_dq1",
+            "question": "1. Think of the best one-on-one conversations of your life. What did the other person do that made them work?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt7_dq2",
+            "question": "2. Which part of the meeting liturgy would you be most tempted to skip — and what would skipping it cost?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt7_dq3",
+            "question": "3. Practice out loud: turn “You should forgive your brother” into three questions that could help someone discover it."
+          },
+          {
+            "type": "prompt",
+            "id": "dt7_dq4",
+            "question": "4. Where are you on the driving-lesson seats with the skills of the faith — and who put you in the driver’s seat first?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt7_dq5",
+            "question": "5. Why is “needing you less” success and not loss? What in us resists that?"
+          },
+          {
+            "type": "heading",
+            "text": "This Week’s Practice: Run a Full Meeting"
+          },
+          {
+            "type": "paragraph",
+            "text": "With your practice partner, run one complete meeting using the liturgy: prayer → life check-in → John 15:1–11 with Observation/Interpretation/Application → OARS questions → close praying both ways. Time it. Afterward, debrief with two questions: where did it feel alive, and where did it feel like a classroom?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt7_practice_meeting",
+            "question": "What I will do differently in my next meeting:"
+          },
+          {
+            "type": "heading",
+            "text": "Memory Verse for Module 7"
+          },
+          {
+            "type": "verse",
+            "text": "A disciple is not above his teacher, but everyone who is perfectly trained will be like his teacher.",
+            "reference": "Luke 6:40 (NKJV)"
+          },
+          {
+            "type": "heading",
+            "text": "End-of-Module Reflection"
+          },
+          {
+            "type": "prompt",
+            "id": "dt7_r1",
+            "question": "1. Am I more at risk of lecturing or of drifting into mere chat? What is my correction?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt7_r2",
+            "question": "2. How did it feel to be prayed for by the person I was discipling in practice?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt7_r3",
+            "question": "3. Which question I asked this week actually opened a door? What made it work?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt7_r4",
+            "question": "4. What skill of the faith am I ready to hand the keys for — and to whom?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt7_r5",
+            "question": "5. What do I want to carry into Module 8, where we walk the actual GLC tracks my disciple will travel?"
+          },
+          {
+            "type": "quote",
+            "text": "Closing thought — Always remember: the meeting is not the ministry — the meeting is the greenhouse where the ministry grows. Keep it warm, keep it honest, keep it weekly. And keep sliding toward the passenger seat: the day your disciple drives off without you is not your loss. It is your harvest."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dis_m8",
+      "weekNumber": 8,
+      "kind": "CORE",
+      "title": "Walking the Tracks: Your Disciple’s Journey at Grace Life Center",
+      "summary": "Becoming a sure-footed guide on the actual path your disciple will walk — from first hello to commissioning.",
+      "content": {
+        "version": 1,
+        "blocks": [
+          {
+            "type": "bigIdea",
+            "text": "Becoming a sure-footed guide on the actual path your disciple will walk — from first hello to commissioning."
+          },
+          {
+            "type": "heading",
+            "text": "Overview"
+          },
+          {
+            "type": "paragraph",
+            "text": "A trail guide must know the trail. Your disciple will not be walking an abstract “spiritual journey”; they will be walking Grace Life Center’s pathway — Welcome Track, BECOME®, Leaders Track — with real milestones, real cohorts, and real tools in our Harvest app. This module is your working tour: what your disciple experiences at every stage, and how you shepherd each handoff."
+          },
+          {
+            "type": "heading",
+            "text": "The Path: BE → BECOME → BRING"
+          },
+          {
+            "type": "paragraph",
+            "text": "The Welcome Track (5 weeks) opens the front door: who we are, why Jesus, what following means, how we partner — ending in the two covenants: the decision to follow Jesus, and partnership with GLC. Your role there: help a brand-new friend feel safe, answer honestly, and celebrate the turning of a heart. Remember the first 72 hours after someone says yes to Jesus are golden — excitement and fear arrive together (“Am I really forgiven?”); your early presence steadies both."
+          },
+          {
+            "type": "paragraph",
+            "text": "BECOME® (12 weeks) is the workshop: the Sermon on the Mount, one practice at a time, with a Before/After Discipleship Assessment and the milestone of water baptism. Your role: keep them practicing, not just reading — and walk them toward the water. The Leaders Track (11 weeks) forms those God calls to lead, ending in commissioning. Your role: notice the call before they do, and say so out loud. What does success look like for a discipler? Three things we celebrate: your disciple reaches the next track; your disciple becomes a discipler; your disciple steps toward leadership."
+          },
+          {
+            "type": "heading",
+            "text": "The Illustration: The Exchange Zone"
+          },
+          {
+            "type": "paragraph",
+            "text": "Relay races are won and lost in one painted stretch of track: the exchange zone, where the baton passes at full speed. The runners do not stop, shake hands, and restart — the incoming runner runs alongside the outgoing runner until the baton is safely in new fingers."
+          },
+          {
+            "type": "paragraph",
+            "text": "Every transition in your disciple’s journey — Welcome into BECOME®, BECOME® into serving or Leaders, one discipler to another — is an exchange zone. Most people are not lost on the straightaways; they are lost between tracks, in the unaccompanied gaps. Your job in every transition: run alongside until the baton is truly in the next hand. No unaccompanied gaps."
+          },
+          {
+            "type": "heading",
+            "text": "Your Tools in the Harvest App"
+          },
+          {
+            "type": "paragraph",
+            "text": "Grace Life Center runs its discipleship pathway on our Harvest app, and disciplers get their own toolkit inside it. My Disciples (🤝) shows you each disciple’s workbook and their saved reflections — read them before every meeting; they are a window into the week you were not there for. The Discipler Note lets you leave one comment per module — it is emailed to your disciple, so write it with grace: specific, warm, short. Cohort announcements keep you current; the nudge email tells you when your disciple has gone quiet for a week — treat it as a prayer alarm first and a text prompt second; and milestones (baptism, commissioning) are recorded and celebrated — never let one pass silently."
+          },
+          {
+            "type": "paragraph",
+            "text": "Involve your disciple at every level of church life as they grow — the one-on-one, a small group, the large gathering. Each space forms something the others cannot."
+          },
+          {
+            "type": "heading",
+            "text": "Fill-In Reflections"
+          },
+          {
+            "type": "prompt",
+            "id": "dt8_fill_become",
+            "question": "1. The pathway: Welcome (BE) → BECOME® (____) → Leaders (BRING).",
+            "hint": "Answer: BECOME"
+          },
+          {
+            "type": "prompt",
+            "id": "dt8_fill_72",
+            "question": "2. The first ____ hours after conversion are golden.",
+            "hint": "Answer: 72"
+          },
+          {
+            "type": "prompt",
+            "id": "dt8_fill_tracks",
+            "question": "3. People are rarely lost on the straightaways; they are lost between ____.",
+            "hint": "Answer: tracks (in the gaps)"
+          },
+          {
+            "type": "prompt",
+            "id": "dt8_fill_baton",
+            "question": "4. Run alongside until the ____ is truly in the next hand.",
+            "hint": "Answer: baton"
+          },
+          {
+            "type": "prompt",
+            "id": "dt8_fill_reflections",
+            "question": "5. Read your disciple’s ____ before every meeting.",
+            "hint": "Answer: reflections"
+          },
+          {
+            "type": "heading",
+            "text": "Discussion Questions"
+          },
+          {
+            "type": "prompt",
+            "id": "dt8_dq1",
+            "question": "1. Where on the GLC pathway did you almost fall into a gap? Who ran alongside you — or failed to?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt8_dq2",
+            "question": "2. Which track do you know least well from the inside? What is your plan to walk its material?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt8_dq3",
+            "question": "3. Why do excitement and fear arrive together in a new believer’s first days? What steadies each?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt8_dq4",
+            "question": "4. What makes a Discipler Note life-giving instead of school-report-like? Draft one aloud."
+          },
+          {
+            "type": "prompt",
+            "id": "dt8_dq5",
+            "question": "5. Which of the three success markers (next track, new discipler, leadership) most stirs you — and why?"
+          },
+          {
+            "type": "heading",
+            "text": "This Week’s Practice: Walk the Trail Yourself"
+          },
+          {
+            "type": "paragraph",
+            "text": "In the app, open the Welcome, BECOME®, and Leaders workbooks and skim one module of each with a guide’s eyes: what will my disciple feel here? Where might they stall? Then draft one practice Discipler Note (two or three sentences, warm and specific) for a sample module and bring it to the gathering for feedback."
+          },
+          {
+            "type": "prompt",
+            "id": "dt8_practice_gap",
+            "question": "The gap on the pathway I most want to guard:"
+          },
+          {
+            "type": "heading",
+            "text": "Memory Verse for Module 8"
+          },
+          {
+            "type": "verse",
+            "text": "I have no greater joy than to hear that my children walk in truth.",
+            "reference": "3 John 4 (NKJV)"
+          },
+          {
+            "type": "heading",
+            "text": "End-of-Module Reflection"
+          },
+          {
+            "type": "prompt",
+            "id": "dt8_r1",
+            "question": "1. Do I know the trail well enough to guide it? What is my study plan?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt8_r2",
+            "question": "2. Which exchange zone in our church most needs guarding right now?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt8_r3",
+            "question": "3. How will I keep the app’s tools human — helps to presence, never substitutes for it?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt8_r4",
+            "question": "4. Whose milestone can I help celebrate in the next month?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt8_r5",
+            "question": "5. What do I want to carry into Module 9, where we prepare for the hard weeks?"
+          },
+          {
+            "type": "quote",
+            "text": "Closing thought — Always remember: a guide’s authority comes from scars and mileage — you point most confidently at bends you have walked yourself. Learn the trail, guard the exchange zones, and let no one you love travel an unaccompanied gap. The baton matters more than the runner’s speed."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dis_m9",
+      "weekNumber": 9,
+      "kind": "CORE",
+      "title": "Challenges, Boundaries & Care: Never Alone",
+      "summary": "Becoming a steady companion for hard weeks — who knows what is mine to carry, and what is not.",
+      "content": {
+        "version": 1,
+        "blocks": [
+          {
+            "type": "bigIdea",
+            "text": "Becoming a steady companion for hard weeks — who knows what is mine to carry, and what is not."
+          },
+          {
+            "type": "heading",
+            "text": "Overview"
+          },
+          {
+            "type": "paragraph",
+            "text": "Walk with anyone long enough and you will meet hard weeks: the disciple who goes silent, the confession that is bigger than you, the season when nothing seems to grow. This module prepares you before you need it — the boundaries that keep you serving in your lane, the escalation path that keeps everyone safe, and the grace that keeps perseverance from curdling into pressure."
+          },
+          {
+            "type": "heading",
+            "text": "What a Discipler Is Not"
+          },
+          {
+            "type": "paragraph",
+            "text": "Write these three boundaries where you can see them. You are not a counselor — deep wounds, trauma, and mental-health struggles deserve trained care; your role is love, prayer, and a warm handoff, not treatment. You are not a life coach — you serve their formation in Christ, not their five-year plan. You are not a theologian-on-call — “I don’t know, but let’s find out” is a fully qualified answer."
+          },
+          {
+            "type": "paragraph",
+            "text": "Boundaries are not a failure of love; they are one of its forms. The lifeguard who drags a drowning man to the trained medic on shore has not abandoned him — he has saved him twice."
+          },
+          {
+            "type": "heading",
+            "text": "The Illustration: The Depth Markers"
+          },
+          {
+            "type": "paragraph",
+            "text": "Every safe pool paints depth markers on its wall — 3 FT, 5 FT, 9 FT, DEEP END — so swimmers and lifeguards alike know where feet can touch bottom. Souls have depth markers too. Level 1 — everyday struggles (discouragement, a hard decision): any believing friend can wade here; that is normal friendship. Level 2 — habitual struggles (a besetting sin, a stuck pattern): this is your discipling lane — intentional follow-up, Scripture, prayer, patient accountability. Level 3 — life-dominating issues (addiction, an unraveling marriage, deep grief): you stay present, but you bring in pastors and, where wise, professional care. Level 4 — crisis (abuse, threat of self-harm, danger): immediately to pastoral leadership; confidentiality never means secrecy that endangers someone."
+          },
+          {
+            "type": "paragraph",
+            "text": "Know the markers before the water gets deep. In the deep end, presence is still yours — treatment is not."
+          },
+          {
+            "type": "heading",
+            "text": "The Quiet Disciple and the Stalled Season"
+          },
+          {
+            "type": "paragraph",
+            "text": "When your disciple goes quiet: reach out, express real concern, offer support — and do not push. If the silence holds, ask your coordinator about a conversation or reassignment. Hear this clearly: reassignment is faithfulness, not failure. Some pairings are for a season; stewarding the season well includes knowing when it ends."
+          },
+          {
+            "type": "paragraph",
+            "text": "When growth stalls, return to Module 3: nobody yells at seeds. Persevere — no fruit ripens without a farmer who kept showing up through unremarkable months (Galatians 6:9) — but match your pressure to their stated commitment, not your ambition for them. And when correction is needed, the old sequence still holds: after prayer, with gentleness, from earned trust, aimed at restoration. Watch how Jesus supervised: He reviewed, debriefed, corrected — and He bore with Peter all the way through denial to breakfast on the beach. Restorative, never punitive."
+          },
+          {
+            "type": "heading",
+            "text": "Who Carries the Carrier?"
+          },
+          {
+            "type": "paragraph",
+            "text": "You will feel over your head sometimes — that is the correct depth; it is what keeps disciplers praying. But feeling over your head is different from being alone, and you must never be alone. Behind you stands a coordinator who tracks every pairing; above you, pastors who want the hard cases; beside you, the quarterly Discipler Gathering — testimonies, refreshers, honest questions — that exists precisely “so that mentors don’t feel isolated.” Bring your burdens there. Confidentiality binds the circle, not the chain: taking a crisis up the chain to your pastors is not breaking trust; it is completing it."
+          },
+          {
+            "type": "paragraph",
+            "text": "And mind your own soul: sabbath, your own Paul, your own daily bread in the Word. Broken people are God’s favorite instruments — but sustained ones last."
+          },
+          {
+            "type": "heading",
+            "text": "Fill-In Reflections"
+          },
+          {
+            "type": "prompt",
+            "id": "dt9_fill_theologian",
+            "question": "1. Not a counselor, not a life coach, not a ____.",
+            "hint": "Answer: theologian"
+          },
+          {
+            "type": "prompt",
+            "id": "dt9_fill_presence",
+            "question": "2. In the deep end, ____ is still yours — treatment is not.",
+            "hint": "Answer: presence"
+          },
+          {
+            "type": "prompt",
+            "id": "dt9_fill_faithfulness",
+            "question": "3. Reassignment is ____, not failure.",
+            "hint": "Answer: faithfulness"
+          },
+          {
+            "type": "prompt",
+            "id": "dt9_fill_trust",
+            "question": "4. Correction comes after prayer, with gentleness, from earned ____.",
+            "hint": "Answer: trust"
+          },
+          {
+            "type": "prompt",
+            "id": "dt9_fill_chain",
+            "question": "5. Confidentiality binds the circle, not the ____.",
+            "hint": "Answer: chain"
+          },
+          {
+            "type": "heading",
+            "text": "Discussion Questions"
+          },
+          {
+            "type": "prompt",
+            "id": "dt9_dq1",
+            "question": "1. Which boundary will be hardest for you — counselor, coach, or theologian? What makes it tempting?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt9_dq2",
+            "question": "2. Walk the four depth levels with real (anonymous) examples. Where exactly does Level 2 end and Level 3 begin?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt9_dq3",
+            "question": "3. Have you ever been the quiet one who went silent? What reached you? What pushed you further away?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt9_dq4",
+            "question": "4. Why do we hesitate to escalate — and what has hesitation cost people you have known?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt9_dq5",
+            "question": "5. What does “bearing with Peter to breakfast on the beach” teach about correcting someone who has failed badly?"
+          },
+          {
+            "type": "heading",
+            "text": "This Week’s Practice: Know Your Chain, Rehearse Your Lines"
+          },
+          {
+            "type": "paragraph",
+            "text": "Two parts. (1) Write down your actual chain of care with names and numbers: my coordinator · my pastor · when I call immediately. (2) With your practice partner, role-play two hard moments: a disciple who confesses something at Level 3, and a disciple who has gone silent for two weeks. Practice your first three sentences for each — grace first, presence promised, next step named."
+          },
+          {
+            "type": "prompt",
+            "id": "dt9_practice_chain",
+            "question": "My chain of care:"
+          },
+          {
+            "type": "heading",
+            "text": "Memory Verse for Module 9"
+          },
+          {
+            "type": "verse",
+            "text": "Bear one another’s burdens, and so fulfill the law of Christ.",
+            "reference": "Galatians 6:2 (NKJV)"
+          },
+          {
+            "type": "heading",
+            "text": "End-of-Module Reflection"
+          },
+          {
+            "type": "prompt",
+            "id": "dt9_r1",
+            "question": "1. Am I more likely to carry too much or too little? What is the cost of my lean?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt9_r2",
+            "question": "2. Who carries me? Is that chair actually filled, or just theoretically?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt9_r3",
+            "question": "3. What crisis line do I need to memorize before I ever need it?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt9_r4",
+            "question": "4. Where do I need grace for a stalled season — in someone I love, or in myself?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt9_r5",
+            "question": "5. What do I want to carry into Module 10, where the whole journey turns outward: multiplication and commissioning?"
+          },
+          {
+            "type": "quote",
+            "text": "Closing thought — Always remember: you were never asked to be the ocean — only a lifeguard who knows the depth markers and the number for shore. Stay present in the deep end, call for help early, and let the hard weeks drive you to prayer rather than to performance. The Good Shepherd has never once lost track of a sheep because His helper asked for help."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dis_m10",
+      "weekNumber": 10,
+      "kind": "CORE",
+      "title": "Multiplication & Commissioning: Hand It On",
+      "summary": "Becoming a link in an unbroken chain — commissioned, entrusted, and already praying for the next generation.",
+      "content": {
+        "version": 1,
+        "blocks": [
+          {
+            "type": "bigIdea",
+            "text": "Becoming a link in an unbroken chain — commissioned, entrusted, and already praying for the next generation."
+          },
+          {
+            "type": "heading",
+            "text": "Overview"
+          },
+          {
+            "type": "paragraph",
+            "text": "This is where the track turns from preparation to commissioning. One conviction stands over the final week: discipleship is not complete until your disciple disciples someone else. You are not graduating from a course; you are stepping into a lineage — and taking your place in the same relay that reached you. Take the After assessment, see what Jesus has done in ten weeks, and receive your assignment."
+          },
+          {
+            "type": "heading",
+            "text": "The Aim Was Always the Third Generation"
+          },
+          {
+            "type": "paragraph",
+            "text": "Paul to Timothy, one last time: what you heard from me, commit to faithful people, who will teach others also (2 Timothy 2:2) — four generations in one sentence. Your work with your disciple is not finished when they know the material; it is finished when they are walking with their own person. “Like begets like” — you reproduce what you are, which is why this track has spent ten weeks on who you are becoming."
+          },
+          {
+            "type": "paragraph",
+            "text": "So build multiplication in from your first meeting. Speak in the present tense — “when you disciple someone...” — long before they feel ready. Release the way Jesus did: model → let them try → encourage → repeat → release, staying available. Success, remember, is measured in sending capacity, not seating capacity."
+          },
+          {
+            "type": "heading",
+            "text": "The Illustration: The Candle and the Dark Room"
+          },
+          {
+            "type": "paragraph",
+            "text": "Take one lit candle into a dark hall and the darkness barely notices. Now let that candle light two, and those two light four, and keep going. Nothing about any single candle improved — same small flame — yet in a few minutes the hall is blazing. No candle lost anything by lighting another; flame is the one wealth that multiplies by being given away."
+          },
+          {
+            "type": "paragraph",
+            "text": "This is God’s arithmetic for filling the earth with His glory “as the waters cover the sea” (Habakkuk 2:14). Your one small flame, faithfully handed on, out-shines every spotlight that never lit anything."
+          },
+          {
+            "type": "heading",
+            "text": "The Fears, Answered One Last Time"
+          },
+          {
+            "type": "paragraph",
+            "text": "“I’m not good enough.” Neither were the ordinary, unschooled men of Acts 4:13 — people could only tell they had been with Jesus. “I don’t know enough.” You know the One who knows; “I don’t know, let’s find out” remains fully qualified. “What if I fail?” You will, sometimes — and His strength is made perfect in weakness (2 Corinthians 12:9). Every fear points to the same answer: God’s capability, not yours. He who began this good work — in you and in your disciple — will complete it (Philippians 1:6). The whole plan runs on His faithfulness, and Jesus Himself is praying for your success."
+          },
+          {
+            "type": "paragraph",
+            "text": "You are not sent alone, and you are not sent unarmed: you carry a gospel bigger than sin management, a grace stronger than performance, a friendship with a vision, a Spirit who does the real work, and a church with a path, a toolkit, and a room full of fellow disciplers every quarter."
+          },
+          {
+            "type": "heading",
+            "text": "Commissioned"
+          },
+          {
+            "type": "paragraph",
+            "text": "At the commissioning gathering you will retake the readiness assessment (below), share testimonies of these ten weeks, be prayed over by your pastors, and — the part you will remember — receive a name: the person entrusted to you. Before that day, do three things: pray again over the names from Module 2; agree with your coordinator on your first pairing; and set your first meet-and-greet."
+          },
+          {
+            "type": "paragraph",
+            "text": "The journey from here is lifelong. Disciplers keep learning, keep gathering quarterly, keep their own Paul and Barnabas close — and keep handing on the coat. Somewhere down the chain of the people you will touch, there are faces you will never see this side of heaven. Walk accordingly."
+          },
+          {
+            "type": "heading",
+            "text": "Discipler Readiness Assessment — After"
+          },
+          {
+            "type": "paragraph",
+            "text": "Rate yourself honestly from 1 (“not yet true of me”) to 5 (“consistently true of me”) — the same ten categories as Module 0. Do not look back at your Before answers until you finish. Then turn to the Appendix and set the two side by side: that distance is what Jesus did in ten weeks."
+          },
+          {
+            "type": "rating",
+            "id": "dt10_readiness_after",
+            "title": "Category — “consistently true of me?”",
+            "items": [
+              "1. The Gospel of the Kingdom (what I believe and teach): I can explain the good news as more than sin management — God’s power and presence available now, through Jesus.",
+              "2. The Call & My Motivation: I am clear on why Jesus calls every disciple to make disciples — and why He is calling me.",
+              "3. Grace-Based Posture (gospel, not performance): I nurture growth without policing behavior; I know how to handle failure — mine and others’ — with grace.",
+              "4. Friendship & Shared Life: I share life, not just content; people experience me as a safe, generous friend.",
+              "5. Dependence on the Holy Spirit & Prayer: I pray for people by name, expect God to act, and rely on the Spirit rather than my own persuasion.",
+              "6. Listening & Asking Good Questions: I listen more than I talk, and my questions help people discover truth for themselves.",
+              "7. Modeling & Personal Integrity: My private walk with Jesus could bear being imitated; I am honest about my weaknesses.",
+              "8. Safety, Confidentiality & Care: I hold what people share like treasure, and I know when and how to involve pastors.",
+              "9. Knowledge of the GLC Tracks: I know what my disciple will experience in Welcome, Become®, and Leaders — and the tools in the Harvest app.",
+              "10. Multiplication Mindset: I am aiming from day one at a disciple who will one day disciple someone else."
+            ],
+            "scaleMax": 5
+          },
+          {
+            "type": "heading",
+            "text": "Fill-In Reflections"
+          },
+          {
+            "type": "prompt",
+            "id": "dt10_fill_disciples",
+            "question": "1. Discipleship is not complete until your disciple ____ someone else.",
+            "hint": "Answer: disciples"
+          },
+          {
+            "type": "prompt",
+            "id": "dt10_fill_like",
+            "question": "2. Like begets ____ — you reproduce what you are.",
+            "hint": "Answer: like"
+          },
+          {
+            "type": "prompt",
+            "id": "dt10_fill_givenaway",
+            "question": "3. Flame is the one wealth that multiplies by being ____ ____.",
+            "hint": "Answer: given away"
+          },
+          {
+            "type": "prompt",
+            "id": "dt10_fill_sending",
+            "question": "4. Success is measured in ____ capacity, not seating capacity.",
+            "hint": "Answer: sending"
+          },
+          {
+            "type": "prompt",
+            "id": "dt10_fill_capability",
+            "question": "5. Every fear points to the same answer: God’s ____, not yours.",
+            "hint": "Answer: capability"
+          },
+          {
+            "type": "heading",
+            "text": "Discussion Questions"
+          },
+          {
+            "type": "prompt",
+            "id": "dt10_dq1",
+            "question": "1. Compare your Before and After assessments. Where did Jesus move you most? Where is the next growth edge?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt10_dq2",
+            "question": "2. “Speak multiplication in the present tense from the first meeting.” Why does language shape expectation so strongly?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt10_dq3",
+            "question": "3. Which of the three fears still whispers loudest to you — and what is your answer to it now, in one sentence?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt10_dq4",
+            "question": "4. The candle: who are the “faces you will never see” that motivate you? Name the hope out loud."
+          },
+          {
+            "type": "prompt",
+            "id": "dt10_dq5",
+            "question": "5. What will keep you connected and growing after commissioning — concretely: which rhythms, which people?"
+          },
+          {
+            "type": "heading",
+            "text": "This Week’s Practice: Ready the First Meeting"
+          },
+          {
+            "type": "paragraph",
+            "text": "Do the three commissioning preparations: (1) pray over your Module 2 names one final week; (2) meet your coordinator and confirm your first pairing; (3) sketch your first meet-and-greet — where, when, and the three questions you will ask. Then write a one-paragraph prayer of consecration for your first disciple, and bring it to commissioning."
+          },
+          {
+            "type": "prompt",
+            "id": "dt10_practice_meetgreet",
+            "question": "My first meet-and-greet plan:"
+          },
+          {
+            "type": "heading",
+            "text": "Memory Verse for Module 10"
+          },
+          {
+            "type": "verse",
+            "text": "Him we preach, warning every man and teaching every man in all wisdom, that we may present every man perfect in Christ Jesus. To this end I also labor, striving according to His working which works in me mightily.",
+            "reference": "Colossians 1:28–29 (NKJV)"
+          },
+          {
+            "type": "heading",
+            "text": "End-of-Module Reflection"
+          },
+          {
+            "type": "prompt",
+            "id": "dt10_r1",
+            "question": "1. What has actually changed in me across these ten weeks — the thing a close friend would notice?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt10_r2",
+            "question": "2. What one sentence from this track do I want to be able to say in my sleep?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt10_r3",
+            "question": "3. Who am I praying will be the second candle — and the third?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt10_r4",
+            "question": "4. What do I want my pastors to pray over me at commissioning?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt10_r5",
+            "question": "5. What do I want to say to Jesus as I finish — and begin?"
+          },
+          {
+            "type": "quote",
+            "text": "Closing thought — Always remember: commissioning is not a certificate; it is a torch. You came into this track because somebody walked with you. You leave it as somebody who walks with another — a friend with a vision, a courier of the Kingdom, a candle that lights candles. Go, therefore. And when your disciple one day stands where you stand now, you will understand why heaven calls this joy."
+          }
+        ]
+      }
+    },
+    {
+      "id": "dis_m11",
+      "weekNumber": 11,
+      "kind": "APPENDIX",
+      "title": "Your Growth, Compared — and the Discipler’s Toolkit",
+      "summary": "A place to see what Jesus has done — and the tools you will reach for, for years to come.",
+      "content": {
+        "version": 1,
+        "blocks": [
+          {
+            "type": "bigIdea",
+            "text": "A place to see what Jesus has done — and the tools you will reach for, for years to come."
+          },
+          {
+            "type": "heading",
+            "text": "Overview"
+          },
+          {
+            "type": "paragraph",
+            "text": "This closing section holds two things: your Before/After comparison — set your Module 0 and Module 10 assessments side by side and let the distance speak — and the permanent toolkit you will return to long after the track ends. In the app, this appendix stays available to you as a commissioned discipler."
+          },
+          {
+            "type": "heading",
+            "text": "The Before / After Comparison"
+          },
+          {
+            "type": "paragraph",
+            "text": "Your scores for each of the ten categories from Module 0 (Before) and Module 10 (After) come together in the comparison table below — it will draw the picture for you. Two instructions as you look at it: first, thank God specifically for every point of movement — you did not manufacture it; second, circle the one category you most want Jesus to grow next, and tell your Barnabas. Growth that is named gets prayed for; growth that is prayed for continues."
+          },
+          {
+            "type": "comparison",
+            "title": "Your Growth as a Discipler — Before vs. After",
+            "beforeLabel": "Before",
+            "afterLabel": "After",
+            "note": "Calculated automatically from your two Discipler Readiness Assessments (Module 0 and Module 10). This is never about comparing yourself to others — it is about seeing what Jesus has done in ten weeks.",
+            "pairs": [
+              {
+                "title": "Discipler Readiness — 10 Categories",
+                "before": "dt0_readiness_before",
+                "after": "dt10_readiness_after",
+                "items": [
+                  "1. The Gospel of the Kingdom (what I believe and teach): I can explain the good news as more than sin management — God’s power and presence available now, through Jesus.",
+                  "2. The Call & My Motivation: I am clear on why Jesus calls every disciple to make disciples — and why He is calling me.",
+                  "3. Grace-Based Posture (gospel, not performance): I nurture growth without policing behavior; I know how to handle failure — mine and others’ — with grace.",
+                  "4. Friendship & Shared Life: I share life, not just content; people experience me as a safe, generous friend.",
+                  "5. Dependence on the Holy Spirit & Prayer: I pray for people by name, expect God to act, and rely on the Spirit rather than my own persuasion.",
+                  "6. Listening & Asking Good Questions: I listen more than I talk, and my questions help people discover truth for themselves.",
+                  "7. Modeling & Personal Integrity: My private walk with Jesus could bear being imitated; I am honest about my weaknesses.",
+                  "8. Safety, Confidentiality & Care: I hold what people share like treasure, and I know when and how to involve pastors.",
+                  "9. Knowledge of the GLC Tracks: I know what my disciple will experience in Welcome, Become®, and Leaders — and the tools in the Harvest app.",
+                  "10. Multiplication Mindset: I am aiming from day one at a disciple who will one day disciple someone else."
+                ]
+              }
+            ]
+          },
+          {
+            "type": "prompt",
+            "id": "dt11_growth_next",
+            "question": "The one category I most want Jesus to grow next (tell your Barnabas):"
+          },
+          {
+            "type": "heading",
+            "text": "The Discipler’s Toolkit — What Lives Here"
+          },
+          {
+            "type": "paragraph",
+            "text": "The Discipler Covenant (Module 0) — reread it each time you begin with a new disciple. The Mentee Conversations (Module 6) — the Five Concepts walk-through and the “Where am I as a Christian?” conversation, printable for your first meetings. The Weekly Meeting Card (Module 7) — the liturgy, the OARS questions, and the Observation/Interpretation/Application method on one page. The Four-Line Prayer List template (Module 5). The Depth Markers & Chain of Care card (Module 9) — levels of care with your coordinator’s and pastors’ contacts. The Pathway Map (Module 8) — Welcome → BECOME® → Leaders, with each track’s milestones and your role at every exchange zone."
+          },
+          {
+            "type": "paragraph",
+            "text": "Going deeper: the Kingdom Prayer card — a plain-English praying of the Lord’s Prayer for daily use; the aphorism list — the one-liners from this track, one page, worth memorizing (“the Kingdom of God is wherever what God wants done gets done” · “being saved is not where you are going but who you are now” · “grace is not opposed to effort, but to earning” · “content is taught, context is caught” · “disciple-making is friendship with a vision” · “nobody yells at seeds” · “prayer is the work” · “presence is yours; treatment is not” · “sending capacity, not seating capacity”); and the Divine Conspiracy going-deeper plan — our twelve-session teaching series through Dallas Willard’s vision of the Kingdom, for disciplers who want the deep well this track drew from."
+          },
+          {
+            "type": "heading",
+            "text": "A Last Word"
+          },
+          {
+            "type": "paragraph",
+            "text": "Keep this workbook. Not as a souvenir — as a field manual. The day will come when your disciple, somewhere around their own Module 4, looks up and asks how you learned to walk with people like this. Hand them this book, and say the oldest sentence in the family: “Someone walked with me. Now I walk with you. One day, you will walk with another.”"
+          },
+          {
+            "type": "heading",
+            "text": "Memory Verse for Appendix"
+          },
+          {
+            "type": "verse",
+            "text": "And let us not grow weary while doing good, for in due season we shall reap if we do not lose heart.",
+            "reference": "Galatians 6:9 (NKJV)"
+          },
+          {
+            "type": "quote",
+            "text": "Closing thought — Always remember: the Well is still the center. Everything in this toolkit is a bucket — useful only because of the Water it carries. Be with Jesus. Become like Jesus. Bring heaven. And keep handing on the coat."
+          }
+        ]
+      }
+    }
+  ]
+}
