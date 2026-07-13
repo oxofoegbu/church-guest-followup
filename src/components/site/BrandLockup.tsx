@@ -6,7 +6,7 @@ import { SITE } from '@/lib/site';
 
 export default function BrandLockup({
   tone = 'light',
-  href = '/',
+  href = '/home',
 }: {
   tone?: 'light' | 'dark';
   href?: string;

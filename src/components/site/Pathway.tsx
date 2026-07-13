@@ -3,7 +3,7 @@
 // landing pages. Reusable; the section head is supplied by the page.
 import Link from 'next/link';
 
-type Room = {
+export type Room = {
   num: string;
   rhythm: string;
   name: React.ReactNode;
@@ -56,10 +56,16 @@ const ROOMS: Room[] = [
   },
 ];
 
-export default function Pathway({ className = '' }: { className?: string }) {
+export default function Pathway({
+  className = '',
+  rooms = ROOMS,
+}: {
+  className?: string;
+  rooms?: Room[];
+}) {
   return (
     <div className={`grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 ${className}`}>
-      {ROOMS.map((r) => (
+      {rooms.map((r) => (
         <Link
           key={r.num}
           href={r.href}
