@@ -40,31 +40,7 @@ export async function GET(request: NextRequest) {
 
       const actionLabel = ACTION_ITEM_TYPES[item.actionType]?.label || item.customAction || item.actionType;
       const guestName = item.guest ? `${item.guest.firstName} ${item.guest.lastName}` : '';
-      const timeStr = item.dueTime || 'today';
 
-      const message = [
-        `⏰ *Reminder: ${item.title}*`,
-        `Action: ${actionLabel}`,
-        guestName ? `For: ${guestName}` : '',
-        `Due: ${item.dueDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })} at ${timeStr}`,
-        item.notes ? `Notes: ${item.notes}` : '',
-      ].filter(Boolean).join('\n');
-
-      // Send WhatsApp via Whapi
-      if (item.user.phone) {
-        try {
-          const apiUrl = process.env.WHAPI_API_URL || 'https://gate.whapi.cloud';
-          const token = process.env.WHAPI_TOKEN;
-          if (token) {
-            const cleanNumber = item.user.phone.replace(/[^0-9]/g, '');
-            await fetch(`${apiUrl}/messages/text?token=${token}`, {
-              method: 'POST',
-              headers: { 'accept': 'application/json', 'content-type': 'application/json' },
-              body: JSON.stringify({ to: cleanNumber, body: message }),
-            });
-          }
-        } catch (e) { console.error('WhatsApp reminder failed:', e); }
-      }
 
       // Send Email via Resend
       if (item.user.email) {

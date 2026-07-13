@@ -1,4 +1,5 @@
 import prisma from './db';
+import { sendWhatsAppTemplate, WA_TEMPLATES } from './whatsapp';
 
 interface NotifyVolunteerParams {
   volunteerId: string;
@@ -13,9 +14,6 @@ interface NotifyVolunteerParams {
   preferredContact: string;
   guestLink: string;
 }
-
-const DEFAULT_WHATSAPP_TEMPLATE =
-  'New guest assigned: {GuestName}. Phone: {GuestPhone}. First visit: {FirstVisitDate} ({ServiceAttended}). Preferred contact: {PreferredContact}. Open: {GuestLink}';
 
 const DEFAULT_EMAIL_SUBJECT = 'New Guest Assigned: {GuestName}';
 
@@ -139,8 +137,14 @@ export async function sendWhatsAppViaWhapi(to: string, message: string): Promise
 }
 
 export async function sendWhatsAppNotification(params: NotifyVolunteerParams): Promise<void> {
-  const template = process.env.WHATSAPP_TEMPLATE || DEFAULT_WHATSAPP_TEMPLATE;
-  const body = fillTemplate(template, params);
+  const templateParams = [
+    params.volunteerName,
+    params.guestName,
+    params.guestPhone || 'N/A',
+    params.firstVisitDate,
+    params.serviceAttended || 'N/A',
+    params.preferredContact,
+  ];
 
   const logEntry = await prisma.notificationLog.create({
     data: {
@@ -148,7 +152,7 @@ export async function sendWhatsAppNotification(params: NotifyVolunteerParams): P
       toUserId: params.volunteerId,
       channel: 'WHATSAPP',
       status: 'QUEUED',
-      payloadSnapshot: JSON.stringify({ body, to: params.volunteerPhone }),
+      payloadSnapshot: JSON.stringify({ template: WA_TEMPLATES.guestAssignment.name, params: templateParams, to: params.volunteerPhone }),
     },
   });
 
@@ -161,7 +165,7 @@ export async function sendWhatsAppNotification(params: NotifyVolunteerParams): P
   }
 
   try {
-    const result = await sendWhatsAppViaWhapi(params.volunteerPhone, body);
+    const result = await sendWhatsAppTemplate(params.volunteerPhone, WA_TEMPLATES.guestAssignment, templateParams);
 
     if (result.error) {
       throw new Error(result.error);
@@ -276,18 +280,6 @@ function buildNewGuestEmailHtml(guest: GuestInfo): string {
   `;
 }
 
-function buildNewGuestWhatsAppMessage(guest: GuestInfo): string {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || '';
-  let msg = `🆕 *New Guest Card*\n\nName: ${guest.firstName} ${guest.lastName}\nPhone: ${guest.phone || 'N/A'}\nService: ${guest.serviceAttended || 'N/A'}\nFirst Visit: ${guest.firstVisitDate}\nPreferred Contact: ${guest.preferredContactMethod}`;
-  if (guest.prayerRequest) {
-    msg += `\nPrayer Request: ${guest.prayerRequest}`;
-  }
-  if (appUrl) {
-    msg += `\n\nView: ${appUrl}/dashboard/guests/${guest.id}`;
-  }
-  return msg;
-}
-
 async function sendNewGuestEmails(guest: GuestInfo, emails: string[]): Promise<void> {
   const subject = `New Guest: ${guest.firstName} ${guest.lastName}`;
   const html = buildNewGuestEmailHtml(guest);
@@ -309,13 +301,20 @@ async function sendNewGuestEmails(guest: GuestInfo, emails: string[]): Promise<v
 }
 
 async function sendNewGuestWhatsApp(guest: GuestInfo, numbers: string[]): Promise<void> {
-  const body = buildNewGuestWhatsAppMessage(guest);
+  const templateParams = [
+    `${guest.firstName} ${guest.lastName}`,
+    guest.phone || 'N/A',
+    guest.serviceAttended || 'N/A',
+    guest.firstVisitDate,
+    guest.preferredContactMethod,
+    guest.prayerRequest || 'None provided',
+  ];
 
   for (const number of numbers) {
     const trimmed = number.trim();
     if (!trimmed) continue;
     try {
-      const result = await sendWhatsAppViaWhapi(trimmed, body);
+      const result = await sendWhatsAppTemplate(trimmed, WA_TEMPLATES.newGuestAlert, templateParams);
       if (result.error) {
         console.error(`New guest WhatsApp failed to ${trimmed}:`, result.error);
       } else {

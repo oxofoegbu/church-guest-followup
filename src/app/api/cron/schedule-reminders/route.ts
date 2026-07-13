@@ -4,9 +4,9 @@ import { renderOrderOfServiceHtml, renderOrderOfServiceWhatsApp } from '@/lib/sc
 import { buildOrderOfServicePdf, oosPdfFilename, OoSItem } from '@/lib/oos-pdf';
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
+import { sendWhatsAppTemplate, WA_TEMPLATES } from '@/lib/whatsapp';
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY!;
-const WHAPI_TOKEN    = process.env.WHAPI_TOKEN!;
 const FROM_EMAIL     = process.env.RESEND_FROM_EMAIL || process.env.FROM_EMAIL || 'noreply@gracelifecenter.org';
 const FROM_NAME      = process.env.RESEND_FROM_NAME  || 'Grace Life Center';
 const CHURCH_NAME    = 'Grace Life Center';
@@ -121,36 +121,14 @@ async function sendEmail(
 async function sendWhatsApp(
   phone: string, name: string, role: string,
   svc: ServiceInfo,
-  days: number,
 ) {
   const dateStr = svc.date.toLocaleDateString('en-US', {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
   });
-  const themeLine = svc.monthTheme ? `\n\u{1F4D6} Theme: ${svc.monthTheme}` : '';
-  const timing    = leadTimeLabel(days);
-
-  let message =
-    `\u{1F64F} *${CHURCH_NAME} \u2014 Service Reminder*\n\n` +
-    `Hi ${name}, you're scheduled as *${role}* ${timing}.\n\n` +
-    `\u{1F4C5} *${dateStr}*${themeLine}\n\n` +
-    `\u{1F4DD} _${svc.topic}_\n\n`;
-
-  if (svc.oosText) {
-    message += svc.oosText + `\n\n`;
-    message += `\u{1F4C4} Download / print the Order of Service (PDF):\n${svc.pdfUrl}\n\n`;
-    message += `_If anything needs to change, say so BEFORE Sunday._\n\n`;
-  }
-
-  message +=
-    `Questions? Contact ${CONTACT_NAME}${CONTACT_PHONE ? ` \u2014 ${CONTACT_PHONE}` : ''}.\n\n` +
-    `_See you Sunday\u{1F389}_`;
-
-  const normalized = phone.replace(/[\s\-\(\)]/g, '').replace(/^\+/, '');
-  await fetch('https://gate.whapi.cloud/messages/text', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${WHAPI_TOKEN}` },
-    body: JSON.stringify({ to: `${normalized}@s.whatsapp.net`, body: message }),
-  });
+  const scriptureMatch = svc.topic.match(/\(([^)]+)\)\s*$/);
+  const title = scriptureMatch ? svc.topic.replace(/\s*\([^)]+\)\s*$/, '') : svc.topic;
+  const result = await sendWhatsAppTemplate(phone, WA_TEMPLATES.roleAssignment, [name, dateStr, role, title]);
+  if (result.error) throw new Error(result.error);
 }
 
 /** Notify one person; returns how they were reached (for the leader summary). */
@@ -167,7 +145,7 @@ async function notifyUser(
     catch (e) { console.error(`[schedule-reminders] email error (${days}d)`, e); }
   }
   if (user.phone) {
-    try { await sendWhatsApp(user.phone, name, role, svc, days); channels.push('WhatsApp'); }
+    try { await sendWhatsApp(user.phone, name, role, svc); channels.push('WhatsApp'); }
     catch (e) { console.error(`[schedule-reminders] whatsapp error (${days}d)`, e); }
   }
   return channels;
@@ -180,10 +158,7 @@ type LineupEntry = { role: string; name: string; channels: string[] };
 async function sendLeaderSummary(svc: ServiceInfo, lineup: LineupEntry[]) {
   const emailSetting = await prisma.appSetting.findUnique({ where: { key: 'summary_emails' } }).catch(() => null);
   const emails = emailSetting?.value ? emailSetting.value.split(',').map(e => e.trim()).filter(Boolean) : [];
-  const waSetting = await prisma.appSetting.findUnique({ where: { key: 'summary_whatsapp' } }).catch(() => null);
-  const numbers = waSetting?.value ? waSetting.value.split(',').map(n => n.trim()).filter(Boolean) : [];
-
-  if (!emails.length && !numbers.length) return;
+  if (!emails.length) return;
 
   const dateStr = svc.date.toLocaleDateString('en-US', {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
@@ -244,27 +219,6 @@ async function sendLeaderSummary(svc: ServiceInfo, lineup: LineupEntry[]) {
     } catch (e) { console.error('[schedule-reminders] summary email error', e); }
   }
 
-  if (numbers.length) {
-    const statusText = (e: LineupEntry) => e.channels.length ? '\u2705 reminded' : '\u26A0\uFE0F not linked (no reminder)';
-    const lines = lineup.map(e => `\u2022 *${e.role}:* ${e.name} \u2014 ${statusText(e)}`).join('\n');
-    const message =
-      `\u{1F4CB} *${CHURCH_NAME} \u2014 Service Lineup*\n\n` +
-      `\u{1F4C5} *${dateStr}*\n` +
-      `\u{1F4DD} _${svc.topic}_\n\n` +
-      `These persons have been reminded of their role in the upcoming service:\n\n${lines}\n\n` +
-      `\u{1F4C4} Order of Service (PDF):\n${svc.pdfUrl}`;
-
-    for (const num of numbers) {
-      try {
-        const normalized = num.replace(/[\s\-\(\)]/g, '').replace(/^\+/, '');
-        await fetch('https://gate.whapi.cloud/messages/text', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${WHAPI_TOKEN}` },
-          body: JSON.stringify({ to: `${normalized}@s.whatsapp.net`, body: message }),
-        });
-      } catch (e) { console.error('[schedule-reminders] summary whatsapp error', e); }
-    }
-  }
 }
 
 export async function GET(request: NextRequest) {

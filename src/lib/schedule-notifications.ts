@@ -4,6 +4,8 @@
  * Replicates the Resend/Whapi patterns from notifications.ts.
  */
 
+import { sendWhatsAppTemplate, WA_TEMPLATES } from './whatsapp';
+
 const CHURCH_NAME = 'Grace Life Center';
 
 // ── Low-level helpers (mirror notifications.ts) ─────────────────────────────
@@ -26,27 +28,6 @@ async function sendEmail(to: string, subject: string, html: string): Promise<voi
     }
   } catch (e: any) {
     console.error('[schedule-notify] email exception:', e.message);
-  }
-}
-
-async function sendWhatsApp(phone: string, message: string): Promise<void> {
-  const apiUrl = process.env.WHAPI_API_URL || 'https://gate.whapi.cloud';
-  const token  = process.env.WHAPI_TOKEN;
-  if (!token) { console.warn('[schedule-notify] Whapi not configured'); return; }
-
-  const cleanNumber = phone.replace(/^whatsapp:/, '').replace(/[^0-9]/g, '');
-  try {
-    const res = await fetch(`${apiUrl}/messages/text?token=${token}`, {
-      method: 'POST',
-      headers: { accept: 'application/json', 'content-type': 'application/json' },
-      body: JSON.stringify({ to: cleanNumber, body: message }),
-    });
-    if (!res.ok) {
-      const d = await res.json();
-      console.error('[schedule-notify] Whapi error:', d.message || d.error);
-    }
-  } catch (e: any) {
-    console.error('[schedule-notify] WhatsApp exception:', e.message);
   }
 }
 
@@ -126,29 +107,6 @@ function buildRoleEmailHtml(p: RoleAssignmentParams): string {
     </div>`;
 }
 
-function buildRoleWhatsAppMessage(p: RoleAssignmentParams): string {
-  const dateStr = p.date.toLocaleDateString('en-US', {
-    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
-  });
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || '';
-  const scriptureMatch = p.topic.match(/\(([^)]+)\)\s*$/);
-  const scripture = scriptureMatch?.[1] || null;
-  const title     = scripture ? p.topic.replace(/\s*\([^)]+\)\s*$/, '') : p.topic;
-
-  let msg =
-    `⛪ *${CHURCH_NAME} — Service Role Assignment*\n\n` +
-    `Hello ${p.userName}! You've been assigned a role for Sunday:\n\n` +
-    `📅 *${dateStr}*\n` +
-    `🎭 Role: *${p.role}*\n` +
-    `📖 Topic: _${title}_`;
-  if (scripture) msg += `\n📜 ${scripture}`;
-  if (p.monthTheme) msg += `\n🗓️ ${p.monthTheme.replace(/^[A-Z]+ THEME:\s*/i,'')}`;
-  msg += `\n\n✅ This has been added to your calendar.\n`;
-  if (appUrl) msg += `👉 ${appUrl}/dashboard/schedule`;
-  if (p.orderOfService && p.orderOfService.length) msg += `\n\n` + renderOrderOfServiceWhatsApp(p.orderOfService as any);
-  return msg;
-}
-
 export async function notifyServiceRoleAssignment(p: RoleAssignmentParams): Promise<void> {
   const tasks: Promise<void>[] = [];
 
@@ -164,7 +122,14 @@ export async function notifyServiceRoleAssignment(p: RoleAssignmentParams): Prom
   }
 
   if (p.userPhone) {
-    tasks.push(sendWhatsApp(p.userPhone, buildRoleWhatsAppMessage(p)));
+    const waDate = p.date.toLocaleDateString('en-US', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
+    });
+    const scriptureMatch = p.topic.match(/\(([^)]+)\)\s*$/);
+    const title = scriptureMatch ? p.topic.replace(/\s*\([^)]+\)\s*$/, '') : p.topic;
+    tasks.push(
+      sendWhatsAppTemplate(p.userPhone, WA_TEMPLATES.roleAssignment, [p.userName, waDate, p.role, title]).then(() => {}),
+    );
   }
 
   await Promise.allSettled(tasks);
