@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
-import { hashOtpCode, OTP_MAX_ATTEMPTS, beginAudienceLabel, DISCIPLER_TRACK_SLUG } from '@/lib/enroll';
+import { hashOtpCode, OTP_MAX_ATTEMPTS, beginAudienceLabel, DISCIPLER_TRACK_SLUG, LEADERS_TRACK_SLUG } from '@/lib/enroll';
 import { notifyAdminsOfEnrollmentRequest } from '@/lib/enrollment-notifications';
 
 // Run 14 — public endpoint, step 2 of self-enrollment.
@@ -73,6 +73,11 @@ export async function POST(request: NextRequest) {
       invitedBy: req.invitedBy || null,
       interest: req.intent === 'INTEREST',
       alertDisciplerTeam: req.track.slug === DISCIPLER_TRACK_SLUG,
+      // Run 29 -- Leaders Track applications: invitedBy holds the reference
+      // leader, callingNote holds the "why do you sense a call?" answer, and
+      // the leaders_team_email recipients are alerted alongside the admins.
+      callingNote: req.callingNote || null,
+      isLeaders: req.track.slug === LEADERS_TRACK_SLUG,
     });
 
     return NextResponse.json({ ok: true });

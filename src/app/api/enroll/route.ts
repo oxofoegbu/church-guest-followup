@@ -46,6 +46,7 @@ export async function POST(request: NextRequest) {
     const audience = parsed.data.audience || null;
     const shareNote = parsed.data.shareNote?.trim() || null;
     const invitedBy = parsed.data.invitedBy?.trim() || null;
+    const callingNote = parsed.data.callingNote?.trim() || null; // Run 29 -- /leaders
 
     // Track must be open to this endpoint: the self-enroll tracks, plus the
     // invite-only Disciplers Track (Run 27 — reachable ONLY through here;
@@ -147,7 +148,7 @@ export async function POST(request: NextRequest) {
           cohortId: cohort?.id || null,
           firstName, lastName, email, phone,
           matchedUserId: matchedUser?.id || null,
-          audience, shareNote, invitedBy,
+          audience, shareNote, invitedBy, callingNote,
           status: 'PENDING',
         },
         select: { id: true },
@@ -199,7 +200,7 @@ export async function POST(request: NextRequest) {
           firstName, lastName, phone,
           cohortId: cohort?.id || null,
           matchedUserId: matchedUser?.id || null,
-          audience, shareNote, invitedBy,
+          audience, shareNote, invitedBy, callingNote,
           verifyCodeHash: hashOtpCode(unverified.id, code),
           verifyExpiresAt: new Date(now + OTP_TTL_MS),
           verifySentAt: new Date(now),
@@ -221,7 +222,7 @@ export async function POST(request: NextRequest) {
         cohortId: cohort?.id || null,
         firstName, lastName, email, phone,
         matchedUserId: matchedUser?.id || null,
-        audience, shareNote, invitedBy,
+        audience, shareNote, invitedBy, callingNote,
         intent: isInterest ? 'INTEREST' : null,
         status: 'UNVERIFIED',
       },

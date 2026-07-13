@@ -37,6 +37,8 @@ export default function SettingsPage() {
     track_nudge_days: '7',
     // Run 27 — /discipler page submission alerts (both doors)
     discipler_team_email: '',
+    // Run 29 — /leaders page application alerts
+    leaders_team_email: '',
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -175,6 +177,8 @@ export default function SettingsPage() {
           track_nudge_days:       String(Math.min(90, Math.max(1, parseInt(settings.track_nudge_days, 10) || 7))),
           // Run 27 — discipleship team alert address(es) for /discipler
           discipler_team_email:   settings.discipler_team_email.trim(),
+          // Run 29 — leadership team alert address(es) for /leaders
+          leaders_team_email:     settings.leaders_team_email.trim(),
         }),
       });
       if (!res.ok) throw new Error('Save failed');
@@ -485,6 +489,18 @@ export default function SettingsPage() {
                 Disciplers Track page (/discipler) — in addition to the standard enrollment-request
                 recipients above. Separate multiple emails with commas; leave blank to use only the
                 standard recipients.
+              </p>
+            </div>
+            {/* Run 29 — /leaders application alerts */}
+            <div>
+              <label className="label">📧 Leadership team email</label>
+              <input type="text" value={settings.leaders_team_email}
+                onChange={e => setSettings(s => ({ ...s, leaders_team_email: e.target.value }))}
+                placeholder="pastor@gracelifecenter.com" className="input-field" />
+              <p className="text-xs text-church-400 mt-1">
+                Alerted the moment someone applies on the public Leaders Track page (/leaders) — in
+                addition to the standard enrollment-request recipients above. Separate multiple
+                emails with commas; leave blank to use only the standard recipients.
               </p>
             </div>
           </div>

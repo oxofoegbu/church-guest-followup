@@ -15,7 +15,7 @@ export const enrollRequestSchema = z.object({
   phone: z.string().trim().max(40).optional().or(z.literal('')),
   // Run 24 -- optional extras sent by the /become landing page (the DB
   // columns have existed since Run 19; /enroll's own form simply omits them)
-  audience: z.enum(['WELCOME_GRAD', 'GLC_MEMBER', 'OTHER_CHURCH', 'NEW_TO_FAITH', 'BECOME_DONE', 'BECOME_NOW', 'PATH_OTHER']).nullable().optional(),
+  audience: z.enum(['WELCOME_GRAD', 'GLC_MEMBER', 'OTHER_CHURCH', 'NEW_TO_FAITH', 'BECOME_DONE', 'BECOME_NOW', 'PATH_OTHER', 'LEAD_BECOME_DONE', 'LEAD_BECOME_NOW', 'LEAD_BECOME_NOT_YET']).nullable().optional(),
   shareNote: z.string().trim().max(1000).optional().or(z.literal('')),
   // Run 27 -- optional extras sent by the /discipler landing page.
   // invitedBy: Door 1 "who tapped your shoulder" / Door 2 "who has walked
@@ -23,6 +23,10 @@ export const enrollRequestSchema = z.object({
   // must never become an enrollment); enrollment doors simply omit it.
   invitedBy: z.string().trim().max(200).optional().or(z.literal('')),
   intent: z.enum(['INTEREST']).nullable().optional(),
+  // Run 29 -- the /leaders application's heart: "why do you sense God calling
+  // you to lead?" (required on the page; optional here so the other doors,
+  // which never send it, still validate).
+  callingNote: z.string().trim().max(1000).optional().or(z.literal('')),
   website: z.string().optional(), // honeypot -- humans never fill this
 });
 
@@ -93,12 +97,31 @@ export const DISCIPLER_AUDIENCES: { code: string; label: string }[] = [
   { code: 'PATH_OTHER', label: 'Other' },
 ];
 
+// Run 29 -- the Leaders Track's public application page (/leaders). Unlike
+// the Disciplers Track, Leaders is a normal self-enroll track (it stays in
+// SELF_ENROLL_TRACK_SLUGS and still appears on /enroll as a quick side
+// door); /leaders is simply a richer front door that also collects a
+// reference leader (stored in invitedBy) and the calling note.
+export const LEADERS_TRACK_SLUG = 'leaders-track';
+
+// "Where are you on the path?" options for /leaders. Same
+// EnrollmentRequest.audience column; a fourth disjoint code set. The codes
+// are namespaced LEAD_ so they never collide with the Disciplers page's
+// BECOME_DONE / BECOME_NOW (which share the same column) -- every code must
+// resolve to exactly one label.
+export const LEADERS_AUDIENCES: { code: string; label: string }[] = [
+  { code: 'LEAD_BECOME_DONE', label: "I've completed Become\u00AE" },
+  { code: 'LEAD_BECOME_NOW', label: "I'm currently in Become\u00AE" },
+  { code: 'LEAD_BECOME_NOT_YET', label: "I haven't taken Become\u00AE yet" },
+];
+
 export function beginAudienceLabel(code?: string | null): string | null {
   if (!code) return null;
   return (
     BEGIN_AUDIENCES.find(a => a.code === code)?.label ||
     BECOME_AUDIENCES.find(a => a.code === code)?.label ||
     DISCIPLER_AUDIENCES.find(a => a.code === code)?.label ||
+    LEADERS_AUDIENCES.find(a => a.code === code)?.label ||
     null
   );
 }

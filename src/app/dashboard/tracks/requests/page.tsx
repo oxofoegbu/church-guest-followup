@@ -18,6 +18,8 @@ type EnrollmentRequest = {
   audience: string | null; shareNote: string | null;
   // Run 27 -- Disciplers Track (/discipler) extras
   invitedBy: string | null; intent: string | null;
+  // Run 29 -- Leaders Track (/leaders) extra
+  callingNote: string | null;
   track: { id: string; name: string; slug: string };
   cohort: { id: string; name: string; meetingDay: string | null; meetingTime: string | null } | null;
   matchedUser: { id: string; name: string } | null;
@@ -45,9 +47,14 @@ const AUDIENCE_LABELS: Record<string, string> = {
   BECOME_DONE: "I've completed Become\u00AE",
   BECOME_NOW: "I'm completing Become\u00AE now",
   PATH_OTHER: 'Other',
+  // Run 29 -- /leaders page audiences (namespaced so they never collide)
+  LEAD_BECOME_DONE: "I've completed Become\u00AE",
+  LEAD_BECOME_NOW: "I'm currently in Become\u00AE",
+  LEAD_BECOME_NOT_YET: "I haven't taken Become\u00AE yet",
 };
 
 const WELCOME_SLUG = 'welcome-track';
+const LEADERS_SLUG = 'leaders-track'; // Run 29 -- invitedBy is a reference leader here
 
 export default function EnrollmentRequestsPage() {
   const [requests, setRequests] = useState<EnrollmentRequest[]>([]);
@@ -194,9 +201,14 @@ export default function EnrollmentRequestsPage() {
                   </p>
                   {r.invitedBy && (
                     <p className="text-sm text-church-600 mt-1.5">
-                      <span className="text-church-400">{isInterest ? 'They\u2019ve walked with:' : 'Invited by:'}</span>{' '}
+                      <span className="text-church-400">{isInterest ? 'They\u2019ve walked with:' : r.track.slug === LEADERS_SLUG ? 'Reference leader:' : 'Invited by:'}</span>{' '}
                       <span className="font-semibold">{r.invitedBy}</span>
                     </p>
+                  )}
+                  {r.callingNote && (
+                    <div className="mt-2 text-sm text-church-700 bg-blue-50 border-l-2 border-blue-300 rounded-r px-3 py-2">
+                      <span className="text-church-400">🕊️ Why they sense a call to lead:</span> {r.callingNote}
+                    </div>
                   )}
                   {r.audience && AUDIENCE_LABELS[r.audience] && (
                     <p className="text-sm text-church-600 mt-1.5">

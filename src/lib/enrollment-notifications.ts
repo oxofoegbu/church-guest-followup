@@ -21,6 +21,9 @@ type RequestInfo = {
   invitedBy?: string | null;     // Door 1: who tapped their shoulder / Door 2: who has walked with them
   interest?: boolean;            // Door 2: a conversation request, never an enrollment
   alertDisciplerTeam?: boolean;  // also alert the discipler_team_email setting's recipients
+  // Run 29 -- Leaders Track (/leaders) applications
+  callingNote?: string | null;   // "why do you sense God calling you to lead?"
+  isLeaders?: boolean;           // reference leader lives in invitedBy; alert leaders_team_email
 };
 
 async function getChurchName(): Promise<string> {
@@ -88,6 +91,17 @@ export async function notifyAdminsOfEnrollmentRequest(info: RequestInfo): Promis
       }
     }
 
+    // Run 29 -- Leaders Track applications also alert the leadership team's
+    // own address(es) (Settings -> leaders_team_email), deduped against the
+    // standard recipients. Fire-safe like everything here.
+    if (info.isLeaders) {
+      const teamSetting = await prisma.appSetting.findUnique({ where: { key: 'leaders_team_email' } });
+      const teamEmails: string[] = teamSetting?.value ? teamSetting.value.split(',').map((e: string) => e.trim()).filter(Boolean) : [];
+      for (const te of teamEmails) {
+        if (!emails.some((e: string) => e.toLowerCase() === te.toLowerCase())) emails.push(te);
+      }
+    }
+
     const fullName = `${info.firstName} ${info.lastName}`;
     const reviewUrl = `${appUrl()}/dashboard/tracks/requests`;
     const cohortLine = info.cohortName ? ` (${info.cohortName})` : '';
@@ -102,14 +116,24 @@ export async function notifyAdminsOfEnrollmentRequest(info: RequestInfo): Promis
         discipleship team should reach out within a day or two.</p>`
       : `<p><strong>${esc(fullName)}</strong> (${esc(info.email)}${info.phone ? `, ${esc(info.phone)}` : ''})
         has requested to join <strong>${esc(info.trackName)}</strong>${esc(cohortLine)}.</p>`;
+    const invitedByLabel = info.interest
+      ? 'They\u2019ve walked with'
+      : info.isLeaders
+        ? 'Reference leader'
+        : 'Invited by';
     const invitedByHtml = info.invitedBy
-      ? `<p style="margin:4px 0;color:#374151;">${info.interest ? 'They\u2019ve walked with' : 'Invited by'}: <em>${esc(info.invitedBy)}</em></p>`
+      ? `<p style="margin:4px 0;color:#374151;">${invitedByLabel}: <em>${esc(info.invitedBy)}</em></p>`
+      : '';
+    // Run 29 -- the Leaders application's heart: the calling note.
+    const callingHtml = info.callingNote
+      ? `<div style="background:#f9fafb;border-left:3px solid #b0894f;padding:10px 14px;margin:12px 0;color:#374151;"><p style="margin:0;font-size:13px;color:#6b7280;">Why they sense a call to lead:</p><p style="margin:4px 0 0;">${esc(info.callingNote)}</p></div>`
       : '';
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 560px;">
         <h2 style="color:#1f2937;">${info.interest ? 'Disciplers Track \u2014 interest conversation' : 'New enrollment request'}</h2>
         ${leadHtml}
         ${invitedByHtml}
+        ${callingHtml}
         ${info.audienceLabel ? `<p style="margin:4px 0;color:#374151;">They describe themselves as: <em>${esc(info.audienceLabel)}</em></p>` : ''}
         ${info.shareNote ? `<div style="background:#f9fafb;border-left:3px solid #b45309;padding:10px 14px;margin:12px 0;color:#374151;"><p style="margin:0;font-size:13px;color:#6b7280;">They shared:</p><p style="margin:4px 0 0;">${esc(info.shareNote)}</p></div>` : ''}
         <p><a href="${reviewUrl}" style="background:#b45309;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none;">Review requests</a></p>

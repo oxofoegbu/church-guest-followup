@@ -807,7 +807,7 @@ export default function DisciplerPage() {
           <a href="/become" className="underline underline-offset-4" style={{ color: C.gold }}>BECOME®</a>
           <span className="mx-2 opacity-50">·</span>
           Sensing a call to lead?{' '}
-          <a href="/enroll" className="underline underline-offset-4" style={{ color: C.gold }}>The Leaders Track</a>
+          <a href="/leaders" className="underline underline-offset-4" style={{ color: C.gold }}>The Leaders Track</a>
         </p>
         <p className="mt-4 text-xs" style={{ color: C.gold }}>
           BE with Jesus · BECOME like Jesus · BRING heaven
