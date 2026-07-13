@@ -329,58 +329,70 @@ export default function LeadersPage() {
         />
       </header>
 
-      {/* ---- B. Is this you? (the marks of a call) — split with the portrait ---- */}
+      {/* ---- B. Is this you? (the marks of a call) ---- */}
+      {/* Desktop / tablet: the approved portrait full-bleed, HTML text over
+          the empty navy-and-contour space to the woman's left — the same
+          treatment as the hero. Her side (right) stays clear; a whisper of
+          navy scrim keeps the gold heading and cream text AA over the faint
+          contour lines. */}
       <section className="relative overflow-hidden" style={{ background: C.midnight }}>
-        {/* Desktop: portrait right on its own clean navy, HTML text left. */}
-        <div className="hidden md:grid md:grid-cols-2 md:items-stretch">
-          <div className="flex items-center px-8 lg:px-12 py-20">
-            <div className="max-w-md">
-              <h2 className={`${garamond.className} text-3xl mb-6`} style={{ color: C.cream }}>
-                Is this you?
-              </h2>
-              <ul className="space-y-4 text-base leading-relaxed" style={{ color: '#D9E2EC' }}>
-                <li className="flex gap-3"><span aria-hidden="true" style={{ color: C.gold }}>—</span><span>A stirring that won’t leave, however quietly it began.</span></li>
-                <li className="flex gap-3"><span aria-hidden="true" style={{ color: C.gold }}>—</span><span>A leader has named something in you — “I see it.”</span></li>
-                <li className="flex gap-3"><span aria-hidden="true" style={{ color: C.gold }}>—</span><span>People already come to you, and you’re not quite sure why.</span></li>
-                <li className="flex gap-3"><span aria-hidden="true" style={{ color: C.gold }}>—</span><span>A hunger to see others find and follow Jesus.</span></li>
-              </ul>
-              <p className={`${garamond.className} mt-6 text-lg italic leading-relaxed`} style={{ color: C.gold }}>
-                If that’s you — even if you feel unqualified — keep reading. Feeling unqualified is
-                where most calls begin.
-              </p>
-            </div>
-          </div>
+        <div className="relative hidden md:flex items-center" style={{ minHeight: '600px' }}>
           <img
             src="/leaders/portrait-square.webp"
             alt="A woman in a light-blue shirt smiling warmly against a deep navy background with gold contour lines."
             width={1254}
             height={1254}
             loading="lazy"
-            className="h-full w-full object-cover"
-            style={{ objectPosition: '65% 50%' }}
+            className="absolute inset-0 h-full w-full object-cover"
+            style={{ objectPosition: '82% 28%' }}
           />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0"
+            style={{ background: 'linear-gradient(to right, rgba(22,35,59,0.7), rgba(22,35,59,0.45) 34%, transparent 58%)' }}
+          />
+          <div className="relative z-10 w-full">
+            <div className="mx-auto max-w-6xl px-8 lg:px-12">
+              <div className="max-w-md">
+                <h2 className={`${garamond.className} text-3xl mb-6`} style={{ color: C.gold }}>
+                  Is this you?
+                </h2>
+                <ul className="space-y-4 text-base leading-relaxed" style={{ color: C.cream }}>
+                  <li className="flex gap-3"><span aria-hidden="true" style={{ color: C.gold }}>—</span><span>A stirring that won’t leave, however quietly it began.</span></li>
+                  <li className="flex gap-3"><span aria-hidden="true" style={{ color: C.gold }}>—</span><span>A leader has named something in you — “I see it.”</span></li>
+                  <li className="flex gap-3"><span aria-hidden="true" style={{ color: C.gold }}>—</span><span>People already come to you, and you’re not quite sure why.</span></li>
+                  <li className="flex gap-3"><span aria-hidden="true" style={{ color: C.gold }}>—</span><span>A hunger to see others find and follow Jesus.</span></li>
+                </ul>
+                <p className={`${garamond.className} mt-6 text-lg italic leading-relaxed`} style={{ color: C.cream }}>
+                  If that’s you — even if you feel unqualified — keep reading. Feeling unqualified is
+                  where most calls begin.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-        {/* Mobile: text over the contour center, portrait below. */}
+        {/* Mobile: the text block over the contour center, then a tighter
+            crop of the portrait below (the empty navy trimmed to the woman). */}
         <div className="md:hidden">
           <div className="px-6 py-16" style={contourBg}>
-            <h2 className={`${garamond.className} text-3xl mb-6 text-center`} style={{ color: C.cream }}>
+            <h2 className={`${garamond.className} text-3xl mb-6 text-center`} style={{ color: C.gold }}>
               Is this you?
             </h2>
-            <ul className="mx-auto max-w-md space-y-3 text-base leading-relaxed" style={{ color: '#D9E2EC' }}>
+            <ul className="mx-auto max-w-md space-y-3 text-base leading-relaxed" style={{ color: C.cream }}>
               <li className="flex gap-3"><span aria-hidden="true" style={{ color: C.gold }}>—</span><span>A stirring that won’t leave, however quietly it began.</span></li>
               <li className="flex gap-3"><span aria-hidden="true" style={{ color: C.gold }}>—</span><span>A leader has named something in you — “I see it.”</span></li>
               <li className="flex gap-3"><span aria-hidden="true" style={{ color: C.gold }}>—</span><span>People already come to you, and you’re not quite sure why.</span></li>
               <li className="flex gap-3"><span aria-hidden="true" style={{ color: C.gold }}>—</span><span>A hunger to see others find and follow Jesus.</span></li>
             </ul>
-            <p className={`${garamond.className} mt-6 text-lg italic leading-relaxed text-center`} style={{ color: C.gold }}>
+            <p className={`${garamond.className} mt-6 text-lg italic leading-relaxed text-center`} style={{ color: C.cream }}>
               If that’s you — even if you feel unqualified — keep reading. Feeling unqualified is
               where most calls begin.
             </p>
           </div>
           <img
-            src="/leaders/portrait-square.webp"
+            src="/leaders/portrait-mobile.webp"
             alt="A woman in a light-blue shirt smiling warmly against a deep navy background with gold contour lines."
-            width={1254}
+            width={1003}
             height={1254}
             loading="lazy"
             className="w-full h-auto"
