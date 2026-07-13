@@ -10,7 +10,8 @@ const PUBLIC_KEYS = ['target_config', 'custom_roles', 'schedule_coordinators', '
 
 // Keys only admins can read
 // Run 21: track_nudge_enabled / track_nudge_days — discipler nudge cron config
-const ADMIN_KEYS  = ['notify_emails', 'notify_whatsapp', 'notify_on_new_guest', 'notify_on_assignment', 'summary_emails', 'summary_whatsapp', 'track_nudge_enabled', 'track_nudge_days'];
+// Run 27: discipler_team_email — /discipler submission alerts (both doors)
+const ADMIN_KEYS  = ['notify_emails', 'notify_whatsapp', 'notify_on_new_guest', 'notify_on_assignment', 'summary_emails', 'summary_whatsapp', 'track_nudge_enabled', 'track_nudge_days', 'discipler_team_email'];
 
 // All writable keys (admin only)
 const WRITABLE_KEYS = [...PUBLIC_KEYS, ...ADMIN_KEYS];

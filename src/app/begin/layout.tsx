@@ -13,6 +13,20 @@ export const metadata: Metadata = {
     description:
       'A place to begin \u2014 with Jesus, and with us. The Welcome Track is a short, unhurried journey. You\u2019re welcome here.',
     type: 'website',
+    url: 'https://harvest.gracelifecenter.com/begin',
+    // Run 27 -- approved link-preview imagery (the well at dawn, wordmark
+    // baked). Preview-only assets: they never appear on the page itself.
+    images: [
+      { url: 'https://harvest.gracelifecenter.com/begin/social-og.jpg', width: 1200, height: 630 },
+      { url: 'https://harvest.gracelifecenter.com/begin/social-square.jpg', width: 1254, height: 1254 },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Begin the Journey \u2014 Grace Life Center',
+    description:
+      'A place to begin \u2014 with Jesus, and with us. The Welcome Track is a short, unhurried journey. You\u2019re welcome here.',
+    images: ['https://harvest.gracelifecenter.com/begin/social-og.jpg'],
   },
 };
 

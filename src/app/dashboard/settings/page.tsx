@@ -35,6 +35,8 @@ export default function SettingsPage() {
     // Run 21 — discipler nudge cron
     track_nudge_enabled: 'true',
     track_nudge_days: '7',
+    // Run 27 — /discipler page submission alerts (both doors)
+    discipler_team_email: '',
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -171,6 +173,8 @@ export default function SettingsPage() {
           // Run 21 — discipler nudge cron (clamped 1–90; blank falls back to 7)
           track_nudge_enabled:    settings.track_nudge_enabled === 'false' ? 'false' : 'true',
           track_nudge_days:       String(Math.min(90, Math.max(1, parseInt(settings.track_nudge_days, 10) || 7))),
+          // Run 27 — discipleship team alert address(es) for /discipler
+          discipler_team_email:   settings.discipler_team_email.trim(),
         }),
       });
       if (!res.ok) throw new Error('Save failed');
@@ -469,6 +473,19 @@ export default function SettingsPage() {
                 onChange={e => setSettings(s => ({ ...s, track_nudge_days: e.target.value }))}
                 className="input-field w-32" />
               <p className="text-xs text-church-400 mt-1">1–90 days. Also the minimum gap between nudges about the same disciple.</p>
+            </div>
+            {/* Run 27 — /discipler submission alerts */}
+            <div>
+              <label className="label">📧 Discipleship team email</label>
+              <input type="text" value={settings.discipler_team_email}
+                onChange={e => setSettings(s => ({ ...s, discipler_team_email: e.target.value }))}
+                placeholder="pastor@gracelifecenter.com" className="input-field" />
+              <p className="text-xs text-church-400 mt-1">
+                Alerted the moment anyone accepts an invitation or expresses interest on the public
+                Disciplers Track page (/discipler) — in addition to the standard enrollment-request
+                recipients above. Separate multiple emails with commas; leave blank to use only the
+                standard recipients.
+              </p>
             </div>
           </div>
         </div>

@@ -699,6 +699,9 @@ model EnrollmentRequest {
   // Run 19 -- Welcome Track "Begin" page extras (both optional, additive)
   audience        String?   // FIRST_TIME | RETURNING | MEMBER | EXPLORING
   shareNote       String?   // "anything you'd like us to know -- or pray about"
+  // Run 27 -- Disciplers Track /discipler page extras (both optional, additive)
+  invitedBy       String?   // Door 1: "who tapped your shoulder" | Door 2: "who has walked with you"
+  intent          String?   // null = enrollment request | INTEREST = conversation only (never approvable)
   // Run 14 — email OTP verification (requests start UNVERIFIED; the admin
   // queue only ever sees requests that verified their email)
   verifyCodeHash  String?

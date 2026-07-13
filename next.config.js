@@ -7,6 +7,7 @@ const nextConfig = {
   // host (same procedure as welcome.), and the rewrite does the rest.
   //   become.gracelifecenter.com -> /become   (Run 24)
   //   begin.gracelifecenter.com  -> /begin    (Run 25)
+  //   discipler.gracelifecenter.com -> /discipler (Run 27)
   async rewrites() {
     return {
       beforeFiles: [
@@ -19,6 +20,11 @@ const nextConfig = {
           source: '/',
           has: [{ type: 'host', value: 'begin.gracelifecenter.com' }],
           destination: '/begin',
+        },
+        {
+          source: '/',
+          has: [{ type: 'host', value: 'discipler.gracelifecenter.com' }],
+          destination: '/discipler',
         },
       ],
     };

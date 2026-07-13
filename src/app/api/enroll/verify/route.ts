@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
-import { hashOtpCode, OTP_MAX_ATTEMPTS, beginAudienceLabel } from '@/lib/enroll';
+import { hashOtpCode, OTP_MAX_ATTEMPTS, beginAudienceLabel, DISCIPLER_TRACK_SLUG } from '@/lib/enroll';
 import { notifyAdminsOfEnrollmentRequest } from '@/lib/enrollment-notifications';
 
 // Run 14 — public endpoint, step 2 of self-enrollment.
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     const req = await (prisma as any).enrollmentRequest.findUnique({
       where: { id: requestId },
       include: {
-        track: { select: { name: true } },
+        track: { select: { name: true, slug: true } },
         cohort: { select: { name: true } },
       },
     });
@@ -67,6 +67,12 @@ export async function POST(request: NextRequest) {
       // Run 19 -- present on Welcome Track "Begin" requests
       audienceLabel: beginAudienceLabel(req.audience),
       shareNote: req.shareNote || null,
+      // Run 27 -- present on Disciplers Track (/discipler) requests; a
+      // verified INTEREST row is a conversation request, not an enrollment,
+      // and the discipleship team is alerted alongside the admin recipients
+      invitedBy: req.invitedBy || null,
+      interest: req.intent === 'INTEREST',
+      alertDisciplerTeam: req.track.slug === DISCIPLER_TRACK_SLUG,
     });
 
     return NextResponse.json({ ok: true });

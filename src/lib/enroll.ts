@@ -15,8 +15,14 @@ export const enrollRequestSchema = z.object({
   phone: z.string().trim().max(40).optional().or(z.literal('')),
   // Run 24 -- optional extras sent by the /become landing page (the DB
   // columns have existed since Run 19; /enroll's own form simply omits them)
-  audience: z.enum(['WELCOME_GRAD', 'GLC_MEMBER', 'OTHER_CHURCH', 'NEW_TO_FAITH']).nullable().optional(),
+  audience: z.enum(['WELCOME_GRAD', 'GLC_MEMBER', 'OTHER_CHURCH', 'NEW_TO_FAITH', 'BECOME_DONE', 'BECOME_NOW', 'PATH_OTHER']).nullable().optional(),
   shareNote: z.string().trim().max(1000).optional().or(z.literal('')),
+  // Run 27 -- optional extras sent by the /discipler landing page.
+  // invitedBy: Door 1 "who tapped your shoulder" / Door 2 "who has walked
+  // with you". intent 'INTEREST' marks Door 2 (a conversation request that
+  // must never become an enrollment); enrollment doors simply omit it.
+  invitedBy: z.string().trim().max(200).optional().or(z.literal('')),
+  intent: z.enum(['INTEREST']).nullable().optional(),
   website: z.string().optional(), // honeypot -- humans never fill this
 });
 
@@ -73,11 +79,26 @@ export const BECOME_AUDIENCES: { code: string; label: string }[] = [
   { code: 'NEW_TO_FAITH', label: "I'm fairly new to all of this" },
 ];
 
+// Run 27 -- the Disciplers Track's public page (/discipler). The track is
+// deliberately NOT in SELF_ENROLL_TRACK_SLUGS (it never appears on /enroll);
+// only the /discipler page reaches it, and every acceptance still lands in
+// the same admin approval queue where the inviter is verified by a human.
+export const DISCIPLER_TRACK_SLUG = 'disciplers';
+
+// "Where are you on the path?" options for /discipler.
+// Same EnrollmentRequest.audience column; third disjoint code set.
+export const DISCIPLER_AUDIENCES: { code: string; label: string }[] = [
+  { code: 'BECOME_DONE', label: "I've completed Become\u00AE" },
+  { code: 'BECOME_NOW', label: "I'm completing Become\u00AE now" },
+  { code: 'PATH_OTHER', label: 'Other' },
+];
+
 export function beginAudienceLabel(code?: string | null): string | null {
   if (!code) return null;
   return (
     BEGIN_AUDIENCES.find(a => a.code === code)?.label ||
     BECOME_AUDIENCES.find(a => a.code === code)?.label ||
+    DISCIPLER_AUDIENCES.find(a => a.code === code)?.label ||
     null
   );
 }

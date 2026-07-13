@@ -16,6 +16,8 @@ type EnrollmentRequest = {
   firstName: string; lastName: string; email: string; phone: string | null;
   status: string; createdAt: string; decidedAt: string | null;
   audience: string | null; shareNote: string | null;
+  // Run 27 -- Disciplers Track (/discipler) extras
+  invitedBy: string | null; intent: string | null;
   track: { id: string; name: string; slug: string };
   cohort: { id: string; name: string; meetingDay: string | null; meetingTime: string | null } | null;
   matchedUser: { id: string; name: string } | null;
@@ -26,6 +28,7 @@ const STATUS_STYLES: Record<string, string> = {
   PENDING: 'bg-yellow-100 text-yellow-700',
   APPROVED: 'bg-green-100 text-green-700',
   REJECTED: 'bg-gray-100 text-gray-500',
+  HANDLED: 'bg-emerald-100 text-emerald-700', // Run 27 -- interest conversation done
 };
 
 const AUDIENCE_LABELS: Record<string, string> = {
@@ -38,6 +41,10 @@ const AUDIENCE_LABELS: Record<string, string> = {
   GLC_MEMBER: "I'm a Grace Life Center member / regular",
   OTHER_CHURCH: "I'm part of another church family",
   NEW_TO_FAITH: "I'm fairly new to all of this",
+  // Run 27 -- /discipler page audiences
+  BECOME_DONE: "I've completed Become\u00AE",
+  BECOME_NOW: "I'm completing Become\u00AE now",
+  PATH_OTHER: 'Other',
 };
 
 const WELCOME_SLUG = 'welcome-track';
@@ -65,9 +72,10 @@ export default function EnrollmentRequestsPage() {
       .catch(() => {});
   }, [fetchRequests]);
 
-  const decide = async (req: EnrollmentRequest, action: 'approve' | 'reject') => {
+  const decide = async (req: EnrollmentRequest, action: 'approve' | 'reject' | 'handle') => {
     if (busy) return;
     if (action === 'reject' && !confirm(`Reject ${req.firstName} ${req.lastName}\u2019s request for ${req.track.name}? They will receive a brief email.`)) return;
+    if (action === 'handle' && !confirm(`Mark ${req.firstName} ${req.lastName}\u2019s interest as handled? This means someone has (or will) personally reach out \u2014 no email is sent and no enrollment is created.`)) return;
     setBusy(req.id);
     setNotice('');
     const disciplerUserId = disciplers[req.id] || undefined;
@@ -87,6 +95,8 @@ export default function EnrollmentRequestsPage() {
         } else {
           setNotice(`${name} enrolled \u2014 notification sent.${disciplerNote}${d.note ? ` (${d.note})` : ''}`);
         }
+      } else if (action === 'handle') {
+        setNotice(`${req.firstName} ${req.lastName}\u2019s interest conversation was marked as handled.`);
       } else {
         setNotice(`Request from ${req.firstName} ${req.lastName} was rejected.`);
       }
@@ -107,9 +117,10 @@ export default function EnrollmentRequestsPage() {
         <h1 className="page-header mt-2">📥 Enrollment Requests</h1>
         <p className="text-church-500 text-sm mt-1">
           People asking to join a track from the public pages — Become &amp; Leaders from <span className="font-mono">/enroll</span>,
-          the Welcome Track from <span className="font-mono">/begin</span>. Approving enrolls them (Welcome Track
-          sign-ups become guests; the others get a Harvest account if they do not have one). You can assign a
-          discipler as you approve — they will be notified by email.
+          the Welcome Track from <span className="font-mono">/begin</span>, the Disciplers Track from <span className="font-mono">/discipler</span>.
+          Approving enrolls them (Welcome Track sign-ups become guests; the others get a Harvest account if they
+          do not have one). You can assign a discipler as you approve — they will be notified by email.
+          💬 Disciplers <em>interest</em> rows are conversations, not enrollments: reach out personally, then Mark as handled.
         </p>
       </div>
 
@@ -141,12 +152,14 @@ export default function EnrollmentRequestsPage() {
           <p className="text-sm text-church-400">
             Share the public links with people you want to invite: <span className="font-mono">/begin</span> (Welcome Track)
             {' '}· <span className="font-mono">/enroll</span> (Become &amp; Leaders)
+            {' '}· <span className="font-mono">/discipler</span> (Disciplers Track, invite-only)
           </p>
         </div>
       ) : (
         <div className="space-y-3">
           {visible.map(r => {
             const isWelcome = r.track.slug === WELCOME_SLUG;
+            const isInterest = r.intent === 'INTEREST'; // Run 27 -- conversation, never an enrollment
             return (
             <div key={r.id} className="card">
               <div className="flex flex-wrap items-start justify-between gap-3">
@@ -154,7 +167,10 @@ export default function EnrollmentRequestsPage() {
                   <div className="flex items-center gap-2 flex-wrap">
                     <p className="font-bold text-church-900">{r.firstName} {r.lastName}</p>
                     <span className={`badge ${STATUS_STYLES[r.status] || ''}`}>{r.status}</span>
-                    {r.status === 'PENDING' && (
+                    {isInterest && (
+                      <span className="badge bg-sky-100 text-sky-700">💬 Interest — conversation, not enrollment</span>
+                    )}
+                    {r.status === 'PENDING' && !isInterest && (
                       r.matchedUser ? (
                         <span className="badge bg-brand-100 text-brand-700">Existing user: {r.matchedUser.name}</span>
                       ) : isWelcome ? (
@@ -176,6 +192,12 @@ export default function EnrollmentRequestsPage() {
                       </span>
                     )}
                   </p>
+                  {r.invitedBy && (
+                    <p className="text-sm text-church-600 mt-1.5">
+                      <span className="text-church-400">{isInterest ? 'They\u2019ve walked with:' : 'Invited by:'}</span>{' '}
+                      <span className="font-semibold">{r.invitedBy}</span>
+                    </p>
+                  )}
                   {r.audience && AUDIENCE_LABELS[r.audience] && (
                     <p className="text-sm text-church-600 mt-1.5">
                       <span className="text-church-400">Describes themselves as:</span> {AUDIENCE_LABELS[r.audience]}
@@ -191,7 +213,18 @@ export default function EnrollmentRequestsPage() {
                     {r.decidedAt && r.decidedBy ? ` · Decided by ${r.decidedBy.name}` : ''}
                   </p>
                 </div>
-                {r.status === 'PENDING' && (
+                {r.status === 'PENDING' && isInterest && (
+                  <div className="flex flex-col gap-2 flex-shrink-0 w-full sm:w-56">
+                    <button onClick={() => decide(r, 'handle')} disabled={busy === r.id}
+                      className="btn-primary btn-sm">
+                      {busy === r.id ? '…' : '✓ Mark as handled'}
+                    </button>
+                    <p className="text-xs text-church-400 leading-relaxed">
+                      Reach out personally first — marking as handled sends no email and creates no enrollment.
+                    </p>
+                  </div>
+                )}
+                {r.status === 'PENDING' && !isInterest && (
                   <div className="flex flex-col gap-2 flex-shrink-0 w-full sm:w-56">
                     <select
                       value={disciplers[r.id] || ''}

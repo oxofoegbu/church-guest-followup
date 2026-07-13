@@ -17,6 +17,10 @@ type RequestInfo = {
   // Run 19 -- Welcome Track "Begin" page extras
   audienceLabel?: string | null; // "Which best describes you?" answer
   shareNote?: string | null;     // "anything you'd like us to know -- or pray about"
+  // Run 27 -- Disciplers Track (/discipler) page extras
+  invitedBy?: string | null;     // Door 1: who tapped their shoulder / Door 2: who has walked with them
+  interest?: boolean;            // Door 2: a conversation request, never an enrollment
+  alertDisciplerTeam?: boolean;  // also alert the discipler_team_email setting's recipients
 };
 
 async function getChurchName(): Promise<string> {
@@ -73,22 +77,47 @@ export async function notifyAdminsOfEnrollmentRequest(info: RequestInfo): Promis
     const waSetting = await prisma.appSetting.findUnique({ where: { key: 'notify_whatsapp' } });
     const numbers = waSetting?.value ? waSetting.value.split(',').map(n => n.trim()).filter(Boolean) : [];
 
+    // Run 27 -- Disciplers Track submissions also alert the discipleship
+    // team's own address(es) (Settings -> discipler_team_email), deduped
+    // against the standard recipients. Fire-safe like everything here.
+    if (info.alertDisciplerTeam) {
+      const teamSetting = await prisma.appSetting.findUnique({ where: { key: 'discipler_team_email' } });
+      const teamEmails: string[] = teamSetting?.value ? teamSetting.value.split(',').map((e: string) => e.trim()).filter(Boolean) : [];
+      for (const te of teamEmails) {
+        if (!emails.some((e: string) => e.toLowerCase() === te.toLowerCase())) emails.push(te);
+      }
+    }
+
     const fullName = `${info.firstName} ${info.lastName}`;
     const reviewUrl = `${appUrl()}/dashboard/tracks/requests`;
     const cohortLine = info.cohortName ? ` (${info.cohortName})` : '';
 
-    const subject = `New enrollment request: ${fullName} \u2192 ${info.trackName}`;
+    const subject = info.interest
+      ? `Disciplers Track interest: ${fullName} \u2014 conversation requested`
+      : `New enrollment request: ${fullName} \u2192 ${info.trackName}`;
+    const leadHtml = info.interest
+      ? `<p><strong>${esc(fullName)}</strong> (${esc(info.email)}${info.phone ? `, ${esc(info.phone)}` : ''})
+        wasn't invited to the <strong>${esc(info.trackName)}</strong> but senses it may be for them \u2014
+        they're asking for a <strong>conversation, not an enrollment</strong>. Someone from the
+        discipleship team should reach out within a day or two.</p>`
+      : `<p><strong>${esc(fullName)}</strong> (${esc(info.email)}${info.phone ? `, ${esc(info.phone)}` : ''})
+        has requested to join <strong>${esc(info.trackName)}</strong>${esc(cohortLine)}.</p>`;
+    const invitedByHtml = info.invitedBy
+      ? `<p style="margin:4px 0;color:#374151;">${info.interest ? 'They\u2019ve walked with' : 'Invited by'}: <em>${esc(info.invitedBy)}</em></p>`
+      : '';
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 560px;">
-        <h2 style="color:#1f2937;">New enrollment request</h2>
-        <p><strong>${esc(fullName)}</strong> (${esc(info.email)}${info.phone ? `, ${esc(info.phone)}` : ''})
-        has requested to join <strong>${esc(info.trackName)}</strong>${esc(cohortLine)}.</p>
+        <h2 style="color:#1f2937;">${info.interest ? 'Disciplers Track \u2014 interest conversation' : 'New enrollment request'}</h2>
+        ${leadHtml}
+        ${invitedByHtml}
         ${info.audienceLabel ? `<p style="margin:4px 0;color:#374151;">They describe themselves as: <em>${esc(info.audienceLabel)}</em></p>` : ''}
         ${info.shareNote ? `<div style="background:#f9fafb;border-left:3px solid #b45309;padding:10px 14px;margin:12px 0;color:#374151;"><p style="margin:0;font-size:13px;color:#6b7280;">They shared:</p><p style="margin:4px 0 0;">${esc(info.shareNote)}</p></div>` : ''}
         <p><a href="${reviewUrl}" style="background:#b45309;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none;">Review requests</a></p>
         <p style="color:#6b7280;font-size:13px;">${esc(churchName)} \u2014 Harvest</p>
       </div>`;
-    const waText = `\uD83D\uDCE5 New enrollment request: ${fullName} \u2192 ${info.trackName}${cohortLine}. Review: ${reviewUrl}`;
+    const waText = info.interest
+      ? `\uD83D\uDCAC Disciplers Track interest: ${fullName} \u2014 conversation requested. Review: ${reviewUrl}`
+      : `\uD83D\uDCE5 New enrollment request: ${fullName} \u2192 ${info.trackName}${cohortLine}. Review: ${reviewUrl}`;
 
     const tasks: Promise<unknown>[] = [];
     for (const to of emails) tasks.push(sendEmailViaResend(to, subject, html));

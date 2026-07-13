@@ -10,9 +10,10 @@ export async function GET(request: NextRequest) {
     const status = new URL(request.url).searchParams.get('status');
     // UNVERIFIED requests (Run 14: email not yet confirmed) never appear in
     // the admin queue — 'ALL' means all decided-or-decidable requests.
+    // Run 27: HANDLED = a Disciplers interest conversation marked done.
     const where = status && status !== 'ALL'
       ? { status }
-      : { status: { in: ['PENDING', 'APPROVED', 'REJECTED'] } };
+      : { status: { in: ['PENDING', 'APPROVED', 'REJECTED', 'HANDLED'] } };
 
     const requests = await (prisma as any).enrollmentRequest.findMany({
       where,

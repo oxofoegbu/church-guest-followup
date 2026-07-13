@@ -42,8 +42,8 @@ export async function POST(
   try {
     const session = await requireAuth(request, ['ADMIN']);
     const { action, disciplerUserId } = await request.json();
-    if (action !== 'approve' && action !== 'reject') {
-      return NextResponse.json({ error: 'action must be approve or reject' }, { status: 400 });
+    if (action !== 'approve' && action !== 'reject' && action !== 'handle') {
+      return NextResponse.json({ error: 'action must be approve, reject, or handle' }, { status: 400 });
     }
 
     const req = await (prisma as any).enrollmentRequest.findUnique({
@@ -56,6 +56,25 @@ export async function POST(
     if (!req) return NextResponse.json({ error: 'Request not found' }, { status: 404 });
     if (req.status !== 'PENDING') {
       return NextResponse.json({ error: `This request was already ${req.status.toLowerCase()}` }, { status: 400 });
+    }
+
+    // ---- Run 27: Disciplers interest rows are conversations, never
+    // enrollments. The ONLY decision they accept is 'handle' (a human has
+    // reached out) — and 'handle' applies to nothing else. No email is sent;
+    // the follow-up is personal by design.
+    const isInterest = req.intent === 'INTEREST';
+    if (isInterest && action !== 'handle') {
+      return NextResponse.json({ error: 'This is an interest conversation, not an enrollment request — use “Mark as handled” once someone has reached out.' }, { status: 400 });
+    }
+    if (!isInterest && action === 'handle') {
+      return NextResponse.json({ error: 'Only Disciplers interest conversations can be marked as handled.' }, { status: 400 });
+    }
+    if (action === 'handle') {
+      const updated = await (prisma as any).enrollmentRequest.update({
+        where: { id: req.id },
+        data: { status: 'HANDLED', decidedAt: new Date(), decidedByUserId: session.userId },
+      });
+      return NextResponse.json({ ok: true, request: updated });
     }
 
     const cohortMeeting = req.cohort
