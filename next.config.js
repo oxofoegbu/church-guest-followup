@@ -9,6 +9,7 @@ const nextConfig = {
   //   begin.gracelifecenter.com  -> /begin    (Run 25)
   //   discipler.gracelifecenter.com -> /discipler (Run 27)
   //   leaders.gracelifecenter.com -> /leaders   (Run 29)
+  //   thegathering.gracelifecenter.com -> /thegathering (Run 33)
   //   gracelifecenter.com (+ www) -> /home     (Run 30 — the public website)
   // The apex serves the marketing homepage at its root; every other marketing
   // route (/im-new, /journey, ...) resolves directly on that host. Attach the
@@ -45,6 +46,11 @@ const nextConfig = {
           source: '/',
           has: [{ type: 'host', value: 'leaders.gracelifecenter.com' }],
           destination: '/leaders',
+        },
+        {
+          source: '/',
+          has: [{ type: 'host', value: 'thegathering.gracelifecenter.com' }],
+          destination: '/thegathering',
         },
       ],
     };

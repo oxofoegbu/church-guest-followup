@@ -21,5 +21,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/become`, lastModified: LASTMOD, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${base}/discipler`, lastModified: LASTMOD, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/leaders`, lastModified: LASTMOD, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${base}/thegathering`, lastModified: LASTMOD, changeFrequency: 'monthly', priority: 0.7 },
   ];
 }

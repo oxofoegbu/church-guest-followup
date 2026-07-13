@@ -21,6 +21,7 @@ const COLUMNS: { heading: string; links: { label: React.ReactNode; href: string 
       { label: "I'm New", href: '/im-new' },
       { label: 'Watch & Read', href: '/teaching' },
       { label: 'Gatherings', href: '/gatherings' },
+      { label: 'The Gathering', href: '/thegathering' },
       { label: 'About', href: '/about' },
     ],
   },
