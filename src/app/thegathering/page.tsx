@@ -344,7 +344,7 @@ export default function TheGatheringPage() {
             Grace Life <span style={{ color: C.glow }}>Center</span>
           </span>
           <div style={{ display: 'flex', gap: 22, fontSize: 14 }}>
-            <a href="/" style={{ color: 'rgba(251,247,239,0.7)', textDecoration: 'none' }}>Main site</a>
+            <a href="/home" style={{ color: 'rgba(251,247,239,0.7)', textDecoration: 'none' }}>Main site</a>
             <a href="/journey" style={{ color: 'rgba(251,247,239,0.7)', textDecoration: 'none' }}>The Journey</a>
             <a href="/prayer" style={{ color: 'rgba(251,247,239,0.7)', textDecoration: 'none' }}>Prayer</a>
           </div>

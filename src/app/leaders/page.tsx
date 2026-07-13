@@ -20,6 +20,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { EB_Garamond, Lato } from 'next/font/google';
+import StandaloneNav from '@/components/site/StandaloneNav';
 
 const garamond = EB_Garamond({ subsets: ['latin'], weight: ['400', '500', '600'], style: ['normal', 'italic'], display: 'swap' });
 const lato = Lato({ subsets: ['latin'], weight: ['400', '700'], display: 'swap' });
@@ -280,6 +281,7 @@ export default function LeadersPage() {
 
   return (
     <div className={lato.className} style={{ background: C.cream, color: C.ink, minHeight: '100vh' }}>
+      <StandaloneNav serifClass={garamond.className} />
       {/* ---- A. Hero — the call ---- */}
       {/* Desktop / tablet: the approved photograph full-bleed, type in live
           HTML over the dark left two-thirds. The left region is near-black,
@@ -314,7 +316,7 @@ export default function LeadersPage() {
           a solid Midnight Navy block carries the type, the image follows
           below, pre-cropped to 4:5 around the praying man. */}
       <header className="md:hidden" style={{ background: C.midnight }}>
-        <div className="px-6 pt-16 pb-12 text-center">
+        <div className="px-6 pt-24 pb-12 text-center">
           {heroKicker}
           {heroH1}
           {heroSub}

@@ -18,6 +18,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { EB_Garamond, Lato } from 'next/font/google';
+import StandaloneNav from '@/components/site/StandaloneNav';
 
 const garamond = EB_Garamond({ subsets: ['latin'], weight: ['400', '500', '600'], style: ['normal', 'italic'], display: 'swap' });
 const lato = Lato({ subsets: ['latin'], weight: ['400', '700'], display: 'swap' });
@@ -272,6 +273,7 @@ export default function DisciplerPage() {
 
   return (
     <div className={lato.className} style={{ background: C.cream, color: C.ink, minHeight: '100vh' }}>
+      <StandaloneNav serifClass={garamond.className} />
       {/* ---- A. Hero — the honor and the question ---- */}
       <header className="relative hidden md:flex items-center overflow-hidden" style={{ background: C.forest, minHeight: '560px' }}>
         <img
@@ -299,7 +301,7 @@ export default function DisciplerPage() {
         </div>
       </header>
       <header className="md:hidden" style={{ background: C.forest }}>
-        <div className="px-6 pt-16 pb-12 text-center">
+        <div className="px-6 pt-24 pb-12 text-center">
           {heroKicker}
           {heroH1}
           {heroSub}

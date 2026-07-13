@@ -42,7 +42,7 @@ export default function StandaloneNav({ serifClass = '' }: { serifClass?: string
   }, [open]);
 
   const wordmark = (
-    <Link href="/" aria-label="Grace Life Center — home" className="inline-flex flex-col leading-[1.05]">
+    <Link href="/home" aria-label="Grace Life Center — home" className="inline-flex flex-col leading-[1.05]">
       <span className={`text-[20px] font-semibold text-white ${serifClass}`} style={serifClass ? undefined : { fontFamily: 'Georgia, serif' }}>
         Grace Life <span className="text-[#E7CF9E]">Center</span>
       </span>

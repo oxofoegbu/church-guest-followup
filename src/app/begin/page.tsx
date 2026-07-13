@@ -11,6 +11,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { EB_Garamond, Lato } from 'next/font/google';
+import StandaloneNav from '@/components/site/StandaloneNav';
 
 const garamond = EB_Garamond({ subsets: ['latin'], weight: ['400', '500', '600'], style: ['normal', 'italic'], display: 'swap' });
 const lato = Lato({ subsets: ['latin'], weight: ['400', '700'], display: 'swap' });
@@ -191,6 +192,7 @@ export default function BeginPage() {
 
   return (
     <div className={lato.className} style={{ background: C.cream, color: C.ink, minHeight: '100vh' }}>
+      <StandaloneNav serifClass={garamond.className} />
       {/* ---- A. Hero — the invitation ---- */}
       <header
         className="relative overflow-hidden px-6 py-24 sm:py-32 text-center"

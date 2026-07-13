@@ -14,6 +14,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { EB_Garamond, Lato } from 'next/font/google';
+import StandaloneNav from '@/components/site/StandaloneNav';
 
 const garamond = EB_Garamond({ subsets: ['latin'], weight: ['400', '500', '600'], style: ['normal', 'italic'], display: 'swap' });
 const lato = Lato({ subsets: ['latin'], weight: ['400', '700'], display: 'swap' });
@@ -263,6 +264,7 @@ export default function BecomePage() {
 
   return (
     <div className={lato.className} style={{ background: C.cream, color: C.ink, minHeight: '100vh' }}>
+      <StandaloneNav serifClass={garamond.className} />
       {/* ---- A. Hero — the ache and the invitation ---- */}
       {/* Desktop / tablet: the approved photograph full-bleed, type in live
           HTML over the empty left two-thirds, with a whisper of scrim that
@@ -296,7 +298,7 @@ export default function BecomePage() {
           overlay — a solid Deep Umber block carries the type, the image
           follows below, pre-cropped to 4:5 around the subject. */}
       <header className="md:hidden" style={{ background: C.umber }}>
-        <div className="px-6 pt-16 pb-12 text-center">
+        <div className="px-6 pt-24 pb-12 text-center">
           {heroKicker}
           {heroH1}
           {heroSub}
