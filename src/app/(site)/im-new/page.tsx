@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 
 const EXPECT = [
   { k: 'The feel', h: 'Warm, not slick', p: "Real people, honest worship, and a welcome that doesn’t corner you. Come late, come tired, come curious — you’ll fit right in." },
-  { k: 'The shape', h: 'Worship & a message', p: 'About 75 minutes: sung worship, prayer, and a message from the Scriptures you can actually use this week.' },
+  { k: 'The shape', h: 'Worship & a message', p: 'About 90 minutes: sung worship, prayer, and a message from the Scriptures you can actually use this week.' },
   { k: 'The dress code', h: 'There isn’t one', p: 'Jeans or your Sunday best — both are right. Wear whatever lets you forget what you’re wearing.' },
 ];
 
