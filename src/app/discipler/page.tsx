@@ -439,18 +439,49 @@ export default function DisciplerPage() {
               </ul>
             </div>
           </div>
-          <p className="mx-auto mt-8 max-w-lg text-center leading-relaxed" style={{ color: '#4b463f' }}>
-            Boundaries are part of the honor. Hard things go to pastors — a discipler never
-            carries a crisis alone.
-          </p>
-          <img
-            src="/discipler/table-two.webp"
-            alt="Two men in honest conversation at a wooden table — an open book between them, window light on the wall."
-            width={1916}
-            height={821}
-            loading="lazy"
-            className="mt-10 rounded-2xl w-full h-auto"
-          />
+          {/* Mobile: the boundaries line as text, then the tighter crop —
+              an overlay would shrink below readability at phone widths */}
+          <div className="sm:hidden">
+            <p className="mx-auto mt-8 max-w-lg text-center leading-relaxed" style={{ color: '#4b463f' }}>
+              Boundaries are part of the honor. Hard things go to pastors — a discipler never
+              carries a crisis alone.
+            </p>
+            <img
+              src="/discipler/table-two-mobile.webp"
+              alt="Two men in honest conversation at a wooden table — an open book between them, window light on the wall."
+              width={1232}
+              height={821}
+              loading="lazy"
+              className="mt-8 rounded-2xl w-full h-auto"
+            />
+          </div>
+          {/* sm+: the line lives on the image's empty wall, hero-style —
+              live HTML over an evergreen scrim (AA-checked against the
+              brightest sunlit patch), never baked into the image */}
+          <div className="relative mt-10 hidden sm:block overflow-hidden rounded-2xl">
+            <img
+              src="/discipler/table-two.webp"
+              alt="Two men in honest conversation at a wooden table — an open book between them, window light on the wall."
+              width={1916}
+              height={821}
+              loading="lazy"
+              className="w-full h-auto"
+            />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0"
+              style={{ background: 'linear-gradient(to right, rgba(31,42,29,0.82), rgba(31,42,29,0.72) 42%, transparent 66%)' }}
+            />
+            <div className="absolute inset-0 flex items-center">
+              <p
+                className={`${garamond.className} max-w-[46%] pl-8 md:pl-10 text-lg md:text-xl italic leading-relaxed`}
+                style={{ color: C.cream, textShadow: '0 1px 10px rgba(20,28,19,0.55)' }}
+              >
+                Boundaries are part of the honor. Hard things go to pastors — a discipler
+                never carries a crisis alone.
+              </p>
+            </div>
+          </div>
         </section>
 
         <hr style={{ borderColor: C.clay }} />
