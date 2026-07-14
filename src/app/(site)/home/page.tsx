@@ -10,6 +10,7 @@ import Eyebrow from '@/components/site/Eyebrow';
 import Button from '@/components/site/Button';
 import Pathway from '@/components/site/Pathway';
 import { SITE, churchJsonLd } from '@/lib/site';
+import { ALL_ARTICLES, featuredTeaching, topicLabel, youTubeThumb } from '@/content/teaching';
 
 const H2 =
   'font-fraunces text-[30px] font-semibold leading-[1.12] tracking-[-0.01em] text-site-umber sm:text-[38px]';
@@ -76,6 +77,7 @@ function TeachingCard({
   title,
   desc,
   featured = false,
+  href = '/teaching',
 }: {
   kind: string;
   thumb: { image?: string; gradient?: string; play?: boolean };
@@ -83,10 +85,11 @@ function TeachingCard({
   title: React.ReactNode;
   desc: string;
   featured?: boolean;
+  href?: string;
 }) {
   return (
     <Link
-      href="/teaching"
+      href={href}
       className="flex flex-col overflow-hidden rounded-2xl border border-site-claydk bg-site-paper transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_22px_44px_-30px_rgba(51,32,26,0.5)]"
     >
       <div className="relative grid h-[150px] place-items-center" style={thumb.gradient ? { backgroundImage: thumb.gradient } : undefined}>
@@ -115,7 +118,19 @@ function TeachingCard({
   );
 }
 
+// Run 39 — the teaching preview is LIVE from the content registry: the pinned
+// featured teaching leads, and the two newest articles follow. Publishing to
+// sermons.ts / articles.ts updates this block automatically — no code change.
+const ARTICLE_GRADIENTS = [
+  'linear-gradient(150deg, #B0894F, #8a6a38)',
+  'linear-gradient(150deg, #3E5A34, #1F2A1D)',
+];
+
 export default function HomePage() {
+  const featured = featuredTeaching();
+  const latestArticles = ALL_ARTICLES.filter(
+    (a) => !featured || a.slug !== featured.slug
+  ).slice(0, 2);
   return (
     <>
       <script
@@ -253,28 +268,32 @@ export default function HomePage() {
           </Button>
         </div>
         <div className="mt-10 grid grid-cols-1 gap-5 lg:grid-cols-[1.6fr_1fr_1fr]">
-          <TeachingCard
-            kind="Latest Sermon"
-            thumb={{ image: '/site/teaching-well.webp', play: true }}
-            series="Series · The Well"
-            title="Proximity Is Not the Same as Orientation"
-            desc="On the outsiders who turned toward Jesus — and what it means that heaven reads direction, not distance."
-            featured
-          />
-          <TeachingCard
-            kind="Article"
-            thumb={{ gradient: 'linear-gradient(150deg, #B0894F, #8a6a38)' }}
-            series="Formation"
-            title={<>What Does It Mean to “Be With Jesus”?</>}
-            desc="A plain guide to the practice underneath everything."
-          />
-          <TeachingCard
-            kind="Article"
-            thumb={{ gradient: 'linear-gradient(150deg, #3E5A34, #1F2A1D)' }}
-            series="Following Jesus"
-            title="Grace Is Not Opposed to Effort"
-            desc="Why apprenticeship isn’t earning — and how change actually happens."
-          />
+          {featured ? (
+            <TeachingCard
+              href={`/teaching/${featured.slug}`}
+              kind={featured.kind === 'sermon' ? 'Featured Sermon' : 'Featured'}
+              thumb={
+                featured.kind === 'sermon'
+                  ? { image: youTubeThumb(featured.youTubeId), play: true }
+                  : { gradient: ARTICLE_GRADIENTS[0] }
+              }
+              series={featured.series ? `Series · ${featured.series}` : topicLabel(featured.topic)}
+              title={featured.title}
+              desc={featured.excerpt}
+              featured
+            />
+          ) : null}
+          {latestArticles.map((a, i) => (
+            <TeachingCard
+              key={a.slug}
+              href={`/teaching/${a.slug}`}
+              kind="Article"
+              thumb={{ gradient: ARTICLE_GRADIENTS[i % ARTICLE_GRADIENTS.length] }}
+              series={topicLabel(a.topic)}
+              title={a.title}
+              desc={a.excerpt}
+            />
+          ))}
         </div>
       </Band>
 
