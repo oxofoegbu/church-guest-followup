@@ -10,6 +10,7 @@ import Band from '@/components/site/Band';
 import Eyebrow from '@/components/site/Eyebrow';
 import Button from '@/components/site/Button';
 import SubscribeForm from '@/components/site/SubscribeForm';
+import Pager from '@/components/site/Pager';
 import { SITE } from '@/lib/site';
 import {
   ALL_SERMONS,
@@ -84,14 +85,49 @@ function TeachingCard({ t }: { t: Teaching }) {
   );
 }
 
-export default function TeachingPage({ searchParams }: { searchParams?: { topic?: string } }) {
+const PAGE_SIZE = 9; // sermons / articles shown per page
+
+function toPage(v: string | undefined): number {
+  const n = v ? parseInt(v, 10) : 1;
+  return Number.isFinite(n) && n > 0 ? n : 1;
+}
+
+export default function TeachingPage({
+  searchParams,
+}: {
+  searchParams?: { topic?: string; sp?: string; ap?: string };
+}) {
   const topics = activeTopics();
   const active = searchParams?.topic as TopicSlug | undefined;
   const activeValid = active && topics.some((x) => x.slug === active) ? active : undefined;
 
-  const sermons = activeValid ? ALL_SERMONS.filter((s) => s.topic === activeValid) : ALL_SERMONS;
-  const articles = activeValid ? ALL_ARTICLES.filter((a) => a.topic === activeValid) : ALL_ARTICLES;
+  const allSermons = activeValid ? ALL_SERMONS.filter((s) => s.topic === activeValid) : ALL_SERMONS;
+  const allArticles = activeValid ? ALL_ARTICLES.filter((a) => a.topic === activeValid) : ALL_ARTICLES;
   const featured = featuredTeaching();
+
+  // Pagination — clamp each section's page to its range.
+  const sermonPages = Math.max(1, Math.ceil(allSermons.length / PAGE_SIZE));
+  const articlePages = Math.max(1, Math.ceil(allArticles.length / PAGE_SIZE));
+  const sp = Math.min(toPage(searchParams?.sp), sermonPages);
+  const ap = Math.min(toPage(searchParams?.ap), articlePages);
+  const sermons = allSermons.slice((sp - 1) * PAGE_SIZE, sp * PAGE_SIZE);
+  const articles = allArticles.slice((ap - 1) * PAGE_SIZE, ap * PAGE_SIZE);
+
+  // Build a hub URL preserving topic + both section pages (omitting defaults).
+  const hubHref = (over: { sp?: number; ap?: number }, hash: string): string => {
+    const nextSp = over.sp ?? sp;
+    const nextAp = over.ap ?? ap;
+    const qs: string[] = [];
+    if (activeValid) qs.push(`topic=${activeValid}`);
+    if (nextSp > 1) qs.push(`sp=${nextSp}`);
+    if (nextAp > 1) qs.push(`ap=${nextAp}`);
+    return `/teaching${qs.length ? `?${qs.join('&')}` : ''}${hash}`;
+  };
+  const rangeLabel = (page: number, total: number): string => {
+    const from = (page - 1) * PAGE_SIZE + 1;
+    const to = Math.min(page * PAGE_SIZE, total);
+    return `${from}–${to} of ${total}`;
+  };
 
   return (
     <>
@@ -171,19 +207,25 @@ export default function TeachingPage({ searchParams }: { searchParams?: { topic?
       ) : null}
 
       {/* Sermons */}
-      <Band variant="cream">
+      <Band variant="cream" id="sermons">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
           <div>
             <Eyebrow className="mb-3">Recent teaching</Eyebrow>
             <h2 className={H2}>Sermons &amp; series.</h2>
           </div>
+          {allSermons.length > PAGE_SIZE ? (
+            <p className="text-[13.5px] text-site-soft">Showing {rangeLabel(sp, allSermons.length)}</p>
+          ) : null}
         </div>
         {sermons.length > 0 ? (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {sermons.map((s) => (
-              <TeachingCard key={s.slug} t={s} />
-            ))}
-          </div>
+          <>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {sermons.map((s) => (
+                <TeachingCard key={s.slug} t={s} />
+              ))}
+            </div>
+            <Pager current={sp} totalPages={sermonPages} ariaLabel="Sermons pages" hrefFor={(p) => hubHref({ sp: p }, '#sermons')} />
+          </>
         ) : (
           <div className="rounded-[16px] border border-dashed border-site-claydk bg-site-paper px-8 py-12 text-center">
             <p className="mx-auto max-w-[520px] text-[16.5px] leading-[1.6] text-site-soft">
@@ -199,17 +241,23 @@ export default function TeachingPage({ searchParams }: { searchParams?: { topic?
       </Band>
 
       {/* Articles */}
-      {articles.length > 0 ? (
-        <Band variant="cream2">
-          <div className="mb-8">
-            <Eyebrow className="mb-3">Read</Eyebrow>
-            <h2 className={H2}>Formation, in plain words.</h2>
+      {allArticles.length > 0 ? (
+        <Band variant="cream2" id="articles">
+          <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <Eyebrow className="mb-3">Read</Eyebrow>
+              <h2 className={H2}>Formation, in plain words.</h2>
+            </div>
+            {allArticles.length > PAGE_SIZE ? (
+              <p className="text-[13.5px] text-site-soft">Showing {rangeLabel(ap, allArticles.length)}</p>
+            ) : null}
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {articles.map((a) => (
               <TeachingCard key={a.slug} t={a} />
             ))}
           </div>
+          <Pager current={ap} totalPages={articlePages} ariaLabel="Articles pages" hrefFor={(p) => hubHref({ ap: p }, '#articles')} />
         </Band>
       ) : null}
 
