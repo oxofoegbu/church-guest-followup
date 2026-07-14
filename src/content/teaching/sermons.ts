@@ -13,6 +13,7 @@ import type { Sermon } from './types';
 
 const OKEZIE = 'Pastor Okezie Ofoegbu';
 const COSMAS = 'Dr. Cosmas Ilechukwu';
+const EWA = 'Pastor John Ewa';
 
 export const SERMONS: Sermon[] = [
   {
@@ -25,6 +26,7 @@ export const SERMONS: Sermon[] = [
     topic: 'following-jesus',
     author: COSMAS,
     youTubeId: 'aNAekM6vdY8',
+    featured: true,
   },
   {
     kind: 'sermon',
@@ -54,7 +56,7 @@ export const SERMONS: Sermon[] = [
     title: 'How God’s Kingdom Comes',
     excerpt:
       'The kingdom rarely arrives with noise. How heaven actually breaks into ordinary lives and places — quietly, and from the inside out.',
-    date: '2026-06-21',
+    date: '2022-04-06',
     topic: 'the-kingdom',
     author: OKEZIE,
     youTubeId: 'YH3LOKh4E1A',
@@ -102,5 +104,95 @@ export const SERMONS: Sermon[] = [
     topic: 'formation',
     author: OKEZIE,
     youTubeId: 'oPBPwQGI4SI',
+  },
+
+  // --- Added Run 36: further sermons with their real upload dates. ---
+  {
+    kind: 'sermon',
+    slug: 'becoming-agents-of-revival-part-2',
+    title: 'Becoming Agents of Revival — Part 2',
+    excerpt:
+      'Revival is not a meeting we attend but a fire we carry. How ordinary people become the ones through whom God renews a place.',
+    date: '2024-03-09',
+    topic: 'prayer-and-spirit',
+    author: OKEZIE,
+    youTubeId: 'CFavMuVr94w',
+  },
+  {
+    kind: 'sermon',
+    slug: 'love-is-not-a-feeling',
+    title: 'Love Is Not a Feeling',
+    excerpt:
+      'Real love is a decision that outlasts the mood. What it looks like to love the way Jesus did — on purpose, and all the way through.',
+    date: '2023-01-21',
+    topic: 'following-jesus',
+    author: OKEZIE,
+    youTubeId: 'Xa4sik5uG2I',
+  },
+  {
+    kind: 'sermon',
+    slug: 'rejoice-in-the-lord',
+    title: 'Rejoice in the Lord',
+    excerpt:
+      'Joy is not denial of what’s hard; it’s a deeper ground beneath it. How to keep a settled gladness rooted in God, whatever the season.',
+    date: '2022-12-11',
+    topic: 'following-jesus',
+    author: OKEZIE,
+    youTubeId: '_zyCgX2P7s8',
+  },
+  {
+    kind: 'sermon',
+    slug: 'leading-and-living-like-jesus',
+    title: 'Leading and Living Like Jesus',
+    excerpt:
+      'The way up in God’s kingdom is down. What it means to lead and to live the way Jesus did — as a servant, from the inside out.',
+    date: '2022-11-13',
+    topic: 'following-jesus',
+    author: EWA,
+    youTubeId: 'gkjxgqbN0b0',
+  },
+  {
+    kind: 'sermon',
+    slug: 'assembled-for-your-victory',
+    title: 'Assembled for Your Victory',
+    excerpt:
+      'We were never meant to fight alone. Why God sets us in a people — and how the gathered church becomes the place your breakthrough comes.',
+    date: '2022-10-09',
+    topic: 'the-kingdom',
+    author: OKEZIE,
+    youTubeId: 'Qnc5gING0h0',
+  },
+  {
+    kind: 'sermon',
+    slug: 'preparation-for-successful-marriage',
+    title: 'Power and Preparation for a Successful Marriage',
+    excerpt:
+      'A marriage is built long before the wedding and long after it. Honest, practical wisdom for preparing a love that lasts.',
+    date: '2022-08-28',
+    topic: 'formation',
+    author: OKEZIE,
+    youTubeId: 'DOchvfcgTaY',
+  },
+  {
+    kind: 'sermon',
+    slug: 'seek-first-the-kingdom',
+    title: 'Seek First the Kingdom',
+    excerpt:
+      'Jesus’ cure for anxiety is a reordering of loves. What changes when His kingdom, not our worry, sits at the center of the day.',
+    date: '2022-03-13',
+    topic: 'sermon-on-the-mount',
+    author: OKEZIE,
+    youTubeId: 'I4-zTu13VTE',
+  },
+  {
+    kind: 'sermon',
+    slug: 'be-fruitful-multiply-and-fill-the-earth',
+    title: 'How To Be Fruitful, Multiply & Fill the Earth',
+    excerpt:
+      'The first blessing was a commission: to be fruitful and fill the earth. What that ancient calling means for an ordinary life today.',
+    date: '2020-08-02',
+    topic: 'the-kingdom',
+    author: OKEZIE,
+    youTubeId: 'PPHwKFjaN50',
   },
 ];

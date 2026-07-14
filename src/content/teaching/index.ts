@@ -43,10 +43,11 @@ export function teachingsByTopic(slug: TopicSlug): Teaching[] {
   return ALL_TEACHINGS.filter((t) => t.topic === slug);
 }
 
-// The featured item on the hub: the latest sermon if any, otherwise the latest
-// article — so the page always leads with real content.
+// The featured item on the hub: an explicitly pinned entry (`featured: true`)
+// wins; otherwise the latest sermon, otherwise the latest article — so the page
+// always leads with real content.
 export function featuredTeaching(): Teaching | undefined {
-  return ALL_SERMONS[0] || ALL_ARTICLES[0];
+  return ALL_TEACHINGS.find((t) => t.featured === true) || ALL_SERMONS[0] || ALL_ARTICLES[0];
 }
 
 export function youTubeThumb(id: string): string {

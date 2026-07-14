@@ -43,6 +43,7 @@ interface TeachingBase {
   topic: TopicSlug;
   series?: string;
   author: string;
+  featured?: boolean; // pin as the hub's featured item, regardless of date
 }
 
 export interface Sermon extends TeachingBase {
