@@ -3,6 +3,8 @@
 // (YouTube), a formation-articles grid, and a subscribe box. Copy from the
 // mock (watchread.html). Publishing new teaching = adding an entry to
 // src/content/teaching/{sermons,articles}.ts — this page needs no edits.
+// Run 40 — full-text search: a `?q=` search box (works without JS) that spans
+// every sermon + article and shows a single ranked result set.
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import InteriorHero from '@/components/site/InteriorHero';
@@ -17,6 +19,7 @@ import {
   ALL_ARTICLES,
   activeTopics,
   featuredTeaching,
+  searchTeachings,
   topicLabel,
   youTubeThumb,
   type Teaching,
@@ -39,6 +42,13 @@ export const metadata: Metadata = {
 
 const PlayIcon = (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+);
+
+const SearchIcon = (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <circle cx="11" cy="11" r="7" />
+    <path d="M21 21l-4.3-4.3" />
+  </svg>
 );
 
 function metaLine(t: Teaching): string {
@@ -85,7 +95,38 @@ function TeachingCard({ t }: { t: Teaching }) {
   );
 }
 
-const PAGE_SIZE = 9; // sermons / articles shown per page
+// The search box — a plain GET form, so it works with or without JavaScript and
+// every result set is a shareable URL. Rendered on both the browse and results
+// views so a visitor can refine in place.
+function SearchBox({ q }: { q: string }) {
+  return (
+    <div className="bg-site-cream2">
+      <div className="mx-auto max-w-[1120px] px-7 pt-9 pb-1">
+        <form method="get" action="/teaching" role="search" className="relative mx-auto max-w-[640px]">
+          <label htmlFor="teaching-q" className="sr-only">Search sermons and articles</label>
+          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-site-soft">{SearchIcon}</span>
+          <input
+            id="teaching-q"
+            name="q"
+            type="search"
+            defaultValue={q}
+            placeholder="Search sermons and articles…"
+            autoComplete="off"
+            className="w-full rounded-full border border-site-claydk bg-site-paper py-3.5 pl-11 pr-[104px] text-[15.5px] text-site-ink shadow-sm placeholder:text-site-soft focus:border-site-brass focus:outline-none focus:ring-2 focus:ring-site-brass/25"
+          />
+          <button
+            type="submit"
+            className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-full bg-site-ember px-5 py-2 text-[13.5px] font-semibold text-white transition-colors hover:bg-site-ember/90"
+          >
+            Search
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+const PAGE_SIZE = 9; // sermons / articles / results shown per page
 
 function toPage(v: string | undefined): number {
   const n = v ? parseInt(v, 10) : 1;
@@ -95,15 +136,108 @@ function toPage(v: string | undefined): number {
 export default function TeachingPage({
   searchParams,
 }: {
-  searchParams?: { topic?: string; sp?: string; ap?: string };
+  searchParams?: { topic?: string; sp?: string; ap?: string; q?: string; p?: string };
 }) {
+  const q = (searchParams?.q ?? '').trim();
+  const isSearch = q.length > 0;
+  const featured = featuredTeaching();
+
+  // ---- Search view: one ranked result set across sermons + articles ----
+  if (isSearch) {
+    const results = searchTeachings(q);
+    const resultPages = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
+    const p = Math.min(toPage(searchParams?.p), resultPages);
+    const pageResults = results.slice((p - 1) * PAGE_SIZE, p * PAGE_SIZE);
+    const searchHref = (page: number): string =>
+      `/teaching?q=${encodeURIComponent(q)}${page > 1 ? `&p=${page}` : ''}#results`;
+    const topics = activeTopics();
+
+    return (
+      <>
+        <InteriorHero
+          image="/site/teaching-well.webp"
+          alt="Cupped hands holding water lit gold by the sun — the water, given away."
+          eyebrow="Watch & Read"
+          title="The water, given away."
+          lede="Sermons and honest writing on being with Jesus, becoming like Him, and carrying heaven — free, and for anyone who’s hungry."
+          current="Watch & Read"
+          objectPosition="50% 45%"
+        />
+        <SearchBox q={q} />
+
+        <Band variant="cream2" id="results">
+          <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <Eyebrow className="mb-3">Search</Eyebrow>
+              <h2 className={H2}>
+                {results.length} {results.length === 1 ? 'result' : 'results'} for “{q}”
+              </h2>
+            </div>
+            <Link href="/teaching" className="text-[14px] font-semibold text-site-ember underline-offset-2 hover:underline">
+              ← Clear search
+            </Link>
+          </div>
+
+          {results.length > 0 ? (
+            <>
+              {results.length > PAGE_SIZE ? (
+                <p className="mb-6 text-[13.5px] text-site-soft">
+                  Showing {(p - 1) * PAGE_SIZE + 1}–{Math.min(p * PAGE_SIZE, results.length)} of {results.length}
+                </p>
+              ) : null}
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {pageResults.map((t) => (
+                  <TeachingCard key={t.slug} t={t} />
+                ))}
+              </div>
+              <Pager current={p} totalPages={resultPages} ariaLabel="Search result pages" hrefFor={searchHref} />
+            </>
+          ) : (
+            <div className="rounded-[16px] border border-dashed border-site-claydk bg-site-paper px-8 py-12 text-center">
+              <p className="mx-auto mb-6 max-w-[520px] text-[16.5px] leading-[1.6] text-site-soft">
+                Nothing matched “{q}” yet. Try a broader word — a theme, a book of the Bible, or a
+                feeling — or browse by topic below.
+              </p>
+              {topics.length > 0 ? (
+                <div className="flex flex-wrap justify-center gap-2.5">
+                  {topics.map((tp) => (
+                    <Link
+                      key={tp.slug}
+                      href={`/teaching?topic=${tp.slug}`}
+                      className="rounded-full border border-site-claydk px-4 py-2 text-[13.5px] font-medium text-site-ink transition-colors hover:border-site-brass"
+                    >
+                      {tp.label}
+                    </Link>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          )}
+        </Band>
+
+        {/* Subscribe */}
+        <Band variant="cream" id="subscribe">
+          <div className="mx-auto max-w-[640px] text-center">
+            <Eyebrow className="mb-3.5">Stay close</Eyebrow>
+            <h2 className={`${H2} mb-3`}>New teaching, when it lands.</h2>
+            <p className="mx-auto mb-7 max-w-[520px] text-[17px] text-site-soft">
+              One honest email now and then — a new sermon, a short piece on following Jesus. No noise,
+              unsubscribe anytime.
+            </p>
+            <SubscribeForm />
+          </div>
+        </Band>
+      </>
+    );
+  }
+
+  // ---- Browse view (default) ----
   const topics = activeTopics();
   const active = searchParams?.topic as TopicSlug | undefined;
   const activeValid = active && topics.some((x) => x.slug === active) ? active : undefined;
 
   const allSermons = activeValid ? ALL_SERMONS.filter((s) => s.topic === activeValid) : ALL_SERMONS;
   const allArticles = activeValid ? ALL_ARTICLES.filter((a) => a.topic === activeValid) : ALL_ARTICLES;
-  const featured = featuredTeaching();
 
   // Pagination — clamp each section's page to its range.
   const sermonPages = Math.max(1, Math.ceil(allSermons.length / PAGE_SIZE));
@@ -140,6 +274,8 @@ export default function TeachingPage({
         current="Watch & Read"
         objectPosition="50% 45%"
       />
+
+      <SearchBox q={q} />
 
       {/* Featured — this week */}
       {featured ? (
