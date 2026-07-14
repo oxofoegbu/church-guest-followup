@@ -99,7 +99,7 @@ const RHYTHMS: Rhythm[] = [
       'One unhurried gathering each week in Laurel — sung worship, prayer, and a message from the Scriptures you can actually use. Come exactly as you are; your kids are cared for.',
     meta: [
       { icon: ClockIcon, text: 'Sundays at 10:00 AM · about 90 minutes' },
-      { icon: PinIcon, text: '8730 Cherry Lane, Laurel, MD 20707' },
+      { icon: PinIcon, text: '8730 Cherry Lane, Suite A5, Laurel, MD 20707' },
     ],
     cta: { href: '/im-new', label: 'Plan a visit →' },
   },

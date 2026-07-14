@@ -16,14 +16,14 @@ export const metadata: Metadata = {
     title: OG_TITLE,
     description: OG_DESCRIPTION,
     type: 'website',
-    url: 'https://harvest.gracelifecenter.com/thegathering',
-    images: [{ url: 'https://harvest.gracelifecenter.com/thegathering/hero.webp', width: 1600, height: 1066 }],
+    url: 'https://gracelifecenter.com/thegathering',
+    images: [{ url: 'https://gracelifecenter.com/thegathering/hero.webp', width: 1600, height: 1066 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: OG_TITLE,
     description: OG_DESCRIPTION,
-    images: ['https://harvest.gracelifecenter.com/thegathering/hero.webp'],
+    images: ['https://gracelifecenter.com/thegathering/hero.webp'],
   },
 };
 

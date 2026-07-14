@@ -16,17 +16,17 @@ export const metadata: Metadata = {
     title: OG_TITLE,
     description: OG_DESCRIPTION,
     type: 'website',
-    url: 'https://harvest.gracelifecenter.com/become',
+    url: 'https://gracelifecenter.com/become',
     images: [
-      { url: 'https://harvest.gracelifecenter.com/become/social-og.jpg', width: 1200, height: 630 },
-      { url: 'https://harvest.gracelifecenter.com/become/social-square.jpg', width: 1200, height: 1200 },
+      { url: 'https://gracelifecenter.com/become/social-og.jpg', width: 1200, height: 630 },
+      { url: 'https://gracelifecenter.com/become/social-square.jpg', width: 1200, height: 1200 },
     ],
   },
   twitter: {
     card: 'summary_large_image',
     title: OG_TITLE,
     description: OG_DESCRIPTION,
-    images: ['https://harvest.gracelifecenter.com/become/social-og.jpg'],
+    images: ['https://gracelifecenter.com/become/social-og.jpg'],
   },
 };
 

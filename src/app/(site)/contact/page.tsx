@@ -52,7 +52,7 @@ export default function ContactPage() {
             <h2 className={`${H2} mb-7`}>The details.</h2>
             <InfoList
               items={[
-                { icon: PinIcon, title: '8730 Cherry Lane', detail: 'Laurel, MD 20707' },
+                { icon: PinIcon, title: '8730 Cherry Lane, Suite A5', detail: 'Laurel, MD 20707' },
                 { icon: ClockIcon, title: 'Sundays at 10:00 AM', detail: 'Doors open at 9:30 for coffee.' },
                 { icon: MailIcon, title: 'hello@gracelifecenter.com', detail: 'We read every message and reply within a day or two.' },
               ]}

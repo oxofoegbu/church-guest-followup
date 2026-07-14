@@ -63,6 +63,39 @@ const nextConfig = {
   // (target: https://harvest.gracelifecenter.com/leaders, later
   // https://leaders.gracelifecenter.com).
   async redirects() {
+    // Run 38 — legacy-URL 301s for the domain move. The previous
+    // church-platform site's URLs are still in Google's index (found live in
+    // search results at cutover time): /media + /podcasts/* ("Sermons"),
+    // /blog, /about/im-new, /planyourvisit, /login, plus the old WordPress
+    // patterns /sermons/* and /category/*. Once the apex + www point at this
+    // project, each must 301 to its new home so link equity transfers and
+    // Google updates its records. Every legacy rule is HOST-SCOPED to the
+    // apex + www ONLY — /login is a real app route on harvest., and none of
+    // these may fire on the app hosts.
+    const LEGACY = [
+      { source: '/media', destination: '/teaching' },
+      { source: '/media/:path*', destination: '/teaching' },
+      { source: '/podcasts/:path*', destination: '/teaching' },
+      { source: '/sermons/:path*', destination: '/teaching' },
+      { source: '/category/:path*', destination: '/teaching' },
+      { source: '/blog', destination: '/teaching' },
+      { source: '/blog/:path*', destination: '/teaching' },
+      { source: '/planyourvisit', destination: '/im-new' },
+      { source: '/about/im-new', destination: '/im-new' },
+      { source: '/login', destination: 'https://harvest.gracelifecenter.com/login' },
+    ];
+    const HOSTS = ['gracelifecenter.com', 'www.gracelifecenter.com'];
+    const legacyRules = [];
+    for (let h = 0; h < HOSTS.length; h++) {
+      for (let i = 0; i < LEGACY.length; i++) {
+        legacyRules.push({
+          source: LEGACY[i].source,
+          has: [{ type: 'host', value: HOSTS[h] }],
+          destination: LEGACY[i].destination,
+          permanent: true,
+        });
+      }
+    }
     return [
       {
         source: '/leaderstrack',
@@ -76,7 +109,7 @@ const nextConfig = {
         destination: '/leaders',
         permanent: false,
       },
-    ];
+    ].concat(legacyRules);
   },
 };
 

@@ -16,7 +16,7 @@ export const SITE = {
 
   // NAP (name/address/phone) — keep identical to Google Business Profile
   // and every directory citation. Phone + public email are still TO CONFIRM.
-  street: '8730 Cherry Lane',
+  street: '8730 Cherry Lane, Suite A5',
   city: 'Laurel',
   region: 'MD',
   regionName: 'Maryland',

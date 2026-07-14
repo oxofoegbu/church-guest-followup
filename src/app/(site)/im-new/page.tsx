@@ -87,7 +87,7 @@ export default function ImNewPage() {
             <InfoList
               items={[
                 { icon: ClockIcon, title: 'Sundays at 10:00 AM', detail: 'One gathering each week. Doors open at 9:30 for coffee.' },
-                { icon: PinIcon, title: '8730 Cherry Lane, Laurel, MD 20707', detail: 'Easy to reach from Laurel, Columbia, Bowie, and Beltsville.' },
+                { icon: PinIcon, title: '8730 Cherry Lane, Suite A5, Laurel, MD 20707', detail: 'Easy to reach from Laurel, Columbia, Bowie, and Beltsville.' },
                 { icon: CarIcon, title: 'Free parking on-site', detail: 'Pull right in — no meters, no hunting for a spot.' },
                 { icon: KidsIcon, title: 'Your kids are cared for', detail: 'Safe, warm, and fun kids’ ministry during the service.' },
               ]}

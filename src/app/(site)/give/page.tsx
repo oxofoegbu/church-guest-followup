@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 const WAYS = [
   { k: 'Online', h: 'Quick and secure', p: 'Give once, or set up a simple recurring gift in under two minutes. Secure and instant.', cta: { href: '#give-online', label: 'Give online →' } },
   { k: 'In person', h: 'On any Sunday', p: 'Drop a gift in the box at any Sunday gathering. No envelope or account needed.', cta: { href: '/im-new', label: 'Plan a visit →' } },
-  { k: 'By mail', h: 'A check works too', p: 'Send a check to Grace Life Center, 8730 Cherry Lane, Laurel, MD 20707. Payable to “Grace Life Center.”', cta: null },
+  { k: 'By mail', h: 'A check works too', p: 'Send a check to Grace Life Center, 8730 Cherry Lane, Suite A5, Laurel, MD 20707. Payable to “Grace Life Center.”', cta: null },
 ];
 
 const WHERE = [
