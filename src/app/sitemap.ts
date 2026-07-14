@@ -3,16 +3,24 @@
 // arrive in Runs B/C and join this list then). Submitted to Search Console.
 import type { MetadataRoute } from 'next';
 import { SITE } from '@/lib/site';
+import { ALL_TEACHINGS } from '@/content/teaching';
 
 const LASTMOD = '2026-07-13';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = SITE.url;
+  const teaching: MetadataRoute.Sitemap = ALL_TEACHINGS.map((t) => ({
+    url: `${base}/teaching/${t.slug}`,
+    lastModified: t.date,
+    changeFrequency: 'yearly',
+    priority: 0.6,
+  }));
   return [
     { url: `${base}/`, lastModified: LASTMOD, changeFrequency: 'weekly', priority: 1 },
     { url: `${base}/im-new`, lastModified: LASTMOD, changeFrequency: 'monthly', priority: 0.9 },
     { url: `${base}/journey`, lastModified: LASTMOD, changeFrequency: 'monthly', priority: 0.9 },
     { url: `${base}/about`, lastModified: LASTMOD, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${base}/teaching`, lastModified: LASTMOD, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/gatherings`, lastModified: LASTMOD, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/prayer`, lastModified: LASTMOD, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/give`, lastModified: LASTMOD, changeFrequency: 'monthly', priority: 0.7 },
@@ -22,5 +30,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/discipler`, lastModified: LASTMOD, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/leaders`, lastModified: LASTMOD, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/thegathering`, lastModified: LASTMOD, changeFrequency: 'monthly', priority: 0.7 },
+    ...teaching,
   ];
 }

@@ -177,7 +177,7 @@ export default function GatheringsPage() {
               {r.cta ? (
                 <Button href={r.cta.href} variant="ghost" className="self-start !px-5 !py-2.5">{r.cta.label}</Button>
               ) : (
-                <p className="text-[13.5px] italic text-site-soft">A dedicated home for The Gathering is on the way.</p>
+                <Button href="/thegathering" variant="ghost" className="self-start !px-5 !py-2.5">Learn about The Gathering →</Button>
               )}
             </div>
           ))}
