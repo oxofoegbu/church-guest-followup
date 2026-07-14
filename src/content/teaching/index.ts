@@ -43,15 +43,15 @@ export function teachingsByTopic(slug: TopicSlug): Teaching[] {
   return ALL_TEACHINGS.filter((t) => t.topic === slug);
 }
 
-// Run 40 — Watch & Read search. Full-text, in-repo, dependency-free: the whole
-// body of every article (and any sermon transcript) is searchable, not just
-// titles — so a hungry visitor can find a message by what it's about. All
-// query terms must appear (AND); title/excerpt hits rank a result higher.
+// Run 40/41 — Watch & Read search. In-repo, dependency-free, and tuned to stay
+// sharp as the library grows.
 function blockText(b: Block): string {
   return b.type === 'list' ? b.items.join(' ') : b.text;
 }
 
-function searchableText(t: Teaching): string {
+// The full searchable text of a teaching — curated headline fields plus the
+// whole article body (or any sermon transcript).
+function fullText(t: Teaching): string {
   const parts: string[] = [t.title, t.excerpt, t.author, topicLabel(t.topic)];
   if (t.series) parts.push(t.series);
   if (t.kind === 'article') {
@@ -62,26 +62,111 @@ function searchableText(t: Teaching): string {
   return parts.join(' ').toLowerCase();
 }
 
-export function searchTeachings(query: string): Teaching[] {
-  const terms = query.toLowerCase().split(/\s+/).filter((s) => s.length > 0);
-  if (terms.length === 0) return [];
-  const scored: { t: Teaching; score: number }[] = [];
-  ALL_TEACHINGS.forEach((t) => {
-    const hay = searchableText(t);
-    const matchesAll = terms.every((term) => hay.indexOf(term) !== -1);
-    if (!matchesAll) return;
-    const title = t.title.toLowerCase();
-    const excerpt = t.excerpt.toLowerCase();
-    let score = 0;
-    terms.forEach((term) => {
-      if (title.indexOf(term) !== -1) score += 3;
-      if (excerpt.indexOf(term) !== -1) score += 1;
-    });
-    scored.push({ t, score });
+// Just the curated "headline" fields — title, summary, series, topic, author.
+function headlineText(t: Teaching): string {
+  const parts: string[] = [t.title, t.excerpt, t.author, topicLabel(t.topic)];
+  if (t.series) parts.push(t.series);
+  return parts.join(' ').toLowerCase();
+}
+
+// Common English words carry no search signal — drop them so a phrase like
+// "God will make a way" isn't dominated by "will"/"a".
+const STOPWORDS: Record<string, boolean> = {
+  a: true, an: true, the: true, and: true, or: true, of: true, to: true, in: true,
+  on: true, for: true, is: true, are: true, am: true, be: true, was: true, were: true,
+  will: true, with: true, that: true, this: true, these: true, those: true, your: true,
+  you: true, we: true, our: true, us: true, my: true, me: true, he: true, she: true,
+  it: true, his: true, her: true, its: true, as: true, at: true, by: true, from: true,
+  but: true, not: true, no: true, has: true, have: true, had: true, do: true, does: true,
+  did: true, so: true, if: true, then: true, than: true, out: true, up: true, i: true,
+  they: true, them: true, their: true, there: true, here: true, what: true, when: true,
+  who: true, how: true, why: true, can: true, may: true,
+};
+
+// Punctuation-stripped, stopword-filtered, de-duplicated query terms.
+function queryTerms(query: string): string[] {
+  const raw = query.toLowerCase().replace(/[^a-z0-9]+/g, ' ').split(' ').filter((s) => s.length >= 2);
+  const content = raw.filter((s) => !STOPWORDS[s]);
+  const base = content.length > 0 ? content : raw; // all-stopword query: fall back to raw
+  const seen: Record<string, boolean> = {};
+  const out: string[] = [];
+  base.forEach((s) => {
+    if (!seen[s]) {
+      seen[s] = true;
+      out.push(s);
+    }
   });
-  // Rank by score, then newest-first (deterministic regardless of sort stability).
-  scored.sort((a, b) => b.score - a.score || byDateDesc(a.t, b.t));
-  return scored.map((x) => x.t);
+  return out;
+}
+
+// Run 41 — a sharper search. It (a) strips punctuation and common words from the
+// query, (b) weights distinctive words far above ubiquitous ones (idf), (c)
+// boosts title/summary hits over body hits, and (d) searches the FULL text only
+// when the query has a distinctive word to anchor on — for an all-common query
+// (e.g. "holy spirit") it searches just the curated headline fields, so results
+// stay tight instead of matching half the library. Finally it keeps only
+// results within half the top score, trimming the long tail.
+export function searchTeachings(query: string): Teaching[] {
+  const terms = queryTerms(query);
+  if (terms.length === 0) return [];
+
+  const docs = ALL_TEACHINGS.map((t) => ({
+    t,
+    title: t.title.toLowerCase(),
+    excerpt: t.excerpt.toLowerCase(),
+    head: headlineText(t),
+    full: fullText(t),
+  }));
+  const N = docs.length;
+
+  // Document frequency + idf per term (over the full text). A term is an
+  // "anchor" if it's distinctive (appears in ≤30% of teachings).
+  const idf: Record<string, number> = {};
+  let hasAnchor = false;
+  terms.forEach((term) => {
+    let df = 0;
+    docs.forEach((d) => {
+      if (d.full.indexOf(term) !== -1) df += 1;
+    });
+    idf[term] = Math.log((N + 1) / (df + 1)) + 1;
+    if (df <= 0.3 * N) hasAnchor = true;
+  });
+  const useFull = hasAnchor; // all-common queries search headline only
+  let avgIdf = 0;
+  terms.forEach((term) => {
+    avgIdf += idf[term];
+  });
+  avgIdf = avgIdf / terms.length;
+  const phrase = terms.join(' ');
+
+  const scored: { t: Teaching; score: number }[] = [];
+  docs.forEach((d) => {
+    const text = useFull ? d.full : d.head;
+    let score = 0;
+    let matched = 0;
+    let strong = false; // matched at least one above-average (distinctive) term
+    terms.forEach((term) => {
+      if (text.indexOf(term) === -1) return;
+      matched += 1;
+      const boost = d.title.indexOf(term) !== -1 ? 6 : d.excerpt.indexOf(term) !== -1 ? 3 : 1;
+      score += idf[term] * boost;
+      if (idf[term] >= avgIdf) strong = true;
+    });
+    if (matched === 0 || !strong) return;
+    score *= 0.4 + 0.6 * (matched / terms.length); // reward matching more of the query
+    if (terms.length > 1 && text.indexOf(phrase) !== -1) score += 40; // exact-phrase bonus
+    scored.push({ t: d.t, score });
+  });
+  if (scored.length === 0) return [];
+
+  let top = 0;
+  scored.forEach((x) => {
+    if (x.score > top) top = x.score;
+  });
+  const floor = top * 0.5;
+  const kept = scored.filter((x) => x.score >= floor);
+  kept.sort((a, b) => b.score - a.score || byDateDesc(a.t, b.t));
+  return kept.map((x) => x.t);
 }
 
 // The featured item on the hub: an explicitly pinned entry (`featured: true`)
