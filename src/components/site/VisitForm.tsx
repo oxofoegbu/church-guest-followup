@@ -1,10 +1,12 @@
 'use client';
 
-// Run 31 — "Plan a Visit" form. Creates a Guest through the EXISTING public
-// intake endpoint (/api/guests/public), which schedules the drip and notifies
-// the new-guest team — no parallel plumbing. Phone is required by that
-// pipeline; framed warmly. Honeypot writes nothing.
+// Run 31 / Run 47 — "Plan a Visit" form. Posts to /api/visit, then confirms the
+// visitor's email with a 6-digit code (OtpDialog). On verification the visit
+// becomes a Guest through the existing intake pipeline (drip + new-guest alert)
+// — no parallel plumbing. Phone + email are required (email carries the code).
+// Honeypot writes nothing.
 import { useState } from 'react';
+import OtpDialog from '@/components/site/OtpDialog';
 
 const INPUT =
   'w-full rounded-[10px] border border-site-claydk bg-white px-3.5 py-3 text-[15px] text-site-ink placeholder:text-site-soft/70 focus:border-site-brass focus:outline-none focus:ring-2 focus:ring-site-brass/30';
@@ -26,6 +28,7 @@ export default function VisitForm() {
   });
   const [status, setStatus] = useState<'idle' | 'sending' | 'done' | 'error'>('idle');
   const [error, setError] = useState('');
+  const [verify, setVerify] = useState<{ id: string; email: string } | null>(null);
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setF({ ...f, [k]: e.target.value });
@@ -39,7 +42,7 @@ export default function VisitForm() {
     setStatus('sending');
     setError('');
     try {
-      const res = await fetch('/api/guests/public', {
+      const res = await fetch('/api/visit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -47,19 +50,21 @@ export default function VisitForm() {
           lastName: f.lastName,
           phone: f.phone,
           email: f.email,
-          preferredContactMethod: 'CALL',
           firstVisitDate: f.firstVisitDate,
-          serviceAttended: 'Sunday 10:00 AM',
-          howHeardAboutUs: 'Plan a Visit (website)',
           prayerRequest: f.prayerRequest,
-          honeypot: '',
+          website: '',
         }),
       });
+      const d = await res.json().catch(() => ({}));
       if (!res.ok) {
-        const d = await res.json().catch(() => ({}));
         throw new Error(d.error || 'Something went wrong. Please try again.');
       }
-      setStatus('done');
+      if (d.requiresVerification && d.id) {
+        setVerify({ id: d.id, email: f.email });
+        setStatus('idle');
+      } else {
+        setStatus('done');
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong.');
       setStatus('error');
@@ -79,46 +84,56 @@ export default function VisitForm() {
   }
 
   return (
-    <form onSubmit={submit} className="rounded-[18px] border border-site-claydk bg-site-paper p-9">
-      <div className="grid gap-4">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="grid gap-1.5">
-            <label className={LABEL} htmlFor="v-first">First name</label>
-            <input id="v-first" className={INPUT} required value={f.firstName} onChange={set('firstName')} placeholder="What should we call you?" />
+    <>
+      <form onSubmit={submit} className="rounded-[18px] border border-site-claydk bg-site-paper p-9">
+        <div className="grid gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-1.5">
+              <label className={LABEL} htmlFor="v-first">First name</label>
+              <input id="v-first" className={INPUT} required value={f.firstName} onChange={set('firstName')} placeholder="What should we call you?" />
+            </div>
+            <div className="grid gap-1.5">
+              <label className={LABEL} htmlFor="v-last">Last name</label>
+              <input id="v-last" className={INPUT} required value={f.lastName} onChange={set('lastName')} placeholder="Your last name" />
+            </div>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-1.5">
+              <label className={LABEL} htmlFor="v-phone">Phone <span className="font-normal text-site-soft">(so we can say hi)</span></label>
+              <input id="v-phone" type="tel" className={INPUT} required value={f.phone} onChange={set('phone')} placeholder="(000) 000-0000" />
+            </div>
+            <div className="grid gap-1.5">
+              <label className={LABEL} htmlFor="v-email">Email</label>
+              <input id="v-email" type="email" className={INPUT} required value={f.email} onChange={set('email')} placeholder="you@email.com" />
+            </div>
           </div>
           <div className="grid gap-1.5">
-            <label className={LABEL} htmlFor="v-last">Last name</label>
-            <input id="v-last" className={INPUT} required value={f.lastName} onChange={set('lastName')} placeholder="Your last name" />
-          </div>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="grid gap-1.5">
-            <label className={LABEL} htmlFor="v-phone">Phone <span className="font-normal text-site-soft">(so we can say hi)</span></label>
-            <input id="v-phone" type="tel" className={INPUT} required value={f.phone} onChange={set('phone')} placeholder="(000) 000-0000" />
+            <label className={LABEL} htmlFor="v-date">Which Sunday are you planning to visit?</label>
+            <input id="v-date" type="date" className={INPUT} required min={todayISO()} value={f.firstVisitDate} onChange={set('firstVisitDate')} />
           </div>
           <div className="grid gap-1.5">
-            <label className={LABEL} htmlFor="v-email">Email <span className="font-normal text-site-soft">(optional)</span></label>
-            <input id="v-email" type="email" className={INPUT} value={f.email} onChange={set('email')} placeholder="you@email.com" />
+            <label className={LABEL} htmlFor="v-note">Anything we should know? <span className="font-normal text-site-soft">(optional)</span></label>
+            <textarea id="v-note" className={`${INPUT} min-h-[110px] resize-y`} value={f.prayerRequest} onChange={set('prayerRequest')} placeholder="Bringing kids, need directions, a question…" />
           </div>
+          <input type="text" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" value={f.website} onChange={set('website')} />
+          {status === 'error' ? <p className="text-[14px] text-site-ember">{error}</p> : null}
+          <button
+            type="submit"
+            disabled={status === 'sending'}
+            className="inline-flex w-fit items-center gap-2 rounded-[40px] bg-site-ember px-6 py-[13px] text-[15px] font-semibold text-white transition-colors hover:bg-site-emberdk disabled:opacity-60"
+          >
+            {status === 'sending' ? 'Sending…' : 'Tell us you’re coming'}
+          </button>
         </div>
-        <div className="grid gap-1.5">
-          <label className={LABEL} htmlFor="v-date">Which Sunday are you planning to visit?</label>
-          <input id="v-date" type="date" className={INPUT} required min={todayISO()} value={f.firstVisitDate} onChange={set('firstVisitDate')} />
-        </div>
-        <div className="grid gap-1.5">
-          <label className={LABEL} htmlFor="v-note">Anything we should know? <span className="font-normal text-site-soft">(optional)</span></label>
-          <textarea id="v-note" className={`${INPUT} min-h-[110px] resize-y`} value={f.prayerRequest} onChange={set('prayerRequest')} placeholder="Bringing kids, need directions, a question…" />
-        </div>
-        <input type="text" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" value={f.website} onChange={set('website')} />
-        {status === 'error' ? <p className="text-[14px] text-site-ember">{error}</p> : null}
-        <button
-          type="submit"
-          disabled={status === 'sending'}
-          className="inline-flex w-fit items-center gap-2 rounded-[40px] bg-site-ember px-6 py-[13px] text-[15px] font-semibold text-white transition-colors hover:bg-site-emberdk disabled:opacity-60"
-        >
-          {status === 'sending' ? 'Sending…' : 'Tell us you’re coming'}
-        </button>
-      </div>
-    </form>
+      </form>
+      {verify ? (
+        <OtpDialog
+          id={verify.id}
+          email={verify.email}
+          onVerified={() => { setVerify(null); setStatus('done'); }}
+          onClose={() => setVerify(null)}
+        />
+      ) : null}
+    </>
   );
 }

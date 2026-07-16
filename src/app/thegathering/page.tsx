@@ -12,6 +12,7 @@
 import { useState } from 'react';
 import { EB_Garamond, Lato } from 'next/font/google';
 import StandaloneNav from '@/components/site/StandaloneNav';
+import OtpDialog from '@/components/site/OtpDialog';
 
 const garamond = EB_Garamond({ subsets: ['latin'], weight: ['400', '500', '600'], style: ['normal', 'italic'], display: 'swap' });
 const lato = Lato({ subsets: ['latin'], weight: ['400', '700'], display: 'swap' });
@@ -40,6 +41,7 @@ function InterestForm({ interest, cta, placeholder }: { interest: Interest; cta:
   const [f, setF] = useState({ name: '', email: '', note: '', website: '' });
   const [status, setStatus] = useState<'idle' | 'sending' | 'done' | 'error'>('idle');
   const [error, setError] = useState('');
+  const [verify, setVerify] = useState<{ id: string; email: string } | null>(null);
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setF({ ...f, [k]: e.target.value });
@@ -58,11 +60,16 @@ function InterestForm({ interest, cta, placeholder }: { interest: Interest; cta:
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: f.name, email: f.email, note: f.note, interest, website: '' }),
       });
+      const d = await res.json().catch(() => ({}));
       if (!res.ok) {
-        const d = await res.json().catch(() => ({}));
         throw new Error(d.error || 'Something went wrong. Please try again.');
       }
-      setStatus('done');
+      if (d.requiresVerification && d.id) {
+        setVerify({ id: d.id, email: f.email });
+        setStatus('idle');
+      } else {
+        setStatus('done');
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong.');
       setStatus('error');
@@ -93,6 +100,7 @@ function InterestForm({ interest, cta, placeholder }: { interest: Interest; cta:
   }
 
   return (
+    <>
     <form onSubmit={submit} style={{ display: 'grid', gap: 14 }}>
       <div style={{ display: 'grid', gap: 6 }}>
         <label style={{ fontSize: 13, fontWeight: 700, color: C.umber }} htmlFor={`${interest}-name`}>Your name</label>
@@ -129,6 +137,15 @@ function InterestForm({ interest, cta, placeholder }: { interest: Interest; cta:
         {status === 'sending' ? 'Sending…' : cta}
       </button>
     </form>
+    {verify ? (
+      <OtpDialog
+        id={verify.id}
+        email={verify.email}
+        onVerified={() => { setVerify(null); setStatus('done'); }}
+        onClose={() => setVerify(null)}
+      />
+    ) : null}
+    </>
   );
 }
 

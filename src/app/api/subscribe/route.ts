@@ -1,12 +1,11 @@
-// Run 35 — Watch & Read subscribe endpoint. Captures an email so the church
-// can let people know when new teaching lands. Emails a list-owner inbox via
-// Resend (NEWSLETTER_EMAIL, comma-separated; default hello@gracelifecenter.com)
-// AND — since Run 43 — persists the address to the NewsletterSubscriber table
-// that feeds the weekly themed digest. Honeypot + rate limit; fire-safe.
+// Run 47 — Watch & Read subscribe (now confirmed / double opt-in). Captures the
+// email as an UNVERIFIED WebContact and emails a 6-digit code; only after the
+// code is confirmed is the address added to the NewsletterSubscriber list (which
+// feeds the weekly digest) and the owner inbox notified — see finalizeWebContact.
+// Honeypot + rate limit; fire-safe.
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { sendEmailViaResend } from '@/lib/notifications';
-import prisma from '@/lib/db';
+import { createPendingWebContact } from '@/lib/webcontact';
 
 const rateLimit = new Map<string, { count: number; resetAt: number }>();
 const RATE_LIMIT = 8;
@@ -25,13 +24,9 @@ function checkRateLimit(ip: string): boolean {
 }
 
 const schema = z.object({
-  email: z.string().email('A valid email is required'),
+  email: z.string().trim().email('A valid email is required').max(200),
   website: z.string().max(0).optional(), // honeypot
 });
-
-function esc(s: string): string {
-  return s.replace(/[&<>]/g, (c) => (c === '&' ? '&amp;' : c === '<' ? '&lt;' : '&gt;'));
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -53,39 +48,18 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    const { email } = parsed.data;
     const source =
       body && typeof body.source === 'string' ? body.source.slice(0, 60) : 'teaching';
 
-    // Run 43 — persist to the newsletter list (best-effort; a DB hiccup must
-    // never block the reply or the owner-inbox notification). Re-subscribing an
-    // address that had unsubscribed reactivates it.
-    try {
-      await (prisma as any).newsletterSubscriber.upsert({
-        where: { email },
-        update: { status: 'ACTIVE', unsubscribedAt: null, source },
-        create: { email, source },
-      });
-    } catch (e) {
-      console.error('[subscribe] newsletter persist failed (non-fatal):', e);
+    const { id, sent } = await createPendingWebContact({
+      type: 'NEWSLETTER',
+      email: parsed.data.email,
+      source,
+    });
+    if (!sent) {
+      return NextResponse.json({ error: 'We could not send your confirmation code. Please try again.' }, { status: 502 });
     }
-
-    const recipients = (process.env.NEWSLETTER_EMAIL || 'hello@gracelifecenter.com')
-      .split(',')
-      .map((s) => s.trim())
-      .filter(Boolean);
-
-    const subject = `New Watch & Read subscriber — gracelifecenter.com`;
-    const html =
-      `<p>A new person asked to hear when new teaching lands:</p>` +
-      `<p style="font-size:16px"><strong>${esc(email)}</strong></p>` +
-      `<hr><p style="color:#6A6157;font-size:13px">Add them to the teaching list.</p>`;
-
-    await Promise.all(
-      recipients.map((to) => sendEmailViaResend(to, subject, html).catch(() => ({})))
-    );
-
-    return NextResponse.json({ ok: true }, { status: 200 });
+    return NextResponse.json({ ok: true, requiresVerification: true, id }, { status: 200 });
   } catch (error) {
     console.error('Subscribe error:', error);
     return NextResponse.json({ error: 'Failed to subscribe. Please try again.' }, { status: 500 });
