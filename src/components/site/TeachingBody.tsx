@@ -1,13 +1,15 @@
-// Run 35 — renders a teaching Block[] (article body or sermon transcript) as
-// styled JSX. No markdown dependency; supports inline **bold** and *italic*
-// within paragraph/quote/list text. Server component.
+// Run 35 / Run 50 — renders a teaching Block[] (article body or sermon transcript)
+// as styled JSX. No markdown dependency; supports inline **bold**, *italic*, and
+// [text](href) links within paragraph/quote/list text. Server component.
 import type { ReactNode } from 'react';
+import Link from 'next/link';
 import type { Block } from '@/content/teaching';
 
-// Inline formatter: **bold** and *italic*. Returns an array of nodes.
+// Inline formatter: **bold**, *italic*, and [text](href) links. Internal links
+// (href starting with "/") use next/link; anything else opens in a new tab.
 function inline(text: string): ReactNode[] {
   const out: ReactNode[] = [];
-  const re = /\*\*(.+?)\*\*|\*(.+?)\*/g;
+  const re = /\*\*(.+?)\*\*|\*(.+?)\*|\[([^\]]+?)\]\(([^)]+?)\)/g;
   let last = 0;
   let m: RegExpExecArray | null;
   let key = 0;
@@ -24,6 +26,19 @@ function inline(text: string): ReactNode[] {
         <em key={`i${key++}`} className="font-fraunces italic">
           {m[2]}
         </em>
+      );
+    } else if (m[3] !== undefined && m[4] !== undefined) {
+      const href = m[4];
+      out.push(
+        href.startsWith('/') ? (
+          <Link key={`l${key++}`} href={href} className="font-medium text-site-ember underline-offset-2 hover:underline">
+            {m[3]}
+          </Link>
+        ) : (
+          <a key={`l${key++}`} href={href} target="_blank" rel="noopener noreferrer" className="font-medium text-site-ember underline-offset-2 hover:underline">
+            {m[3]}
+          </a>
+        )
       );
     }
     last = re.lastIndex;

@@ -212,3 +212,21 @@ export function featuredTeaching(): Teaching | undefined {
 export function youTubeThumb(id: string): string {
   return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
 }
+
+// Run 50 — internal linking helpers. `relatedTeachings`: other visible teachings
+// on the same topic (newest first, excluding the current slug). `adjacentTeachings`:
+// the neighbours in the full chronological (newest-first) visible list, for
+// prev/next navigation on the detail page.
+export function relatedTeachings(slug: string, topic: TopicSlug, limit = 3): Teaching[] {
+  return teachingsByTopic(topic).filter((t) => t.slug !== slug).slice(0, limit);
+}
+
+export function adjacentTeachings(slug: string): { newer?: Teaching; older?: Teaching } {
+  const vis = visibleTeachings();
+  const i = vis.findIndex((t) => t.slug === slug);
+  if (i < 0) return {};
+  return {
+    newer: i > 0 ? vis[i - 1] : undefined,
+    older: i < vis.length - 1 ? vis[i + 1] : undefined,
+  };
+}
