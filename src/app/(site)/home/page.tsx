@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   title: { absolute: OG_TITLE },
   description: OG_DESC,
   alternates: { canonical: '/' },
-  openGraph: {
+  openGraph: { siteName: SITE.name,
     title: OG_TITLE,
     description: OG_DESC,
     url: SITE.url,

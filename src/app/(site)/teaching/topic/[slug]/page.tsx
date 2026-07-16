@@ -85,7 +85,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
     title: `${label} — Watch & Read`,
     description: desc,
     alternates: { canonical: `/teaching/topic/${topic}` },
-    openGraph: { title: ogTitle, description: desc, url, type: 'website', images: [{ url: '/site/social-og.jpg', width: 1200, height: 630 }] },
+    openGraph: { siteName: SITE.name, title: ogTitle, description: desc, url, type: 'website', images: [{ url: '/site/social-og.jpg', width: 1200, height: 630 }] },
     twitter: { card: 'summary_large_image', title: ogTitle, description: desc, images: ['/site/social-og.jpg'] },
   };
 }

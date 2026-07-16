@@ -35,7 +35,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
     title: t.title,
     description: t.excerpt,
     alternates: { canonical: `/teaching/${t.slug}` },
-    openGraph: {
+    openGraph: { siteName: SITE.name,
       title: t.title,
       description: t.excerpt,
       url,
