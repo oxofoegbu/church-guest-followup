@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: 'Begin the Journey \u2014 Grace Life Center',
   description:
     'A place to begin \u2014 with Jesus, and with us. The Welcome Track is a short, unhurried journey into who Jesus is and who you\u2019re becoming. You\u2019re welcome here.',
+  alternates: { canonical: 'https://gracelifecenter.com/begin' },
   openGraph: {
     title: 'Begin the Journey \u2014 Grace Life Center',
     description:

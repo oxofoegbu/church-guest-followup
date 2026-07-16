@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://church-guest-followup.vercel.app';
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://gracelifecenter.com';
 
 export const viewport: Viewport = {
   themeColor:         '#102a43',

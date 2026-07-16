@@ -12,6 +12,7 @@ const OG_DESCRIPTION =
 export const metadata: Metadata = {
   title: OG_TITLE,
   description: OG_DESCRIPTION,
+  alternates: { canonical: 'https://gracelifecenter.com/become' },
   openGraph: {
     title: OG_TITLE,
     description: OG_DESCRIPTION,

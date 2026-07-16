@@ -58,6 +58,13 @@ export default function TeachingDetail({ params }: { params: { slug: string } })
     ],
   };
 
+  const publisherOrg = {
+    '@type': 'Organization',
+    name: SITE.name,
+    url: SITE.url,
+    logo: { '@type': 'ImageObject', url: `${SITE.url}/logo-full.png` },
+  };
+
   const primary =
     t.kind === 'sermon'
       ? {
@@ -69,16 +76,18 @@ export default function TeachingDetail({ params }: { params: { slug: string } })
           uploadDate: t.date,
           embedUrl: `https://www.youtube.com/embed/${t.youTubeId}`,
           ...(t.durationMin ? { duration: `PT${t.durationMin}M` } : {}),
-          publisher: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+          publisher: publisherOrg,
         }
       : {
           '@context': 'https://schema.org',
           '@type': 'Article',
           headline: t.title,
           description: t.excerpt,
+          image: [`${SITE.url}/site/social-og.jpg`],
           datePublished: t.date,
+          dateModified: t.date,
           author: { '@type': 'Person', name: t.author },
-          publisher: { '@type': 'Organization', name: SITE.name },
+          publisher: publisherOrg,
           mainEntityOfPage: { '@type': 'WebPage', '@id': url },
           ...(t.series ? { articleSection: t.series } : {}),
         };

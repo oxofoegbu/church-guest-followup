@@ -23,6 +23,19 @@ export const SITE = {
   postal: '20707',
   country: 'US',
 
+  // Contact + entity signals — filled as they're confirmed (SEO punch-list
+  // Track C). EMPTY string / empty array = OMITTED from the JSON-LD (a wrong
+  // value is worse than none). Each lights up the moment it's set here — no
+  // other change needed. `geo` is read off the Google Business Profile pin.
+  email: 'hello@gracelifecenter.com', // public inbox (already shown on /contact)
+  telephone: '',                       // church main line, e.g. '+1-301-490-1200'
+  geo: { lat: '', lng: '' },           // e.g. lat '39.0912', lng '-76.8446'
+  sameAs: [] as readonly string[],     // ['https://facebook.com/…','https://instagram.com/…','https://youtube.com/@…']
+
+  // Brand assets in /public — for logo/image structured data.
+  logo: '/logo-full.png',
+  ogImage: '/site/social-og.jpg',
+
   serviceDay: 'Sunday',
   serviceDayPlural: 'Sundays',
   serviceTime: '10:00 AM',
@@ -52,7 +65,7 @@ export const ROUTES = {
 } as const;
 
 // Church / PlaceOfWorship + Organization JSON-LD for the homepage.
-// geo coordinates, sameAs (directory/social), phone, and email are omitted
+// Contact/geo/social are driven by the SITE fields above (blank = omitted),
 // until confirmed — publishing wrong values is worse than omitting them.
 export function churchJsonLd() {
   return {
@@ -67,6 +80,14 @@ export function churchJsonLd() {
         description:
           'A people in Laurel, Maryland learning to be with Jesus, become like Jesus, and carry heaven wherever they go — a well, not a fence. Come and see on a Sunday, or begin the journey online, anywhere.',
         slogan: 'A well, not a fence.',
+        logo: `${SITE.url}${SITE.logo}`,
+        image: `${SITE.url}${SITE.ogImage}`,
+        ...(SITE.email ? { email: SITE.email } : {}),
+        ...(SITE.telephone ? { telephone: SITE.telephone } : {}),
+        ...(SITE.geo.lat && SITE.geo.lng
+          ? { geo: { '@type': 'GeoCoordinates', latitude: SITE.geo.lat, longitude: SITE.geo.lng } }
+          : {}),
+        ...(SITE.sameAs.length > 0 ? { sameAs: SITE.sameAs } : {}),
         address: {
           '@type': 'PostalAddress',
           streetAddress: SITE.street,
