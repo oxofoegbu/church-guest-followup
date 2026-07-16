@@ -1,12 +1,12 @@
 // Run 35 — Watch & Read subscribe endpoint. Captures an email so the church
-// can let people know when new teaching lands, emailed to a list-owner inbox
-// via the existing Resend sender (no new plumbing, no DB) until a dedicated
-// newsletter provider is chosen. Recipient from NEWSLETTER_EMAIL env
-// (comma-separated), default hello@gracelifecenter.com. Honeypot + rate limit;
-// fire-safe. Mirrors /api/contact.
+// can let people know when new teaching lands. Emails a list-owner inbox via
+// Resend (NEWSLETTER_EMAIL, comma-separated; default hello@gracelifecenter.com)
+// AND — since Run 43 — persists the address to the NewsletterSubscriber table
+// that feeds the weekly themed digest. Honeypot + rate limit; fire-safe.
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { sendEmailViaResend } from '@/lib/notifications';
+import prisma from '@/lib/db';
 
 const rateLimit = new Map<string, { count: number; resetAt: number }>();
 const RATE_LIMIT = 8;
@@ -54,6 +54,21 @@ export async function POST(request: NextRequest) {
       );
     }
     const { email } = parsed.data;
+    const source =
+      body && typeof body.source === 'string' ? body.source.slice(0, 60) : 'teaching';
+
+    // Run 43 — persist to the newsletter list (best-effort; a DB hiccup must
+    // never block the reply or the owner-inbox notification). Re-subscribing an
+    // address that had unsubscribed reactivates it.
+    try {
+      await (prisma as any).newsletterSubscriber.upsert({
+        where: { email },
+        update: { status: 'ACTIVE', unsubscribedAt: null, source },
+        create: { email, source },
+      });
+    } catch (e) {
+      console.error('[subscribe] newsletter persist failed (non-fatal):', e);
+    }
 
     const recipients = (process.env.NEWSLETTER_EMAIL || 'hello@gracelifecenter.com')
       .split(',')

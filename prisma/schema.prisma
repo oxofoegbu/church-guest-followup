@@ -725,3 +725,37 @@ model EnrollmentRequest {
   @@index([status, createdAt])
   @@map("enrollment_requests")
 }
+
+// ── Run 43 — public teaching newsletter (Watch & Read digest) ───────────────
+// Subscribers are captured from the site's "Keep me posted" box; a weekly
+// themed digest is drafted by cron, approved by the pastor on the review page,
+// and sent via Resend. Additive tables only — apply with `prisma db push`.
+model NewsletterSubscriber {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  status         String    @default("ACTIVE") // ACTIVE | UNSUBSCRIBED
+  token          String    @unique @default(cuid()) // one-click unsubscribe capability
+  source         String? // where they signed up (e.g. "teaching")
+  createdAt      DateTime  @default(now())
+  unsubscribedAt DateTime?
+
+  @@index([status])
+}
+
+model NewsletterIssue {
+  id             String    @id @default(cuid())
+  weekKey        String    @unique // ISO week, e.g. "2026-W29" — one issue per week
+  themeKey       String
+  themeLabel     String
+  subject        String
+  intro          String
+  slugsJson      String    @default("[]") // ordered JSON array of selected article slugs
+  status         String    @default("DRAFT") // DRAFT | SENT | SKIPPED
+  token          String    @unique @default(cuid()) // review/approve capability
+  recipientCount Int?
+  sentCount      Int?
+  createdAt      DateTime  @default(now())
+  decidedAt      DateTime?
+
+  @@index([status])
+}
