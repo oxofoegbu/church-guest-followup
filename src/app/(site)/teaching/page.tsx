@@ -15,8 +15,8 @@ import SubscribeForm from '@/components/site/SubscribeForm';
 import Pager from '@/components/site/Pager';
 import { SITE } from '@/lib/site';
 import {
-  ALL_SERMONS,
-  ALL_ARTICLES,
+  visibleSermons,
+  visibleArticles,
   activeTopics,
   featuredTeaching,
   searchTeachings,
@@ -236,8 +236,10 @@ export default function TeachingPage({
   const active = searchParams?.topic as TopicSlug | undefined;
   const activeValid = active && topics.some((x) => x.slug === active) ? active : undefined;
 
-  const allSermons = activeValid ? ALL_SERMONS.filter((s) => s.topic === activeValid) : ALL_SERMONS;
-  const allArticles = activeValid ? ALL_ARTICLES.filter((a) => a.topic === activeValid) : ALL_ARTICLES;
+  const pubSermons = visibleSermons();
+  const pubArticles = visibleArticles();
+  const allSermons = activeValid ? pubSermons.filter((s) => s.topic === activeValid) : pubSermons;
+  const allArticles = activeValid ? pubArticles.filter((a) => a.topic === activeValid) : pubArticles;
 
   // Pagination — clamp each section's page to its range.
   const sermonPages = Math.max(1, Math.ceil(allSermons.length / PAGE_SIZE));
@@ -410,7 +412,7 @@ export default function TeachingPage({
         </div>
       </Band>
 
-      {ALL_ARTICLES.length + ALL_SERMONS.length > 0 ? (
+      {pubArticles.length + pubSermons.length > 0 ? (
         <div className="pb-4 text-center">
           <Button href="/journey" variant="ghost">See the whole journey →</Button>
         </div>

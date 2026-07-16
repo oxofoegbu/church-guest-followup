@@ -44,6 +44,10 @@ interface TeachingBase {
   series?: string;
   author: string;
   featured?: boolean; // pin as the hub's featured item, regardless of date
+  // Run 42 — scheduled publishing. An ISO yyyy-mm-dd calendar date
+  // (America/New_York). The teaching stays hidden everywhere until that day.
+  // Absent = always visible. See `isVisible` / `visible*` in index.ts.
+  publishAt?: string;
 }
 
 export interface Sermon extends TeachingBase {

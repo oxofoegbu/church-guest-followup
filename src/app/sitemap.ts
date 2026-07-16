@@ -3,13 +3,17 @@
 // arrive in Runs B/C and join this list then). Submitted to Search Console.
 import type { MetadataRoute } from 'next';
 import { SITE } from '@/lib/site';
-import { ALL_TEACHINGS } from '@/content/teaching';
+import { visibleTeachings } from '@/content/teaching';
 
 const LASTMOD = '2026-07-13';
 
+// Run 42 — revalidate hourly so newly-published (scheduled) teachings enter the
+// sitemap on their day; hidden ones are omitted until then.
+export const revalidate = 3600;
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = SITE.url;
-  const teaching: MetadataRoute.Sitemap = ALL_TEACHINGS.map((t) => ({
+  const teaching: MetadataRoute.Sitemap = visibleTeachings().map((t) => ({
     url: `${base}/teaching/${t.slug}`,
     lastModified: t.date,
     changeFrequency: 'yearly',

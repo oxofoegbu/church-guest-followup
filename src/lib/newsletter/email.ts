@@ -5,6 +5,7 @@
 // public newsletter's From identity separate from the internal follow-up app.
 
 import { SITE } from '@/lib/site';
+import { youTubeThumb } from '@/content/teaching';
 
 const FROM_EMAIL =
   process.env.NEWSLETTER_FROM_EMAIL || process.env.RESEND_FROM_EMAIL || 'hello@gracelifecenter.com';
@@ -40,12 +41,20 @@ export interface DigestArticle {
   excerpt: string;
 }
 
+export interface DigestVideo {
+  slug: string;
+  title: string;
+  excerpt: string;
+  youTubeId: string;
+}
+
 // The digest body. Returns a self-contained fragment (no <html>/<body>) so it
 // embeds cleanly both as a sent email and inside the review preview.
 export function renderDigestHtml(args: {
   themeLabel: string;
   intro: string;
   articles: DigestArticle[];
+  videos?: DigestVideo[];
   unsubUrl?: string;
 }): string {
   const cards = args.articles
@@ -63,6 +72,25 @@ export function renderDigestHtml(args: {
       </td></tr>`;
     })
     .join('');
+
+  const videoSection =
+    args.videos && args.videos.length > 0
+      ? `<tr><td style="padding:2px 20px 0 20px;">
+        <p style="margin:24px 0 10px 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:${C.ember};font-weight:bold;">Watch</p>
+        ${args.videos
+          .map((v) => {
+            const url = `${SITE.url}/teaching/${encodeURIComponent(v.slug)}`;
+            return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.card};border:1px solid ${C.line};border-radius:12px;margin-bottom:14px;"><tr><td style="padding:0;">
+              <a href="${url}" style="text-decoration:none;display:block;"><img src="${youTubeThumb(v.youTubeId)}" width="560" alt="${esc(v.title)}" style="width:100%;max-width:560px;height:auto;border-radius:12px 12px 0 0;display:block;"></a>
+              <div style="padding:16px 22px 20px 22px;">
+                <a href="${url}" style="color:${C.umber};font-family:Georgia,'Times New Roman',serif;font-size:19px;font-weight:bold;text-decoration:none;line-height:1.3;">${esc(v.title)}</a>
+                <p style="margin:8px 0 12px 0;color:${C.soft};font-size:15px;line-height:1.55;font-family:Georgia,serif;">${esc(v.excerpt)}</p>
+                <a href="${url}" style="color:${C.ember};font-size:14px;font-weight:bold;text-decoration:none;font-family:Arial,Helvetica,sans-serif;">&#9658;&nbsp; Watch the message</a>
+              </div></td></tr></table>`;
+          })
+          .join('')}
+      </td></tr>`
+      : '';
 
   const addr = `${esc(SITE.name)} &middot; ${esc(SITE.street)}, ${esc(SITE.city)}, ${esc(
     SITE.region
@@ -87,6 +115,7 @@ export function renderDigestHtml(args: {
       <tr><td style="padding:0 20px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${cards}</table>
       </td></tr>
+      ${videoSection}
       <tr><td style="padding:8px 20px 0 20px;">
         <a href="${SITE.url}/teaching" style="color:${C.ember};font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:bold;text-decoration:none;">Browse all teaching &rsaquo;</a>
       </td></tr>

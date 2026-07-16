@@ -10,12 +10,23 @@
  */
 import { NextRequest } from 'next/server';
 import prisma from '@/lib/db';
-import { articlesBySlugs } from '@/lib/newsletter/compose';
+import { articlesBySlugs, themeByKey, sermonsForTheme } from '@/lib/newsletter/compose';
 import { renderDigestHtml, unsubscribeUrl, sendNewsletterBatch, esc } from '@/lib/newsletter/email';
 import type { OutMessage } from '@/lib/newsletter/email';
 import { SITE } from '@/lib/site';
 
 export const dynamic = 'force-dynamic';
+
+function videosForThemeKey(themeKey: string) {
+  const theme = themeByKey(themeKey);
+  if (!theme) return [];
+  return sermonsForTheme(theme, 1).map((s) => ({
+    slug: s.slug,
+    title: s.title,
+    excerpt: s.excerpt,
+    youTubeId: s.youTubeId,
+  }));
+}
 
 function htmlResponse(body: string, status = 200): Response {
   return new Response(body, {
@@ -56,10 +67,12 @@ export async function GET(_req: NextRequest, ctx: { params: { token: string } })
   if (!issue) return htmlResponse(shell('Not found', '<h1>Link not valid</h1><p class="sub">This review link doesn’t match any digest.</p>'), 404);
 
   const articles = articlesBySlugs(JSON.parse(issue.slugsJson || '[]'));
+  const videos = videosForThemeKey(issue.themeKey);
   const previewHtml = renderDigestHtml({
     themeLabel: issue.themeLabel,
     intro: issue.intro,
     articles: articles.map((a) => ({ slug: a.slug, title: a.title, excerpt: a.excerpt })),
+    videos,
   });
 
   if (issue.status !== 'DRAFT') {
@@ -134,6 +147,7 @@ export async function POST(req: NextRequest, ctx: { params: { token: string } })
 
   if (action === 'send') {
     const articles = articlesBySlugs(JSON.parse(issue.slugsJson || '[]'));
+    const videos = videosForThemeKey(issue.themeKey);
     const subs: Array<{ email: string; token: string }> = await (
       prisma as any
     ).newsletterSubscriber.findMany({
@@ -150,6 +164,7 @@ export async function POST(req: NextRequest, ctx: { params: { token: string } })
           themeLabel: issue.themeLabel,
           intro: issue.intro,
           articles: articles.map((a) => ({ slug: a.slug, title: a.title, excerpt: a.excerpt })),
+          videos,
           unsubUrl: unsub,
         }),
         headers: {

@@ -27,20 +27,48 @@ export function getTeaching(slug: string): Teaching | undefined {
   return ALL_TEACHINGS.find((t) => t.slug === slug);
 }
 
+// Run 42 — scheduled publishing. A teaching with a future `publishAt` (an
+// America/New_York calendar date) is hidden from every public surface until
+// that day; absent `publishAt` = always visible. Visibility is evaluated at
+// REQUEST time — the hub is dynamic (searchParams), and the homepage, detail
+// page, and sitemap use hourly ISR — so the day's article appears with no
+// redeploy. `getTeaching` and the raw `ALL_*` lists stay unfiltered (the detail
+// page and generateStaticParams gate explicitly); every LIST surface uses the
+// `visible*` helpers below.
+function todayEastern(): string {
+  // 'en-CA' locale renders as YYYY-MM-DD; timeZone pins it to the church's day.
+  return new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+}
+
+export function isVisible(t: Teaching): boolean {
+  return !t.publishAt || t.publishAt <= todayEastern();
+}
+
+export function visibleTeachings(): Teaching[] {
+  return ALL_TEACHINGS.filter(isVisible);
+}
+export function visibleSermons(): Sermon[] {
+  return ALL_SERMONS.filter(isVisible);
+}
+export function visibleArticles(): Article[] {
+  return ALL_ARTICLES.filter(isVisible);
+}
+
 export function topicLabel(slug: TopicSlug): string {
   const t = TOPICS.find((x) => x.slug === slug);
   return t ? t.label : slug;
 }
 
-// Topics that actually have at least one published teaching (for the chips).
+// Topics that actually have at least one VISIBLE teaching (for the chips) — a
+// topic chip appears only once its first article has published.
 export function activeTopics(): { slug: TopicSlug; label: string }[] {
   const present = new Set<string>();
-  ALL_TEACHINGS.forEach((t) => present.add(t.topic));
+  visibleTeachings().forEach((t) => present.add(t.topic));
   return TOPICS.filter((t) => present.has(t.slug));
 }
 
 export function teachingsByTopic(slug: TopicSlug): Teaching[] {
-  return ALL_TEACHINGS.filter((t) => t.topic === slug);
+  return visibleTeachings().filter((t) => t.topic === slug);
 }
 
 // Run 40/41 — Watch & Read search. In-repo, dependency-free, and tuned to stay
@@ -110,7 +138,7 @@ export function searchTeachings(query: string): Teaching[] {
   const terms = queryTerms(query);
   if (terms.length === 0) return [];
 
-  const docs = ALL_TEACHINGS.map((t) => ({
+  const docs = visibleTeachings().map((t) => ({
     t,
     title: t.title.toLowerCase(),
     excerpt: t.excerpt.toLowerCase(),
@@ -173,7 +201,12 @@ export function searchTeachings(query: string): Teaching[] {
 // wins; otherwise the latest sermon, otherwise the latest article — so the page
 // always leads with real content.
 export function featuredTeaching(): Teaching | undefined {
-  return ALL_TEACHINGS.find((t) => t.featured === true) || ALL_SERMONS[0] || ALL_ARTICLES[0];
+  const vis = visibleTeachings();
+  return (
+    vis.find((t) => t.featured === true) ||
+    vis.find((t): t is Sermon => t.kind === 'sermon') ||
+    vis.find((t): t is Article => t.kind === 'article')
+  );
 }
 
 export function youTubeThumb(id: string): string {

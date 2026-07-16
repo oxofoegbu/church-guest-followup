@@ -18,7 +18,7 @@
  */
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
-import { composeIssue, weekKeyEastern } from '@/lib/newsletter/compose';
+import { composeIssue, weekKeyEastern, sermonsForTheme } from '@/lib/newsletter/compose';
 import { renderDigestHtml, renderReviewEmail, reviewUrl, sendOne } from '@/lib/newsletter/email';
 
 export const dynamic = 'force-dynamic';
@@ -90,10 +90,17 @@ export async function GET(request: NextRequest) {
       where: { status: 'ACTIVE' },
     });
 
+    const videos = sermonsForTheme(draft.theme, 1).map((s) => ({
+      slug: s.slug,
+      title: s.title,
+      excerpt: s.excerpt,
+      youTubeId: s.youTubeId,
+    }));
     const previewHtml = renderDigestHtml({
       themeLabel: draft.theme.label,
       intro: draft.intro,
       articles: draft.articles.map((a) => ({ slug: a.slug, title: a.title, excerpt: a.excerpt })),
+      videos,
     });
     const reviewEmailHtml = renderReviewEmail({
       themeLabel: draft.theme.label,

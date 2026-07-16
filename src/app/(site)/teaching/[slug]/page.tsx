@@ -9,10 +9,16 @@ import Band from '@/components/site/Band';
 import Button from '@/components/site/Button';
 import TeachingBody from '@/components/site/TeachingBody';
 import { SITE } from '@/lib/site';
-import { ALL_TEACHINGS, getTeaching, topicLabel, youTubeThumb } from '@/content/teaching';
+import { visibleTeachings, isVisible, getTeaching, topicLabel, youTubeThumb } from '@/content/teaching';
+
+// Run 42 — pre-build only the currently-visible detail pages; a scheduled
+// article renders on-demand once its day arrives (dynamicParams default). ISR
+// hourly so a not-yet-due slug (which 404s below) flips to live within the hour
+// of its publishAt without a redeploy.
+export const revalidate = 3600;
 
 export function generateStaticParams() {
-  return ALL_TEACHINGS.map((t) => ({ slug: t.slug }));
+  return visibleTeachings().map((t) => ({ slug: t.slug }));
 }
 
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
@@ -39,7 +45,7 @@ const H2 = 'font-fraunces text-[30px] font-semibold leading-[1.12] tracking-[-0.
 
 export default function TeachingDetail({ params }: { params: { slug: string } }) {
   const t = getTeaching(params.slug);
-  if (!t) notFound();
+  if (!t || !isVisible(t)) notFound(); // hidden until its scheduled publishAt
 
   const url = `${SITE.url}/teaching/${t.slug}`;
   const breadcrumb = {

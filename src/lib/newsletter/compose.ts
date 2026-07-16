@@ -2,8 +2,8 @@
 // Pure/selection logic only (no DB, no email) so it can be unit-reasoned and
 // reused by both the cron drafter and the review page.
 
-import { ALL_ARTICLES, searchTeachings } from '@/content/teaching';
-import type { Article } from '@/content/teaching';
+import { ALL_ARTICLES, ALL_SERMONS, searchTeachings } from '@/content/teaching';
+import type { Article, Sermon } from '@/content/teaching';
 import { THEMES, type NewsletterTheme } from './themes';
 
 // Eastern "today" (church timezone), rendered YYYY-MM-DD by the en-CA locale.
@@ -107,6 +107,35 @@ export function composeIssue(d?: Date): IssueDraft {
     intro: theme.blurb,
     articles,
   };
+}
+
+// Run 45 — the digest also features a sermon VIDEO from /teaching. Look up a
+// theme by its stored key, and pick the best-matching published sermon(s).
+export function themeByKey(key: string): NewsletterTheme | undefined {
+  return THEMES.find((t) => t.key === key);
+}
+
+export function publishedSermons(): Sermon[] {
+  const today = todayEastern();
+  return ALL_SERMONS.filter((s: Sermon) => {
+    const pa = (s as { publishAt?: string }).publishAt;
+    return !pa || pa <= today;
+  });
+}
+
+export function sermonsForTheme(theme: NewsletterTheme, count = 1): Sermon[] {
+  const pool = publishedSermons(); // newest-first
+  const chosen: Sermon[] = [];
+  const seen: Record<string, boolean> = {};
+  const take = (s: Sermon) => {
+    if (!seen[s.slug] && chosen.length < count) {
+      seen[s.slug] = true;
+      chosen.push(s);
+    }
+  };
+  pool.filter((s) => theme.topics.indexOf(s.topic) !== -1).forEach(take);
+  if (chosen.length < count) pool.forEach(take); // fall back to any published sermon
+  return chosen;
 }
 
 // Resolve an ordered slug list (as stored on an issue) back to Article objects.
