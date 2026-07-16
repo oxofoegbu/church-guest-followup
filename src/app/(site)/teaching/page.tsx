@@ -203,7 +203,7 @@ export default function TeachingPage({
                   {topics.map((tp) => (
                     <Link
                       key={tp.slug}
-                      href={`/teaching?topic=${tp.slug}`}
+                      href={`/teaching/topic/${tp.slug}`}
                       className="rounded-full border border-site-claydk px-4 py-2 text-[13.5px] font-medium text-site-ink transition-colors hover:border-site-brass"
                     >
                       {tp.label}
@@ -332,7 +332,7 @@ export default function TeachingPage({
             {topics.map((tp) => (
               <Link
                 key={tp.slug}
-                href={`/teaching?topic=${tp.slug}`}
+                href={`/teaching/topic/${tp.slug}`}
                 className={`rounded-full border px-4 py-2 text-[13.5px] font-medium transition-colors ${
                   activeValid === tp.slug ? 'border-site-umber bg-site-umber text-site-cream' : 'border-site-claydk text-site-ink hover:border-site-brass'
                 }`}

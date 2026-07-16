@@ -113,7 +113,9 @@ export default function TeachingDetail({ params }: { params: { slug: string } })
         <div className="max-w-[760px]">
           <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.16em] text-site-brassdk">
             {t.kind === 'sermon' ? 'Sermon' : 'Article'}
-            {t.series ? ` · ${t.series}` : ` · ${topicLabel(t.topic)}`}
+            {t.series ? ` · ${t.series}` : (
+              <> · <Link href={`/teaching/topic/${t.topic}`} className="underline-offset-2 transition-colors hover:text-site-ember hover:underline">{topicLabel(t.topic)}</Link></>
+            )}
           </p>
           <h1 className="font-fraunces text-[34px] font-semibold leading-[1.08] tracking-[-0.01em] text-site-umber sm:text-[46px]">
             {t.title}

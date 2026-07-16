@@ -1,9 +1,10 @@
 // Run 30 — XML sitemap for the public site, rooted at the canonical apex.
-// Only pages that actually exist are listed (the marketing interior pages
-// arrive in Runs B/C and join this list then). Submitted to Search Console.
+// Only pages that actually exist are listed. Submitted to Search Console.
+// Run 49 — the 8 topic hubs (/teaching/topic/<slug>) join for topics that have
+// at least one visible teaching (activeTopics); empty ones are omitted.
 import type { MetadataRoute } from 'next';
 import { SITE } from '@/lib/site';
-import { visibleTeachings } from '@/content/teaching';
+import { visibleTeachings, activeTopics } from '@/content/teaching';
 
 const LASTMOD = '2026-07-13';
 
@@ -18,6 +19,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: t.date,
     changeFrequency: 'yearly',
     priority: 0.6,
+  }));
+  const topicHubs: MetadataRoute.Sitemap = activeTopics().map((t) => ({
+    url: `${base}/teaching/topic/${t.slug}`,
+    lastModified: LASTMOD,
+    changeFrequency: 'weekly',
+    priority: 0.7,
   }));
   return [
     { url: `${base}/`, lastModified: LASTMOD, changeFrequency: 'weekly', priority: 1 },
@@ -34,6 +41,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/discipler`, lastModified: LASTMOD, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/leaders`, lastModified: LASTMOD, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/thegathering`, lastModified: LASTMOD, changeFrequency: 'monthly', priority: 0.7 },
+    ...topicHubs,
     ...teaching,
   ];
 }
