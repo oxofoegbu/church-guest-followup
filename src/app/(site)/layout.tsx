@@ -7,6 +7,7 @@ import { Fraunces, Inter } from 'next/font/google';
 import SiteHeader from '@/components/site/SiteHeader';
 import SiteFooter from '@/components/site/SiteFooter';
 import Analytics from '@/components/site/Analytics';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { SITE } from '@/lib/site';
 
 const fraunces = Fraunces({
@@ -48,6 +49,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       <main className="flex-1">{children}</main>
       <SiteFooter />
       <Analytics />
+      <SpeedInsights />
     </div>
   );
 }

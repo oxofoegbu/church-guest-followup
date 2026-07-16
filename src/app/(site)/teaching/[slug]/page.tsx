@@ -27,7 +27,10 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const t = getTeaching(params.slug);
   if (!t) return { title: 'Teaching' };
   const url = `${SITE.url}/teaching/${t.slug}`;
-  const image = t.kind === 'sermon' ? youTubeThumb(t.youTubeId) : '/site/social-og.jpg';
+  const image =
+    t.kind === 'sermon'
+      ? youTubeThumb(t.youTubeId)
+      : `/api/og/teaching?title=${encodeURIComponent(t.title)}&topic=${encodeURIComponent(topicLabel(t.topic))}`;
   return {
     title: t.title,
     description: t.excerpt,

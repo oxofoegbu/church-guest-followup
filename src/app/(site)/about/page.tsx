@@ -107,12 +107,17 @@ export default function AboutPage() {
               You’re not joining a program. You’re answering a call.
             </p>
           </div>
-          <div
-            className="h-[300px] rounded-2xl border border-site-claydk bg-cover bg-center lg:h-[420px]"
-            role="img"
-            aria-label="Several people’s hands clasped in prayer around an open Bible and a single candle."
-            style={{ backgroundImage: "url('/site/story.webp')" }}
-          />
+          <div className="relative h-[300px] overflow-hidden rounded-2xl border border-site-claydk lg:h-[420px]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/site/story.webp"
+              alt="Several people’s hands clasped in prayer around an open Bible and a single candle."
+              loading="lazy"
+              width={1200}
+              height={840}
+              className="h-full w-full object-cover"
+            />
+          </div>
         </div>
       </Band>
 
