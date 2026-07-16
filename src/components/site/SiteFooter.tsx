@@ -54,6 +54,8 @@ export default function SiteFooter() {
               {SITE.city}, {SITE.region} {SITE.postal}
               <br />
               {SITE.serviceDayPlural} at {SITE.serviceTime}
+              <br />
+              <a href={SITE.telephoneHref} className="transition-colors hover:text-white">{SITE.telephoneDisplay}</a>
             </p>
           </div>
 

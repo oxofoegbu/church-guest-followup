@@ -28,7 +28,9 @@ export const SITE = {
   // value is worse than none). Each lights up the moment it's set here — no
   // other change needed. `geo` is read off the Google Business Profile pin.
   email: 'hello@gracelifecenter.com', // public inbox (already shown on /contact)
-  telephone: '',                       // church main line, e.g. '+1-301-490-1200'
+  telephone: '+1-301-690-9060',        // church main line (Grasshopper) — schema.org / canonical
+  telephoneDisplay: '(301) 690-9060',  // human-readable form shown on the site
+  telephoneHref: 'tel:+13016909060',   // tap-to-call link
   geo: { lat: '', lng: '' },           // e.g. lat '39.0912', lng '-76.8446'
   sameAs: [] as readonly string[],     // ['https://facebook.com/…','https://instagram.com/…','https://youtube.com/@…']
 

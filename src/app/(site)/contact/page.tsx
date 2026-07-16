@@ -31,6 +31,9 @@ const ClockIcon = (
 const MailIcon = (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></svg>
 );
+const PhoneIcon = (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M6.6 10.8a15.2 15.2 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.6 11.6 0 003.6.58 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.4a1 1 0 011 1 11.6 11.6 0 00.58 3.6 1 1 0 01-.25 1z" /></svg>
+);
 
 export default function ContactPage() {
   return (
@@ -54,7 +57,8 @@ export default function ContactPage() {
               items={[
                 { icon: PinIcon, title: '8730 Cherry Lane, Suite A5', detail: 'Laurel, MD 20707' },
                 { icon: ClockIcon, title: 'Sundays at 10:00 AM', detail: 'Doors open at 9:30 for coffee.' },
-                { icon: MailIcon, title: 'hello@gracelifecenter.com', detail: 'We read every message and reply within a day or two.' },
+                { icon: PhoneIcon, title: SITE.telephoneDisplay, detail: 'Call and one of our team will pick up or call you right back.', href: SITE.telephoneHref },
+                { icon: MailIcon, title: 'hello@gracelifecenter.com', detail: 'We read every message and reply within a day or two.', href: 'mailto:hello@gracelifecenter.com' },
               ]}
             />
             <div className="mt-7">
