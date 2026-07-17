@@ -3,6 +3,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import ModuleWorkbook from '@/components/ModuleWorkbook';
+import PageHelp from '@/components/PageHelp';
+import WeekCircle from '@/components/WeekCircle';
+import TrackCoachmark from '@/components/TrackCoachmark';
 import type { WorkbookBlock, ReflectionEntry } from '@/lib/workbook';
 
 type Portal = {
@@ -10,6 +13,7 @@ type Portal = {
   participantFirstName: string;
   status: string;
   milestoneAt?: string | null; // Run 21 — recorded milestone (baptism / commissioning / …)
+  helpSeenAt?: string | null; // Run 54 — null = show the first-run coachmark
   track: {
     name: string; description: string | null;
     milestoneLabel: string | null; workbookUrl: string | null;
@@ -84,6 +88,17 @@ export default function TrackPortalPage() {
         }));
       }
       setModuleLoading(null);
+    }
+  };
+
+  // Run 54 — dismiss the first-run coachmark. Optimistic + fire-safe: the card
+  // closes now; a failed stamp only means the hint returns on a later visit.
+  const dismissHelp = async () => {
+    setPortal(prev => prev ? { ...prev, helpSeenAt: new Date().toISOString() } : prev);
+    try {
+      await fetch(`/api/track-portal/${token}/help-seen`, { method: 'POST' });
+    } catch {
+      /* ignore — worst case the hint shows again next visit */
     }
   };
 
@@ -255,9 +270,36 @@ export default function TrackPortalPage() {
           </a>
         )}
 
+        {/* Run 54 — participant help, inline on the public token portal. No
+            docSection prop on purpose: that link points at /dashboard/help,
+            which redirects to /login, and most people here are Guests with no
+            account. Everything they need is in the tips themselves. */}
+        <PageHelp
+          tips={[
+            { icon: '✅', title: 'Tap the numbered circle to mark a week done', body: 'The circle turns into a green check and your progress bar moves. Tap it again if you change your mind. Nothing is ever locked.' },
+            { icon: '📖', title: 'Tap the week name to open it', body: 'The week opens right here with its content and reflection questions. What you write saves by itself — there is no submit button, and you can come back and change it any time.' },
+            { icon: '🔖', title: 'This link is your page — keep it', body: 'Bookmark it. It works on any device with no password, and it remembers where you are. Please do not share it: anything you write here opens as you.' },
+            { icon: '🤝', title: 'You are not doing this alone', body: 'Your discipler can see how you are getting on and may leave you a comment on a week. Their contact details are near the top of this page — reach out any time.' },
+          ]}
+        />
+
         {/* Weeks */}
         <div>
           <p className="text-xs uppercase text-church-400 font-semibold mb-3 px-1">Your weekly journey</p>
+
+          {/* Run 54 — hint moved above the list; coachmark shows once. */}
+          {portal.status === 'ACTIVE' && (
+            <p className="text-xs text-church-400 mb-3 px-1">
+              {anyContent
+                ? 'Tap a week to open its content and write your reflections. Tap the circle to mark it complete. Your discipler can see your progress and cheer you on.'
+                : 'Tap the circle to mark a week complete when you finish it. Your discipler can see your progress and cheer you on.'}
+            </p>
+          )}
+
+          {portal.status === 'ACTIVE' && !portal.helpSeenAt && (
+            <TrackCoachmark onDismiss={dismissHelp} />
+          )}
+
           <div className="space-y-2.5">
             {portal.track.modules.map(m => {
               const core = isCore(m);
@@ -272,13 +314,14 @@ export default function TrackPortalPage() {
                     className={`flex items-center gap-4 ${m.hasContent ? 'cursor-pointer' : ''}`}
                     onClick={() => { if (m.hasContent) expandWeek(m.id); }}>
                     {core ? (
-                      <button
-                        onClick={ev => { ev.stopPropagation(); toggleWeek(m.id); }}
-                        disabled={portal.status !== 'ACTIVE' || busy}
-                        aria-label={done ? `Mark week ${m.weekNumber} as not complete` : `Mark week ${m.weekNumber} complete`}
-                        className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 transition-colors ${done ? 'bg-green-500 text-white' : 'bg-church-100 text-church-400'} ${portal.status === 'ACTIVE' ? 'hover:ring-2 hover:ring-green-200' : 'cursor-default'}`}>
-                        {busy ? '…' : done ? '✓' : m.weekNumber}
-                      </button>
+                      <WeekCircle
+                        weekNumber={m.weekNumber}
+                        done={done}
+                        busy={busy}
+                        interactive={portal.status === 'ACTIVE'}
+                        onToggle={() => toggleWeek(m.id)}
+                        size="md"
+                      />
                     ) : (
                       <div className="w-9 h-9 rounded-full bg-brand-50 border border-brand-200 flex items-center justify-center text-base flex-shrink-0">
                         {m.kind === 'INTRO' ? '📖' : '📋'}
@@ -315,13 +358,6 @@ export default function TrackPortalPage() {
               );
             })}
           </div>
-          {portal.status === 'ACTIVE' && (
-            <p className="text-xs text-church-400 text-center mt-4">
-              {anyContent
-                ? 'Tap a week to open its content and write your reflections. Tap the circle to mark it complete. Your discipler can see your progress and cheer you on.'
-                : 'Tap a week to mark it complete when you finish it. Your discipler can see your progress and cheer you on.'}
-            </p>
-          )}
         </div>
 
         {/* Milestone footer */}

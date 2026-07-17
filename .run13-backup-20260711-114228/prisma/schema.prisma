@@ -1,0 +1,609 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Note: UserRole enum removed - roles are now flexible strings
+// Default roles: ADMIN, SENIOR_LEADER, LEADER, VOLUNTEER
+// Custom roles can be added via Settings
+
+enum GuestStatus {
+  // Prospect pipeline (pre-visit)
+  PROSPECT
+  INVITED
+  FIRST_VISIT
+  // Guest pipeline (post-visit)
+  NEW_GUEST
+  ASSIGNED
+  CONTACT_ATTEMPTED
+  CONTACTED
+  MEETING_SCHEDULED
+  MET
+  ATTENDING_REGULARLY
+  NOT_INTERESTED
+  INACTIVE
+  BECOME_SIGNED_UP
+  ARCHIVED
+}
+
+enum PreferredContact {
+  CALL
+  TEXT
+  WHATSAPP
+  EMAIL
+}
+
+enum ActivityType {
+  PHONE_CALL
+  WHATSAPP_MESSAGE
+  SMS_TEXT
+  EMAIL
+  HOME_VISIT
+  INVITED_SMALL_GROUP
+  LUNCH_MEETING_PASTOR
+  ATTENDED_NEXT_SERVICE
+  PASTORAL_MEETING
+  OTHER
+}
+
+enum NotificationChannel {
+  EMAIL
+  WHATSAPP
+}
+
+enum NotificationStatus {
+  QUEUED
+  SENT
+  FAILED
+}
+
+model User {
+  id                 String   @id @default(cuid())
+  name               String
+  email              String   @unique
+  phone              String?
+  photoUrl           String?  // Run 10 — discipler photo shown on participant portal
+  password           String
+  role               String   @default("VOLUNTEER")
+  active             Boolean  @default(true)
+  mustChangePassword Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  assignedGuests       Guest[]            @relation("AssignedVolunteer")
+  addedProspects       Guest[]            @relation("AddedBy")
+  activities           FollowUpActivity[] @relation("PerformedBy")
+  serviceReturns       GuestServiceReturn[] @relation("RecordedBy")
+  notificationsReceived NotificationLog[] @relation("NotifiedUser")
+  actionItems          ActionItem[]       @relation("UserActions")
+
+  @@map("users")
+  schedulesAsSpeaker     ServiceSchedule[] @relation("ScheduleSpeaker")
+  schedulesAsCoordinator ServiceSchedule[] @relation("ScheduleCoordinator")
+  schedulesAsPropheticPr ServiceSchedule[] @relation("SchedulePropheticPrayer")
+  schedulesAsWorship     ServiceSchedule[] @relation("ScheduleWorshipLeader")
+
+  eventInvites         EventInvite[]  @relation("UserEventInvites")
+  passwordResetTokens  PasswordResetToken[] @relation("PasswordResets")
+  magicLinkTokens      MagicLinkToken[]     @relation("MagicLinks")
+  clusterMemberships   ClusterMember[]      @relation("ClusterMemberships")
+  clustersCreated      Cluster[]            @relation("ClusterCreatedBy")
+
+  // Run 9 — Tracks engine
+  cohortsFacilitated    TrackCohort[]     @relation("CohortFacilitator")
+  trackEnrollments      TrackEnrollment[] @relation("UserEnrollments")
+  disciplingEnrollments TrackEnrollment[] @relation("DisciplerEnrollments")
+
+}
+
+model Guest {
+  id                   String          @id @default(cuid())
+  firstName            String
+  lastName             String
+  phone                String?
+  email                String?
+  address              String?
+  preferredContactMethod PreferredContact @default(CALL)
+  firstVisitDate       DateTime?
+  serviceAttended      String?
+  howHeardAboutUs      String?
+  prayerRequest        String?
+  status               GuestStatus     @default(NEW_GUEST)
+  assignedVolunteerId  String?
+  assignedAt           DateTime?
+  becomeSignup         Boolean         @default(false)
+  becomeSignupDate     DateTime?
+  becomeCohort         String?
+  serviceReturnCount   Int             @default(0)
+  serviceReturnTarget  Int             @default(7)
+  // Source tracking
+  isDemo               Boolean         @default(false)
+  source               String          @default("GUEST_FORM")  // GUEST_FORM or PROSPECT
+  addedByUserId        String?
+  // Prospect-specific fields
+  relationshipToAdder  String?         // "neighbor", "coworker", "friend", "family"
+  spiritualStatus      String?         // "unsaved", "believer_no_church", "new_believer", "backslider"
+  prospectNotes        String?
+  convertedToGuestAt   DateTime?
+  // Target Goals
+  waterBaptism         Boolean         @default(false)
+  waterBaptismDate     DateTime?
+  volunteerInChurch    Boolean         @default(false)
+  volunteerInChurchDate DateTime?
+  joinSmallGroup       Boolean         @default(false)
+  joinSmallGroupDate   DateTime?
+  customTargets        Json?           @default("[]")
+  // Archival
+  archivedAt           DateTime?
+  archivedReason       String?
+  // Deletion Request
+  deletionRequestedAt  DateTime?
+  deletionRequestedBy  String?
+  deletionRequestReason String?
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+
+  addedBy              User?           @relation("AddedBy", fields: [addedByUserId], references: [id])
+  assignedVolunteer    User?           @relation("AssignedVolunteer", fields: [assignedVolunteerId], references: [id])
+  activities           FollowUpActivity[]
+  serviceReturns       GuestServiceReturn[]
+  notifications        NotificationLog[]
+  actionItems          ActionItem[]
+
+  dripEnabled  Boolean   @default(true)
+  dripPausedAt DateTime?
+
+  guestDripSteps GuestDripStep[]
+  dripSendLogs   DripSendLog[]
+
+  // Run 9 — Tracks engine
+  trackEnrollments TrackEnrollment[] @relation("GuestEnrollments")
+
+  @@map("guests")
+}
+
+model GuestServiceReturn {
+  id              String   @id @default(cuid())
+  guestId         String
+  returnNumber    Int
+  serviceDate     DateTime
+  serviceName     String?
+  recordedByUserId String
+  createdAt       DateTime @default(now())
+
+  guest           Guest    @relation(fields: [guestId], references: [id], onDelete: Cascade)
+  recordedBy      User     @relation("RecordedBy", fields: [recordedByUserId], references: [id])
+
+  @@unique([guestId, returnNumber])
+  @@map("guest_service_returns")
+}
+
+model FollowUpActivity {
+  id                String       @id @default(cuid())
+  guestId           String
+  performedByUserId String
+  activityType      ActivityType
+  activityDateTime  DateTime     @default(now())
+  outcome           String?
+  notes             String?
+  nextFollowUpDate  DateTime?
+  createdAt         DateTime     @default(now())
+
+  guest             Guest        @relation(fields: [guestId], references: [id], onDelete: Cascade)
+  performedBy       User         @relation("PerformedBy", fields: [performedByUserId], references: [id])
+
+  @@map("follow_up_activities")
+}
+
+model NotificationLog {
+  id                String             @id @default(cuid())
+  guestId           String?
+  toUserId          String
+  channel           NotificationChannel
+  status            NotificationStatus @default(QUEUED)
+  providerMessageId String?
+  errorMessage      String?
+  payloadSnapshot   String?
+  createdAt         DateTime           @default(now())
+
+  guest             Guest?             @relation(fields: [guestId], references: [id], onDelete: SetNull)
+  toUser            User               @relation("NotifiedUser", fields: [toUserId], references: [id])
+
+  @@map("notification_logs")
+}
+
+model AppSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+
+  @@map("app_settings")
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  action      String
+  category    String
+  description String
+  userId      String?
+  userName    String?
+  targetId    String?
+  targetType  String?
+  targetName  String?
+  metadata    Json?
+  ipAddress   String?
+  createdAt   DateTime @default(now())
+
+  @@index([category])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+model ActionItem {
+  id              String    @id @default(cuid())
+  userId          String
+  guestId         String?
+  actionType      String    // CALL, TEXT, WHATSAPP, PRAY, VISIT, APPOINTMENT, PASTOR_MEETING, OTHER
+  customAction    String?   // Used when actionType is OTHER
+  title           String
+  notes           String?
+  dueDate         DateTime
+  dueTime         String?   // e.g. "14:30"
+  completed       Boolean   @default(false)
+  completedAt     DateTime?
+  reminderSent    Boolean   @default(false)
+  reminderMinutes Int       @default(60) // minutes before dueDate to send reminder
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  user            User      @relation("UserActions", fields: [userId], references: [id])
+  guest           Guest?    @relation(fields: [guestId], references: [id], onDelete: SetNull)
+
+  @@index([userId, dueDate])
+  @@index([dueDate, reminderSent])
+  @@map("action_items")
+  scheduleId      String?
+  isEvent              Boolean   @default(false)
+  recurrence           String?
+  recurrenceInterval   Int?
+  recurrenceEndDate    DateTime?
+  recurrenceParentId   String?
+  invites         EventInvite[]  @relation("EventInvites")
+
+}
+
+model ServiceSchedule {
+  id                     String    @id @default(cuid())
+  date                   DateTime  @unique
+  monthTheme             String?
+  topic                  String
+
+  speakerName            String?
+  serviceCoordinatorName String?
+  propheticPrayerName    String?
+  worshipLeaderName      String?
+
+  speakerId              String?
+  serviceCoordinatorId   String?
+  propheticPrayerId      String?
+  worshipLeaderId        String?
+
+  speaker                User?     @relation("ScheduleSpeaker",         fields: [speakerId],            references: [id])
+  serviceCoordinator     User?     @relation("ScheduleCoordinator",     fields: [serviceCoordinatorId], references: [id])
+  propheticPrayer        User?     @relation("SchedulePropheticPrayer", fields: [propheticPrayerId],    references: [id])
+  worshipLeader          User?     @relation("ScheduleWorshipLeader",   fields: [worshipLeaderId],      references: [id])
+
+  isSeminar              Boolean   @default(false)
+  panelSpeakers          Json?     // [{name, userId?, title?}]
+  reminder60Sent         Boolean   @default(false)
+  reminder30Sent         Boolean   @default(false)
+  reminder14Sent         Boolean   @default(false)
+  reminder7Sent          Boolean   @default(false)
+  orderOfService         Json?     // Run 1 v3 - section/item array
+  orderCustomized        Boolean   @default(false)
+  notes                  String?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  @@map("service_schedules")
+}
+
+model ScheduleYear {
+  year      Int      @id
+  label     String
+  archived  Boolean  @default(false)
+  theme     String?
+  createdAt DateTime @default(now())
+
+  @@map("schedule_years")
+}
+
+model EventInvite {
+  id          String     @id @default(cuid())
+  eventItemId String
+  userId      String
+  userName    String
+  createdAt   DateTime   @default(now())
+
+  eventItem   ActionItem @relation("EventInvites", fields: [eventItemId], references: [id], onDelete: Cascade)
+  user        User       @relation("UserEventInvites", fields: [userId],    references: [id], onDelete: Cascade)
+
+  @@unique([eventItemId, userId])
+  @@map("event_invites")
+}
+
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation("PasswordResets", fields: [userId], references: [id], onDelete: Cascade)
+  @@map("password_reset_tokens")
+}
+
+model AccountRequest {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  phone     String?
+  message   String?
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("account_requests")
+}
+
+model Cluster {
+  id            String          @id @default(cuid())
+  name          String
+  description   String?
+  color         String          @default("#6366f1")
+  createdById   String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  createdByUser User?           @relation("ClusterCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  members       ClusterMember[]
+  @@map("clusters")
+}
+
+model ClusterMember {
+  id        String   @id @default(cuid())
+  clusterId String
+  userId    String
+  joinedAt  DateTime @default(now())
+  cluster   Cluster  @relation(fields: [clusterId], references: [id], onDelete: Cascade)
+  user      User     @relation("ClusterMemberships", fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([clusterId, userId])
+  @@map("cluster_members")
+}
+model MagicLinkToken {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation("MagicLinks", fields: [userId], references: [id], onDelete: Cascade)
+  @@map("magic_link_tokens")
+}
+
+
+model OrderOfServiceTemplate {
+  id        String   @id @default(cuid())
+  name      String
+  items     Json
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("order_of_service_templates")
+}
+
+
+// ── Drip Campaign (Run 3) ──────────────────────────────────────
+enum DripChannel {
+  EMAIL
+  WHATSAPP
+}
+
+enum DripStepStatus {
+  PENDING
+  SENT
+  FAILED
+  SKIPPED
+}
+
+model DripTemplate {
+  id        String      @id @default(cuid())
+  name      String
+  dayOffset Int
+  channel   DripChannel
+  subject   String?
+  body      String
+  enabled   Boolean     @default(true)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  guestDripSteps GuestDripStep[]
+
+  @@map("drip_templates")
+}
+
+model GuestDripStep {
+  id             String         @id @default(cuid())
+  guestId        String
+  dripTemplateId String
+  scheduledFor   DateTime
+  sentAt         DateTime?
+  status         DripStepStatus @default(PENDING)
+  errorMessage   String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  guest         Guest         @relation(fields: [guestId], references: [id], onDelete: Cascade)
+  dripTemplate  DripTemplate  @relation(fields: [dripTemplateId], references: [id])
+  dripSendLogs  DripSendLog[]
+
+  @@index([guestId])
+  @@index([scheduledFor, status])
+  @@map("guest_drip_steps")
+}
+
+
+model DripSendLog {
+  id                String             @id @default(cuid())
+  guestDripStepId   String
+  guestId           String
+  channel           DripChannel
+  status            NotificationStatus @default(QUEUED)
+  providerMessageId String?
+  errorMessage      String?
+  subjectRendered   String?
+  bodyRendered      String
+  createdAt         DateTime           @default(now())
+
+  guestDripStep     GuestDripStep      @relation(fields: [guestDripStepId], references: [id], onDelete: Cascade)
+  guest             Guest              @relation(fields: [guestId], references: [id], onDelete: Cascade)
+
+  @@index([guestId])
+  @@index([guestDripStepId])
+  @@index([createdAt])
+  @@map("drip_send_logs")
+}
+
+// ── Discipleship Tracks Engine (Run 9) ─────────────────────────
+enum TrackEnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  PAUSED
+  WITHDRAWN
+}
+
+model Track {
+  id             String   @id @default(cuid())
+  name           String
+  slug           String   @unique
+  description    String?
+  ordering       Int      @default(0)
+  isActive       Boolean  @default(true)
+  milestoneLabel String?  // e.g. "Water & Holy Spirit Baptism"
+  workbookUrl    String?  // link to the participant workbook PDF
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  modules     TrackModule[]
+  cohorts     TrackCohort[]
+  enrollments TrackEnrollment[]
+
+  @@map("tracks")
+}
+
+model TrackModule {
+  id         String   @id @default(cuid())
+  trackId    String
+  weekNumber Int
+  title      String
+  summary    String?
+  content    Json?    // Phase 3: in-app workbook content blocks
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  track       Track              @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  progress    ModuleProgress[]
+  reflections ModuleReflection[]
+
+  @@unique([trackId, weekNumber])
+  @@map("track_modules")
+}
+
+model TrackCohort {
+  id                String    @id @default(cuid())
+  trackId           String
+  name              String
+  startDate         DateTime?
+  meetingDay        String?   // e.g. "Wednesday"
+  meetingTime       String?   // e.g. "19:00"
+  facilitatorUserId String?
+  status            String    @default("ACTIVE") // ACTIVE | COMPLETED | ARCHIVED
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  track       Track             @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  facilitator User?             @relation("CohortFacilitator", fields: [facilitatorUserId], references: [id], onDelete: SetNull)
+  enrollments TrackEnrollment[]
+
+  @@map("track_cohorts")
+}
+
+model TrackEnrollment {
+  id              String                @id @default(cuid())
+  trackId         String
+  guestId         String?               // participant is a Guest (pre-membership) ...
+  userId          String?               // ... OR an existing User (member) — exactly one set
+  disciplerUserId String?
+  cohortId        String?
+  status          TrackEnrollmentStatus @default(ACTIVE)
+  portalToken     String                @unique @default(cuid()) // Phase 2 participant portal
+  startedAt       DateTime              @default(now())
+  completedAt     DateTime?
+  notes           String?
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+
+  track     Track            @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  guest     Guest?           @relation("GuestEnrollments", fields: [guestId], references: [id], onDelete: Cascade)
+  user      User?            @relation("UserEnrollments", fields: [userId], references: [id], onDelete: Cascade)
+  discipler User?            @relation("DisciplerEnrollments", fields: [disciplerUserId], references: [id], onDelete: SetNull)
+  cohort      TrackCohort?       @relation(fields: [cohortId], references: [id], onDelete: SetNull)
+  progress    ModuleProgress[]
+  reflections ModuleReflection[]
+
+  @@index([trackId, status])
+  @@index([guestId])
+  @@index([userId])
+  @@map("track_enrollments")
+}
+
+model ModuleProgress {
+  id             String   @id @default(cuid())
+  enrollmentId   String
+  moduleId       String
+  completedAt    DateTime @default(now())
+  markedByUserId String?
+  createdAt      DateTime @default(now())
+
+  enrollment TrackEnrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  module     TrackModule     @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@unique([enrollmentId, moduleId])
+  @@map("module_progress")
+}
+
+// Run 12 — participant reflections (in-app workbook answers)
+// Privacy model: readable by the participant, their discipler, and ADMIN
+// (Senior Pastor / head of discipleship). Written ONLY by the participant.
+model ModuleReflection {
+  id           String   @id @default(cuid())
+  enrollmentId String
+  moduleId     String
+  promptId     String   // savable block id inside TrackModule.content (e.g. "w1_call_moment")
+  response     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  enrollment TrackEnrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  module     TrackModule     @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@unique([enrollmentId, moduleId, promptId])
+  @@index([enrollmentId, moduleId])
+  @@map("module_reflections")
+}

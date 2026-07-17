@@ -45,6 +45,7 @@ function shape(enrollment: any, churchName: string) {
     startedAt: enrollment.startedAt,
     completedAt: enrollment.completedAt,
     milestoneAt: enrollment.milestoneAt, // Run 21 — milestoneNote stays admin-side
+    helpSeenAt: enrollment.helpSeenAt, // Run 54 — null = show the first-run coachmark
     track: {
       name: enrollment.track.name,
       description: enrollment.track.description,

@@ -2,6 +2,9 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import ModuleWorkbook from '@/components/ModuleWorkbook';
+import PageHelp from '@/components/PageHelp';
+import WeekCircle from '@/components/WeekCircle';
+import TrackCoachmark from '@/components/TrackCoachmark';
 import type { WorkbookBlock, ReflectionEntry } from '@/lib/workbook';
 
 type Enrollment = {
@@ -14,6 +17,8 @@ type Enrollment = {
   discipler: { name: string; email: string; phone: string | null; photoUrl: string | null } | null;
   cohort: { name: string; meetingDay: string | null; meetingTime: string | null } | null;
   progress: { moduleId: string; completedAt: string }[];
+  // Run 54 -- null until the participant dismisses the first-run coachmark
+  helpSeenAt?: string | null;
   // Run 20 -- cohort announcements + personal notes, newest first
   announcements?: { id: string; title: string | null; body: string; createdAt: string; enrollmentId: string | null; author: { name: string } | null }[];
 };
@@ -80,6 +85,22 @@ export default function MyTracksPage() {
     setToggling(null);
   };
 
+  // Run 54 -- dismiss the first-run coachmark. Optimistic and fire-safe: the
+  // card closes immediately and a failed stamp simply means the hint returns
+  // on a later visit, which is far better than a card that will not close.
+  const dismissHelp = async (e: Enrollment) => {
+    setEnrollments(prev => prev.map(x =>
+      x.id === e.id ? { ...x, helpSeenAt: new Date().toISOString() } : x));
+    try {
+      await fetch('/api/my-tracks/help-seen', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ enrollmentId: e.id }),
+      });
+    } catch {
+      /* ignore -- the hint reappears next visit at worst */
+    }
+  };
+
   // moduleData/expanded are keyed by `${enrollmentId}:${moduleId}` so the same
   // module in two enrollments (edge case) cannot collide.
   const expandWeek = async (e: Enrollment, moduleId: string) => {
@@ -120,6 +141,18 @@ export default function MyTracksPage() {
           Your own formation journeys — one week at a time, walking with Jesus and with each other.
         </p>
       </div>
+
+      {/* Run 54 -- My Tracks was the one participant-facing dashboard page that
+          never got a PageHelp panel, so people had nowhere to learn the circle. */}
+      <PageHelp
+        docSection="tracks"
+        tips={[
+          { icon: '✅', title: 'Tap the numbered circle to mark a week complete', body: 'The circle turns into a green check and your progress bar moves. Tap it again if you marked it by mistake. Only the numbered weeks count toward your progress.' },
+          { icon: '📖', title: 'Tap the week name to open it', body: 'Each week opens in place with its content and reflection questions. Your answers save on their own as you write them — there is no submit button.' },
+          { icon: '📚', title: 'Introduction and Appendix are for reading', body: 'Sections marked 📖 and 📋 have no circle. They are yours to read, and they never count for or against your progress.' },
+          { icon: '🤝', title: 'Your discipler walks with you', body: 'They can see your progress and reflections, and may leave a comment on a week. Their contact details are at the top of each track.' },
+        ]}
+      />
 
       {loading ? (
         <div className="text-center py-12 text-church-400">Loading your journeys…</div>
@@ -221,6 +254,18 @@ export default function MyTracksPage() {
                   </div>
                 )}
 
+                {/* Run 54 -- the hint moved ABOVE the list. Below it, people had
+                    already concluded the weeks were not tappable. */}
+                {anyContent && e.status === 'ACTIVE' && (
+                  <p className="text-xs text-church-400 mb-2">
+                    Tap a week to open its content and write your reflections. Tap the circle to mark it complete.
+                  </p>
+                )}
+
+                {e.status === 'ACTIVE' && !e.helpSeenAt && (
+                  <TrackCoachmark onDismiss={() => dismissHelp(e)} />
+                )}
+
                 <div className="space-y-2">
                   {e.track.modules.map(m => {
                     const core = isCore(m);
@@ -236,13 +281,14 @@ export default function MyTracksPage() {
                           className={`flex items-center gap-3 ${m.hasContent ? 'cursor-pointer' : ''}`}
                           onClick={() => { if (m.hasContent) expandWeek(e, m.id); }}>
                           {core ? (
-                            <button
-                              onClick={ev => { ev.stopPropagation(); toggleWeek(e, m.id); }}
-                              disabled={e.status !== 'ACTIVE' || busy}
-                              aria-label={done ? `Mark week ${m.weekNumber} as not complete` : `Mark week ${m.weekNumber} complete`}
-                              className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 transition-colors ${done ? 'bg-green-500 text-white' : 'bg-church-100 text-church-400'} ${e.status === 'ACTIVE' ? 'hover:ring-2 hover:ring-green-200' : 'cursor-default'}`}>
-                              {busy ? '…' : done ? '✓' : m.weekNumber}
-                            </button>
+                            <WeekCircle
+                              weekNumber={m.weekNumber}
+                              done={done}
+                              busy={busy}
+                              interactive={e.status === 'ACTIVE'}
+                              onToggle={() => toggleWeek(e, m.id)}
+                              size="sm"
+                            />
                           ) : (
                             <div className="w-7 h-7 rounded-full bg-brand-50 border border-brand-200 flex items-center justify-center text-sm flex-shrink-0">
                               {m.kind === 'INTRO' ? '📖' : '📋'}
@@ -278,12 +324,6 @@ export default function MyTracksPage() {
                     );
                   })}
                 </div>
-
-                {anyContent && e.status === 'ACTIVE' && (
-                  <p className="text-xs text-church-400 mt-3">
-                    Tap a week to open its content and write your reflections. Tap the circle to mark it complete.
-                  </p>
-                )}
 
                 {e.track.workbookUrl && (
                   <a href={e.track.workbookUrl} target="_blank" rel="noopener noreferrer"

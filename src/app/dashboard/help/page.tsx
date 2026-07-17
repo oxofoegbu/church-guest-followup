@@ -241,6 +241,102 @@ const SECTIONS: Section[] = [
     ),
   },
 
+  // ── DISCIPLESHIP TRACKS ─────────────────────────────────────────────────────
+  {
+    id: 'tracks',
+    icon: '🌱',
+    title: 'Discipleship Tracks',
+    category: 'Formation',
+    content: (
+      <div className="space-y-4">
+        <p className="text-sm text-church-600 leading-relaxed">
+          The formation pathway — a well, not a fence. People come at their own pace and
+          move toward the centre: <strong>Welcome Track</strong> (5 weeks, leading to a decision
+          to follow Jesus) → <strong>BECOME®</strong> (12 weeks, leading to water and Holy Spirit
+          baptism) → <strong>Leaders Track</strong> (11 weeks, leading to commissioning) →
+          <strong> Disciplers Track</strong> (10 weeks + orientation).
+        </p>
+
+        <div>
+          <h4 className="font-semibold text-church-800 text-sm mb-2">Tracks, cohorts and enrollments</h4>
+          <p className="text-sm text-church-600 leading-relaxed mb-2">
+            A <strong>track</strong> is the curriculum. A <strong>cohort</strong> is one group walking
+            through it together on a schedule. An <strong>enrollment</strong> is one person on a
+            track — either a member (User) or a Guest who has no account yet.
+          </p>
+          <Callout type="info">
+            Welcome Track sign-ups become <strong>Guests</strong>, never user accounts. Everyone else
+            gets an account with a temporary password they must change at first sign-in.
+          </Callout>
+        </div>
+
+        <div>
+          <h4 className="font-semibold text-church-800 text-sm mb-2">Enrolling someone</h4>
+          <Step n={1}>People apply themselves from the public pages — <code>/begin</code> (Welcome),
+            <code>/become</code>, <code>/leaders</code>, <code>/discipler</code> — and verify their
+            email with a 6-digit code.</Step>
+          <Step n={2}>Verified requests land in the queue at <strong>Tracks → 📥 Requests</strong>.
+            Review and approve or reject. Approval creates the enrollment and emails them their
+            portal link automatically.</Step>
+          <Step n={3}>Or add someone directly from the track&apos;s Participants grid — they get the
+            same welcome email.</Step>
+          <Callout type="warning">
+            Nothing enforces prerequisites. Someone can request the Leaders Track without finishing
+            BECOME® — the approval queue is where that judgement gets made. Check before approving.
+          </Callout>
+        </div>
+
+        <div>
+          <h4 className="font-semibold text-church-800 text-sm mb-2">The participant portal</h4>
+          <p className="text-sm text-church-600 leading-relaxed mb-2">
+            Every enrollment has a private portal link (🔗 copy or 📤 send from the Participants
+            grid). It needs no password — the link itself is the key — so Guests can use it. Members
+            can also reach the same thing at <Link href="/dashboard/my-tracks" className="text-brand-600 hover:underline">📖 My Tracks</Link>.
+          </p>
+          <Callout type="warning">
+            Treat portal links like passwords. Anyone holding one is treated as that participant and
+            can read and write their reflections. Send them to the person, never to a group chat.
+          </Callout>
+        </div>
+
+        <div>
+          <h4 className="font-semibold text-church-800 text-sm mb-2">Progress, reflections and disciplers</h4>
+          <p className="text-sm text-church-600 leading-relaxed">
+            Participants tick off each week themselves by tapping its numbered circle, and write
+            reflections inside the week. Only the numbered <strong>CORE</strong> weeks count toward
+            progress — 📖 Introduction and 📋 Appendix sections are for reading only. Reflections are
+            private to the participant, their assigned discipler, and admins. A discipler can leave
+            one comment per week, and the participant is emailed when it is new or changed.
+          </p>
+        </div>
+
+        <div>
+          <h4 className="font-semibold text-church-800 text-sm mb-2">Milestones</h4>
+          <p className="text-sm text-church-600 leading-relaxed">
+            Record the baptism or commissioning on the ✏️ edit-enrollment modal. It shows a 🏆 in the
+            grid and a celebration card on the participant&apos;s portal. Recording a BECOME® milestone
+            for a Guest also ticks their Water Baptism target goal automatically.
+          </p>
+        </div>
+
+        <div>
+          <h4 className="font-semibold text-church-800 text-sm mb-2">Nudges</h4>
+          <p className="text-sm text-church-600 leading-relaxed">
+            Once a day, any discipler with disciples who have gone quiet — no week completed and no
+            reflection saved for 7 days by default — gets a single digest email. Nobody is mentioned
+            twice in the same window, and people who have finished every week are never flagged.
+            Toggle it or change the window in <strong>⚙️ Settings → 🌱 Discipleship Tracks</strong>.
+          </p>
+        </div>
+
+        <Callout type="tip">
+          <strong>Formation reports</strong> live on Reports → 🌱 Formation: who is on a track now,
+          the Welcome → Become → Leaders pathway, per-week completion funnels, and recent milestones.
+        </Callout>
+      </div>
+    ),
+  },
+
   // ── SUNDAY SCHEDULE ──────────────────────────────────────────────────────────
   {
     id: 'sunday-schedule',
@@ -529,7 +625,7 @@ const SECTIONS: Section[] = [
   },
 ];
 
-const CATEGORIES = ['Overview', 'Guests', 'Schedule', 'Calendar', 'Team', 'Admin'];
+const CATEGORIES = ['Overview', 'Guests', 'Formation', 'Schedule', 'Calendar', 'Team', 'Admin'];
 
 export default function HelpPage() {
   const [activeSection, setActiveSection] = useState('getting-started');

@@ -1,0 +1,11 @@
+src/app/leaders/page.tsx
+src/app/leaders/layout.tsx
+src/app/api/leaders/options/route.ts
+scripts/run29-seed-leaders-settings.mjs
+public/leaders/hero-wide.webp
+public/leaders/hero-mobile.webp
+public/leaders/texture-contours.webp
+public/leaders/portrait-square.webp
+public/leaders/mentorship.webp
+public/leaders/social-og.jpg
+public/leaders/social-square.jpg

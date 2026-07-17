@@ -583,6 +583,12 @@ model TrackEnrollment {
   // Run 21 — when the discipler was last emailed a "check on this disciple"
   // nudge for THIS enrollment (cooldown stamp for the daily nudge cron).
   lastNudgeAt     DateTime?
+  // Run 54 — when this participant dismissed the first-run coachmark that
+  // explains the completion circle. Stamped once, from either surface (My
+  // Tracks or the token portal), so the hint follows the person across
+  // devices instead of living in one browser's localStorage. Null = never
+  // seen. Participant-facing only; never used for reporting.
+  helpSeenAt      DateTime?
   createdAt       DateTime              @default(now())
   updatedAt       DateTime              @updatedAt
 
