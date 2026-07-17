@@ -21,6 +21,7 @@ const NAV_BY_PERMISSION = {
     { href: '/dashboard/my-tracks', label: 'My Tracks',        icon: '📖' },
     { href: '/dashboard/my-disciples', label: 'My Disciples',  icon: '🤝' },
     { href: '/dashboard/web-contacts', label: 'Web Contacts',  icon: '✉️' },
+    { href: '/dashboard/teaching',  label: 'Teaching',         icon: '✍️' },
     { href: '/dashboard/users',     label: 'Users',            icon: '⚙️' },
     { href: '/dashboard/reports',   label: 'Reports',          icon: '📈' },
     { href: '/dashboard/audit',     label: 'Audit Trail',      icon: '📜' },

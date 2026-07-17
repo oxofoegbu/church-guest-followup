@@ -124,3 +124,54 @@
 .slide-in {
   animation: slideIn 0.3s ease forwards;
 }
+
+/* ---------------------------------------------------------------------------
+   Run 57 — the teaching editor surface.
+
+   These styles exist so that what Pastor Okezie types LOOKS like what the site
+   will render. They deliberately echo TeachingBody.tsx rather than reproduce
+   it: this is the dashboard's font stack, not the website's, because pretending
+   to be a pixel-accurate preview would be a lie — the Preview button opens the
+   real page for that.
+
+   The quote's attribution is drawn from the data-cite attribute rather than
+   being editable text, because `cite` is a plain string the site never formats.
+   --------------------------------------------------------------------------- */
+.teaching-editor-surface {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #1f2937;
+}
+.teaching-editor-surface > * + * { margin-top: 0.85em; }
+.teaching-editor-surface h2 {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-top: 1.4em;
+  color: #111827;
+}
+.teaching-editor-surface blockquote {
+  border-left: 3px solid #d6b45f;
+  padding-left: 1rem;
+  font-style: italic;
+  color: #374151;
+}
+.teaching-editor-surface blockquote[data-cite]:not([data-cite=''])::after {
+  content: attr(data-cite);
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #a1834a;
+}
+.teaching-editor-surface ul {
+  list-style: disc;
+  padding-left: 1.4rem;
+}
+.teaching-editor-surface ul li { margin: 0.25em 0; }
+.teaching-editor-surface ul li p { margin: 0; }
+.teaching-editor-surface a { color: #b45309; text-decoration: underline; text-underline-offset: 2px; }
+.teaching-editor-surface p:empty::before { content: ''; display: inline-block; }
