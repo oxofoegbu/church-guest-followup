@@ -6,7 +6,7 @@
 // there is always material and each theme deepens automatically as new articles
 // are tagged into its topics. Repeats across cycles are intentional.
 
-import type { TopicSlug } from '@/content/teaching';
+import type { TopicSlug } from '@/content/teaching/types';
 
 export interface NewsletterTheme {
   key: string;

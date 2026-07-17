@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ skipped: 'draft-exists', weekKey, token: existing.token });
     }
 
-    const draft = composeIssue();
+    const draft = await composeIssue();
     if (draft.articles.length === 0) {
       return NextResponse.json({ skipped: 'no-published-articles', weekKey });
     }
@@ -90,7 +90,7 @@ export async function GET(request: NextRequest) {
       where: { status: 'ACTIVE' },
     });
 
-    const videos = sermonsForTheme(draft.theme, 1).map((s) => ({
+    const videos = (await sermonsForTheme(draft.theme, 1)).map((s) => ({
       slug: s.slug,
       title: s.title,
       excerpt: s.excerpt,

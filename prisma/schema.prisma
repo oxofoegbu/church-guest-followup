@@ -801,3 +801,51 @@ model WebContact {
   @@index([status, createdAt])
   @@index([email])
 }
+
+// Run 56 — teaching content (Watch & Read) moves out of the code registry
+// (src/content/teaching/{articles,sermons}.ts — 166 articles + 16 sermons,
+// 21,766 lines) and into Postgres, so a typo fix or a reschedule stops being a
+// full deploy. Run A is the migration + read path ONLY: no behaviour changes.
+// Read via src/lib/teaching.ts; Block[] schema stays in code (types.ts) and is
+// validated on read — the TrackModule.content Json precedent.
+model Teaching {
+  id          String    @id @default(cuid())
+  kind        String    // 'article' | 'sermon'
+  slug        String    @unique
+  title       String
+  excerpt     String
+  date        DateTime  @db.Date // the teaching's own date (calendar, not an instant)
+  topic       String    // must match a TopicSlug in src/content/teaching/types.ts
+  series      String?
+  author      String
+  featured    Boolean   @default(false)
+  // NULL = always visible. An America/New_York CALENDAR DATE — never an
+  // instant. @db.Date so no timezone can shift it; compared as a yyyy-mm-dd
+  // string against todayEastern(). This field IS the live drip (132 articles,
+  // 2026-07-17 -> 2026-11-25, one per day).
+  publishAt   DateTime? @db.Date
+  // Run 56 — the ordering tie-break. The registry was
+  // [...SERMONS, ...ARTICLES].sort(byDateDesc); Array.sort is stable, so
+  // teachings sharing a `date` kept their concatenation order. Three dates are
+  // shared by seven teachings, so this is real. seq = that concatenation index
+  // (sermons 0-15, articles 16-181). Reads use ORDER BY date DESC, seq ASC,
+  // which reproduces the registry order exactly and does not depend on JS sort
+  // stability. Run B: new content simply takes the next seq.
+  seq         Int
+  body        Json?     // Block[] — articles
+  transcript  Json?     // Block[] — sermons (optional)
+  youTubeId   String?   // sermons
+  durationMin Int?
+  readMin     Int?
+  // Run 56: NEW — the registry had no equivalent. DRAFT = never public,
+  // regardless of publishAt. publishAt does scheduling; status does intent.
+  // Everything seeds PUBLISHED, so Run A changes nothing. Run B uses it.
+  status      String    @default("PUBLISHED") // PUBLISHED | DRAFT | ARCHIVED
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([kind, publishAt])
+  @@index([topic])
+  @@index([publishAt])
+  @@index([status, date, seq])
+}

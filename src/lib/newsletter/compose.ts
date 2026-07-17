@@ -2,8 +2,8 @@
 // Pure/selection logic only (no DB, no email) so it can be unit-reasoned and
 // reused by both the cron drafter and the review page.
 
-import { ALL_ARTICLES, ALL_SERMONS, searchTeachings } from '@/content/teaching';
-import type { Article, Sermon } from '@/content/teaching';
+import { allArticles, allSermons, searchTeachings } from '@/lib/teaching';
+import type { Article, Sermon } from '@/lib/teaching';
 import { THEMES, type NewsletterTheme } from './themes';
 
 // Eastern "today" (church timezone), rendered YYYY-MM-DD by the en-CA locale.
@@ -46,9 +46,9 @@ export function themeForWeek(weekKey: string): NewsletterTheme {
 // (added in Run 42) WITHOUT a hard dependency on it: on Run 41 the field is
 // absent so every article is visible; once Run 42 ships, a scheduled article
 // stays out of the digest until its America/New_York date arrives.
-export function publishedArticles(): Article[] {
+export async function publishedArticles(): Promise<Article[]> {
   const today = todayEastern();
-  return ALL_ARTICLES.filter((a: Article) => {
+  return (await allArticles()).filter((a: Article) => {
     const pa = (a as { publishAt?: string }).publishAt;
     return !pa || pa <= today;
   });
@@ -65,8 +65,8 @@ export interface IssueDraft {
 // Select up to `count` articles for a theme: in-theme (by topic) newest-first,
 // then supplement with keyword search hits, then fill from the newest remaining
 // so the digest is never thin. Selection is limited to published articles.
-export function selectForTheme(theme: NewsletterTheme, count = 4): Article[] {
-  const pool = publishedArticles(); // already newest-first (registry sorts desc)
+export async function selectForTheme(theme: NewsletterTheme, count = 4): Promise<Article[]> {
+  const pool = await publishedArticles(); // already newest-first (the read path sorts desc)
   const publishedSlugs: Record<string, boolean> = {};
   pool.forEach((a: Article) => {
     publishedSlugs[a.slug] = true;
@@ -86,7 +86,7 @@ export function selectForTheme(theme: NewsletterTheme, count = 4): Article[] {
     .forEach(take);
 
   if (chosen.length < count && theme.keywords.length > 0) {
-    searchTeachings(theme.keywords.join(' ')).forEach((t) => {
+    (await searchTeachings(theme.keywords.join(' '))).forEach((t) => {
       if (t.kind === 'article' && publishedSlugs[t.slug]) take(t as Article);
     });
   }
@@ -96,10 +96,10 @@ export function selectForTheme(theme: NewsletterTheme, count = 4): Article[] {
   return chosen;
 }
 
-export function composeIssue(d?: Date): IssueDraft {
+export async function composeIssue(d?: Date): Promise<IssueDraft> {
   const weekKey = weekKeyEastern(d);
   const theme = themeForWeek(weekKey);
-  const articles = selectForTheme(theme, 4);
+  const articles = await selectForTheme(theme, 4);
   return {
     weekKey,
     theme,
@@ -115,16 +115,16 @@ export function themeByKey(key: string): NewsletterTheme | undefined {
   return THEMES.find((t) => t.key === key);
 }
 
-export function publishedSermons(): Sermon[] {
+export async function publishedSermons(): Promise<Sermon[]> {
   const today = todayEastern();
-  return ALL_SERMONS.filter((s: Sermon) => {
+  return (await allSermons()).filter((s: Sermon) => {
     const pa = (s as { publishAt?: string }).publishAt;
     return !pa || pa <= today;
   });
 }
 
-export function sermonsForTheme(theme: NewsletterTheme, count = 1): Sermon[] {
-  const pool = publishedSermons(); // newest-first
+export async function sermonsForTheme(theme: NewsletterTheme, count = 1): Promise<Sermon[]> {
+  const pool = await publishedSermons(); // newest-first
   const chosen: Sermon[] = [];
   const seen: Record<string, boolean> = {};
   const take = (s: Sermon) => {
@@ -139,9 +139,9 @@ export function sermonsForTheme(theme: NewsletterTheme, count = 1): Sermon[] {
 }
 
 // Resolve an ordered slug list (as stored on an issue) back to Article objects.
-export function articlesBySlugs(slugs: string[]): Article[] {
+export async function articlesBySlugs(slugs: string[]): Promise<Article[]> {
   const bySlug: Record<string, Article> = {};
-  ALL_ARTICLES.forEach((a: Article) => {
+  (await allArticles()).forEach((a: Article) => {
     bySlug[a.slug] = a;
   });
   const out: Article[] = [];

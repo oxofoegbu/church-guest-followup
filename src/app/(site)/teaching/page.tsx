@@ -24,7 +24,7 @@ import {
   youTubeThumb,
   type Teaching,
   type TopicSlug,
-} from '@/content/teaching';
+} from '@/lib/teaching';
 
 const H2 = 'font-fraunces text-[30px] font-semibold leading-[1.12] tracking-[-0.01em] text-site-umber sm:text-[38px]';
 
@@ -133,24 +133,24 @@ function toPage(v: string | undefined): number {
   return Number.isFinite(n) && n > 0 ? n : 1;
 }
 
-export default function TeachingPage({
+export default async function TeachingPage({
   searchParams,
 }: {
   searchParams?: { topic?: string; sp?: string; ap?: string; q?: string; p?: string };
 }) {
   const q = (searchParams?.q ?? '').trim();
   const isSearch = q.length > 0;
-  const featured = featuredTeaching();
+  const featured = await featuredTeaching();
 
   // ---- Search view: one ranked result set across sermons + articles ----
   if (isSearch) {
-    const results = searchTeachings(q);
+    const results = await searchTeachings(q);
     const resultPages = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
     const p = Math.min(toPage(searchParams?.p), resultPages);
     const pageResults = results.slice((p - 1) * PAGE_SIZE, p * PAGE_SIZE);
     const searchHref = (page: number): string =>
       `/teaching?q=${encodeURIComponent(q)}${page > 1 ? `&p=${page}` : ''}#results`;
-    const topics = activeTopics();
+    const topics = await activeTopics();
 
     return (
       <>
@@ -232,12 +232,12 @@ export default function TeachingPage({
   }
 
   // ---- Browse view (default) ----
-  const topics = activeTopics();
+  const topics = await activeTopics();
   const active = searchParams?.topic as TopicSlug | undefined;
   const activeValid = active && topics.some((x) => x.slug === active) ? active : undefined;
 
-  const pubSermons = visibleSermons();
-  const pubArticles = visibleArticles();
+  const pubSermons = await visibleSermons();
+  const pubArticles = await visibleArticles();
   const allSermons = activeValid ? pubSermons.filter((s) => s.topic === activeValid) : pubSermons;
   const allArticles = activeValid ? pubArticles.filter((a) => a.topic === activeValid) : pubArticles;
 

@@ -4,7 +4,7 @@
 // at least one visible teaching (activeTopics); empty ones are omitted.
 import type { MetadataRoute } from 'next';
 import { SITE } from '@/lib/site';
-import { visibleTeachings, activeTopics } from '@/content/teaching';
+import { visibleTeachings, activeTopics } from '@/lib/teaching';
 
 const LASTMOD = '2026-07-13';
 
@@ -12,15 +12,15 @@ const LASTMOD = '2026-07-13';
 // sitemap on their day; hidden ones are omitted until then.
 export const revalidate = 3600;
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = SITE.url;
-  const teaching: MetadataRoute.Sitemap = visibleTeachings().map((t) => ({
+  const teaching: MetadataRoute.Sitemap = (await visibleTeachings()).map((t) => ({
     url: `${base}/teaching/${t.slug}`,
     lastModified: t.date,
     changeFrequency: 'yearly',
     priority: 0.6,
   }));
-  const topicHubs: MetadataRoute.Sitemap = activeTopics().map((t) => ({
+  const topicHubs: MetadataRoute.Sitemap = (await activeTopics()).map((t) => ({
     url: `${base}/teaching/topic/${t.slug}`,
     lastModified: LASTMOD,
     changeFrequency: 'weekly',

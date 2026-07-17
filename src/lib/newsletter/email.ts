@@ -5,7 +5,7 @@
 // public newsletter's From identity separate from the internal follow-up app.
 
 import { SITE } from '@/lib/site';
-import { youTubeThumb } from '@/content/teaching';
+import { youTubeThumb } from '@/content/teaching/helpers';
 
 const FROM_EMAIL =
   process.env.NEWSLETTER_FROM_EMAIL || process.env.RESEND_FROM_EMAIL || 'hello@gracelifecenter.com';

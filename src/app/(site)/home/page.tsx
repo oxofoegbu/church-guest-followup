@@ -10,7 +10,7 @@ import Eyebrow from '@/components/site/Eyebrow';
 import Button from '@/components/site/Button';
 import Pathway from '@/components/site/Pathway';
 import { SITE, churchJsonLd } from '@/lib/site';
-import { visibleArticles, featuredTeaching, topicLabel, youTubeThumb } from '@/content/teaching';
+import { visibleArticles, featuredTeaching, topicLabel, youTubeThumb } from '@/lib/teaching';
 
 // Run 42 — revalidate hourly so the homepage teaching block refreshes as new
 // articles publish on their scheduled day (the hub itself is already dynamic).
@@ -130,9 +130,9 @@ const ARTICLE_GRADIENTS = [
   'linear-gradient(150deg, #3E5A34, #1F2A1D)',
 ];
 
-export default function HomePage() {
-  const featured = featuredTeaching();
-  const latestArticles = visibleArticles()
+export default async function HomePage() {
+  const featured = await featuredTeaching();
+  const latestArticles = (await visibleArticles())
     .filter((a) => !featured || a.slug !== featured.slug)
     .slice(0, 2);
   return (

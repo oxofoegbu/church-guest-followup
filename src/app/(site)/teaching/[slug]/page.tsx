@@ -11,7 +11,7 @@ import Band from '@/components/site/Band';
 import Button from '@/components/site/Button';
 import TeachingBody from '@/components/site/TeachingBody';
 import { SITE } from '@/lib/site';
-import { visibleTeachings, isVisible, getTeaching, topicLabel, youTubeThumb, relatedTeachings, adjacentTeachings } from '@/content/teaching';
+import { visibleTeachings, isVisible, getTeaching, topicLabel, youTubeThumb, relatedTeachings, adjacentTeachings } from '@/lib/teaching';
 
 // Run 42 — pre-build only the currently-visible detail pages; a scheduled
 // article renders on-demand once its day arrives (dynamicParams default). ISR
@@ -19,12 +19,12 @@ import { visibleTeachings, isVisible, getTeaching, topicLabel, youTubeThumb, rel
 // of its publishAt without a redeploy.
 export const revalidate = 3600;
 
-export function generateStaticParams() {
-  return visibleTeachings().map((t) => ({ slug: t.slug }));
+export async function generateStaticParams() {
+  return (await visibleTeachings()).map((t) => ({ slug: t.slug }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const t = getTeaching(params.slug);
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const t = await getTeaching(params.slug);
   if (!t) return { title: 'Teaching' };
   const url = `${SITE.url}/teaching/${t.slug}`;
   const image =
@@ -48,8 +48,8 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 
 const H2 = 'font-fraunces text-[30px] font-semibold leading-[1.12] tracking-[-0.01em] text-site-umber sm:text-[38px]';
 
-export default function TeachingDetail({ params }: { params: { slug: string } }) {
-  const t = getTeaching(params.slug);
+export default async function TeachingDetail({ params }: { params: { slug: string } }) {
+  const t = await getTeaching(params.slug);
   if (!t || !isVisible(t)) notFound(); // hidden until its scheduled publishAt
 
   const url = `${SITE.url}/teaching/${t.slug}`;
@@ -102,8 +102,8 @@ export default function TeachingDetail({ params }: { params: { slug: string } })
   if (t.kind === 'article' && t.readMin) metaBits.push(`${t.readMin} min read`);
 
   // Run 50 — internal linking: same-topic siblings + chronological neighbours.
-  const related = relatedTeachings(t.slug, t.topic, 3);
-  const adj = adjacentTeachings(t.slug);
+  const related = await relatedTeachings(t.slug, t.topic, 3);
+  const adj = await adjacentTeachings(t.slug);
 
   return (
     <>

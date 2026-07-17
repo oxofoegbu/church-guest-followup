@@ -12,7 +12,7 @@ import Eyebrow from '@/components/site/Eyebrow';
 import Button from '@/components/site/Button';
 import SubscribeForm from '@/components/site/SubscribeForm';
 import { SITE } from '@/lib/site';
-import { TOPICS, topicLabel, teachingsByTopic, youTubeThumb, type Teaching, type TopicSlug } from '@/content/teaching';
+import { TOPICS, topicLabel, teachingsByTopic, youTubeThumb, type Teaching, type TopicSlug } from '@/lib/teaching';
 
 export const revalidate = 3600;
 
@@ -90,12 +90,12 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   };
 }
 
-export default function TopicHubPage({ params }: { params: { slug: string } }) {
+export default async function TopicHubPage({ params }: { params: { slug: string } }) {
   const topic = topicFromSlug(params.slug);
   if (!topic) notFound();
   const label = topicLabel(topic);
   const intro = TOPIC_INTRO[topic];
-  const teachings = teachingsByTopic(topic); // visible only, newest first
+  const teachings = await teachingsByTopic(topic); // visible only, newest first
   const url = `${SITE.url}/teaching/topic/${topic}`;
   const others = TOPICS.filter((t) => t.slug !== topic);
 

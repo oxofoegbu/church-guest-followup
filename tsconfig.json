@@ -16,5 +16,15 @@
     "paths": { "@/*": ["./src/*"] }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  // Run 56 — "backups" is NOT source. deploy.sh writes each run's rollback
+  // copies to backups/runN-<stamp>/ (Run 54 moved them there from the old
+  // .runNN-backup-<stamp>/, and Run 55 gitignored the directory). But include
+  // is "**/*.ts", and TypeScript's wildcards SKIP dot-directories while
+  // matching ordinary ones — so the 44 legacy .runNN-backup-* dirs were always
+  // invisible to the compiler and backups/ silently was not. It only bit once a
+  // run changed a shared module's signature: Run 56 made compose.ts async, and
+  // the stale route.ts sitting in backups/ still resolved '@/lib/newsletter/compose'
+  // through the alias to the NEW source and failed to compile. Rollback caught
+  // it. Backups are snapshots of old code by definition; never type-check them.
+  "exclude": ["node_modules", "backups"]
 }

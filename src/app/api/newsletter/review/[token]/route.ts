@@ -17,10 +17,10 @@ import { SITE } from '@/lib/site';
 
 export const dynamic = 'force-dynamic';
 
-function videosForThemeKey(themeKey: string) {
+async function videosForThemeKey(themeKey: string) {
   const theme = themeByKey(themeKey);
   if (!theme) return [];
-  return sermonsForTheme(theme, 1).map((s) => ({
+  return (await sermonsForTheme(theme, 1)).map((s) => ({
     slug: s.slug,
     title: s.title,
     excerpt: s.excerpt,
@@ -66,8 +66,8 @@ export async function GET(_req: NextRequest, ctx: { params: { token: string } })
   });
   if (!issue) return htmlResponse(shell('Not found', '<h1>Link not valid</h1><p class="sub">This review link doesn’t match any digest.</p>'), 404);
 
-  const articles = articlesBySlugs(JSON.parse(issue.slugsJson || '[]'));
-  const videos = videosForThemeKey(issue.themeKey);
+  const articles = await articlesBySlugs(JSON.parse(issue.slugsJson || '[]'));
+  const videos = await videosForThemeKey(issue.themeKey);
   const previewHtml = renderDigestHtml({
     themeLabel: issue.themeLabel,
     intro: issue.intro,
@@ -146,8 +146,8 @@ export async function POST(req: NextRequest, ctx: { params: { token: string } })
   }
 
   if (action === 'send') {
-    const articles = articlesBySlugs(JSON.parse(issue.slugsJson || '[]'));
-    const videos = videosForThemeKey(issue.themeKey);
+    const articles = await articlesBySlugs(JSON.parse(issue.slugsJson || '[]'));
+    const videos = await videosForThemeKey(issue.themeKey);
     const subs: Array<{ email: string; token: string }> = await (
       prisma as any
     ).newsletterSubscriber.findMany({
