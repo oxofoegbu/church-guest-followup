@@ -287,8 +287,12 @@ export default function TrackPortalPage() {
         <div>
           <p className="text-xs uppercase text-church-400 font-semibold mb-3 px-1">Your weekly journey</p>
 
-          {/* Run 54 — hint moved above the list; coachmark shows once. */}
-          {portal.status === 'ACTIVE' && (
+          {/* Run 54 — hint moved above the list; coachmark shows once.
+              Run 55 — the two are now mutually exclusive: the coachmark teaches,
+              then this line takes over as the permanent reminder. Together they
+              repeated the same instruction three times over (PageHelp tip, this
+              line, and the coachmark), which is noise, not help. */}
+          {portal.status === 'ACTIVE' && !!portal.helpSeenAt && (
             <p className="text-xs text-church-400 mb-3 px-1">
               {anyContent
                 ? 'Tap a week to open its content and write your reflections. Tap the circle to mark it complete. Your discipler can see your progress and cheer you on.'
@@ -297,7 +301,7 @@ export default function TrackPortalPage() {
           )}
 
           {portal.status === 'ACTIVE' && !portal.helpSeenAt && (
-            <TrackCoachmark onDismiss={dismissHelp} />
+            <TrackCoachmark hasContent={anyContent} onDismiss={dismissHelp} />
           )}
 
           <div className="space-y-2.5">

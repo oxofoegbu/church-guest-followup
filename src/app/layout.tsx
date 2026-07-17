@@ -7,8 +7,20 @@ export const viewport: Viewport = {
   themeColor:         '#102a43',
   width:              'device-width',
   initialScale:       1,
-  maximumScale:       1,
-  userScalable:       false,
+  // Run 55 — maximumScale:1 + userScalable:false were REMOVED here.
+  //
+  // They were added to make the installed PWA feel native (they suppress
+  // double-tap zoom). The cost was a WCAG 2.1 AA failure: SC 1.4.4 (Resize
+  // Text) requires text to scale to 200%, and locking the viewport denies
+  // that to exactly the people who need it most — older congregants trying
+  // to read a reflection question on a phone.
+  //
+  // The lock was never even consistent: iOS Safari has ignored
+  // user-scalable=no since iOS 10, so iPhone users could always pinch while
+  // Android users could not. Same app, two rules.
+  //
+  // Do not put them back. If double-tap zoom ever feels janky, fix it with
+  // touch-action / tap-target sizing in CSS, which does not disable zoom.
 };
 
 export const metadata: Metadata = {

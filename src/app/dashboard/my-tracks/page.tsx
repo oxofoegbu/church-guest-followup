@@ -255,15 +255,21 @@ export default function MyTracksPage() {
                 )}
 
                 {/* Run 54 -- the hint moved ABOVE the list. Below it, people had
-                    already concluded the weeks were not tappable. */}
-                {anyContent && e.status === 'ACTIVE' && (
+                    already concluded the weeks were not tappable.
+                    Run 55 -- and it now waits for the coachmark to be dismissed.
+                    Showing both at once said the same sentence twice, which read
+                    as nagging rather than helping. Coachmark while you learn;
+                    this quiet line forever after. */}
+                {e.status === 'ACTIVE' && !!e.helpSeenAt && (
                   <p className="text-xs text-church-400 mb-2">
-                    Tap a week to open its content and write your reflections. Tap the circle to mark it complete.
+                    {anyContent
+                      ? 'Tap a week to open its content and write your reflections. Tap the circle to mark it complete.'
+                      : 'Tap the circle to mark a week complete when you finish it.'}
                   </p>
                 )}
 
                 {e.status === 'ACTIVE' && !e.helpSeenAt && (
-                  <TrackCoachmark onDismiss={() => dismissHelp(e)} />
+                  <TrackCoachmark hasContent={anyContent} onDismiss={() => dismissHelp(e)} />
                 )}
 
                 <div className="space-y-2">

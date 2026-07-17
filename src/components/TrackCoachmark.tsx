@@ -14,9 +14,16 @@
 
 interface TrackCoachmarkProps {
   onDismiss: () => void;
+  /**
+   * Run 55 — does this track have in-app workbook content? Every GLC track
+   * does today, but a track seeded with week titles and no content would
+   * otherwise be told to "tap the week's name to open its content", which
+   * would open nothing. Defaults to true.
+   */
+  hasContent?: boolean;
 }
 
-export default function TrackCoachmark({ onDismiss }: TrackCoachmarkProps) {
+export default function TrackCoachmark({ onDismiss, hasContent = true }: TrackCoachmarkProps) {
   return (
     <div className="mb-3 rounded-xl border border-brand-200 bg-brand-50 px-3.5 py-3 flex items-start gap-3">
       <span className="flex-shrink-0 w-7 h-7 rounded-full bg-white border-2 border-church-300 text-church-500 flex items-center justify-center text-xs font-bold mt-0.5">
@@ -25,8 +32,10 @@ export default function TrackCoachmark({ onDismiss }: TrackCoachmarkProps) {
       <div className="min-w-0 flex-1">
         <p className="text-sm font-semibold text-brand-800">Tap the numbered circle to mark a week done</p>
         <p className="text-xs text-brand-700 mt-0.5 leading-relaxed">
-          It turns into a green check ✓ and your progress bar moves. Tap the week&apos;s
-          name instead to open its content and write your reflections.
+          It turns into a green check ✓ and your progress bar moves.
+          {hasContent
+            ? ' Tap the week’s name instead to open its content and write your reflections.'
+            : ' Tap it again if you change your mind — nothing is ever locked.'}
         </p>
         <button
           type="button"

@@ -4,3 +4,10 @@ node_modules
 .DS_Store
 .vercel
 .env*.local
+
+# Run 55 — deploy.sh writes timestamped rollback copies here before it
+# touches anything. They are local safety nets, not source. Run 54's
+# `git add -A` committed one into the repo by accident; ignoring the
+# directory stops every future run from pushing a full copy of the
+# previous version and slowly bloating the history.
+backups/
