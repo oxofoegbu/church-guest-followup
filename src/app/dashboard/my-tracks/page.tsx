@@ -130,6 +130,27 @@ export default function MyTracksPage() {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ promptId, response }),
     });
+    if (res.ok) {
+      // Keep the cached snapshot in step with what was just saved. A week's
+      // ModuleWorkbook is only mounted while it is open, so collapsing and
+      // re-opening it remounts fresh and re-seeds from this cache. Without
+      // this upsert the re-opened week reverts to the pre-edit fetch and the
+      // saved answers look like they vanished until a refresh. Cache is keyed
+      // by `${enrollmentId}:${moduleId}` here (same as expandWeek).
+      const key = `${e.id}:${moduleId}`;
+      setModuleData(prev => {
+        const cur = prev[key];
+        if (!cur) return prev;
+        const rest = cur.reflections.filter(r => r.promptId !== promptId);
+        return {
+          ...prev,
+          [key]: {
+            ...cur,
+            reflections: [...rest, { promptId, response, updatedAt: new Date().toISOString() }],
+          },
+        };
+      });
+    }
     return res.ok;
   };
 

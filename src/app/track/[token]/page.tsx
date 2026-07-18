@@ -107,6 +107,26 @@ export default function TrackPortalPage() {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ promptId, response }),
     });
+    if (res.ok) {
+      // Keep the cached snapshot in step with what was just saved. A week's
+      // ModuleWorkbook is only mounted while it is open, so collapsing and
+      // re-opening it remounts fresh and re-seeds from this cache. Without
+      // this upsert the re-opened week reverts to the pre-edit fetch and the
+      // participant's saved answers look like they vanished (they are safe on
+      // the server — a refresh brought them back — but the cache was stale).
+      setModuleData(prev => {
+        const cur = prev[moduleId];
+        if (!cur) return prev;
+        const rest = cur.reflections.filter(r => r.promptId !== promptId);
+        return {
+          ...prev,
+          [moduleId]: {
+            ...cur,
+            reflections: [...rest, { promptId, response, updatedAt: new Date().toISOString() }],
+          },
+        };
+      });
+    }
     return res.ok;
   };
 
