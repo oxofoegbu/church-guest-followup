@@ -849,3 +849,25 @@ model Teaching {
   @@index([publishAt])
   @@index([status, date, seq])
 }
+
+// ── Run 59 — Ask a Question: anonymous live sermon Q&A. QR code on-screen
+// during service -> /ask (no login, no name/email/phone -- genuinely
+// anonymous) -> a leader-level moderation queue at
+// /dashboard/sermon-questions where a question is marked ANSWERED or
+// DISMISSED once addressed. No OTP (would break anonymity); the human
+// moderation step is the spam gate instead of a rate limiter. Additive only
+// -- apply with `npx prisma db push`.
+model SermonQuestion {
+  id         String   @id @default(cuid())
+  text       String
+  // An America/New_York CALENDAR DATE, same @db.Date convention as
+  // Teaching.publishAt -- set from todayEastern() at submission time, never
+  // an instant. Read/written via src/lib/sermon-questions.ts's toDbDate /
+  // toDateStr -- never call toLocaleDateString on it directly (see
+  // instructions doc's "Calendar dates live at UTC midnight" rule).
+  sermonDate DateTime @db.Date
+  status     String   @default("NEW") // NEW | ANSWERED | DISMISSED
+  createdAt  DateTime @default(now())
+
+  @@index([sermonDate, status, createdAt])
+}
