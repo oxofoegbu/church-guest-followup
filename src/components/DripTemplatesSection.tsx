@@ -2,12 +2,23 @@
 import { useEffect, useState } from 'react';
 
 type DripChannel = 'EMAIL' | 'WHATSAPP';
+type DripRecipient = 'GUEST' | 'VOLUNTEER';
+
+// Run 61 — keep in sync with WA_TEMPLATES in src/lib/whatsapp.ts. The API
+// validates the real list server-side; this is just the picker's labels.
+const WA_TEMPLATE_OPTIONS: { key: string; label: string }[] = [
+  { key: 'day2FollowUp', label: 'day2_follow_up — "Hi {{volunteerName}}, it\'s been 24 hours…"' },
+  { key: 'day4PastorCheckin', label: 'day4_pastor_checkin — "Hi {{firstName}}! This is Pastor O…"' },
+  { key: 'day11InviteBack', label: 'day11_invite_back — "Hi {{volunteerName}} this is a gentle reminder…"' },
+];
 
 type DripTemplate = {
   id: string;
   name: string;
   dayOffset: number;
   channel: DripChannel;
+  recipient: DripRecipient;
+  whatsappTemplateKey: string | null;
   subject: string | null;
   body: string;
   enabled: boolean;
@@ -19,6 +30,8 @@ type DraftTemplate = {
   name: string;
   dayOffset: number;
   channel: DripChannel;
+  recipient: DripRecipient;
+  whatsappTemplateKey: string;
   subject: string;
   body: string;
   enabled: boolean;
@@ -28,6 +41,8 @@ const BLANK_DRAFT: DraftTemplate = {
   name: '',
   dayOffset: 1,
   channel: 'EMAIL',
+  recipient: 'GUEST',
+  whatsappTemplateKey: '',
   subject: '',
   body: '',
   enabled: true,
@@ -68,6 +83,8 @@ export default function DripTemplatesSection() {
       name: t.name,
       dayOffset: t.dayOffset,
       channel: t.channel,
+      recipient: t.recipient || 'GUEST',
+      whatsappTemplateKey: t.whatsappTemplateKey || '',
       subject: t.subject || '',
       body: t.body,
       enabled: t.enabled,
@@ -84,6 +101,10 @@ export default function DripTemplatesSection() {
       alert('Name and body are required.');
       return;
     }
+    if (editDraft.channel === 'WHATSAPP' && !editDraft.whatsappTemplateKey) {
+      alert('Pick which approved Meta template this WhatsApp step sends.');
+      return;
+    }
     setBusyId(id);
     try {
       const res = await fetch(`/api/settings/drip-templates/${id}`, {
@@ -93,6 +114,8 @@ export default function DripTemplatesSection() {
           name: editDraft.name.trim(),
           dayOffset: Number(editDraft.dayOffset),
           channel: editDraft.channel,
+          recipient: editDraft.recipient,
+          whatsappTemplateKey: editDraft.channel === 'WHATSAPP' ? editDraft.whatsappTemplateKey || null : null,
           subject: editDraft.channel === 'EMAIL' ? editDraft.subject.trim() || null : null,
           body: editDraft.body,
           enabled: editDraft.enabled,
@@ -147,6 +170,10 @@ export default function DripTemplatesSection() {
       alert('Name and body are required.');
       return;
     }
+    if (draft.channel === 'WHATSAPP' && !draft.whatsappTemplateKey) {
+      alert('Pick which approved Meta template this WhatsApp step sends.');
+      return;
+    }
     setCreating(true);
     try {
       const res = await fetch('/api/settings/drip-templates', {
@@ -156,6 +183,8 @@ export default function DripTemplatesSection() {
           name: draft.name.trim(),
           dayOffset: Number(draft.dayOffset),
           channel: draft.channel,
+          recipient: draft.recipient,
+          whatsappTemplateKey: draft.channel === 'WHATSAPP' ? draft.whatsappTemplateKey || null : null,
           subject: draft.channel === 'EMAIL' ? draft.subject.trim() || null : null,
           body: draft.body,
           enabled: draft.enabled,
@@ -269,6 +298,36 @@ export default function DripTemplatesSection() {
                           />
                         </div>
                       )}
+                      <div>
+                        <label className="label">Recipient</label>
+                        <select
+                          className="select-field"
+                          value={editDraft.recipient}
+                          onChange={(e) =>
+                            setEditDraft({ ...editDraft, recipient: e.target.value as DripRecipient })
+                          }
+                        >
+                          <option value="GUEST">Guest</option>
+                          <option value="VOLUNTEER">Assigned volunteer</option>
+                        </select>
+                      </div>
+                      {editDraft.channel === 'WHATSAPP' && (
+                        <div>
+                          <label className="label">Meta template</label>
+                          <select
+                            className="select-field"
+                            value={editDraft.whatsappTemplateKey}
+                            onChange={(e) =>
+                              setEditDraft({ ...editDraft, whatsappTemplateKey: e.target.value })
+                            }
+                          >
+                            <option value="">— pick approved template —</option>
+                            {WA_TEMPLATE_OPTIONS.map((o) => (
+                              <option key={o.key} value={o.key}>{o.label}</option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
                     </div>
                     <div>
                       <label className="label">Body</label>
@@ -328,6 +387,11 @@ export default function DripTemplatesSection() {
                         >
                           {t.channel}
                         </span>
+                        {t.recipient === 'VOLUNTEER' && (
+                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-100 text-amber-700">
+                            → VOLUNTEER
+                          </span>
+                        )}
                         {!t.enabled && (
                           <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-church-200 text-church-600">
                             DISABLED
@@ -420,6 +484,32 @@ export default function DripTemplatesSection() {
                   onChange={(e) => setDraft({ ...draft, subject: e.target.value })}
                   placeholder="Welcome to {{churchName}}!"
                 />
+              </div>
+            )}
+            <div>
+              <label className="label">Recipient</label>
+              <select
+                className="select-field"
+                value={draft.recipient}
+                onChange={(e) => setDraft({ ...draft, recipient: e.target.value as DripRecipient })}
+              >
+                <option value="GUEST">Guest</option>
+                <option value="VOLUNTEER">Assigned volunteer</option>
+              </select>
+            </div>
+            {draft.channel === 'WHATSAPP' && (
+              <div>
+                <label className="label">Meta template</label>
+                <select
+                  className="select-field"
+                  value={draft.whatsappTemplateKey}
+                  onChange={(e) => setDraft({ ...draft, whatsappTemplateKey: e.target.value })}
+                >
+                  <option value="">— pick approved template —</option>
+                  {WA_TEMPLATE_OPTIONS.map((o) => (
+                    <option key={o.key} value={o.key}>{o.label}</option>
+                  ))}
+                </select>
               </div>
             )}
           </div>

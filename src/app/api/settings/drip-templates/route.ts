@@ -3,6 +3,9 @@ import { prisma } from '@/lib/db';
 import { getSession } from '@/lib/auth';
 import { getPermissionLevel } from '@/lib/roles';
 import { logAudit } from '@/lib/audit';
+import { WA_TEMPLATES } from '@/lib/whatsapp';
+
+const WA_KEYS = Object.keys(WA_TEMPLATES);
 
 async function getCustomRoles() {
   const setting = await prisma.appSetting.findUnique({ where: { key: 'custom_roles' } });
@@ -44,6 +47,8 @@ export async function POST(request: NextRequest) {
   const name = typeof body.name === 'string' ? body.name.trim() : '';
   const dayOffset = Number(body.dayOffset);
   const channel = body.channel;
+  const recipient = body.recipient === 'VOLUNTEER' ? 'VOLUNTEER' : 'GUEST';
+  const whatsappTemplateKey = typeof body.whatsappTemplateKey === 'string' ? body.whatsappTemplateKey : null;
   const subject = typeof body.subject === 'string' ? body.subject.trim() : null;
   const messageBody = typeof body.body === 'string' ? body.body : '';
   const enabled = body.enabled !== false;
@@ -58,12 +63,22 @@ export async function POST(request: NextRequest) {
   if (!messageBody.trim()) {
     return NextResponse.json({ error: 'Body is required' }, { status: 400 });
   }
+  // Run 61: a WhatsApp step must name a real, approved Meta template — no
+  // silent fallback exists anymore (the old Whapi path is gone from drip).
+  if (channel === 'WHATSAPP' && (!whatsappTemplateKey || !WA_KEYS.includes(whatsappTemplateKey))) {
+    return NextResponse.json(
+      { error: `whatsappTemplateKey must be one of: ${WA_KEYS.join(', ')}` },
+      { status: 400 }
+    );
+  }
 
   const created = await (prisma as any).dripTemplate.create({
     data: {
       name,
       dayOffset,
       channel,
+      recipient,
+      whatsappTemplateKey: channel === 'WHATSAPP' ? whatsappTemplateKey : null,
       subject: channel === 'EMAIL' ? subject : null,
       body: messageBody,
       enabled,

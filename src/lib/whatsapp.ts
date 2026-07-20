@@ -11,11 +11,23 @@ const TOKEN = process.env.WHATSAPP_TOKEN;
 // (guest_assignment + role_assignment were created as "English" = en;
 //  the guest-card alert as "English (US)" = en_US. The send code MUST match
 //  the template's language or Meta returns 132001 "template does not exist".)
+//
+// Run 61 — day2FollowUp/day4PastorCheckin/day11InviteBack replace the dead
+// Whapi path for drip WhatsApp. Day 13's drip step reuses day4PastorCheckin
+// (identical approved content, submitted once) rather than getting its own
+// Meta template. lang is 'en' as a placeholder matching the other three —
+// if Meta assigns something else during approval, update the lang here,
+// nothing else needs to change.
 export const WA_TEMPLATES = {
   guestAssignment: { name: 'guest_assignment', lang: 'en' },
   newGuestAlert: { name: 'guest_card_submission_alert_kxmsydplrq', lang: 'en_US' },
   roleAssignment: { name: 'role_assignment', lang: 'en' },
+  day2FollowUp: { name: 'day2_follow_up', lang: 'en' },
+  day4PastorCheckin: { name: 'day4_pastor_checkin', lang: 'en' },
+  day11InviteBack: { name: 'day11_invite_back', lang: 'en' },
 } as const;
+
+export type WaTemplateKey = keyof typeof WA_TEMPLATES;
 
 type WaTemplate = { name: string; lang: string };
 

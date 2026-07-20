@@ -3,6 +3,9 @@ import { prisma } from '@/lib/db';
 import { getSession } from '@/lib/auth';
 import { getPermissionLevel } from '@/lib/roles';
 import { logAudit } from '@/lib/audit';
+import { WA_TEMPLATES } from '@/lib/whatsapp';
+
+const WA_KEYS = Object.keys(WA_TEMPLATES);
 
 async function getCustomRoles() {
   const setting = await prisma.appSetting.findUnique({ where: { key: 'custom_roles' } });
@@ -62,6 +65,23 @@ export async function PUT(
     data.channel = body.channel;
     toggledOnly = false;
   }
+  if (body.recipient !== undefined) {
+    if (body.recipient !== 'GUEST' && body.recipient !== 'VOLUNTEER') {
+      return NextResponse.json({ error: 'recipient must be GUEST or VOLUNTEER' }, { status: 400 });
+    }
+    data.recipient = body.recipient;
+    toggledOnly = false;
+  }
+  if (body.whatsappTemplateKey !== undefined) {
+    if (body.whatsappTemplateKey !== null && !WA_KEYS.includes(body.whatsappTemplateKey)) {
+      return NextResponse.json(
+        { error: `whatsappTemplateKey must be one of: ${WA_KEYS.join(', ')}` },
+        { status: 400 }
+      );
+    }
+    data.whatsappTemplateKey = body.whatsappTemplateKey;
+    toggledOnly = false;
+  }
   if (body.subject !== undefined) {
     data.subject = typeof body.subject === 'string' && body.subject.trim() ? body.subject.trim() : null;
     toggledOnly = false;
@@ -78,6 +98,19 @@ export async function PUT(
   }
   // If channel is being changed to WHATSAPP, force subject null
   if (data.channel === 'WHATSAPP') data.subject = null;
+  // If channel is being changed to EMAIL, no Meta template applies
+  if (data.channel === 'EMAIL') data.whatsappTemplateKey = null;
+
+  // Run 61: whichever fields this request did/didn't touch, the row must
+  // end up consistent — a WHATSAPP row always needs a real template key.
+  const effectiveChannel = data.channel ?? existing.channel;
+  const effectiveWaKey = data.whatsappTemplateKey !== undefined ? data.whatsappTemplateKey : existing.whatsappTemplateKey;
+  if (effectiveChannel === 'WHATSAPP' && (!effectiveWaKey || !WA_KEYS.includes(effectiveWaKey))) {
+    return NextResponse.json(
+      { error: `whatsappTemplateKey must be one of: ${WA_KEYS.join(', ')}` },
+      { status: 400 }
+    );
+  }
 
   const updated = await (prisma as any).dripTemplate.update({
     where: { id: params.id },

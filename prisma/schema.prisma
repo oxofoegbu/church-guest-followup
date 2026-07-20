@@ -426,16 +426,29 @@ enum DripStepStatus {
   SKIPPED
 }
 
+// Run 61 — who a drip step actually goes to. Defaults to GUEST so every
+// pre-existing row keeps its current behavior with no data migration
+// required. WHATSAPP steps also carry whatsappTemplateKey, the key into
+// WA_TEMPLATES (src/lib/whatsapp.ts) used to send via the Meta Cloud API —
+// replaces the dead Whapi path. Null/unset on EMAIL rows and on any
+// WHATSAPP row that hasn't been assigned a Meta template yet.
+enum DripRecipient {
+  GUEST
+  VOLUNTEER
+}
+
 model DripTemplate {
-  id        String      @id @default(cuid())
-  name      String
-  dayOffset Int
-  channel   DripChannel
-  subject   String?
-  body      String
-  enabled   Boolean     @default(true)
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  id                  String         @id @default(cuid())
+  name                String
+  dayOffset           Int
+  channel             DripChannel
+  recipient           DripRecipient  @default(GUEST)
+  whatsappTemplateKey String?
+  subject             String?
+  body                String
+  enabled             Boolean        @default(true)
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
 
   guestDripSteps GuestDripStep[]
 

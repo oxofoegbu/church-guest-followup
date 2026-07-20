@@ -4,7 +4,15 @@
  * Daily cron at 14:00 UTC. Picks up all PENDING GuestDripSteps whose
  * scheduledFor <= now(), applies the safety filters (guest.dripEnabled,
  * guest.dripPausedAt, dripTemplate.enabled, template deletion), renders the
- * template, and sends via Resend (EMAIL) or Whapi (WHATSAPP).
+ * template, and sends via Resend (EMAIL) or the Meta Cloud API (WHATSAPP).
+ *
+ * Run 61: WhatsApp drip sends moved off the dead Whapi gateway onto the
+ * same Meta Cloud API path guest_assignment/role_assignment already use
+ * (src/lib/whatsapp.ts). A WHATSAPP-channel DripTemplate now also carries
+ * `recipient` (GUEST or VOLUNTEER — who actually receives it) and
+ * `whatsappTemplateKey` (which approved Meta template to send). A WhatsApp
+ * step with no whatsappTemplateKey assigned is SKIPPED rather than
+ * silently falling back to anything — there is no more Whapi fallback.
  *
  * Run 6 additions:
  *   - Fetches `church_name` from AppSetting ONCE at the start of the run
@@ -56,10 +64,42 @@ import {
   renderMustache,
   buildDripEmailHtml,
   sendDripEmail,
-  sendDripWhatsApp,
   resolveDripVars,
   DEFAULT_CHURCH_NAME,
 } from '@/lib/drip-sender';
+// Run 61 — drip WhatsApp moved off the dead Whapi gateway onto the same
+// Meta Cloud API path guest_assignment/role_assignment already use.
+import { sendWhatsAppTemplate, WA_TEMPLATES, type WaTemplateKey } from '@/lib/whatsapp';
+
+// Run 61 — exact param order for each approved Meta template, built from
+// the same MustacheVars resolveDripVars already produces. Keep this in
+// sync with the template body submitted in WhatsApp Manager: Meta sends
+// {{1}}, {{2}}, ... in array order, no names.
+function buildWaParams(key: WaTemplateKey, vars: Record<string, string>): string[] {
+  switch (key) {
+    case 'day2FollowUp':
+      return [vars.volunteerName, vars.firstName, vars.firstName];
+    case 'day4PastorCheckin':
+      return [vars.firstName, vars.churchName];
+    case 'day11InviteBack':
+      return [vars.volunteerName, vars.firstName];
+    default:
+      // guestAssignment/newGuestAlert/roleAssignment aren't sent from the
+      // drip path — reaching here means a template row's key is stale.
+      return [];
+  }
+}
+
+// Run 61 — plain lookup instead of `key in WA_TEMPLATES`, so there's no
+// dependence on TS narrowing a nullable key across a negated `||`.
+// Returns null for anything not a real, known key (missing, stale, typo'd
+// via direct DB edit, etc.) — callers treat null as "no template assigned".
+function resolveWaTemplate(rawKey: string | null): { key: WaTemplateKey; entry: { name: string; lang: string } } | null {
+  if (!rawKey) return null;
+  const entry = (WA_TEMPLATES as Record<string, { name: string; lang: string }>)[rawKey];
+  if (!entry) return null;
+  return { key: rawKey as WaTemplateKey, entry };
+}
 
 type SendOutcome =
   | {
@@ -174,7 +214,7 @@ export async function GET(request: NextRequest) {
       include: {
         guest: {
           include: {
-            assignedVolunteer: { select: { id: true, name: true } },
+            assignedVolunteer: { select: { id: true, name: true, phone: true, email: true } },
           },
         },
         dripTemplate: true,
@@ -225,20 +265,50 @@ export async function GET(request: NextRequest) {
         continue;
       }
 
-      // ── Validate contact info for this channel
+      // ── Filter 5: WhatsApp step with no Meta template selected → SKIP
+      // (Run 61: no more silent Whapi fallback — if a template hasn't been
+      // wired to an approved Meta template, don't guess, don't send.)
       const channel: 'EMAIL' | 'WHATSAPP' = template.channel;
-      if (channel === 'EMAIL' && !guest.email) {
+      const waResolved = resolveWaTemplate(template.whatsappTemplateKey ?? null);
+      if (channel === 'WHATSAPP' && !waResolved) {
         await (prisma as any).guestDripStep.update({
           where: { id: step.id },
-          data: { status: 'SKIPPED', errorMessage: 'Guest has no email address' },
+          data: { status: 'SKIPPED', errorMessage: 'No Meta WhatsApp template assigned to this drip step' },
         });
         skipped++;
         continue;
       }
-      if (channel === 'WHATSAPP' && !guest.phone) {
+
+      // ── Validate contact info for this channel, for the actual
+      // recipient (Run 61: GUEST or VOLUNTEER, not always the guest).
+      const recipient: 'GUEST' | 'VOLUNTEER' = template.recipient || 'GUEST';
+      const volunteer = guest.assignedVolunteer;
+
+      if (recipient === 'VOLUNTEER' && !volunteer) {
         await (prisma as any).guestDripStep.update({
           where: { id: step.id },
-          data: { status: 'SKIPPED', errorMessage: 'Guest has no phone number' },
+          data: { status: 'SKIPPED', errorMessage: 'No volunteer assigned to this guest' },
+        });
+        skipped++;
+        continue;
+      }
+
+      const contactEmail = recipient === 'VOLUNTEER' ? volunteer?.email : guest.email;
+      const contactPhone = recipient === 'VOLUNTEER' ? volunteer?.phone : guest.phone;
+      const contactLabel = recipient === 'VOLUNTEER' ? 'Assigned volunteer' : 'Guest';
+
+      if (channel === 'EMAIL' && !contactEmail) {
+        await (prisma as any).guestDripStep.update({
+          where: { id: step.id },
+          data: { status: 'SKIPPED', errorMessage: `${contactLabel} has no email address` },
+        });
+        skipped++;
+        continue;
+      }
+      if (channel === 'WHATSAPP' && !contactPhone) {
+        await (prisma as any).guestDripStep.update({
+          where: { id: step.id },
+          data: { status: 'SKIPPED', errorMessage: `${contactLabel} has no phone number` },
         });
         skipped++;
         continue;
@@ -254,7 +324,9 @@ export async function GET(request: NextRequest) {
       const outcome: SendOutcome = await sendOne({
         channel,
         template,
-        guest,
+        contactEmail,
+        contactPhone,
+        waResolved,
         vars,
         dryRun,
         churchName,
@@ -380,12 +452,14 @@ export async function GET(request: NextRequest) {
 async function sendOne(args: {
   channel: 'EMAIL' | 'WHATSAPP';
   template: any;
-  guest: any;
+  contactEmail: string | null | undefined;
+  contactPhone: string | null | undefined;
+  waResolved: { key: WaTemplateKey; entry: { name: string; lang: string } } | null;
   vars: Record<string, string>;
   dryRun: boolean;
   churchName: string;
 }): Promise<SendOutcome> {
-  const { channel, template, guest, vars, dryRun, churchName } = args;
+  const { channel, template, contactEmail, contactPhone, waResolved, vars, dryRun, churchName } = args;
 
   if (channel === 'EMAIL') {
     const subject = renderMustache(
@@ -399,7 +473,7 @@ async function sendOne(args: {
 
     if (dryRun) {
       console.log('[drip-executor][DRY RUN] EMAIL', {
-        to: guest.email,
+        to: contactEmail,
         subject,
         bodyPreview: bodyPlain.slice(0, 200),
       });
@@ -412,7 +486,7 @@ async function sendOne(args: {
     }
 
     const result = await sendDripEmail({
-      to: guest.email,
+      to: contactEmail as string,
       subject,
       html,
       fromNameOverride: churchName,
@@ -433,36 +507,53 @@ async function sendOne(args: {
     };
   }
 
-  // WHATSAPP
-  const body = renderMustache(template.body || '', vars, { escape: 'none' });
+  // WHATSAPP — Run 61: Meta Cloud API via the same sender/registry
+  // guest_assignment and role_assignment already use successfully.
+  // waResolved is guaranteed non-null here (Filter 5 skips otherwise) —
+  // but sendOne doesn't re-derive that guarantee itself, so guard for real
+  // rather than casting past it.
+  if (!waResolved) {
+    return {
+      kind: 'failed',
+      errorMessage: 'No Meta WhatsApp template resolved for this step',
+      renderedSubject: null,
+      renderedBody: renderMustache(template.body || '', vars, { escape: 'none' }),
+    };
+  }
+  const params = buildWaParams(waResolved.key, vars);
+  // bodyRendered is for DripSendLog/audit only — a human-readable render
+  // of what was actually submitted, since Meta template sends don't have
+  // a single "body string" the way email/Whapi did.
+  const bodyRendered = renderMustache(template.body || '', vars, { escape: 'none' });
 
   if (dryRun) {
     console.log('[drip-executor][DRY RUN] WHATSAPP', {
-      toPhone: guest.phone,
-      bodyPreview: body.slice(0, 200),
+      toPhone: contactPhone,
+      template: waResolved.entry.name,
+      params,
     });
     return {
       kind: 'sent',
       providerMessageId: null,
       renderedSubject: null,
-      renderedBody: body,
+      renderedBody: bodyRendered,
     };
   }
 
-  const result = await sendDripWhatsApp({ toPhone: guest.phone, body });
+  const result = await sendWhatsAppTemplate(contactPhone as string, waResolved.entry, params);
   if (result.error) {
     return {
       kind: 'failed',
       errorMessage: result.error,
       renderedSubject: null,
-      renderedBody: body,
+      renderedBody: bodyRendered,
     };
   }
   return {
     kind: 'sent',
     providerMessageId: result.id || null,
     renderedSubject: null,
-    renderedBody: body,
+    renderedBody: bodyRendered,
   };
 }
 
