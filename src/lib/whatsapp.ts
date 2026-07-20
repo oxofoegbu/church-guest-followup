@@ -18,12 +18,20 @@ const TOKEN = process.env.WHATSAPP_TOKEN;
 // Meta template. lang is 'en' as a placeholder matching the other three —
 // if Meta assigns something else during approval, update the lang here,
 // nothing else needs to change.
+//
+// Run 62 — day4PastorCheckin's real Meta name is day4_pastor_checkingin,
+// not day4_pastor_checkin. Meta rejected the original as Utility (bumped
+// it to Marketing, as flagged during Run 61 scoping); Okezie deleted that
+// submission and resubmitted under a new name, since Meta blocks reusing a
+// deleted template's exact name right away. Category is Marketing on
+// Meta's side now — no code-side effect, the send call is identical either
+// way, this is purely which approved template it points at.
 export const WA_TEMPLATES = {
   guestAssignment: { name: 'guest_assignment', lang: 'en' },
   newGuestAlert: { name: 'guest_card_submission_alert_kxmsydplrq', lang: 'en_US' },
   roleAssignment: { name: 'role_assignment', lang: 'en' },
   day2FollowUp: { name: 'day2_follow_up', lang: 'en' },
-  day4PastorCheckin: { name: 'day4_pastor_checkin', lang: 'en' },
+  day4PastorCheckin: { name: 'day4_pastor_checkingin', lang: 'en' },
   day11InviteBack: { name: 'day11_invite_back', lang: 'en' },
 } as const;
 

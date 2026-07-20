@@ -8,7 +8,7 @@ type DripRecipient = 'GUEST' | 'VOLUNTEER';
 // validates the real list server-side; this is just the picker's labels.
 const WA_TEMPLATE_OPTIONS: { key: string; label: string }[] = [
   { key: 'day2FollowUp', label: 'day2_follow_up — "Hi {{volunteerName}}, it\'s been 24 hours…"' },
-  { key: 'day4PastorCheckin', label: 'day4_pastor_checkin — "Hi {{firstName}}! This is Pastor O…"' },
+  { key: 'day4PastorCheckin', label: 'day4_pastor_checkingin — "Hi {{firstName}}! This is Pastor O…"' },
   { key: 'day11InviteBack', label: 'day11_invite_back — "Hi {{volunteerName}} this is a gentle reminder…"' },
 ];
 
