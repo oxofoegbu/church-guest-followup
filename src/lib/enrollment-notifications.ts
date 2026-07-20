@@ -24,6 +24,10 @@ type RequestInfo = {
   // Run 29 -- Leaders Track (/leaders) applications
   callingNote?: string | null;   // "why do you sense God calling you to lead?"
   isLeaders?: boolean;           // reference leader lives in invitedBy; alert leaders_team_email
+  // Run 60 -- Welcome Track (/begin) discipler preference
+  disciplerPreferenceLabel?: string | null;
+  requestedDisciplerName?: string | null;
+  requestedDisciplerContact?: string | null;
 };
 
 async function getChurchName(): Promise<string> {
@@ -128,12 +132,18 @@ export async function notifyAdminsOfEnrollmentRequest(info: RequestInfo): Promis
     const callingHtml = info.callingNote
       ? `<div style="background:#f9fafb;border-left:3px solid #b0894f;padding:10px 14px;margin:12px 0;color:#374151;"><p style="margin:0;font-size:13px;color:#6b7280;">Why they sense a call to lead:</p><p style="margin:4px 0 0;">${esc(info.callingNote)}</p></div>`
       : '';
+    // Run 60 -- /begin's optional discipler preference. A request for the
+    // pastoral team to honor during normal review, not an auto-assignment.
+    const disciplerHtml = info.disciplerPreferenceLabel
+      ? `<div style="background:#f0fdf4;border-left:3px solid #16a34a;padding:10px 14px;margin:12px 0;color:#374151;"><p style="margin:0;font-size:13px;color:#6b7280;">Discipler preference:</p><p style="margin:4px 0 0;">${esc(info.disciplerPreferenceLabel)}${info.requestedDisciplerName ? ` \u2014 <strong>${esc(info.requestedDisciplerName)}</strong>${info.requestedDisciplerContact ? ` (${esc(info.requestedDisciplerContact)})` : ''}` : ''}</p></div>`
+      : '';
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 560px;">
         <h2 style="color:#1f2937;">${info.interest ? 'Disciplers Track \u2014 interest conversation' : 'New enrollment request'}</h2>
         ${leadHtml}
         ${invitedByHtml}
         ${callingHtml}
+        ${disciplerHtml}
         ${info.audienceLabel ? `<p style="margin:4px 0;color:#374151;">They describe themselves as: <em>${esc(info.audienceLabel)}</em></p>` : ''}
         ${info.shareNote ? `<div style="background:#f9fafb;border-left:3px solid #b45309;padding:10px 14px;margin:12px 0;color:#374151;"><p style="margin:0;font-size:13px;color:#6b7280;">They shared:</p><p style="margin:4px 0 0;">${esc(info.shareNote)}</p></div>` : ''}
         <p><a href="${reviewUrl}" style="background:#b45309;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none;">Review requests</a></p>

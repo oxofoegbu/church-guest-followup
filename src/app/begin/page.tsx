@@ -61,6 +61,10 @@ const FAQS = [
     q: 'Do I have to join anything?',
     a: 'No. The Welcome Track ends with an invitation, not an obligation. Come and see — what you do with it is entirely yours to decide.',
   },
+  {
+    q: 'What’s a discipler, exactly?',
+    a: 'A friend a step or two ahead on the journey — not a teacher, not a boss, just company for the road. They walk with you through the Welcome Track, answer questions, and pray with you. Whether you’d like one is entirely your call, and you can say so (or change your mind) on the sign-up form below.',
+  },
 ];
 
 function cohortLabel(c: Cohort): string {
@@ -94,6 +98,10 @@ export default function BeginPage() {
   const [cohortId, setCohortId] = useState<string>('');
   const [shareNote, setShareNote] = useState('');
   const [honeypot, setHoneypot] = useState('');
+  // Run 60 -- optional discipler preference
+  const [disciplerPreference, setDisciplerPreference] = useState<string | null>(null);
+  const [requestedDisciplerName, setRequestedDisciplerName] = useState('');
+  const [requestedDisciplerContact, setRequestedDisciplerContact] = useState('');
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -134,6 +142,9 @@ export default function BeginPage() {
           audience: audience || null,
           cohortId: cohortId || null,
           shareNote,
+          disciplerPreference,
+          requestedDisciplerName: disciplerPreference === 'REQUEST_SPECIFIC' ? requestedDisciplerName : '',
+          requestedDisciplerContact: disciplerPreference === 'REQUEST_SPECIFIC' ? requestedDisciplerContact : '',
           website: honeypot,
         }),
       });
@@ -287,6 +298,23 @@ export default function BeginPage() {
 
         {/* ---- D. What it's really about (the heart) ---- */}
       </div>
+
+      {/* ---- The Well — a wordless breather (Run 60) ---- */}
+      <div style={{ height: 'min(56vw, 440px)', minHeight: 260, overflow: 'hidden' }}>
+        <img
+          src="/begin/well-breather.webp"
+          srcSet="/begin/well-breather.webp 1672w, /begin/well-breather-800.webp 800w"
+          sizes="100vw"
+          alt=""
+          aria-hidden="true"
+          width={1672}
+          height={941}
+          loading="lazy"
+          decoding="async"
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 58%', display: 'block' }}
+        />
+      </div>
+
       <section className="px-6 py-16 sm:py-20" style={{ background: C.midnight }}>
         <div className="mx-auto max-w-2xl text-center">
           <p className={`${garamond.className} text-2xl sm:text-[1.7rem] italic leading-relaxed`} style={{ color: C.cream }}>
@@ -476,11 +504,69 @@ export default function BeginPage() {
                       className={input} style={inputStyle} placeholder="We’d be honored to." />
                   </div>
 
+                  {/* ---- Discipler preference (Run 60) ---- */}
+                  <div className="pt-1 mt-1 border-t" style={{ borderColor: C.sand }}>
+                    <div className="rounded-lg border px-4 py-3.5 mb-3 mt-5" style={{ borderColor: C.sand, background: '#FFFDF8' }}>
+                      <p className={`${garamond.className} text-lg mb-1`} style={{ color: C.navy }}>Would you like a discipler?</p>
+                      <p className="text-sm leading-relaxed" style={{ color: '#4b463f' }}>
+                        A discipler is a friend a step or two ahead on the journey — someone who walks with
+                        you through the Welcome Track, answers questions, and prays with you. It’s not a
+                        teacher or a boss; it’s company for the road. Totally your call.
+                      </p>
+                    </div>
+                    <fieldset>
+                      <legend className="sr-only">Would you like a discipler?</legend>
+                      <div className="space-y-2">
+                        {[
+                          { code: 'ASSIGN', title: 'Yes — please pair me with someone', sub: 'We’ll thoughtfully match you with one of our disciplers.' },
+                          { code: 'NONE', title: 'Not right now', sub: 'You can always ask for one later.' },
+                          { code: 'REQUEST_SPECIFIC', title: 'I’d love to request someone specific', sub: 'Tell us who — we’ll do our best to make it happen.' },
+                        ].map(opt => (
+                          <label key={opt.code}
+                            className="flex cursor-pointer items-start gap-3 rounded-lg border bg-white px-4 py-3 text-sm transition-colors"
+                            style={{ borderColor: disciplerPreference === opt.code ? C.gold : C.sand }}
+                          >
+                            <input type="radio" name="disciplerPreference" value={opt.code}
+                              checked={disciplerPreference === opt.code}
+                              onChange={() => setDisciplerPreference(disciplerPreference === opt.code ? null : opt.code)}
+                              onClick={() => { if (disciplerPreference === opt.code) setDisciplerPreference(null); }}
+                              className="mt-0.5 accent-[#B0894F]" />
+                            <span>
+                              <span className="block font-bold" style={{ color: C.ink }}>{opt.title}</span>
+                              <span className="block text-xs opacity-70 mt-0.5">{opt.sub}</span>
+                            </span>
+                          </label>
+                        ))}
+                      </div>
+                    </fieldset>
+
+                    {disciplerPreference === 'REQUEST_SPECIFIC' && (
+                      <div className="mt-2 ml-1 rounded-lg border border-dashed px-4 py-3.5" style={{ borderColor: C.gold, background: '#FFFDF8' }}>
+                        <label htmlFor="begin-discipler-name" className={label} style={{ color: C.navy }}>
+                          Who would you like?
+                        </label>
+                        <input id="begin-discipler-name" required={disciplerPreference === 'REQUEST_SPECIFIC'}
+                          value={requestedDisciplerName} onChange={e => setRequestedDisciplerName(e.target.value)}
+                          maxLength={120} className={input} style={inputStyle} placeholder="Their name" />
+                        <label htmlFor="begin-discipler-contact" className={`${label} mt-3`} style={{ color: C.navy }}>
+                          How can we reach them? <span className="font-normal opacity-60">(optional)</span>
+                        </label>
+                        <input id="begin-discipler-contact"
+                          value={requestedDisciplerContact} onChange={e => setRequestedDisciplerContact(e.target.value)}
+                          maxLength={200} className={input} style={inputStyle} placeholder="Email or phone, if you have it" />
+                        <p className="mt-2.5 text-xs leading-relaxed opacity-70">
+                          A request, not a promise — we’ll check in with them and do our best. If it can’t
+                          be them this time, we’ll find you someone wonderful.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
                   {error && <p role="alert" className="text-sm" style={{ color: '#9b3535' }}>{error}</p>}
 
                   <button
                     type="submit"
-                    disabled={submitting || !open || !firstName.trim() || !email.trim()}
+                    disabled={submitting || !open || !firstName.trim() || !email.trim() || (disciplerPreference === 'REQUEST_SPECIFIC' && !requestedDisciplerName.trim())}
                     className="w-full rounded-lg px-8 py-3.5 text-base font-bold transition-opacity hover:opacity-90 disabled:opacity-50"
                     style={{ background: C.navy, color: C.cream }}
                   >

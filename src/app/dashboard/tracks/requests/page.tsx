@@ -20,6 +20,10 @@ type EnrollmentRequest = {
   invitedBy: string | null; intent: string | null;
   // Run 29 -- Leaders Track (/leaders) extra
   callingNote: string | null;
+  // Run 60 -- Welcome Track (/begin) discipler preference
+  disciplerPreference: string | null;
+  requestedDisciplerName: string | null;
+  requestedDisciplerContact: string | null;
   track: { id: string; name: string; slug: string };
   cohort: { id: string; name: string; meetingDay: string | null; meetingTime: string | null } | null;
   matchedUser: { id: string; name: string } | null;
@@ -55,6 +59,13 @@ const AUDIENCE_LABELS: Record<string, string> = {
 
 const WELCOME_SLUG = 'welcome-track';
 const LEADERS_SLUG = 'leaders-track'; // Run 29 -- invitedBy is a reference leader here
+
+// Run 60 -- /begin's optional discipler preference
+const DISCIPLER_PREFERENCE_LABELS: Record<string, string> = {
+  ASSIGN: 'Yes \u2014 please pair me with someone',
+  NONE: 'Not right now',
+  REQUEST_SPECIFIC: 'Requested someone specific',
+};
 
 export default function EnrollmentRequestsPage() {
   const [requests, setRequests] = useState<EnrollmentRequest[]>([]);
@@ -218,6 +229,18 @@ export default function EnrollmentRequestsPage() {
                   {r.shareNote && (
                     <div className="mt-2 text-sm text-church-700 bg-amber-50 border-l-2 border-amber-300 rounded-r px-3 py-2">
                       <span className="text-church-400">💬 They shared:</span> {r.shareNote}
+                    </div>
+                  )}
+                  {r.disciplerPreference && (
+                    <div className="mt-2 text-sm text-church-700 bg-green-50 border-l-2 border-green-300 rounded-r px-3 py-2">
+                      <span className="text-church-400">🤝 Discipler preference:</span>{' '}
+                      {DISCIPLER_PREFERENCE_LABELS[r.disciplerPreference] || r.disciplerPreference}
+                      {r.requestedDisciplerName && (
+                        <>
+                          {' '}&mdash; <span className="font-semibold">{r.requestedDisciplerName}</span>
+                          {r.requestedDisciplerContact ? ` (${r.requestedDisciplerContact})` : ''}
+                        </>
+                      )}
                     </div>
                   )}
                   <p className="text-xs text-church-400 mt-1.5">

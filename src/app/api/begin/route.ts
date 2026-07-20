@@ -39,6 +39,12 @@ export async function POST(request: NextRequest) {
     const cohortId = parsed.data.cohortId || null;
     const audience = parsed.data.audience || null;
     const shareNote = parsed.data.shareNote?.trim() || null;
+    // Run 60 -- discipler preference. requestedDisciplerName/Contact only
+    // ever persist when the preference is REQUEST_SPECIFIC, regardless of
+    // what the client sent, so a stray value can't linger against ASSIGN/NONE.
+    const disciplerPreference = parsed.data.disciplerPreference || null;
+    const requestedDisciplerName = disciplerPreference === 'REQUEST_SPECIFIC' ? (parsed.data.requestedDisciplerName?.trim() || null) : null;
+    const requestedDisciplerContact = disciplerPreference === 'REQUEST_SPECIFIC' ? (parsed.data.requestedDisciplerContact?.trim() || null) : null;
 
     // Opportunistic sweep of stale unverified rows (no cron needed)
     await (prisma as any).enrollmentRequest.deleteMany({
@@ -118,6 +124,9 @@ export async function POST(request: NextRequest) {
       matchedUserId: matchedUser?.id || null,
       audience,
       shareNote,
+      disciplerPreference,
+      requestedDisciplerName,
+      requestedDisciplerContact,
     };
 
     const now = Date.now();

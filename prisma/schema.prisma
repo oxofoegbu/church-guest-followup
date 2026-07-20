@@ -710,6 +710,15 @@ model EnrollmentRequest {
   intent          String?   // null = enrollment request | INTEREST = conversation only (never approvable)
   // Run 29 -- Leaders Track /leaders page: "why do you sense God calling you to lead?"
   callingNote     String?
+  // Run 60 -- Welcome Track /begin page: an optional, non-binding discipler
+  // preference captured at signup. ASSIGN | NONE | REQUEST_SPECIFIC (kept as
+  // a plain string, same convention as audience/status -- validated in zod).
+  // requestedDisciplerName/Contact are only ever set when the preference is
+  // REQUEST_SPECIFIC. This is a REQUEST for the pastoral team to honor during
+  // normal review -- never auto-assigned. See src/lib/enroll.ts.
+  disciplerPreference       String?
+  requestedDisciplerName    String?
+  requestedDisciplerContact String?
   // Run 14 — email OTP verification (requests start UNVERIFIED; the admin
   // queue only ever sees requests that verified their email)
   verifyCodeHash  String?

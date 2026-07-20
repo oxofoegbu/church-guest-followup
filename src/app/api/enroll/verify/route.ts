@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
-import { hashOtpCode, OTP_MAX_ATTEMPTS, beginAudienceLabel, DISCIPLER_TRACK_SLUG, LEADERS_TRACK_SLUG } from '@/lib/enroll';
+import { hashOtpCode, OTP_MAX_ATTEMPTS, beginAudienceLabel, DISCIPLER_TRACK_SLUG, LEADERS_TRACK_SLUG, DISCIPLER_PREFERENCE_LABELS } from '@/lib/enroll';
 import { notifyAdminsOfEnrollmentRequest } from '@/lib/enrollment-notifications';
 
 // Run 14 — public endpoint, step 2 of self-enrollment.
@@ -78,6 +78,10 @@ export async function POST(request: NextRequest) {
       // the leaders_team_email recipients are alerted alongside the admins.
       callingNote: req.callingNote || null,
       isLeaders: req.track.slug === LEADERS_TRACK_SLUG,
+      // Run 60 -- /begin's optional discipler preference
+      disciplerPreferenceLabel: req.disciplerPreference ? (DISCIPLER_PREFERENCE_LABELS[req.disciplerPreference] || null) : null,
+      requestedDisciplerName: req.requestedDisciplerName || null,
+      requestedDisciplerContact: req.requestedDisciplerContact || null,
     });
 
     return NextResponse.json({ ok: true });

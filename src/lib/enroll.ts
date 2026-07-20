@@ -126,6 +126,19 @@ export function beginAudienceLabel(code?: string | null): string | null {
   );
 }
 
+// Run 60 -- /begin's optional discipler preference. A REQUEST captured at
+// signup, not an assignment -- the pastoral team honors it during normal
+// review via the existing admin/approval + DisciplerNote machinery. Never
+// auto-assign from requestedDisciplerName.
+export const DISCIPLER_PREFERENCES = ['ASSIGN', 'NONE', 'REQUEST_SPECIFIC'] as const;
+export type DisciplerPreference = (typeof DISCIPLER_PREFERENCES)[number];
+
+export const DISCIPLER_PREFERENCE_LABELS: Record<string, string> = {
+  ASSIGN: 'Yes \u2014 please pair me with someone',
+  NONE: 'Not right now',
+  REQUEST_SPECIFIC: 'Requested someone specific',
+};
+
 // Begin form: warmer and leaner than /enroll -- last name is optional
 // (stored as '' when omitted), plus the optional audience + share/prayer note.
 export const beginRequestSchema = z.object({
@@ -136,5 +149,15 @@ export const beginRequestSchema = z.object({
   phone: z.string().trim().max(40).optional().or(z.literal('')),
   audience: z.enum(['FIRST_TIME', 'RETURNING', 'MEMBER', 'EXPLORING']).nullable().optional(),
   shareNote: z.string().trim().max(1000).optional().or(z.literal('')),
+  // Run 60 -- optional discipler preference (see DISCIPLER_PREFERENCES).
+  // requestedDisciplerName is required by the page's own UI when
+  // REQUEST_SPECIFIC is chosen; enforced again here so a tampered request
+  // can't skip it.
+  disciplerPreference: z.enum(DISCIPLER_PREFERENCES).nullable().optional(),
+  requestedDisciplerName: z.string().trim().max(120).optional().or(z.literal('')),
+  requestedDisciplerContact: z.string().trim().max(200).optional().or(z.literal('')),
   website: z.string().optional(), // honeypot -- humans never fill this
-});
+}).refine(
+  (data) => data.disciplerPreference !== 'REQUEST_SPECIFIC' || !!(data.requestedDisciplerName && data.requestedDisciplerName.trim()),
+  { message: 'Please tell us who you\u2019d like to request.', path: ['requestedDisciplerName'] }
+);
