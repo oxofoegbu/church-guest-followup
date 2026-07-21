@@ -1,0 +1,1249 @@
+{
+  "run": 63,
+  "note": "Practicing His Presence (Game With Minutes) — content-only additions.",
+  "modules": [
+    {
+      "id": "wel_m3",
+      "content": {
+        "version": 2,
+        "blocks": [
+          {
+            "type": "bigIdea",
+            "text": "Becoming an apprentice of Jesus — letting Him train and re-form us from the inside, one day at a time."
+          },
+          {
+            "type": "heading",
+            "text": "Overview"
+          },
+          {
+            "type": "paragraph",
+            "text": "If Jesus is who we said He is in Module 2 — God's love in person, the master of life, the one we're all becoming — then the natural response is to follow Him. But what does that actually look like on a Tuesday? This module is about the what and the how of following Jesus, and it clears away one of the most exhausting misunderstandings in all of religion."
+          },
+          {
+            "type": "heading",
+            "text": "Following Is Personal, Daily, and Continuous"
+          },
+          {
+            "type": "paragraph",
+            "text": "Following Jesus begins with a decision — a turning of the heart toward Him. But it does not end there. It is personal and intimate (it's a relationship, not a subscription). It is daily (“let him… take up his cross daily, and follow Me,” Luke 9:23). And it is continuous — you will fall many times, and you will get back up, and keep walking. Falling is not the opposite of following. Struggle in the direction of Jesus is discipleship. God is not grading your distance; He is reading your direction."
+          },
+          {
+            "type": "prompt",
+            "id": "wt3_fill_daily",
+            "question": "✎ Fill-in: Following Jesus is a decision, and then it is ____ and ____.",
+            "hint": "Answer: daily; continuous"
+          },
+          {
+            "type": "heading",
+            "text": "Not Willpower. Not Earning. Apprenticeship."
+          },
+          {
+            "type": "paragraph",
+            "text": "Here is the misunderstanding we most want to free you from. Following Jesus is not white-knuckling your way through a list of commands so that God will finally approve of you. That road leads to either pride or despair."
+          },
+          {
+            "type": "paragraph",
+            "text": "Dallas Willard said it perfectly: “Grace is not opposed to effort; it is opposed to earning.” We do put in effort — real effort — but not to earn anything. We already have God's love in Jesus. The effort is the effort of an apprentice learning from a master. As Jesus said, “Everyone who is perfectly trained will be like his teacher” (Luke 6:40). To follow Jesus is to apprentice your whole life to Him."
+          },
+          {
+            "type": "heading",
+            "text": "The Commands Are Training, Not a Test"
+          },
+          {
+            "type": "paragraph",
+            "text": "So why bother obeying Jesus' instructions at all, if we're not earning anything? Think about a gym."
+          },
+          {
+            "type": "heading",
+            "text": "The Illustration: The Trainer's Reps"
+          },
+          {
+            "type": "paragraph",
+            "text": "Imagine you hire a personal trainer. He says: ten reps of curls, twenty of squats, hold this plank. Now — do you earn his love by finishing the reps? Of course not. Does he love you more at rep ten than rep one? No. So why the reps at all? Because that is how he trains you. The reps are not a test you pass; they are the means by which your body is slowly, physically re-made. Strength you didn't have becomes strength you do."
+          },
+          {
+            "type": "paragraph",
+            "text": "The commands and practices of Jesus — forgiving, praying, giving, resting, telling the truth, loving your enemy — work exactly the same way. They are not a test to earn God's approval. They are the spiritual exercises by which Jesus re-wires you from the inside, until His character becomes your character. As the BECOME® workbook puts it: you practice — He transforms — and together, you become like Him."
+          },
+          {
+            "type": "prompt",
+            "id": "wt3_fill_means",
+            "question": "✎ Fill-in: The instructions of Jesus are not a test to pass, but the ____ by which He re-wires us.",
+            "hint": "Answer: means / training"
+          },
+          {
+            "type": "heading",
+            "text": "How Transformation Happens: Vision, Intention, Means"
+          },
+          {
+            "type": "paragraph",
+            "text": "Dallas Willard described the path of real change with three simple words:"
+          },
+          {
+            "type": "list",
+            "items": [
+              "Vision — I see the kind of person Jesus is offering to make me (patient, unafraid, full of love). I want it.",
+              "Intention — I actually decide to become that, and give my yes to Jesus.",
+              "Means — I take up the everyday practices — being with Jesus, Scripture, prayer, community, obedience — that let Him do the forming."
+            ]
+          },
+          {
+            "type": "lesson",
+            "text": "The focus is never merely on the behavior. The focus is on who you are becoming — the kind of person you are turning into: more patient, more kind, more peaceful, more free, more courageous for good. Behavior is the fruit. Character is the tree. Jesus is making the tree good."
+          },
+          {
+            "type": "heading",
+            "text": "Fill-In Reflections"
+          },
+          {
+            "type": "prompt",
+            "id": "wt3_fill_earning",
+            "question": "1. Grace is not opposed to effort; it is opposed to ____.",
+            "hint": "Answer: earning"
+          },
+          {
+            "type": "prompt",
+            "id": "wt3_fill_apprentice",
+            "question": "2. To follow Jesus is to become His ____ — a student who will become like his teacher.",
+            "hint": "Answer: apprentice"
+          },
+          {
+            "type": "prompt",
+            "id": "wt3_fill_train",
+            "question": "3. The disciplines are like a trainer's reps: not to earn love, but to ____ us.",
+            "hint": "Answer: train / re-wire"
+          },
+          {
+            "type": "prompt",
+            "id": "wt3_fill_person",
+            "question": "4. The focus is not just behavior, but the kind of ____ we are becoming.",
+            "hint": "Answer: person"
+          },
+          {
+            "type": "heading",
+            "text": "Discussion Questions"
+          },
+          {
+            "type": "prompt",
+            "id": "wt3_dq1",
+            "question": "1. Have you ever experienced faith as earning God's approval? What did that do to you?"
+          },
+          {
+            "type": "prompt",
+            "id": "wt3_dq2",
+            "question": "2. What's your honest reaction to “grace is not opposed to effort, but to earning”?"
+          },
+          {
+            "type": "prompt",
+            "id": "wt3_dq3",
+            "question": "3. The trainer's reps: which “rep” of Jesus (forgiving, praying, resting, truth-telling, loving an enemy) feels most like a stretch for you right now?"
+          },
+          {
+            "type": "prompt",
+            "id": "wt3_dq4",
+            "question": "4. Willard's three words — Vision, Intention, Means. Which one is your weak link: not seeing it, not deciding it, or not practicing it?"
+          },
+          {
+            "type": "prompt",
+            "id": "wt3_dq5",
+            "question": "5. What kind of person do you sense Jesus wants to form you into this year?"
+          },
+          {
+            "type": "heading",
+            "text": "This Week's Practice: One Rep With Jesus"
+          },
+          {
+            "type": "paragraph",
+            "text": "Pick one small “rep” and do it daily this week — with Jesus, not for a grade:"
+          },
+          {
+            "type": "checklist",
+            "id": "wt3_practice_reps",
+            "title": "My reps this week",
+            "options": [
+              "The With-God minute (continue the Module 1 practice)",
+              "One obedience experiment: choose a single instruction of Jesus (e.g., bless someone who irritates you, or tell the truth in one place you'd normally shade it) and practice it once a day."
+            ]
+          },
+          {
+            "type": "paragraph",
+            "text": "Notice what Jesus begins to form in you."
+          },
+          {
+            "type": "prompt",
+            "id": "wt3_practice_rep",
+            "question": "My one rep this week:"
+          },
+          {
+            "type": "heading",
+            "text": "Memory Verse for Module 3"
+          },
+          {
+            "type": "verse",
+            "text": "Exercise yourself toward godliness. For bodily exercise profits a little, but godliness is profitable for all things…",
+            "reference": "1 Timothy 4:7–8 (NKJV)"
+          },
+          {
+            "type": "heading",
+            "text": "Following Jesus Is a Friendship You Listen Your Way Into"
+          },
+          {
+            "type": "paragraph",
+            "text": "We often picture following Jesus as a list of things to start and stop doing. Those things matter. But underneath them is something warmer: Jesus is a Person, and He wants your company — not only on Sunday, but all day. He said it plainly: “Lo, I am with you always” (Matthew 28:20). He is already with you. Following Him begins with learning to notice that."
+          },
+          {
+            "type": "paragraph",
+            "text": "Here is a question worth sitting with: why does God so often feel silent? For many of us the honest answer is that we never stop talking. Think about any real friendship — as long as one person keeps talking, the other has to stay quiet. We bring God our list of requests, say amen, and get up and go, and we call that prayer. But we never gave Him a turn."
+          },
+          {
+            "type": "paragraph",
+            "text": "What if part of following Jesus is simply learning to go quiet long enough to hear Him — not for an hour, but for a second? A missionary named Frank Laubach spent years learning exactly this and turned it into what he called the Game With Minutes: through the day, give God one second out of every minute — one small turn of the mind back toward Him. Not to perform. To listen. Next week we will learn how to actually do it. This week, just let the idea land: the God you are following is near, and He is speaking. You are learning to get quiet enough to hear."
+          },
+          {
+            "type": "verse",
+            "text": "Thou wilt keep him in perfect peace, whose mind is stayed on thee: because he trusteth in thee.",
+            "reference": "Isaiah 26:3 (KJV)"
+          },
+          {
+            "type": "paragraph",
+            "text": "Notice the condition. The peace is perfect — but it rests on a mind that is stayed on Him: fixed, settled, returning to Him again and again. Perfect peace is not the absence of trouble. It is the presence of a mind that keeps coming home to Jesus."
+          },
+          {
+            "type": "prompt",
+            "id": "wt3_listen_talk",
+            "question": "Be honest: in your prayers, who does most of the talking? What might change if you gave God a turn?"
+          },
+          {
+            "type": "heading",
+            "text": "End-of-Module Reflection"
+          },
+          {
+            "type": "prompt",
+            "id": "wt3_r1",
+            "question": "1. Where have you been trying to earn what Jesus wants to freely form in you?"
+          },
+          {
+            "type": "prompt",
+            "id": "wt3_r2",
+            "question": "2. What is one “rep” you want to make a habit?"
+          },
+          {
+            "type": "prompt",
+            "id": "wt3_r3",
+            "question": "3. When you fall this week, what will you remind yourself about direction vs. distance?"
+          },
+          {
+            "type": "prompt",
+            "id": "wt3_r4",
+            "question": "4. What kind of person do you want to be one year from now?"
+          },
+          {
+            "type": "prompt",
+            "id": "wt3_r5",
+            "question": "5. What do I want to carry into Module 4, where we ask: how can GLC help me actually walk this out?"
+          },
+          {
+            "type": "quote",
+            "text": "Closing thought — Always remember: you do not become like Jesus by willpower. You become like Jesus by apprenticeship to Jesus. This is not self-help; it is Christ-in-you formation. This is not behavior management; it is heart renovation. You practice. He transforms. Together, you become like Him."
+          }
+        ]
+      }
+    },
+    {
+      "id": "wel_m4",
+      "content": {
+        "version": 2,
+        "blocks": [
+          {
+            "type": "bigIdea",
+            "text": "Becoming part of a family that helps you keep facing Jesus — and helps others find Him too."
+          },
+          {
+            "type": "heading",
+            "text": "Overview"
+          },
+          {
+            "type": "paragraph",
+            "text": "We've talked about the well (who we are), the One at the center (who Jesus is), and apprenticeship (what following looks like). This final module is the most practical: you were never meant to do this alone. Here is how Grace Life Center can help you actually walk it out — our role, your role, and the next steps on the path."
+          },
+          {
+            "type": "heading",
+            "text": "You Can't Make the Journey Alone"
+          },
+          {
+            "type": "paragraph",
+            "text": "No one becomes like Jesus in isolation. We are formed in the company of others who are also learning to face the center — people who carry our burdens, celebrate our small steps, and gently pull us back when we drift. “And let us consider one another in order to stir up love and good works, not forsaking the assembling of ourselves together” (Hebrews 10:24–25). Belonging to a church family is not an add-on to following Jesus. It is part of how you follow Jesus."
+          },
+          {
+            "type": "heading",
+            "text": "The Path at Grace Life Center"
+          },
+          {
+            "type": "paragraph",
+            "text": "We've tried to make the journey clear, with an unhurried next step at every stage. You are, right now, at the very first step:"
+          },
+          {
+            "type": "list",
+            "ordered": true,
+            "items": [
+              "Guest → Follower of Jesus. This Welcome Track. Learning to be with Jesus and turn your heart toward Him.",
+              "Follower → Disciple-Maker. The Growth Track / BECOME® — a deeper journey of being formed by Jesus (the Sermon on the Mount, the practices, the healing of the heart).",
+              "Disciple-Maker → Leader. The Leaders Track — for those Jesus is calling to help lead and shepherd others."
+            ]
+          },
+          {
+            "type": "lesson",
+            "text": "You never have to take the whole staircase at once. You just take the next step."
+          },
+          {
+            "type": "prompt",
+            "id": "wt4_fill_next",
+            "question": "✎ Fill-in: I don't have to take the whole staircase at once — only the ____ step.",
+            "hint": "Answer: next"
+          },
+          {
+            "type": "heading",
+            "text": "Our Role and Your Role"
+          },
+          {
+            "type": "subheading",
+            "text": "Our role — what you can expect from us"
+          },
+          {
+            "type": "list",
+            "items": [
+              "To keep Jesus at the center and point you to Him, not to ourselves.",
+              "To be a safe, gentle, non-judgmental space — protecting your dignity, your questions, and your story.",
+              "To teach the Scriptures slowly and prayerfully, and to walk with you — praying, not fixing.",
+              "To provide the path (Growth Track, small groups, mentors) so you always have a next step."
+            ]
+          },
+          {
+            "type": "subheading",
+            "text": "Your role — what we'll gently ask of you"
+          },
+          {
+            "type": "list",
+            "items": [
+              "Keep facing Jesus — keep turning toward the center, even when you fall.",
+              "Show up. Formation happens in rhythm and relationship, not in isolation.",
+              "Be honest. No pretending, no performing. Bring the real you.",
+              "Take your next step, and in time, help someone else take theirs."
+            ]
+          },
+          {
+            "type": "heading",
+            "text": "A Covenant to Face Jesus — Together"
+          },
+          {
+            "type": "paragraph",
+            "text": "Historically we've described partnership with three simple movements, and they still hold. With Jesus at the center, we covenant together to:"
+          },
+          {
+            "type": "list",
+            "items": [
+              "BE with Jesus — to abide, worship, pray, and learn to live from His presence.",
+              "BECOME like Jesus — to be formed by Him from the inside, through the practices, in community.",
+              "BRING heaven — to carry His love, healing, and presence into our homes, work, and world, and to help others find Him."
+            ]
+          },
+          {
+            "type": "paragraph",
+            "text": "(You'll find the full covenants in Module 5. You don't sign anything today — just begin to consider them.)"
+          },
+          {
+            "type": "heading",
+            "text": "Fill-In Reflections"
+          },
+          {
+            "type": "prompt",
+            "id": "wt4_fill_isolation",
+            "question": "1. No one becomes like Jesus in ____.",
+            "hint": "Answer: isolation"
+          },
+          {
+            "type": "prompt",
+            "id": "wt4_fill_movements",
+            "question": "2. The three movements of partnership: BE with Jesus, ____ like Jesus, and ____ heaven.",
+            "hint": "Answer: BECOME; BRING"
+          },
+          {
+            "type": "prompt",
+            "id": "wt4_fill_point",
+            "question": "3. Our role is to point you to ____, not to ourselves.",
+            "hint": "Answer: Jesus"
+          },
+          {
+            "type": "heading",
+            "text": "Discussion Questions"
+          },
+          {
+            "type": "prompt",
+            "id": "wt4_dq1",
+            "question": "1. What has your experience of “church family” been — life-giving, painful, absent? What do you long for?"
+          },
+          {
+            "type": "prompt",
+            "id": "wt4_dq2",
+            "question": "2. Which part of our role do you most need right now (a safe space? someone to walk with? a clear next step?)"
+          },
+          {
+            "type": "prompt",
+            "id": "wt4_dq3",
+            "question": "3. Which part of your role feels hardest — facing Jesus, showing up, being honest, or taking the next step?"
+          },
+          {
+            "type": "prompt",
+            "id": "wt4_dq4",
+            "question": "4. Of the three movements — BE, BECOME, BRING — which one is Jesus highlighting for you?"
+          },
+          {
+            "type": "prompt",
+            "id": "wt4_dq5",
+            "question": "5. What is one concrete next step you're willing to consider?"
+          },
+          {
+            "type": "heading",
+            "text": "This Week's Practice: Take One Step"
+          },
+          {
+            "type": "paragraph",
+            "text": "Choose one real next step and do it this week:"
+          },
+          {
+            "type": "checklist",
+            "id": "wt4_next_step",
+            "title": "My next step",
+            "options": [
+              "Join the next Growth Track / BECOME® cohort",
+              "Come to a Gathering or a small group",
+              "Ask for a conversation or a prayer partner / mentor",
+              "Simply tell someone at GLC, “I'd like to keep coming.”"
+            ]
+          },
+          {
+            "type": "prompt",
+            "id": "wt4_next_step_note",
+            "question": "My next step:"
+          },
+          {
+            "type": "heading",
+            "text": "Practicing His Presence: Keeping Your Mind on Jesus All Day"
+          },
+          {
+            "type": "paragraph",
+            "text": "Last week we said following Jesus is a friendship you listen your way into. This week we get practical: how do you keep company with Someone you cannot see, in the middle of an ordinary, busy day? This is one of the most useful things you will ever learn, so we will take our time."
+          },
+          {
+            "type": "subheading",
+            "text": "The One-Second Idea"
+          },
+          {
+            "type": "paragraph",
+            "text": "The whole practice fits in a sentence: through the day, keep turning some corner of your mind back to Jesus — even for a second — as often as you can remember. Laubach called it a “game” on purpose. The moment it becomes pressure or guilt, it stops working. You are not trying to think about God every second. You are trying to remember Him more and more often, until it becomes as natural as remembering someone you love."
+          },
+          {
+            "type": "paragraph",
+            "text": "And here is the quiet secret underneath it: each time you turn to Him, go still for a moment and listen. This is not only you reaching for God — it is you getting quiet enough for God to reach you. A second of silence, many times a day, is how your mind learns to stay on Him. And a mind stayed on Him is where the peace of Isaiah 26:3 actually shows up."
+          },
+          {
+            "type": "subheading",
+            "text": "Write Down What Comes — Journal It"
+          },
+          {
+            "type": "paragraph",
+            "text": "When you go quiet and turn toward Jesus, things will come to mind: a verse, a memory, a name, a gentle nudge, a comfort, sometimes a conviction, sometimes just peace. Do not judge what comes. Just capture it. Keep a cheap notebook, or use the notes app on your phone — jot the date and a line or two."
+          },
+          {
+            "type": "paragraph",
+            "text": "This matters more than it sounds. Over a few weeks, that little journal becomes a record of a Voice you could always hear — you were simply never quiet enough to notice. Make journaling part of the practice, not an add-on."
+          },
+          {
+            "type": "subheading",
+            "text": "Ways to “Win a Minute” — Old and New"
+          },
+          {
+            "type": "paragraph",
+            "text": "There is no single correct way. You “win” a minute any time your mind touches Jesus. Here are ways that have helped people for nearly a century, plus some for our own noisy, phone-shaped world. Pick the ones that fit you."
+          },
+          {
+            "type": "list",
+            "items": [
+              "Whisper to God about small, ordinary things — what to wear, what to say, the drive to work.",
+              "Hum or sing a line of worship under your breath.",
+              "Keep a cross or a verse where your eyes fall on it — by the door, on the mirror.",
+              "See Him in what is beautiful: the sky, trees, water, a child’s face.",
+              "Breathe a quick prayer for each person you pass — the cashier, a stranger, a coworker.",
+              "Do a small kindness quietly, for His sake, as a way of remembering Him in the middle of it."
+            ]
+          },
+          {
+            "type": "subheading",
+            "text": "For Today’s World"
+          },
+          {
+            "type": "list",
+            "items": [
+              "Put on worship on Spotify or Apple Music and let one line become your prayer for a few minutes.",
+              "Trade one scroll for one verse: before you open Instagram or TikTok, open a single verse and say it slowly, twice.",
+              "Repeat one short verse until it walks around inside you all day — “Be still, and know that I am God” (Psalm 46:10) is a good start.",
+              "Turn dead time into God-time: a red light, an elevator, a loading screen, the kettle boiling, a waiting room.",
+              "Set a gentle phone reminder a few times a day that simply says: Jesus. When it buzzes, go quiet for ten seconds and listen.",
+              "Whisper a one-word prayer over whoever is in front of you right now — bless him, help her, thank You for them."
+            ]
+          },
+          {
+            "type": "lesson",
+            "text": "Anything that locks your mind onto Jesus, even for a moment, counts. Fire is caught, not manufactured — you catch it by practicing, gently, again and again."
+          },
+          {
+            "type": "subheading",
+            "text": "When You Forget — and You Will"
+          },
+          {
+            "type": "paragraph",
+            "text": "You will forget for an hour. Some days, all day. That is not failure; that is being new at something. When you notice you drifted, you do not owe God an apology or a guilt trip. You just begin again, with a smile. As Laubach put it, we fix our eyes on Jesus, not on a clock."
+          },
+          {
+            "type": "subheading",
+            "text": "Go Deeper: The Free Booklet"
+          },
+          {
+            "type": "paragraph",
+            "text": "This practice comes from a short booklet called The Game With Minutes by Frank Laubach, along with his Letters by a Modern Mystic. Download and read them slowly — they are short, and may become some of the most quietly life-changing pages you ever read. Your discipler has read them too, and would love to talk them over with you."
+          },
+          {
+            "type": "resource",
+            "label": "The Game With Minutes — Frank Laubach",
+            "url": "/resources/game-with-minutes.pdf",
+            "note": "The short booklet that teaches this practice (PDF)"
+          },
+          {
+            "type": "resource",
+            "label": "Letters by a Modern Mystic — Frank Laubach",
+            "url": "/resources/letters-by-a-modern-mystic.pdf",
+            "note": "The fuller companion, for going deeper (PDF)"
+          },
+          {
+            "type": "heading",
+            "text": "This Week’s Practice: One Minute, Many Times, Written Down"
+          },
+          {
+            "type": "list",
+            "ordered": true,
+            "items": [
+              "Pick two or three of the “ways to win a minute” above that fit your life.",
+              "Through the day, keep turning your mind to Jesus for a second or two — and each time, go quiet and listen before you move on.",
+              "Keep a small journal. When something comes to mind, write it down — date and a line.",
+              "At the end of the week, read back over what you wrote. What might Jesus have been saying?"
+            ]
+          },
+          {
+            "type": "prompt",
+            "id": "wt4_presence_journal",
+            "question": "One line from my week of practicing His presence that I want to remember:"
+          },
+          {
+            "type": "prompt",
+            "id": "wt4_presence_reflect",
+            "question": "What did you notice when you got quiet and listened, instead of only talking?"
+          },
+          {
+            "type": "heading",
+            "text": "Memory Verse for Module 4"
+          },
+          {
+            "type": "verse",
+            "text": "…He who has begun a good work in you will complete it until the day of Jesus Christ.",
+            "reference": "Philippians 1:6 (NKJV)"
+          },
+          {
+            "type": "heading",
+            "text": "End-of-Module Reflection"
+          },
+          {
+            "type": "prompt",
+            "id": "wt4_r1",
+            "question": "1. What has shifted in you across these four modules?"
+          },
+          {
+            "type": "prompt",
+            "id": "wt4_r2",
+            "question": "2. Which way is your heart facing now, compared to when you started?"
+          },
+          {
+            "type": "prompt",
+            "id": "wt4_r3",
+            "question": "3. What is the next step you sense Jesus inviting you to take?"
+          },
+          {
+            "type": "prompt",
+            "id": "wt4_r4",
+            "question": "4. Who is one person you'd love to see find what you're finding?"
+          },
+          {
+            "type": "prompt",
+            "id": "wt4_r5",
+            "question": "5. What do you want to say to Jesus as you finish this track?"
+          },
+          {
+            "type": "quote",
+            "text": "Closing thought — Always remember: this is not graduation — it's activation. You came in as a guest; you leave as a fellow traveler on the road with Jesus, and with us. We are not building a crowd. We are tending a fire, gathered around the Well, learning to be with Jesus so He can form us and send us out carrying heaven. Turn. Face Him. And never stop moving toward Him — we'll walk with you the whole way."
+          }
+        ]
+      }
+    },
+    {
+      "id": "bec_m7",
+      "content": {
+        "version": 2,
+        "blocks": [
+          {
+            "type": "heading",
+            "text": "Week 7 — Secret Devotion: Giving, Prayer & Fasting",
+            "subtitle": "Becoming the Kind of Person Who Lives Before God, Not Before People"
+          },
+          {
+            "type": "subheading",
+            "text": "Introduction"
+          },
+          {
+            "type": "paragraph",
+            "text": "As we enter Week 7, Jesus transitions from addressing our inner reactions to shaping our inner devotions. This is one of the most important formation weeks of the entire journey."
+          },
+          {
+            "type": "paragraph",
+            "text": "Jesus teaches: how to give, how to pray, how to fast. But more importantly, He teaches where to give, where to pray, and where to fast: in secret."
+          },
+          {
+            "type": "bigIdea",
+            "text": "Because Jesus knows: Your public life is shaped by your secret life. Who you are before people flows from who you are before God."
+          },
+          {
+            "type": "paragraph",
+            "text": "This week is all about becoming the kind of person who: lives from the inside out; serves without applause; prays without performance; gives without being seen; fasts without seeking attention; enjoys quiet, intimate friendship with God."
+          },
+          {
+            "type": "paragraph",
+            "text": "This is where real transformation begins."
+          },
+          {
+            "type": "subheading",
+            "text": "The Heart of Jesus’ Teaching: “Do It in Secret”"
+          },
+          {
+            "type": "paragraph",
+            "text": "Jesus says three things again and again:"
+          },
+          {
+            "type": "verse",
+            "text": "“Your Father who sees in secret will reward you.”",
+            "reference": "Matthew 6:4, 6, 18"
+          },
+          {
+            "type": "paragraph",
+            "text": "Jesus repeats this phrase because He wants it deeply planted in us. “Your Father sees you.” Not people. Not crowds. Not the public. But Your Father."
+          },
+          {
+            "type": "paragraph",
+            "text": "And the Father’s eyes are enough. The Father sees: your prayers in your room, your quiet generosity, your hidden sacrifices, your patient obedience, your unseen tears, your private worship."
+          },
+          {
+            "type": "lesson",
+            "text": "Jesus is teaching us the secret of spiritual authenticity: Live for an audience of One – Your Father."
+          },
+          {
+            "type": "subheading",
+            "text": "Becoming, Not Just Doing"
+          },
+          {
+            "type": "paragraph",
+            "text": "Week 7 is not about: “Give more.” “Pray more.” “Fast more.”"
+          },
+          {
+            "type": "paragraph",
+            "text": "Jesus is not trying to increase your religious activities. He is trying to shape your inner motives. He wants to form a heart that:"
+          },
+          {
+            "type": "list",
+            "items": [
+              "gives because it loves",
+              "prays because it needs Him",
+              "fasts because it longs for Him",
+              "serves without needing attention",
+              "acts out of love, not performance",
+              "lives for God, not for approval"
+            ]
+          },
+          {
+            "type": "lesson",
+            "text": "Secret devotion is where God forms who you are becoming."
+          },
+          {
+            "type": "subheading",
+            "text": "Illustration: The Roots of a Tree"
+          },
+          {
+            "type": "paragraph",
+            "text": "A tree’s strength is not seen in the branches. It is seen in the roots — hidden, underground, unseen. Your secret practices are the roots of your spiritual life."
+          },
+          {
+            "type": "paragraph",
+            "text": "If your roots are shallow: storms uproot you, temptations shake you, opinions sway you, pressure breaks you."
+          },
+          {
+            "type": "paragraph",
+            "text": "But if your roots are deep: you stand firm, you grow strong, you produce fruit, you remain steady, you carry peace."
+          },
+          {
+            "type": "paragraph",
+            "text": "Jesus uses giving, prayer, and fasting – done in secret – to deepen your roots."
+          },
+          {
+            "type": "subheading",
+            "text": "Jesus’ Three Formational Practices"
+          },
+          {
+            "type": "subheading",
+            "text": "1. Secret Giving (Matthew 6:1–4)"
+          },
+          {
+            "type": "paragraph",
+            "text": "Jesus says: Give quietly. Give humbly. Give without drawing attention."
+          },
+          {
+            "type": "paragraph",
+            "text": "Why? Because giving in secret breaks: pride, comparison, applause-seeking, selfishness. And it builds: humility, kindness, compassion, generosity."
+          },
+          {
+            "type": "paragraph",
+            "text": "Secret giving forms a heart like the Father’s – because God so loved the world that He gave."
+          },
+          {
+            "type": "subheading",
+            "text": "2. Secret Prayer (Matthew 6:5–8)"
+          },
+          {
+            "type": "paragraph",
+            "text": "Jesus says: “Go to your room, close the door, and pray to your Father.”"
+          },
+          {
+            "type": "paragraph",
+            "text": "Secret prayer forms: honesty, intimacy, dependence, listening, humility, rest in the Father. This is the prayer that shapes the soul."
+          },
+          {
+            "type": "paragraph",
+            "text": "Jesus’ other commands reinforce this: “Watch and pray.” — Matthew 26:41. “Pray always and never give up.” — Luke 18:1. “Ask… seek… knock.” — Matthew 7:7. These deepen your inner life with God."
+          },
+          {
+            "type": "subheading",
+            "text": "3. Secret Fasting (Matthew 6:16–18)"
+          },
+          {
+            "type": "paragraph",
+            "text": "Fasting in secret: trains the body, quiets desires, focuses the heart, awakens spiritual hunger, strengthens discipline, invites God’s presence."
+          },
+          {
+            "type": "lesson",
+            "text": "Jesus does not say if you fast. He says “when you fast.” Because fasting is a training exercise that helps you become a person who desires God more than anything else."
+          },
+          {
+            "type": "subheading",
+            "text": "A Fourth Practice — Secret Prayer, All Day Long: Practicing His Presence"
+          },
+          {
+            "type": "paragraph",
+            "text": "Jesus tells us to go into our room, shut the door, and pray to the Father in secret. That closed-door time is the root of everything. But Jesus also lived as though the door were never fully closed — He stayed in unbroken conversation with the Father through ordinary days, crowds, meals, and pressure. Paul names the goal directly: “Pray without ceasing” (1 Thessalonians 5:17). For most of us that sounds impossible — until we learn how."
+          },
+          {
+            "type": "subheading",
+            "text": "The Discipline Underneath “Pray Without Ceasing”"
+          },
+          {
+            "type": "paragraph",
+            "text": "Frank Laubach, a missionary who gave his life to this, called the practice the Game With Minutes: through the whole day, keep turning some part of your mind back to God — even for a single second — as often as you can remember. Not to perform; to stay in His company. Like learning an instrument, it becomes more natural with practice until you “win” most of your minutes with little effort."
+          },
+          {
+            "type": "paragraph",
+            "text": "But notice why this is secret prayer, and not just religious busyness. Most of us assume God is quiet. The truer diagnosis is that we never stop talking. In any real relationship, as long as one person is talking, the other must stay silent. We bring God our list, say amen, and leave — never giving Him a turn. The Game With Minutes is, at its heart, a discipline of listening: quieting the mind, over and over through the day, long enough to hear the Father who is already speaking. This is how a mind gets “stayed” on Him."
+          },
+          {
+            "type": "verse",
+            "text": "Thou wilt keep him in perfect peace, whose mind is stayed on thee: because he trusteth in thee.",
+            "reference": "Isaiah 26:3 (KJV)"
+          },
+          {
+            "type": "paragraph",
+            "text": "Perfect peace is not the absence of storms — you are learning that all through this course. It is the presence of a mind that keeps returning home to God, all day long."
+          },
+          {
+            "type": "subheading",
+            "text": "Journal What You Hear"
+          },
+          {
+            "type": "paragraph",
+            "text": "Because this is listening, it produces something to write down. As you go quiet through the day and turn to Him, things will surface — a verse, a name, a prompting, a conviction, a comfort. Capture them in a running journal. This is the same Listen → Obey movement from the SPLO rhythm in the appendix, now happening in the cracks of your whole day, not only in your morning time. Over weeks the journal becomes evidence: the Father has been speaking; you are learning to be quiet enough to notice."
+          },
+          {
+            "type": "subheading",
+            "text": "How to Actually Do It (choose a few)"
+          },
+          {
+            "type": "list",
+            "items": [
+              "Whisper to God about the ordinary thing in front of you right now.",
+              "Let one line of a worship song (Spotify, Apple Music) be your prayer for a few minutes.",
+              "Before you open social media, give that minute to a single verse instead — say it slowly, twice.",
+              "Repeat one short verse until it lives in you all day.",
+              "Turn red lights, elevators, loading screens and waiting rooms into God-minutes.",
+              "Breathe a one-word prayer over whoever is in front of you.",
+              "When you forget for an hour or a day, begin again with a smile — eyes on Jesus, not on the clock."
+            ]
+          },
+          {
+            "type": "paragraph",
+            "text": "Anything that locks your mind onto Jesus, even for a moment, counts."
+          },
+          {
+            "type": "paragraph",
+            "text": "Look back at your Before Assessment, under Spiritual Devotion — “I pray privately,” “I pray consistently.” This practice is the concrete way those scores move. It is also quietly at work under Trust & Freedom from Worry: a mind stayed on Him (Isaiah 26:3) is a mind less ruled by fear."
+          },
+          {
+            "type": "resource",
+            "label": "The Game With Minutes — Frank Laubach",
+            "url": "/resources/game-with-minutes.pdf",
+            "note": "The short booklet that teaches this practice (PDF)"
+          },
+          {
+            "type": "resource",
+            "label": "Letters by a Modern Mystic — Frank Laubach",
+            "url": "/resources/letters-by-a-modern-mystic.pdf",
+            "note": "The fuller companion, for going deeper (PDF)"
+          },
+          {
+            "type": "subheading",
+            "text": "An Added Practice — “The Listening Day”"
+          },
+          {
+            "type": "paragraph",
+            "text": "Pick one day this week to play the Game With Minutes in earnest. Through the day, keep turning your mind to God for a second or two — and each time, go quiet and listen before moving on. Keep your journal handy and write down whatever comes. That evening, review it, and bring it to your next meeting with your discipler."
+          },
+          {
+            "type": "prompt",
+            "id": "b7_listening_day",
+            "question": "What I heard on my Listening Day — and what I want to keep practicing:"
+          },
+          {
+            "type": "heading",
+            "text": "Reflection Questions"
+          },
+          {
+            "type": "prompt",
+            "id": "b7_d1",
+            "question": "1. Which is easiest for you: giving, praying, or fasting? Why?"
+          },
+          {
+            "type": "prompt",
+            "id": "b7_d2",
+            "question": "2. Which is hardest for you, and why do you think that is?"
+          },
+          {
+            "type": "prompt",
+            "id": "b7_d3",
+            "question": "3. What would my spiritual life look like if my secret habits were stronger?"
+          },
+          {
+            "type": "prompt",
+            "id": "b7_d4",
+            "question": "4. What kind of heart do I want Jesus to form in me this week?"
+          },
+          {
+            "type": "prompt",
+            "id": "b7_d5",
+            "question": "5. What would happen in my inner life if I grew in secret devotion?"
+          },
+          {
+            "type": "heading",
+            "text": "This Week’s Practices"
+          },
+          {
+            "type": "subheading",
+            "text": "Practice #1 — “A Secret Gift”"
+          },
+          {
+            "type": "paragraph",
+            "text": "Do one act of giving this week that: no one sees, no one hears about, no one praises — only the Father knows. Small or big — it doesn’t matter."
+          },
+          {
+            "type": "prompt",
+            "id": "b7_secret_gift",
+            "question": "My Secret Gift:"
+          },
+          {
+            "type": "subheading",
+            "text": "Practice #2 — “The Closed-Door Prayer Time”"
+          },
+          {
+            "type": "paragraph",
+            "text": "Choose one time this week to: shut the door, turn off devices, speak honestly to God, be still, let Him speak."
+          },
+          {
+            "type": "prompt",
+            "id": "b7_prayer_time",
+            "question": "My Secret Prayer Time:"
+          },
+          {
+            "type": "subheading",
+            "text": "Practice #3 — “A One-Meal Fast”"
+          },
+          {
+            "type": "paragraph",
+            "text": "This week, try one of the following: skip one meal; skip a type of food; skip social media for a day; skip entertainment for a day. Use that time to pray, listen, or read Scripture."
+          },
+          {
+            "type": "prompt",
+            "id": "b7_fast",
+            "question": "My Fast This Week:"
+          },
+          {
+            "type": "heading",
+            "text": "Fill-in Reflections"
+          },
+          {
+            "type": "prompt",
+            "id": "b7_f1",
+            "question": "1. Jesus is forming in me a heart that seeks …"
+          },
+          {
+            "type": "prompt",
+            "id": "b7_f2",
+            "question": "2. I want to become a person who values … more than applause."
+          },
+          {
+            "type": "prompt",
+            "id": "b7_f3",
+            "question": "3. My biggest barrier to secret devotion is …"
+          },
+          {
+            "type": "prompt",
+            "id": "b7_f4",
+            "question": "4. I believe Jesus wants to grow my … this week."
+          },
+          {
+            "type": "heading",
+            "text": "Memory Verse for Week 7"
+          },
+          {
+            "type": "verse",
+            "text": "“Your Father who sees in secret will reward you.”",
+            "reference": "Matthew 6:6"
+          },
+          {
+            "type": "paragraph",
+            "text": "A simple reminder: God sees you. And His eyes are enough."
+          },
+          {
+            "type": "heading",
+            "text": "End-of-Week Reflection"
+          },
+          {
+            "type": "prompt",
+            "id": "b7_e1",
+            "question": "1. What did I experience in my closed-door prayer time?"
+          },
+          {
+            "type": "prompt",
+            "id": "b7_e2",
+            "question": "2. How did my body and heart respond to fasting?"
+          },
+          {
+            "type": "prompt",
+            "id": "b7_e3",
+            "question": "3. What happened when I gave in secret? How did it affect my soul?"
+          },
+          {
+            "type": "prompt",
+            "id": "b7_e4",
+            "question": "4. Which of these three practices felt most meaningful?"
+          },
+          {
+            "type": "prompt",
+            "id": "b7_e5",
+            "question": "5. How is Jesus shaping my inner life through these habits?"
+          },
+          {
+            "type": "heading",
+            "text": "Closing Thought for Week 7"
+          },
+          {
+            "type": "lesson",
+            "text": "Remember: Your public strength is shaped by your private devotion. Your outer life is shaped by your inner practices. Your spiritual power is shaped by your secret life with God. This week is not about doing more. It is about rooting your life deeper in the Father’s presence. Let Him meet you in the secret place."
+          },
+          {
+            "type": "prompt",
+            "id": "b7_notes",
+            "question": "Notes & Insights"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dis_m5",
+      "content": {
+        "version": 2,
+        "blocks": [
+          {
+            "type": "bigIdea",
+            "text": "Becoming a discipler who cooperates with the Spirit instead of substituting for Him."
+          },
+          {
+            "type": "heading",
+            "text": "Overview"
+          },
+          {
+            "type": "paragraph",
+            "text": "Here is the module that takes the weight off your shoulders. You cannot change a heart. You never could. There is a Discipler senior to you on every case — the Holy Spirit — and your whole craft is learning to cooperate with what He is already doing. The tools of that cooperation are prayer and attentiveness. This module trains both."
+          },
+          {
+            "type": "heading",
+            "text": "Three Roles, One Work"
+          },
+          {
+            "type": "paragraph",
+            "text": "Get the division of labor right and discipleship becomes light. The Holy Spirit’s role: He orchestrates the encounters, creates the hunger, guides the process, convicts, transforms, and gives you wisdom on demand (James 1:5). Your role: pray with expectation, abide in Jesus, stay available, and cooperate — you are a partner in His work, never the engine. The Word’s role: it is the food; you point your disciple to the Lord through Scripture and let the Book do its own deep work (2 Timothy 3:16–17)."
+          },
+          {
+            "type": "paragraph",
+            "text": "Jesus put it without loopholes: “Without Me you can do nothing” (John 15:5). And the honest corollary: if we attempt it without Him — programs, charisma, willpower — we will produce activity, not transformation. Say it plainly: you cannot change a heart; the Holy Spirit can."
+          },
+          {
+            "type": "heading",
+            "text": "The Illustration: The Sailboat and the Rowboat"
+          },
+          {
+            "type": "paragraph",
+            "text": "Two boats set out across the same lake. The rowboat moves by the strength of the rower — impressive for an hour, exhausted by evening, and in a storm, hopeless. The sailboat cannot move itself at all. Its skill is different: trim the sail, read the wind, position the boat where the wind can drive it."
+          },
+          {
+            "type": "paragraph",
+            "text": "Discipling in your own strength is rowing: you will wear out, and so will your disciple. Discipling in the Spirit is sailing: prayer is how you hoist the sail; attentiveness is how you read the wind; obedience is how you trim. The wind does the moving. “‘Not by might nor by power, but by My Spirit,’ says the LORD of hosts” (Zechariah 4:6)."
+          },
+          {
+            "type": "heading",
+            "text": "Prayer Is the Work"
+          },
+          {
+            "type": "paragraph",
+            "text": "George Müller, who cared for thousands of orphans on prayer alone, said the thing every discipler must learn: prayer is not preparation for the work — prayer IS the work. What happens in your disciple between your meetings will be decided mostly by what happens in your prayer closet between your meetings."
+          },
+          {
+            "type": "paragraph",
+            "text": "So build the discipler’s prayer list — four lines per disciple: their relationship with God, their current struggle, their next step of growth, their influence on the people around them. Pray it daily. Old rule of thumb: pray for them, pray more for them, pray even more for them. And before you ever give advice, ask the question that reroutes the whole conversation to the senior Discipler: “Have you prayed about it?”"
+          },
+          {
+            "type": "heading",
+            "text": "Every Discipler Needs Three Friends"
+          },
+          {
+            "type": "paragraph",
+            "text": "Do not sail alone. Every discipler needs a Paul — someone farther along who speaks into your life; a Timothy — the one you are pouring into; and a Barnabas — a peer who encourages you at eye level. This track is deliberately building all three around you: your pastors and coordinator (Paul), your future disciple (Timothy), and this cohort (Barnabas). A threefold cord is not quickly broken."
+          },
+          {
+            "type": "paragraph",
+            "text": "One more habit of mutual prayer: share your own requests with your disciple and let them pray for you. It teaches them to pray, keeps you humble, and quietly announces the best news in the room: we are both under the same grace, being discipled by the same Spirit."
+          },
+          {
+            "type": "heading",
+            "text": "Teaching a Disciple to Practice His Presence"
+          },
+          {
+            "type": "paragraph",
+            "text": "Every disciple you walk with will eventually ask some version of the same question: “How do I actually feel close to God, not just believe things about Him?” Frank Laubach, a missionary who spent a lifetime keeping company with God in ordinary minutes, called the answer the Game With Minutes: through the day, keep turning your mind back to God — even for a second — not as a rule, but as a delight."
+          },
+          {
+            "type": "paragraph",
+            "text": "At its heart, this is a practice of listening. Most people assume God is silent, when the truer problem is that we never stop talking — and in any relationship, as long as one person is talking, the other must stay quiet. Teaching your disciple to give God one second of every minute is really teaching them to go quiet long enough to hear Him, until their mind is “stayed” on Him and they taste the perfect peace of Isaiah 26:3. Encourage them to journal what comes — a verse, a nudge, a comfort — so that over time they hold real evidence that God has been speaking all along."
+          },
+          {
+            "type": "verse",
+            "text": "Thou wilt keep him in perfect peace, whose mind is stayed on thee: because he trusteth in thee.",
+            "reference": "Isaiah 26:3 (KJV)"
+          },
+          {
+            "type": "paragraph",
+            "text": "This is a practice you teach mostly by catching it yourself, not by explaining it well. Your disciple will notice long before you say a word — in how you pause before answering, in the way you pray mid-sentence instead of only at the end of a meeting, in the fact that you seem unhurried even when busy. Content is taught; context is caught. This is context."
+          },
+          {
+            "type": "paragraph",
+            "text": "When you teach it directly, teach it the way Laubach insisted: as a delight, never a test. Some disciples take to it instantly and run for years. Others try it for three days, forget, and feel like they failed at Christianity itself. Your job in that moment is not a stricter tracking system — it is to say, gently, “You didn’t fail. You forgot. Begin again, right now, with one minute.” You are forming a habit of grace about a habit of presence, and the first matters more than the second."
+          },
+          {
+            "type": "paragraph",
+            "text": "A simple way to introduce it in a one-on-one: spend sixty seconds together in silence, both of you noticing that God is in the room, and then listening. Afterward, ask what they noticed. That single minute teaches more than a paragraph ever could."
+          },
+          {
+            "type": "lesson",
+            "text": "Before you teach it, refresh yourself in the source. Re-read The Game With Minutes and Letters by a Modern Mystic before you introduce this to a disciple. You cannot hand on a fire you are not currently warming yourself at."
+          },
+          {
+            "type": "resource",
+            "label": "The Game With Minutes — Frank Laubach",
+            "url": "/resources/game-with-minutes.pdf",
+            "note": "The short booklet that teaches this practice (PDF)"
+          },
+          {
+            "type": "resource",
+            "label": "Letters by a Modern Mystic — Frank Laubach",
+            "url": "/resources/letters-by-a-modern-mystic.pdf",
+            "note": "The fuller companion, for going deeper (PDF)"
+          },
+          {
+            "type": "heading",
+            "text": "Fill-In Reflections"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_fill_holyspirit",
+            "question": "1. You cannot change a heart; the ____ ____ can.",
+            "hint": "Answer: Holy Spirit"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_fill_sail",
+            "question": "2. Discipling in the Spirit is sailing: prayer hoists the ____; the wind does the moving.",
+            "hint": "Answer: sail"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_fill_is",
+            "question": "3. Prayer is not preparation for the work — prayer ____ the work.",
+            "hint": "Answer: IS"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_fill_prayed",
+            "question": "4. Before giving advice, ask: “Have you ____ about it?”",
+            "hint": "Answer: prayed"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_fill_barnabas",
+            "question": "5. Every discipler needs a Paul, a Timothy, and a ____.",
+            "hint": "Answer: Barnabas"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_fill_talking",
+            "question": "6. We think God is silent mainly because we never stop ____.",
+            "hint": "Answer: talking"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_fill_catching",
+            "question": "7. We teach this practice less by explaining it and more by ____ it ourselves.",
+            "hint": "Answer: catching (modeling)"
+          },
+          {
+            "type": "heading",
+            "text": "Discussion Questions"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_dq1",
+            "question": "1. Rowing or sailing — which describes your serving life so far? What has rowing cost you?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_dq2",
+            "question": "2. Where have you watched the Holy Spirit do in a moment what you had failed to do in months?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_dq3",
+            "question": "3. What would praying the four-line list daily actually require of your schedule — and what might it change?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_dq4",
+            "question": "4. Who currently plays Paul, Timothy, and Barnabas in your life? Which chair is empty?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_dq5",
+            "question": "5. Why do you think we reach for advice before we reach for prayer? What does “Have you prayed about it?” do to a conversation?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_dq6",
+            "question": "6. Who taught you to sense God’s presence in ordinary moments — and did they do it by explaining, or by example?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_dq7",
+            "question": "7. What would it look like to practice the Game With Minutes yourself this week, before you ever teach it?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_dq8",
+            "question": "8. How will you respond the first time a disciple tells you they “failed” at this practice?"
+          },
+          {
+            "type": "heading",
+            "text": "This Week’s Practice: The Four-Line List"
+          },
+          {
+            "type": "paragraph",
+            "text": "Choose one person (your likely disciple, or someone God has placed near you) and write their four-line prayer list: relationship with God · current struggle · next growth step · their influence. Pray it every day this week. Keep a small log of anything that changes — in them, or in how you see them. Expect the second change first."
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_practice_fourlines",
+            "question": "My four lines for the person I am praying for:"
+          },
+          {
+            "type": "heading",
+            "text": "Memory Verse for Module 5"
+          },
+          {
+            "type": "verse",
+            "text": "I am the vine, you are the branches. He who abides in Me, and I in him, bears much fruit; for without Me you can do nothing.",
+            "reference": "John 15:5 (NKJV)"
+          },
+          {
+            "type": "heading",
+            "text": "End-of-Module Reflection"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_r1",
+            "question": "1. Where am I still rowing?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_r2",
+            "question": "2. What did praying for one person daily do to my heart toward them?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_r3",
+            "question": "3. When the Spirit nudged me this week, did I notice? Did I obey?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_r4",
+            "question": "4. What do I want my disciple to catch about prayer just from watching me?"
+          },
+          {
+            "type": "prompt",
+            "id": "dt5_r5",
+            "question": "5. What do I want to carry into Module 6, where we learn to truly know the person we walk with?"
+          },
+          {
+            "type": "quote",
+            "text": "Closing thought — Always remember: the Holy Spirit was discipling your disciple long before you arrived and will continue long after your season ends. You are not the wind; you are a sail. Stay hoisted. Stay trimmed. And never be surprised when the Lord uses your disciple’s journey to disciple you."
+          }
+        ]
+      }
+    }
+  ]
+}

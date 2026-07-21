@@ -15,6 +15,9 @@ export type WorkbookBlock =
   | { type: 'rating'; id: string; title: string; items: string[]; scaleMax?: number }
   | { type: 'checklist'; id: string; title: string; options: string[] }
   | { type: 'prayer'; title?: string; text: string }
+  // Run 63 — display-only external resource link (e.g. a hosted PDF).
+  // Not savable, no progress/reflection impact.
+  | { type: 'resource'; label: string; url: string; note?: string }
   // Run 16 — read-only Before/After growth comparison. Each pair references
   // two rating block ids (which may live in OTHER modules, e.g. the Before
   // assessment in the Introduction module); the renderer sums the 1–5 values

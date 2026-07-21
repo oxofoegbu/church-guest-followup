@@ -306,6 +306,23 @@ export default function ModuleWorkbook({ blocks, reflections, readOnly, onSave }
               </div>
             );
           }
+          case 'resource':
+            return (
+              <a
+                key={i}
+                href={block.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 bg-brand-50 border border-brand-200 rounded-xl px-4 py-3 hover:border-brand-400 transition-colors no-underline"
+              >
+                <span className="text-xl" aria-hidden="true">📄</span>
+                <span className="flex-1 min-w-0">
+                  <span className="block text-sm font-semibold text-brand-800">{block.label}</span>
+                  {block.note && <span className="block text-xs text-church-500 mt-0.5">{block.note}</span>}
+                </span>
+                <span className="text-xs font-bold text-brand-700 whitespace-nowrap">Download ↓</span>
+              </a>
+            );
           default:
             return null;
         }
